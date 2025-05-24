@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile - Park Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+</head>
+<body class="bg-white font-sans">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 py-3 shadow-sm border-b">
+    <div class="flex items-center space-x-2">
+      <span class="material-icons-outlined text-black cursor-pointer" id="backButton">arrow_back</span>
+      <h1 class="text-lg font-semibold">Profile</h1>
+    </div>
+    <div class="flex space-x-4">
+      <button class="px-4 py-1.5 bg-purple-100 text-purple-600 rounded-md text-sm font-medium hover:bg-purple-200">Edit</button>
+      <button id="logoutButton" class="px-4 py-1.5 bg-red-100 text-red-600 rounded-md text-sm font-medium hover:bg-red-200">Logout</button>
+    </div>
+  </div>
+
+  <!-- Profile Avatar and Name -->
+  <div class="flex flex-col items-center mt-6 space-y-2">
+    <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png"
+         alt="Profile Avatar"
+         class="w-20 h-20 rounded-full" />
+    <p class="text-gray-700 text-md font-medium" id="userNameDisplay">User Name</p>
+  </div>
+
+  <!-- Card -->
+  <div class="p-4">
+    <div class="bg-white rounded-xl shadow-md divide-y">
+
+      <!-- Item -->
+      <div class="flex items-start justify-between p-4 hover:bg-gray-50 cursor-pointer">
+        <div class="flex items-start space-x-3">
+          <div class="bg-blue-100 p-2 rounded-full">
+            <span class="material-icons-outlined text-blue-600">headset_mic</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-sm">Help and support</h4>
+            <p class="text-xs text-gray-500">Find answers to your FAQ or reach out to us</p>
+          </div>
+        </div>
+        <span class="material-icons-outlined text-gray-400">chevron_right</span>
+      </div>
+
+      <!-- Item -->
+      <div class="flex items-start justify-between p-4 hover:bg-gray-50 cursor-pointer">
+        <div class="flex items-start space-x-3">
+          <div class="bg-green-100 p-2 rounded-full">
+            <span class="material-icons-outlined text-green-600">shield</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-sm">Privacy policies</h4>
+            <p class="text-xs text-gray-500">View the policies of our app</p>
+          </div>
+        </div>
+        <span class="material-icons-outlined text-gray-400">chevron_right</span>
+      </div>
+
+      <!-- Item -->
+      <div class="flex items-start justify-between p-4 hover:bg-gray-50 cursor-pointer">
+        <div class="flex items-start space-x-3">
+          <div class="bg-green-100 p-2 rounded-full">
+            <span class="material-icons-outlined text-green-600">description</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-sm">Terms and Conditions</h4>
+            <p class="text-xs text-gray-500">View the terms and conditions of our operations</p>
+          </div>
+        </div>
+        <span class="material-icons-outlined text-gray-400">chevron_right</span>
+      </div>
+
+      <!-- Item -->
+      <div class="flex items-start justify-between p-4 hover:bg-gray-50 cursor-pointer">
+        <div class="flex items-start space-x-3">
+          <div class="bg-green-100 p-2 rounded-full">
+            <span class="material-icons-outlined text-green-600">tune</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-sm">Account Preferences</h4>
+            <p class="text-xs text-gray-500">Adjust and personalize your account settings</p>
+          </div>
+        </div>
+        <span class="material-icons-outlined text-gray-400">chevron_right</span>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('backButton').addEventListener('click', () => {
+      window.history.back();
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    });
+
+    // Load user name from localStorage and display
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const userObj = JSON.parse(storedUser);
+        userNameDisplay.textContent = userObj.name || 'User Name';
+      } catch {
+        userNameDisplay.textContent = 'User Name';
+      }
+    }
+  </script>
+
+</body>
+</html>
