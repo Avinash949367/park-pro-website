@@ -1,8 +1,24 @@
+
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
-// Signup Controller
+// Setup nodemailer transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER, // your email address to send from
+    pass: process.env.EMAIL_PASS, // your email password or app password
+  },
+});
+
+// Helper function to generate OTP
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+}
+
+// Signup Controller with OTP email
 exports.register = async (req, res) => {
   const { name, email, role, password } = req.body;
 
@@ -13,20 +29,67 @@ exports.register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const otp = generateOTP();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+
     const user = await User.create({
       name,
       email,
       role,
       password: hashedPassword,
+      isConfirmed: false,
+      confirmationToken: otp,
+      otpExpiry,
     });
 
-    res.status(201).json({ message: "Registered successfully" });
+    // Send OTP email
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your OTP for Park Pro Signup",
+      text: `Your OTP for account verification is: ${otp}. It is valid for 10 minutes.`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending OTP email:", error);
+      } else {
+        console.log("OTP email sent:", info.response);
+      }
+    });
+
+    res.status(201).json({ message: "Registered successfully. Please check your email for the OTP to verify your account." });
   } catch (err) {
     res.status(500).json({ message: "Error registering", error: err.message });
   }
 };
 
-// Login Controller
+// OTP Verification Controller
+exports.verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    if (user.isConfirmed) return res.status(400).json({ message: "User already verified" });
+
+    if (user.confirmationToken !== otp) return res.status(400).json({ message: "Invalid OTP" });
+
+    if (user.otpExpiry < new Date()) return res.status(400).json({ message: "OTP expired" });
+
+    user.isConfirmed = true;
+    user.confirmationToken = null;
+    user.otpExpiry = null;
+    await user.save();
+
+    res.json({ message: "Account verified successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error verifying OTP", error: err.message });
+  }
+};
+
+// Login Controller with verification check
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -35,10 +98,9 @@ exports.login = async (req, res) => {
     if (!user)
       return res.status(400).json({ message: "User not found" });
 
-    // Remove account confirmation check to allow all users to login regardless of isConfirmed status
-    // if (user.role !== 'admin' && !user.isConfirmed) {
-    //   return res.status(400).json({ message: "Account not confirmed. Please check your email." });
-    // }
+    if (!user.isConfirmed) {
+      return res.status(400).json({ message: "Account not confirmed. Please verify your email." });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
