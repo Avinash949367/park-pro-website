@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerSpotBtn = document.getElementById('registerSpotBtn');
     const findSpotView = document.getElementById('findSpotView');
     const registerSpotView = document.getElementById('registerSpotView');
+    const heroSection = document.getElementById('heroSection');
     
     findSpotBtn.addEventListener('click', function() {
         // Switch to Find Spot view
@@ -13,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         findSpotView.classList.remove('hidden');
         registerSpotView.classList.add('hidden');
+
+        // Change background image for Find Spot
+        heroSection.style.backgroundImage = "url('https://c1.wallpaperflare.com/preview/50/659/614/car-man-drive-watch-thumbnail.jpg')";
     });
     
     registerSpotBtn.addEventListener('click', function() {
@@ -24,5 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         registerSpotView.classList.remove('hidden');
         findSpotView.classList.add('hidden');
+
+        // Change background image for Register Spot
+        heroSection.style.backgroundImage = "url('https://lirp.cdn-website.com/md/unsplash/dms3rep/multi/opt/photo-1506521781263-d8422e82f27a-1920w.jpg')";
     });
 });

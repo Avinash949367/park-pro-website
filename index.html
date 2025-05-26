@@ -88,7 +88,9 @@
     </nav>
     <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
       <a href="userlogin.html" id="loginButton" class="gradient-orange text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300">Login</a>
-      <a href="#" id="getAppButton" class="gradient-orange text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300">Get the App</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-orange-500 hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+        Get the App
+      </a>
       <div id="profileContainer" class="hidden relative">
         <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
         <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
@@ -108,8 +110,8 @@
   <script src="js/cardToggle.js"></script>
 
   <!-- Hero Section -->
-  <section class="relative bg-white py-20 px-4 sm:px-10 mt-20" style="background-image: url('https://c1.wallpaperflare.com/preview/50/659/614/car-man-drive-watch-thumbnail.jpg'); background-size: cover; background-position: center;">
-    <div class="max-w-7xl mx-auto flex justify-end items-start min-h-[400px] relative">
+  <section id="heroSection" class="relative bg-white py-20 px-4 sm:px-10 mt-20" style="background-image: url('https://c1.wallpaperflare.com/preview/50/659/614/car-man-drive-watch-thumbnail.jpg'); background-size: cover; background-position: center;">
+    <div class="max-w-7xl mx-auto flex justify-end items-start min-h-[100px] relative">
       <!-- Right Card -->
       <div class="bg-white bg-opacity-90 shadow-lg rounded-2xl p-6 w-full max-w-md mx-4 mt-8">
         <div class="flex justify-between mb-6">
@@ -123,26 +125,26 @@
           </button>
         </div>
         <div id="registerSpotContent" class="max-w-md mx-auto px-6 py-4">
-          <div class="bg-white rounded-lg shadow-md p-6 min-h-[320px]">
+          <div class="bg-white rounded-lg shadow-md p-6 min-h-[120px]">
             <div class="flex justify-between mb-6">
-              <button id="findSpotBtn" class="text-blue-600 font-semibold text-lg hidden">Find spot</button>
-              <button id="registerSpotBtn" class="text-gray-500 font-semibold text-lg hidden">Register spot</button>
             </div>
             <div id="findSpotView">
               <h2 class="text-xl font-bold mb-4">Search parking spot in seconds</h2>
-              <div class="mb-4">
+              <!--<div class="mb-4">
                 <label class="text-gray-500 text-sm">e.g. Bengaluru</label>
                 <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </div>
+              </div>-->
+              <br>
               <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
                 Search now
               </button>
+              <br><br>
             </div>
             <div id="registerSpotView" class="hidden">
               <h2 class="text-xl font-bold mb-4">Register your parking spot with us</h2>
-              <p class="text-gray-600 mb-6">n
+             <!-- <p class="text-gray-600 mb-6">
                 Join our platform to manage your parking space efficiently and reach potential users.
-              </p>
+              </p>-->
               <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 mb-4">
                 Register now
               </button>
@@ -159,43 +161,32 @@
   <!-- Services Section -->
   <section class="bg-gray-100 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-10">
-      <h2 class="text-xl font-semibold mb-6">Do more with Park+</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6 bg-white rounded-2xl p-6 shadow">
+      <h2 class="text-xl font-semibold mb-6">Do more with Park Pro</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 bg-white rounded-2xl p-4 shadow">
         <!-- Each item -->
         <div class="text-center">
-          <img src="https://i.imgur.com/2D0aa2J.png" alt="FASTag" class="w-12 h-12 mx-auto mb-2">
+          <img src="assets/images/fastag.png" alt="FASTag" class="w-16 h-16 mx-auto mb-1">
           <p class="text-sm font-medium">FASTag</p>
         </div>
         <div class="text-center">
-          <img src="https://i.imgur.com/nccRfQe.png" alt="Buy Petrol" class="w-12 h-12 mx-auto mb-2">
-          <p class="text-sm font-medium">Buy Petrol</p>
-        </div>
-        <div class="text-center">
-          <img src="https://i.imgur.com/OzOzdeO.png" alt="Challan" class="w-12 h-12 mx-auto mb-2">
+          <img src="assets/images/challan icon.jpg" alt="Challan" class="w-16 h-16 mx-auto mb-1">
           <p class="text-sm font-medium">Challan</p>
         </div>
         <div class="text-center">
-          <img src="https://i.imgur.com/fKW8e4c.png" alt="Bill Payments" class="w-12 h-12 mx-auto mb-2">
+          <img src="https://i.imgur.com/fKW8e4c.png" alt="Bill Payments" class="w-16 h-16 mx-auto mb-1">
           <p class="text-sm font-medium">Bill Payments</p>
         </div>
         <div class="text-center">
-          <p class="text-sm font-medium">Bill Payments</p>
-        </div>
-        <div class="text-center">
-          <img src="https://i.imgur.com/ByMNdYP.png" alt="Store" class="w-12 h-12 mx-auto mb-2">
+          <img src="https://i.imgur.com/ByMNdYP.png" alt="Store" class="w-16 h-16 mx-auto mb-1">
           <p class="text-sm font-medium">Store</p>
         </div>
         <div class="text-center">
-          <img src="https://i.imgur.com/FtV3F9D.png" alt="Car Loan" class="w-12 h-12 mx-auto mb-2">
+          <img src="https://i.imgur.com/FtV3F9D.png" alt="Car Loan" class="w-16 h-16 mx-auto mb-1">
           <p class="text-sm font-medium">Car Loan</p>
         </div>
         <div class="text-center">
-          <img src="https://i.imgur.com/hyz5xYu.png" alt="Car Service" class="w-12 h-12 mx-auto mb-2">
+          <img src="https://i.imgur.com/hyz5xYu.png" alt="Car Service" class="w-16 h-16 mx-auto mb-1">
           <p class="text-sm font-medium">Car Service</p>
-        </div>
-        <div class="text-center">
-          <img src="https://i.imgur.com/Epcq5rx.png" alt="New Cars" class="w-12 h-12 mx-auto mb-2">
-          <p class="text-sm font-medium">New Cars</p>
         </div>
       </div>
     </div>
@@ -241,5 +232,49 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Floating Fasttag Button -->
+  <div id="fasttagContainer" class="fixed bottom-4 left-4 flex items-center space-x-4 z-50">
+    <button id="fasttagButton" class="text-white rounded-full px-6 py-3 shadow-lg cursor-pointer bg-gradient-to-r from-orange-500 via-purple-600 to-blue-600 hover:from-orange-600 hover:to-blue-700 transform hover:scale-110 transition-transform duration-300 font-bold text-lg">
+      Fastag
+    </button>
+    <div id="fasttagTyping" class="font-bold text-lg max-w-xs" style="color: #FFD700; text-shadow: 1px 1px 2px #000000;"></div>
+  </div>
+
+  <script>
+    const messages = [
+      "Seamless Entry and Exit",
+      "Real-Time Balance and Receipts",
+      "Faster Parking with Less Congestion"
+    ];
+    let currentIndex = 0;
+    let charIndex = 0;
+    const typingElement = document.getElementById('fasttagTyping');
+    const typingSpeed = 50;
+    const messagePause = 1000;
+
+    function typeMessage() {
+      if (charIndex < messages[currentIndex].length) {
+        typingElement.textContent += messages[currentIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeMessage, typingSpeed);
+      } else {
+        setTimeout(eraseMessage, messagePause);
+      }
+    }
+
+    function eraseMessage() {
+      if (charIndex > 0) {
+        typingElement.textContent = messages[currentIndex].substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(eraseMessage, typingSpeed / 2);
+      } else {
+        currentIndex = (currentIndex + 1) % messages.length;
+        setTimeout(typeMessage, typingSpeed);
+      }
+    }
+
+    typeMessage();
+  </script>
   </body>
 </html>
