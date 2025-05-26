@@ -1,11 +1,12 @@
 const express = require("express");
 const passport = require("passport");
-const { register, login, googleCallback, facebookCallback, getUserCount, getUsersList, deleteUsersExceptAdmins, googleSignIn } = require("../controllers/authController");
+const { register, login, googleCallback, facebookCallback, getUserCount, getUsersList, deleteUsersExceptAdmins, googleSignIn, verifyOtp } = require("../controllers/authController");
 
 const router = express.Router();
 
 router.post("/signup", register);
 router.post("/login", login);
+router.post("/verify-otp", verifyOtp);
 
 // New routes for admin to get user count and user list
 const ensureAdmin = (req, res, next) => {

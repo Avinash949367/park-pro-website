@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
   confirmationToken: {
     type: String,
   },
+  otpExpiry: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
