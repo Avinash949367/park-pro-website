@@ -1,87 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parking Spot Finder</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-4 max-w-md">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex justify-between mb-6">
-                <button id="findSpotBtn" class="text-blue-600 font-semibold text-lg">Find spot</button>
-                <button id="registerSpotBtn" class="text-gray-500 font-semibold text-lg">Register spot</button>
-            </div>
-            
-            <!-- Find Spot View -->
-            <div id="findSpotView">
-                <h2 class="text-xl font-bold mb-4">Search parking spot in seconds</h2>
-                
-                <div class="mb-4">
-                    <label class="text-gray-500 text-sm">e.g. Bengaluru</label>
-                    <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                
-                <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
-                    Search now
-                </button>
-            </div>
-            
-            <!-- Register Spot View -->
-            <div id="registerSpotView" class="hidden">
-                <h2 class="text-xl font-bold mb-4">Register your parking spot with us</h2>
-                
-                <p class="text-gray-600 mb-6">
-                    Join our platform to manage your parking space efficiently and reach potential users.
-                </p>
-                
-                <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 mb-4">
-                    Register now
-                </button>
-                
-                <a href="#" class="text-blue-500 text-sm hover:underline flex justify-center">
-                    Learn more about spot registration
-                </a>
-            </div>
-        </div>
-    </div>
+  <title>Device Location Map (Free)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const findSpotBtn = document.getElementById('findSpotBtn');
-            const registerSpotBtn = document.getElementById('registerSpotBtn');
-            const findSpotView = document.getElementById('findSpotView');
-            const registerSpotView = document.getElementById('registerSpotView');
-            
-            findSpotBtn.addEventListener('click', function() {
-                // Switch to Find Spot view
-                findSpotBtn.classList.remove('text-gray-500');
-                findSpotBtn.classList.add('text-blue-600');
-                registerSpotBtn.classList.remove('text-blue-600');
-                registerSpotBtn.classList.add('text-gray-500');
-                
-                findSpotView.classList.remove('hidden');
-                registerSpotView.classList.add('hidden');
-            });
-            
-            registerSpotBtn.addEventListener('click', function() {
-                // Switch to Register Spot view
-                registerSpotBtn.classList.remove('text-gray-500');
-                registerSpotBtn.classList.add('text-blue-600');
-                findSpotBtn.classList.remove('text-blue-600');
-                findSpotBtn.classList.add('text-gray-500');
-                
-                registerSpotView.classList.remove('hidden');
-                findSpotView.classList.add('hidden');
-            });
-        });
-    </script>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    #map {
+      height: 100vh; /* Full screen height */
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+  // Create the map
+  var map = L.map('map').setView([0, 0], 2); // default center
+
+  // Add OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Add device location if available
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude;
+
+      // Update map center and add marker
+      map.setView([lat, lng], 15);
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup("You are here!")
+        .openPopup();
+    }, function() {
+      alert("Geolocation permission denied.");
+    });
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+</script>
+
 </body>
 </html>
