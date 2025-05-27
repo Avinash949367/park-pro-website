@@ -98,7 +98,7 @@ exports.login = async (req, res) => {
     if (!user)
       return res.status(400).json({ message: "User not found" });
 
-    if (!user.isConfirmed) {
+    if (!user.isConfirmed && user.role !== 'admin') {
       return res.status(400).json({ message: "Account not confirmed. Please verify your email." });
     }
 
