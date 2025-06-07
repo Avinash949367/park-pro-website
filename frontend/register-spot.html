@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register Parking Spot - Park Pro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    /* Custom styles for multi-step form */
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    .progressbar {
+      display: flex;
+      justify-content: space-between;
+      counter-reset: step;
+      margin-bottom: 2rem;
+    }
+    .progressbar li {
+      list-style-type: none;
+      width: 20%;
+      position: relative;
+      text-align: center;
+      font-weight: 500;
+      color: #6b7280; /* gray-500 */
+      cursor: default;
+    }
+    .progressbar li::before {
+      content: counter(step);
+      counter-increment: step;
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+      border: 2px solid #6b7280;
+      display: block;
+      text-align: center;
+      margin: 0 auto 0.5rem auto;
+      border-radius: 50%;
+      background-color: white;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .progressbar li::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #6b7280;
+      top: 1rem;
+      left: -50%;
+      z-index: -1;
+      transition: background-color 0.3s;
+    }
+    .progressbar li:first-child::after {
+      content: none;
+    }
+    .progressbar li.active {
+      color: #2563eb; /* blue-600 */
+    }
+    .progressbar li.active::before {
+      border-color: #2563eb;
+      background-color: #2563eb;
+      color: white;
+    }
+    .progressbar li.active::after {
+      background-color: #2563eb;
+    }
+    /* Animated transitions */
+    .fade-enter {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 300ms, transform 300ms;
+    }
+    .fade-exit {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .fade-exit-active {
+      opacity: 0;
+      transform: translateX(-100%);
+      transition: opacity 300ms, transform 300ms;
+    }
+    /* Upload preview thumbnails */
+    .upload-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .upload-preview img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .upload-preview .remove-btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Map container */
+    #mapContainer {
+      position: relative;
+      margin-top: 0.5rem;
+      max-width: 100%;
+      height: 300px;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+  <body class="font-sans bg-gray-200">
+  
+  <!-- Navbar -->
+  <div class="fixed top-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+    <div class="flex items-center space-x-4">
+      <img src="assets/images/Maybefinal.png" alt="Park Pro Logo" class="h-15 w-25 object-contain" />
+    </div>
+    <nav class="space-x-6 hidden md:flex font-medium">
+      <a href="index.html" class="hover:underline text-gray-900">About us</a>
+      <a href="#" class="hover:underline text-gray-900">Park Pro For Business</a>
+      <a href="#" class="hover:underline text-gray-900">Products</a>
+      <a href="#" class="hover:underline text-gray-900">Contact</a>
+    </nav>
+    <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+      <a href="userlogin.html" id="loginButton" class="gradient-orange text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300">Login</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-orange-500 hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+        Get the App
+      </a>
+      <div id="profileContainer" class="hidden relative">
+        <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+            <div>
+              <p class="font-semibold text-gray-900" id="userName">User</p>
+              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+            </div>
+          </div>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
+  <main class="flex-grow max-w-4xl mx-auto p-6 bg-white rounded-lg shadow mt-20 mb-12">
+
+  <main class="flex-grow max-w-4xl mx-auto p-6 bg-white rounded-lg shadow mt-8 mb-12">
+    <h1 class="text-3xl font-semibold mb-6 text-center">Parking Spot Registration</h1>
+
+    <ul class="progressbar mb-8" id="progressbar">
+      <li class="active">General Info</li>
+      <li>Vehicle & Pricing</li>
+      <li>Timings</li>
+      <li>Owner & Uploads</li>
+      <li>GPS & Review</li>
+    </ul>
+
+    <form id="registrationForm" novalidate>
+      <!-- Step 1: General Information -->
+      <div class="step active" data-step="1" aria-label="General Information">
+        <div class="mb-4">
+          <label for="spotName" class="block font-medium mb-1">Spot Name <span class="text-red-600">*</span></label>
+          <input type="text" id="spotName" name="spotName" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter the spot name.</div>
+        </div>
+        <div class="mb-4">
+          <label for="address" class="block font-medium mb-1">Address <span class="text-red-600">*</span></label>
+          <textarea id="address" name="address" required aria-required="true" rows="3" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+          <div class="invalid-feedback text-red-600 hidden">Please enter the address.</div>
+        </div>
+        <div class="mb-4">
+          <label for="parkingType" class="block font-medium mb-1">Parking Type <span class="text-red-600">*</span></label>
+          <select id="parkingType" name="parkingType" required aria-required="true" class="form-select rounded shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <option value="">Select type</option>
+            <option value="open">Open</option>
+            <option value="covered">Covered</option>
+            <option value="underground">Underground</option>
+          </select>
+          <div class="invalid-feedback text-red-600 hidden">Please select a parking type.</div>
+        </div>
+        <div class="mb-4">
+          <label for="numSlots" class="block font-medium mb-1">Number of Slots <span class="text-red-600">*</span></label>
+          <input type="number" id="numSlots" name="numSlots" min="1" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter a valid number of slots.</div>
+        </div>
+      </div>
+
+      <!-- Step 2: Vehicle Types & Pricing -->
+      <div class="step" data-step="2" aria-label="Vehicle Types and Pricing">
+        <fieldset class="mb-4">
+          <legend class="font-medium mb-2">Allowed Vehicles <span class="text-red-600">*</span></legend>
+          <div class="flex flex-wrap gap-4">
+            <label><input type="checkbox" name="allowedVehicles" value="car" required /> Car</label>
+            <label><input type="checkbox" name="allowedVehicles" value="bike" /> Bike</label>
+            <label><input type="checkbox" name="allowedVehicles" value="truck" /> Truck</label>
+            <label><input type="checkbox" name="allowedVehicles" value="electric" /> Electric Vehicle</label>
+          </div>
+          <div class="invalid-feedback text-red-600 hidden">Please select at least one vehicle type.</div>
+        </fieldset>
+        <div class="mb-4">
+          <label for="hourlyRate" class="block font-medium mb-1">Hourly Rate ($) <span class="text-red-600">*</span></label>
+          <input type="number" id="hourlyRate" name="hourlyRate" min="0" step="0.01" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter a valid hourly rate.</div>
+        </div>
+        <div class="mb-4">
+          <label for="dailyRate" class="block font-medium mb-1">Daily Rate ($) <span class="text-red-600">*</span></label>
+          <input type="number" id="dailyRate" name="dailyRate" min="0" step="0.01" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter a valid daily rate.</div>
+        </div>
+        <div class="mb-4">
+          <label for="monthlyRate" class="block font-medium mb-1">Monthly Rate ($) <span class="text-red-600">*</span></label>
+          <input type="number" id="monthlyRate" name="monthlyRate" min="0" step="0.01" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter a valid monthly rate.</div>
+        </div>
+      </div>
+
+      <!-- Step 3: Timings & Availability -->
+      <div class="step" data-step="3" aria-label="Timings and Availability">
+        <div class="mb-4">
+          <label for="openTime" class="block font-medium mb-1">Open Time <span class="text-red-600">*</span></label>
+          <input type="time" id="openTime" name="openTime" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter the opening time.</div>
+        </div>
+        <div class="mb-4">
+          <label for="closeTime" class="block font-medium mb-1">Close Time <span class="text-red-600">*</span></label>
+          <input type="time" id="closeTime" name="closeTime" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter the closing time.</div>
+        </div>
+        <div class="form-check mb-4">
+          <input type="checkbox" id="open247" name="open247" class="form-check-input" />
+          <label for="open247" class="form-check-label font-medium">Open 24/7</label>
+        </div>
+      </div>
+
+      <!-- Step 4: Owner Contact & Uploads -->
+      <div class="step" data-step="4" aria-label="Owner Contact and Uploads">
+        <div class="mb-4">
+          <label for="ownerName" class="block font-medium mb-1">Owner Name <span class="text-red-600">*</span></label>
+          <input type="text" id="ownerName" name="ownerName" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter the owner name.</div>
+        </div>
+        <div class="mb-4">
+          <label for="ownerEmail" class="block font-medium mb-1">Owner Email <span class="text-red-600">*</span></label>
+          <input type="email" id="ownerEmail" name="ownerEmail" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter a valid email address.</div>
+        </div>
+        <div class="mb-4">
+          <label for="ownerPhone" class="block font-medium mb-1">Owner Phone <span class="text-red-600">*</span></label>
+          <input type="tel" id="ownerPhone" name="ownerPhone" required aria-required="true" pattern="\\+?[0-9\\-\\s]{7,15}" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div class="invalid-feedback text-red-600 hidden">Please enter a valid phone number.</div>
+        </div>
+        <div class="mb-4">
+          <label for="parkingPhotos" class="block font-medium mb-1">Parking Photos</label>
+          <input type="file" id="parkingPhotos" name="parkingPhotos" accept="image/*" multiple class="form-control" />
+          <div class="upload-preview" id="parkingPhotosPreview"></div>
+        </div>
+        <div class="mb-4">
+          <label for="ownershipDocs" class="block font-medium mb-1">Ownership Documents</label>
+          <input type="file" id="ownershipDocs" name="ownershipDocs" accept=".pdf,.doc,.docx,.jpg,.png" class="form-control" />
+          <div class="upload-preview" id="ownershipDocsPreview"></div>
+        </div>
+      </div>
+
+      <!-- Step 5: Infrastructure GPS -->
+      <div class="step" data-step="5" aria-label="Infrastructure GPS and Review">
+        <div class="mb-4">
+          <label for="latitude" class="block font-medium mb-1">Latitude</label>
+          <input type="text" id="latitude" name="latitude" readonly class="form-control rounded shadow-sm bg-gray-100" />
+        </div>
+        <div class="mb-4">
+          <label for="longitude" class="block font-medium mb-1">Longitude</label>
+          <input type="text" id="longitude" name="longitude" readonly class="form-control rounded shadow-sm bg-gray-100" />
+        </div>
+        <button type="button" id="useLocationBtn" class="btn btn-primary mb-4">Use My Location</button>
+
+      
+      </div>
+    </form>
+  </main>
+
+  <!-- Toast notifications -->
+  <div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+    <div id="toast" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastBody"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+  <script src="js/index.js"></script>
+  <script src="js/cardToggle.js"></script>
+  <script src="js/registerSpot.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
