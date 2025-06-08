@@ -10,6 +10,25 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
+
+
+.option {
+  text-decoration: none;       /* Remove underline */
+  color: #1e3740;              /* Dark teal text color */
+  padding: 8px 12px;           /* Spacing around text */
+  border-radius: 8px;          /* Rounded corners */
+  transition: all 0.3s ease;   /* Smooth hover transition */
+  font-weight: 500;
+}
+
+/* Hover effect */
+.option:hover {
+  color: white;                /* Text turns white */
+  background-color: #46949d;   /* Medium teal background on hover */
+  box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+}
+
+
     /* Custom styles for multi-step form */
     .step {
       display: none;
@@ -110,7 +129,7 @@
       top: 2px;
       right: 2px;
       background: rgba(0,0,0,0.6);
-      color: white;
+      color: rgb(255, 255, 255);
       border: none;
       border-radius: 50%;
       width: 20px;
@@ -141,19 +160,20 @@
   <body class="font-sans bg-gray-200">
   
   <!-- Navbar -->
-  <div class="fixed top-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
-    <div class="flex items-center space-x-4">
-      <img src="assets/images/Maybefinal.png" alt="Park Pro Logo" class="h-15 w-25 object-contain" />
-    </div>
+  <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+    <a href="index.html"><div class="flex items-center space-x-4">
+      <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+      <img src="../assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+    </div></a>
     <nav class="space-x-6 hidden md:flex font-medium">
-      <a href="index.html" class="hover:underline text-gray-900">About us</a>
-      <a href="#" class="hover:underline text-gray-900">Park Pro For Business</a>
-      <a href="#" class="hover:underline text-gray-900">Products</a>
-      <a href="#" class="hover:underline text-gray-900">Contact</a>
+      <a href="index.html" class="option">About us</a>
+      <a href="#" class="option">Park Pro For Business</a>
+      <a href="#" class="option">Products</a>
+      <a href="#" class="option">Contact</a>
     </nav>
     <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
-      <a href="userlogin.html" id="loginButton" class="gradient-orange text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300">Login</a>
-      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-orange-500 hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
         Get the App
       </a>
       <div id="profileContainer" class="hidden relative">
@@ -169,144 +189,60 @@
           <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
         </div>
       </div>
-    </div>
   </div>
-  <br><br>
-  <main class="flex-grow max-w-4xl mx-auto p-6 bg-white rounded-lg shadow mt-20 mb-12">
+  </div>
+ <!-- Full-page background with overlay -->
+ <div class="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 py-10" style="background-image: url('https://img.freepik.com/premium-vector/white-black-abstract-background-with-blue-elements_907220-1686.jpg?semt=ais_hybrid&w=740');">
+  <div class="bg-white bg-opacity-90 rounded-lg shadow-lg w-full max-w-6xl grid md:grid-cols-2 gap-10 p-8 md:p-12">
 
-  <main class="flex-grow max-w-4xl mx-auto p-6 bg-white rounded-lg shadow mt-8 mb-12">
-    <h1 class="text-3xl font-semibold mb-6 text-center">Parking Spot Registration</h1>
+    <!-- Left Container -->
+    <div class="flex flex-col justify-center">
+      <h1 class="text-4xl font-bold mb-4">Got a question?</h1>
+      <p class="mb-8 text-lg text-gray-700">Fill up the form and our Team will get back to you within 24 hours.</p>
 
-    <ul class="progressbar mb-8" id="progressbar">
-      <li class="active">General Info</li>
-      <li>Vehicle & Pricing</li>
-      <li>Timings</li>
-      <li>Owner & Uploads</li>
-      <li>GPS & Review</li>
-    </ul>
-
-    <form id="registrationForm" novalidate>
-      <!-- Step 1: General Information -->
-      <div class="step active" data-step="1" aria-label="General Information">
-        <div class="mb-4">
-          <label for="spotName" class="block font-medium mb-1">Spot Name <span class="text-red-600">*</span></label>
-          <input type="text" id="spotName" name="spotName" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter the spot name.</div>
-        </div>
-        <div class="mb-4">
-          <label for="address" class="block font-medium mb-1">Address <span class="text-red-600">*</span></label>
-          <textarea id="address" name="address" required aria-required="true" rows="3" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
-          <div class="invalid-feedback text-red-600 hidden">Please enter the address.</div>
-        </div>
-        <div class="mb-4">
-          <label for="parkingType" class="block font-medium mb-1">Parking Type <span class="text-red-600">*</span></label>
-          <select id="parkingType" name="parkingType" required aria-required="true" class="form-select rounded shadow-sm focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Select type</option>
-            <option value="open">Open</option>
-            <option value="covered">Covered</option>
-            <option value="underground">Underground</option>
-          </select>
-          <div class="invalid-feedback text-red-600 hidden">Please select a parking type.</div>
-        </div>
-        <div class="mb-4">
-          <label for="numSlots" class="block font-medium mb-1">Number of Slots <span class="text-red-600">*</span></label>
-          <input type="number" id="numSlots" name="numSlots" min="1" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter a valid number of slots.</div>
-        </div>
+      <div class="space-y-4 text-base text-gray-800">
+        <p><i class="fas fa-phone mr-2 text-gray-700"></i>+91 74882 39471</p>
+        <p><i class="fas fa-envelope mr-2 text-gray-700"></i>connect@parkspot.in</p>
+        <p><i class="fas fa-map-marker-alt mr-2 text-gray-700"></i>2nd Floor, Nextcoworks BTM Layout, BTM 2nd Stage, Bengaluru, Karnataka 560076</p>
       </div>
 
-      <!-- Step 2: Vehicle Types & Pricing -->
-      <div class="step" data-step="2" aria-label="Vehicle Types and Pricing">
-        <fieldset class="mb-4">
-          <legend class="font-medium mb-2">Allowed Vehicles <span class="text-red-600">*</span></legend>
-          <div class="flex flex-wrap gap-4">
-            <label><input type="checkbox" name="allowedVehicles" value="car" required /> Car</label>
-            <label><input type="checkbox" name="allowedVehicles" value="bike" /> Bike</label>
-            <label><input type="checkbox" name="allowedVehicles" value="truck" /> Truck</label>
-            <label><input type="checkbox" name="allowedVehicles" value="electric" /> Electric Vehicle</label>
-          </div>
-          <div class="invalid-feedback text-red-600 hidden">Please select at least one vehicle type.</div>
-        </fieldset>
-        <div class="mb-4">
-          <label for="hourlyRate" class="block font-medium mb-1">Hourly Rate ($) <span class="text-red-600">*</span></label>
-          <input type="number" id="hourlyRate" name="hourlyRate" min="0" step="0.01" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter a valid hourly rate.</div>
-        </div>
-        <div class="mb-4">
-          <label for="dailyRate" class="block font-medium mb-1">Daily Rate ($) <span class="text-red-600">*</span></label>
-          <input type="number" id="dailyRate" name="dailyRate" min="0" step="0.01" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter a valid daily rate.</div>
-        </div>
-        <div class="mb-4">
-          <label for="monthlyRate" class="block font-medium mb-1">Monthly Rate ($) <span class="text-red-600">*</span></label>
-          <input type="number" id="monthlyRate" name="monthlyRate" min="0" step="0.01" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter a valid monthly rate.</div>
-        </div>
+      <!-- Social Icons -->
+      <div class="flex space-x-5 mt-8 text-xl text-black">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
       </div>
+    </div>
 
-      <!-- Step 3: Timings & Availability -->
-      <div class="step" data-step="3" aria-label="Timings and Availability">
-        <div class="mb-4">
-          <label for="openTime" class="block font-medium mb-1">Open Time <span class="text-red-600">*</span></label>
-          <input type="time" id="openTime" name="openTime" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter the opening time.</div>
-        </div>
-        <div class="mb-4">
-          <label for="closeTime" class="block font-medium mb-1">Close Time <span class="text-red-600">*</span></label>
-          <input type="time" id="closeTime" name="closeTime" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter the closing time.</div>
-        </div>
-        <div class="form-check mb-4">
-          <input type="checkbox" id="open247" name="open247" class="form-check-input" />
-          <label for="open247" class="form-check-label font-medium">Open 24/7</label>
-        </div>
-      </div>
+    <!-- Right Container (Form) -->
+    <div class="bg-white p-6 md:p-8 rounded-md shadow-md">
+      <form>
+        <label class="block mb-2 font-semibold">Full Name</label>
+        <input type="text" placeholder="Full Name" class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring focus:border-blue-300" />
 
-      <!-- Step 4: Owner Contact & Uploads -->
-      <div class="step" data-step="4" aria-label="Owner Contact and Uploads">
-        <div class="mb-4">
-          <label for="ownerName" class="block font-medium mb-1">Owner Name <span class="text-red-600">*</span></label>
-          <input type="text" id="ownerName" name="ownerName" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter the owner name.</div>
-        </div>
-        <div class="mb-4">
-          <label for="ownerEmail" class="block font-medium mb-1">Owner Email <span class="text-red-600">*</span></label>
-          <input type="email" id="ownerEmail" name="ownerEmail" required aria-required="true" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter a valid email address.</div>
-        </div>
-        <div class="mb-4">
-          <label for="ownerPhone" class="block font-medium mb-1">Owner Phone <span class="text-red-600">*</span></label>
-          <input type="tel" id="ownerPhone" name="ownerPhone" required aria-required="true" pattern="\\+?[0-9\\-\\s]{7,15}" class="form-control rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-          <div class="invalid-feedback text-red-600 hidden">Please enter a valid phone number.</div>
-        </div>
-        <div class="mb-4">
-          <label for="parkingPhotos" class="block font-medium mb-1">Parking Photos</label>
-          <input type="file" id="parkingPhotos" name="parkingPhotos" accept="image/*" multiple class="form-control" />
-          <div class="upload-preview" id="parkingPhotosPreview"></div>
-        </div>
-        <div class="mb-4">
-          <label for="ownershipDocs" class="block font-medium mb-1">Ownership Documents</label>
-          <input type="file" id="ownershipDocs" name="ownershipDocs" accept=".pdf,.doc,.docx,.jpg,.png" class="form-control" />
-          <div class="upload-preview" id="ownershipDocsPreview"></div>
-        </div>
-      </div>
+        <label class="block mb-2 font-semibold">Email</label>
+        <input type="email" placeholder="Email" class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring focus:border-blue-300" />
 
-      <!-- Step 5: Infrastructure GPS -->
-      <div class="step" data-step="5" aria-label="Infrastructure GPS and Review">
-        <div class="mb-4">
-          <label for="latitude" class="block font-medium mb-1">Latitude</label>
-          <input type="text" id="latitude" name="latitude" readonly class="form-control rounded shadow-sm bg-gray-100" />
-        </div>
-        <div class="mb-4">
-          <label for="longitude" class="block font-medium mb-1">Longitude</label>
-          <input type="text" id="longitude" name="longitude" readonly class="form-control rounded shadow-sm bg-gray-100" />
-        </div>
-        <button type="button" id="useLocationBtn" class="btn btn-primary mb-4">Use My Location</button>
+        <label class="block mb-2 font-semibold">Mobile No.</label>
+        <input type="tel" placeholder="Mobile No." class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring focus:border-blue-300" />
 
-      
-      </div>
-    </form>
-  </main>
+        <label class="block mb-2 font-semibold">Message</label>
+        <textarea placeholder="Message" rows="4" class="w-full border border-gray-300 rounded px-4 py-2 mb-6 focus:outline-none focus:ring focus:border-blue-300"></textarea>
+
+        <button type="submit" class="bg-[#10b981] hover:bg-yellow-400 text-black font-semibold py-2 px-6 rounded transition flex items-center gap-2">
+          Submit <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- WhatsApp Floating Icon -->
+<a href="https://wa.me/917488239471" target="_blank" class="fixed bottom-5 right-5 z-50">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="h-12 w-12" />
+</a>
 
   <!-- Toast notifications -->
   <div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
