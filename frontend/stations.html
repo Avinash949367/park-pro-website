@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registered Parking Stations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-gray-800">Registered Parking Stations</h1>
+    <button id="addStationBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+      Add Station
+    </button>
+  </header>
+
+  <main class="flex-grow p-4">
+    <div class="overflow-x-auto bg-white rounded shadow">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Station Name</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="stationsTableBody" class="bg-white divide-y divide-gray-200">
+          <!-- Station rows will be inserted here -->
+          <tr>
+            <td colspan="2" class="px-6 py-4 text-center text-gray-500">No stations registered.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Add Station Modal -->
+  <div id="addStationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <h2 class="text-xl font-semibold mb-4">Add New Station</h2>
+      <form id="addStationForm" class="space-y-4">
+        <div>
+          <label for="stationName" class="block text-sm font-medium text-gray-700">Station Name</label>
+          <input type="text" id="stationName" name="stationName" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" />
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" id="cancelAddStation" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Add</button>
+        </div>
+      </form>
+      <button id="closeAddStationModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl font-bold">&times;</button>
+    </div>
+  </div>
+
+  <script>
+    const addStationBtn = document.getElementById('addStationBtn');
+    const addStationModal = document.getElementById('addStationModal');
+    const closeAddStationModal = document.getElementById('closeAddStationModal');
+    const cancelAddStation = document.getElementById('cancelAddStation');
+    const addStationForm = document.getElementById('addStationForm');
+    const stationsTableBody = document.getElementById('stationsTableBody');
+
+    // Show modal
+    addStationBtn.addEventListener('click', () => {
+      addStationModal.classList.remove('hidden');
+    });
+
+    // Hide modal
+    closeAddStationModal.addEventListener('click', () => {
+      addStationModal.classList.add('hidden');
+      addStationForm.reset();
+    });
+    cancelAddStation.addEventListener('click', () => {
+      addStationModal.classList.add('hidden');
+      addStationForm.reset();
+    });
+
+    // Sample data for stations
+    let stations = [];
+
+    // Render stations in table
+    function renderStations() {
+      stationsTableBody.innerHTML = '';
+      if (stations.length === 0) {
+        stationsTableBody.innerHTML = '<tr><td colspan="2" class="px-6 py-4 text-center text-gray-500">No stations registered.</td></tr>';
+        return;
+      }
+      stations.forEach((station, index) => {
+        const tr = document.createElement('tr');
+        tr.classList.add('hover:bg-gray-50');
+        tr.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap text-gray-900">${station.name}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-right">
+            <div class="relative inline-block text-left">
+              <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-3 py-1 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50" aria-expanded="true" aria-haspopup="true" data-index="${index}">
+                Actions
+                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div class="origin-top-right absolute right-0 mt-2 w-28 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-10" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                <div class="py-1" role="none">
+                  <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-action="view" data-index="${index}">View</button>
+                  <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-action="edit" data-index="${index}">Edit</button>
+                  <button class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem" data-action="delete" data-index="${index}">Delete</button>
+                </div>
+              </div>
+            </div>
+          </td>
+        `;
+        stationsTableBody.appendChild(tr);
+      });
+      attachDropdownEvents();
+    }
+
+    // Toggle dropdown visibility
+    function attachDropdownEvents() {
+      const buttons = stationsTableBody.querySelectorAll('button[aria-haspopup="true"]');
+      buttons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeAllDropdowns();
+          const menu = button.nextElementSibling;
+          if (menu) {
+            menu.classList.toggle('hidden');
+          }
+        });
+      });
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', closeAllDropdowns);
+
+      // Attach action handlers
+      const actionButtons = stationsTableBody.querySelectorAll('button[role="menuitem"]');
+      actionButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const action = btn.getAttribute('data-action');
+          const index = parseInt(btn.getAttribute('data-index'));
+          if (action && !isNaN(index)) {
+            handleAction(action, index);
+          }
+          closeAllDropdowns();
+        });
+      });
+    }
+
+    function closeAllDropdowns() {
+      const menus = stationsTableBody.querySelectorAll('div[role="menu"]');
+      menus.forEach(menu => menu.classList.add('hidden'));
+    }
+
+    // Handle actions: view, edit, delete
+    function handleAction(action, index) {
+      const station = stations[index];
+      if (!station) return;
+      switch(action) {
+        case 'view':
+          alert('View details for: ' + station.name);
+          break;
+        case 'edit':
+          const newName = prompt('Edit station name:', station.name);
+          if (newName && newName.trim() !== '') {
+            stations[index].name = newName.trim();
+            renderStations();
+          }
+          break;
+        case 'delete':
+          if (confirm('Are you sure you want to delete station: ' + station.name + '?')) {
+            stations.splice(index, 1);
+            renderStations();
+          }
+          break;
+      }
+    }
+
+    // Handle add station form submit
+    addStationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nameInput = addStationForm.stationName.value.trim();
+      if (nameInput === '') return;
+      stations.push({ name: nameInput });
+      renderStations();
+      addStationModal.classList.add('hidden');
+      addStationForm.reset();
+    });
+
+    // Initial render
+    renderStations();
+  </script>
+</body>
+</html>
