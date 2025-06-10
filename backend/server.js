@@ -6,6 +6,7 @@ const passport = require('passport');
 const session = require('express-session');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
+const stationsRoutes = require('./routes/stationsRoutes');
 require('./config/passport'); // Passport config
 
 const bcrypt = require('bcryptjs');
@@ -64,6 +65,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/', authRoutes);
+app.use('/api/stations', stationsRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

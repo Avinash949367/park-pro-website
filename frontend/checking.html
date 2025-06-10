@@ -1,70 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Register Parking Spot - Park Pro</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Park Pro Navbar</title>
+  <link rel="stylesheet" href="css/navbar.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
-     .option {
-  text-decoration: none;       /* Remove underline */
-  color: #1e3740;              /* Dark teal text color */
-  padding: 8px 12px;           /* Spacing around text */
-  border-radius: 8px;          /* Rounded corners */
-  transition: all 0.3s ease;   /* Smooth hover transition */
+    /* Navbar styles */
+.navbar-container {
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.option {
+  text-decoration: none;
+  color: #1e3740;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
   font-weight: 500;
 }
 
-/* Hover effect */
 .option:hover {
-  color: white;                /* Text turns white */
-  background-color: #46949d;   /* Medium teal background on hover */
-  box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+  color: white;
+  background-color: #46949d;
+  box-shadow: 0 2px 6px rgb(18, 105, 28);
+}
+
+.nav-login-btn {
+  background-color: black;
+  font-weight: bold;
+  color: white;
+  padding: 8px 24px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-login-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.1);
+}
+
+.nav-app-btn {
+  color: white;
+  border-radius: 8px;
+  padding: 8px 24px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: black;
+  transition: all 0.3s ease;
+}
+
+.nav-app-btn:hover {
+  background-color: #ff7e29;
+  transform: scale(1.1);
+}
+
+.profile-avatar {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  width: 256px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 16px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.3s ease;
+}
+
+.profile-container:hover .profile-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-header {
+  padding: 0 16px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dropdown-avatar {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.dropdown-username {
+  font-weight: 600;
+  color: #111827;
+}
+
+.dropdown-useremail {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.dropdown-logout {
+  width: 100%;
+  text-align: left;
+  padding: 8px 16px;
+  color: #1f2937;
+  transition: background-color 0.2s;
+}
+
+.dropdown-logout:hover {
+  background-color: #f3f4f6;
 }
   </style>
-  
 </head>
-  <body class="font-sans bg-gray-200">
-  
+<body>
   <!-- Navbar -->
-  <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
-    <a href="index.html"><div class="flex items-center space-x-4">
-      <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-      <img src="../assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-    </div></a>
-    <nav class="space-x-6 hidden md:flex font-medium">
-      <a href="index.html" class="option">About us</a>
-      <a href="#" class="option">Park Pro For Business</a>
-      <a href="#" class="option">Products</a>
-      <a href="#" class="option">Contact</a>
-    </nav>
-    <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
-      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
-      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
-        Get the App
+  <div class="navbar-container">
+    <div class="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+      <a href="index.html">
+        <div class="flex items-center space-x-4">
+          <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+          <img src="../assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+        </div>
       </a>
-      <div id="profileContainer" class="hidden relative">
-        <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
-        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
-          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
-            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
-            <div>
-              <p class="font-semibold text-gray-900" id="userName">User</p>
-              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+      <nav class="space-x-6 hidden md:flex font-medium">
+        <a href="index.html" class="option">About us</a>
+        <a href="#" class="option">Park Pro For Business</a>
+        <a href="#" class="option">Products</a>
+        <a href="#" class="option">Contact</a>
+      </nav>
+      <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+        <a href="userlogin.html" id="loginButton" class="nav-login-btn">Login</a>
+        <a href="#" id="getAppButton" class="nav-app-btn">
+          Get the App
+        </a>
+        <div id="profileContainer" class="hidden relative">
+          <div id="profileAvatar" class="profile-avatar"></div>
+          <div id="profileDropdown" class="profile-dropdown">
+            <div class="dropdown-header">
+              <div id="dropdownAvatar" class="dropdown-avatar"></div>
+              <div>
+                <p class="dropdown-username" id="userName">User</p>
+                <p class="dropdown-useremail" id="userEmail">user@example.com</p>
+              </div>
             </div>
+            <button id="logoutButton" class="dropdown-logout">Logout</button>
           </div>
-          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
         </div>
       </div>
+    </div>
   </div>
-  </div>
-  <script src="js/index.js"></script>
-  <script src="js/cardToggle.js"></script>
-  <script src="js/registerSpot.js"></script>
-  </body>
+
+  <script src="js/navbar.js"></script>
+</body>
 </html>
