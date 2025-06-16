@@ -1,157 +1,135 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const totalUsersElem = document.getElementById('totalUsers');
-  const usersTableBody = document.getElementById('usersTableBody');
-  const userDetailsModal = document.getElementById('userDetailsModal');
-  const userDetailsContent = document.getElementById('userDetailsContent');
-  const closeModalBtn = document.getElementById('closeModal');
+  const messageIcon = document.getElementById('messageIcon');
+  const messageBadge = document.getElementById('messageBadge');
+  const receivedStationsPopup = document.getElementById('receivedStationsPopup');
+  const closePopupBtn = document.getElementById('closePopup');
+  const receivedStationsList = document.getElementById('receivedStationsList');
 
-  // Function to fetch total users count
-  async function fetchTotalUsers() {
+  const backendBaseUrl = 'http://localhost:5000'; // Adjust if your backend runs on a different URL or port
+
+  // Fetch count of received stations and update badge
+  async function updateReceivedCount() {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/users/count', {
-        headers: {
-          'Authorization': 'Bearer ' + token,
-        },
-      });
-      if (response.status === 401) {
-        console.error('Unauthorized: Token may be invalid or expired');
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'userlogin.html';
-        return;
+      const response = await fetch(`${backendBaseUrl}/api/stations/status/received`);
+      if (!response.ok) throw new Error('Failed to fetch received stations');
+      const stations = await response.json();
+      if (stations.length > 0) {
+        messageBadge.textContent = stations.length;
+        messageBadge.classList.remove('hidden');
+      } else {
+        messageBadge.classList.add('hidden');
       }
-      if (!response.ok) throw new Error('Failed to fetch total users');
-      const data = await response.json();
-      totalUsersElem.textContent = data.totalUsers;
-    } catch (err) {
-      console.error(err);
-      totalUsersElem.textContent = 'Error';
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  // Function to fetch users list
-  async function fetchUsersList() {
+  // Fetch and display received stations in popup
+  async function showReceivedStations() {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/users/list', {
-        headers: {
-          'Authorization': 'Bearer ' + token,
-        },
-      });
-      if (response.status === 401) {
-        console.error('Unauthorized: Token may be invalid or expired');
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'userlogin.html';
-        return;
+      const response = await fetch(`${backendBaseUrl}/api/stations/status/received`);
+      if (!response.ok) throw new Error('Failed to fetch received stations');
+      const stations = await response.json();
+
+      receivedStationsList.innerHTML = '';
+      if (stations.length === 0) {
+        receivedStationsList.innerHTML = '<li class="text-gray-600">No stations with status "received".</li>';
+      } else {
+        stations.forEach(station => {
+          const li = document.createElement('li');
+          li.className = 'flex justify-between items-center border p-2 rounded';
+
+          const infoDiv = document.createElement('div');
+          infoDiv.innerHTML = `<strong>${station.name}</strong><br/><small>${station.location}</small>`;
+
+          const confirmBtn = document.createElement('button');
+          confirmBtn.textContent = 'Confirm';
+          confirmBtn.className = 'bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600';
+          confirmBtn.addEventListener('click', () => confirmStation(station._id));
+
+          li.appendChild(infoDiv);
+          li.appendChild(confirmBtn);
+          receivedStationsList.appendChild(li);
+        });
       }
-      if (!response.ok) throw new Error('Failed to fetch users list');
-      const data = await response.json();
-      renderUsersList(data.users);
-    } catch (err) {
-      console.error(err);
-      usersTableBody.innerHTML = '<tr><td colspan="5">Error loading users</td></tr>';
+
+      receivedStationsPopup.classList.remove('hidden');
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  // Function to render users list in table
-  function renderUsersList(users) {
-    usersTableBody.innerHTML = '';
-    users.forEach(user => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${user.name}</td>
-        <td>${user.email}</td>
-        <td>${user.role}</td>
-        <td>${user.password ? user.password : ''}</td>
-        <td><button class="view-details-btn" data-user='${JSON.stringify(user)}'>View Details</button></td>
-      `;
-      usersTableBody.appendChild(tr);
+  // Confirm station - update status to 'admin confirm'
+  async function confirmStation(stationId) {
+    try {
+      const response = await fetch(`${backendBaseUrl}/api/stations/${stationId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'admin confirm' }),
+      });
+      if (!response.ok) throw new Error('Failed to update station status');
+      await updateReceivedCount();
+      await showReceivedStations();
+      await loadActiveStations();
+    } catch (error) {
+      console.error(error);
+      alert('Failed to confirm station. Please try again.');
+    }
+  }
+
+  // Load and display active stations
+  async function loadActiveStations() {
+    try {
+      const response = await fetch(`${backendBaseUrl}/api/stations/status/active`);
+      if (!response.ok) throw new Error('Failed to fetch active stations');
+      const stations = await response.json();
+
+      const activeStationsContainer = document.getElementById('activeStationsContainer');
+      if (!activeStationsContainer) return;
+
+      activeStationsContainer.innerHTML = '';
+      if (stations.length === 0) {
+        activeStationsContainer.innerHTML = '<p class="text-gray-600">No active stations found.</p>';
+      } else {
+        const ul = document.createElement('ul');
+        ul.className = 'space-y-2';
+        stations.forEach(station => {
+          const li = document.createElement('li');
+          li.className = 'border p-2 rounded bg-white shadow';
+
+          li.innerHTML = `<strong>${station.name}</strong><br/><small>${station.location}</small>`;
+          ul.appendChild(li);
+        });
+        activeStationsContainer.appendChild(ul);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // Event listeners
+  messageIcon.addEventListener('click', showReceivedStations);
+  closePopupBtn.addEventListener('click', () => {
+    receivedStationsPopup.classList.add('hidden');
+  });
+
+  // Add click event listener for checkingIcon to redirect to adminConfirm.html
+  const checkingIcon = document.getElementById('checkingIcon');
+  if (checkingIcon) {
+    checkingIcon.addEventListener('click', () => {
+      window.location.href = 'adminConfirm.html';
     });
-
-    // Add event listeners for view details buttons
-    document.querySelectorAll('.view-details-btn').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const user = JSON.parse(e.target.getAttribute('data-user'));
-        showUserDetails(user);
-      });
-    });
   }
 
-  // Function to show user details in modal
-  function showUserDetails(user) {
-    userDetailsContent.innerHTML = `
-      <p><strong>Name:</strong> ${user.name}</p>
-      <p><strong>Email:</strong> ${user.email}</p>
-      <p><strong>Role:</strong> ${user.role}</p>
-      <p><strong>Password:</strong> ${user.password ? user.password : ''}</p>
-    `;
-    userDetailsModal.style.display = 'block';
+  // Initial badge update and load active stations
+  updateReceivedCount();
+  loadActiveStations();
+
+  // New code for admin dashboard user loading
+  async function loadUsers() {
   }
 
-  // Close modal event
-  closeModalBtn.addEventListener('click', () => {
-    userDetailsModal.style.display = 'none';
-  });
-
-  // Close modal on outside click
-  window.addEventListener('click', (event) => {
-    if (event.target === userDetailsModal) {
-      userDetailsModal.style.display = 'none';
-    }
-  });
-
-  // Profile menu toggle
-  const profileButton = document.getElementById('profileButton');
-  const profileMenu = document.getElementById('profileMenu');
-  profileButton.addEventListener('click', () => {
-    profileMenu.classList.toggle('hidden');
-  });
-
-  // Logout button
-  const logoutButton = document.getElementById('logoutButton');
-  logoutButton.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.location.href = 'userlogin.html';
-  });
-
-  // Function to clear users except admins
-  async function clearUsers() {
-    if (!confirm('Are you sure you want to delete all users except admins? This action cannot be undone.')) {
-      return;
-    }
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/users/clear', {
-        method: 'DELETE',
-        headers: {
-          'Authorization': 'Bearer ' + token,
-        },
-      });
-      if (response.status === 401) {
-        console.error('Unauthorized: Token may be invalid or expired');
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'userlogin.html';
-        return;
-      }
-      if (!response.ok) throw new Error('Failed to clear users');
-      alert('Users cleared successfully');
-      fetchTotalUsers();
-      fetchUsersList();
-    } catch (err) {
-      console.error(err);
-      alert('Error clearing users');
-    }
+  // Call loadUsers if on admin dashboard page
+  if (document.getElementById('usersTableBody')) {
   }
-
-  // Add event listener for clear users button
-  const clearUsersBtn = document.getElementById('clearUsersBtn');
-  clearUsersBtn.addEventListener('click', clearUsers);
-
-  // Initial fetch
-  fetchTotalUsers();
-  fetchUsersList();
 });

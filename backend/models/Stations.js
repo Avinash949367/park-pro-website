@@ -36,6 +36,11 @@ const stationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ['received', 'admin confirm', 'active'],
+    default: 'received',
+  },
 });
 
 module.exports = mongoose.model("Stations", stationSchema);
