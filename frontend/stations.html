@@ -5,187 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Registered Parking Stations</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-100 font-sans flex h-screen">
 
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-gray-800">Registered Parking Stations</h1>
-    <button id="addStationBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
-      Add Station
-    </button>
-  </header>
-
-  <main class="flex-grow p-4">
-    <div class="overflow-x-auto bg-white rounded shadow">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Station Name</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="stationsTableBody" class="bg-white divide-y divide-gray-200">
-          <!-- Station rows will be inserted here -->
-          <tr>
-            <td colspan="2" class="px-6 py-4 text-center text-gray-500">No stations registered.</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- Sidebar -->
+  <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+    <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
+      <a href="admindashboard.html"><div class="flex items-center space-x-4">
+        <img src="assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+      </div></a>
+      <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
     </div>
+    <nav class="flex-1 overflow-y-auto">
+      <ul class="p-4 space-y-2">
+        <li>
+          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">dashboard</i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">local_parking</i>
+            <span>My Spots</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">event</i>
+            <span>Bookings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">credit_card</i>
+            <span>Payments</span>
+          </a>
+        </li>
+        <li>
+          <a href="stations.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">local_parking</i>
+            <span>Stations</span>
+          </a>
+        </li>
+        <li>
+          <details class="group">
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-orange-500 hover:text-white list-none flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="material-icons text-gray-900">settings</i>
+                <span>Management</span>
+              </span>
+              <span class="float-right transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <ul class="pl-4 mt-2 space-y-1">
+              <li>
+                <a href="#" class="block py-1 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">person</i>
+                  <span>Users</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="block py-1 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">settings</i>
+                  <span>Settings</span>
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold text-gray-800">Registered Parking Stations</h1>
+      <button id="messageIcon" aria-label="Received Stations" class="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span class="material-icons text-orange-500 text-3xl">message</span>
+        <span id="messageBadge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full hidden">0</span>
+      </button>
+      <button id="checkingIcon" aria-label="Checking Stations" class="relative p-2 rounded-full ml-4 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <span class="material-icons text-blue-500 text-3xl">hourglass_top</span>
+        <span id="checkingBadge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full hidden">0</span>
+      </button>
+    </div>
+
+    <!-- Received Stations Popup -->
+    <div id="receivedStationsPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto p-4">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Stations with Status "Received"</h2>
+          <button id="closePopup" aria-label="Close" class="text-gray-600 hover:text-gray-900">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+        <ul id="receivedStationsList" class="space-y-2">
+          <!-- Stations will be dynamically added here -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- Checking Stations Popup -->
+    <div id="checkingStationsPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto p-4">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Stations with Status "Checking"</h2>
+          <button id="closeCheckingPopup" aria-label="Close" class="text-gray-600 hover:text-gray-900">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+        <ul id="checkingStationsList" class="space-y-2">
+          <!-- Stations will be dynamically added here -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- Add your stations page content here -->
+    <section id="activeStationsContainer" class="mt-6">
+      <h2 class="text-2xl font-semibold mb-4">Active Stations</h2>
+      <!-- Active stations list will be loaded here -->
+    </section>
   </main>
 
-  <!-- Add Station Modal -->
-  <div id="addStationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-      <h2 class="text-xl font-semibold mb-4">Add New Station</h2>
-      <form id="addStationForm" class="space-y-4">
-        <div>
-          <label for="stationName" class="block text-sm font-medium text-gray-700">Station Name</label>
-          <input type="text" id="stationName" name="stationName" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500" />
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" id="cancelAddStation" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Add</button>
-        </div>
-      </form>
-      <button id="closeAddStationModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-2xl font-bold">&times;</button>
-    </div>
-  </div>
-
-  <script>
-    const addStationBtn = document.getElementById('addStationBtn');
-    const addStationModal = document.getElementById('addStationModal');
-    const closeAddStationModal = document.getElementById('closeAddStationModal');
-    const cancelAddStation = document.getElementById('cancelAddStation');
-    const addStationForm = document.getElementById('addStationForm');
-    const stationsTableBody = document.getElementById('stationsTableBody');
-
-    // Show modal
-    addStationBtn.addEventListener('click', () => {
-      addStationModal.classList.remove('hidden');
-    });
-
-    // Hide modal
-    closeAddStationModal.addEventListener('click', () => {
-      addStationModal.classList.add('hidden');
-      addStationForm.reset();
-    });
-    cancelAddStation.addEventListener('click', () => {
-      addStationModal.classList.add('hidden');
-      addStationForm.reset();
-    });
-
-    // Sample data for stations
-    let stations = [];
-
-    // Render stations in table
-    function renderStations() {
-      stationsTableBody.innerHTML = '';
-      if (stations.length === 0) {
-        stationsTableBody.innerHTML = '<tr><td colspan="2" class="px-6 py-4 text-center text-gray-500">No stations registered.</td></tr>';
-        return;
-      }
-      stations.forEach((station, index) => {
-        const tr = document.createElement('tr');
-        tr.classList.add('hover:bg-gray-50');
-        tr.innerHTML = `
-          <td class="px-6 py-4 whitespace-nowrap text-gray-900">${station.name}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-right">
-            <div class="relative inline-block text-left">
-              <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-3 py-1 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50" aria-expanded="true" aria-haspopup="true" data-index="${index}">
-                Actions
-                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div class="origin-top-right absolute right-0 mt-2 w-28 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-10" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
-                <div class="py-1" role="none">
-                  <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-action="view" data-index="${index}">View</button>
-                  <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" data-action="edit" data-index="${index}">Edit</button>
-                  <button class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem" data-action="delete" data-index="${index}">Delete</button>
-                </div>
-              </div>
-            </div>
-          </td>
-        `;
-        stationsTableBody.appendChild(tr);
-      });
-      attachDropdownEvents();
-    }
-
-    // Toggle dropdown visibility
-    function attachDropdownEvents() {
-      const buttons = stationsTableBody.querySelectorAll('button[aria-haspopup="true"]');
-      buttons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          e.stopPropagation();
-          closeAllDropdowns();
-          const menu = button.nextElementSibling;
-          if (menu) {
-            menu.classList.toggle('hidden');
-          }
-        });
-      });
-
-      // Close dropdowns when clicking outside
-      document.addEventListener('click', closeAllDropdowns);
-
-      // Attach action handlers
-      const actionButtons = stationsTableBody.querySelectorAll('button[role="menuitem"]');
-      actionButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const action = btn.getAttribute('data-action');
-          const index = parseInt(btn.getAttribute('data-index'));
-          if (action && !isNaN(index)) {
-            handleAction(action, index);
-          }
-          closeAllDropdowns();
-        });
-      });
-    }
-
-    function closeAllDropdowns() {
-      const menus = stationsTableBody.querySelectorAll('div[role="menu"]');
-      menus.forEach(menu => menu.classList.add('hidden'));
-    }
-
-    // Handle actions: view, edit, delete
-    function handleAction(action, index) {
-      const station = stations[index];
-      if (!station) return;
-      switch(action) {
-        case 'view':
-          alert('View details for: ' + station.name);
-          break;
-        case 'edit':
-          const newName = prompt('Edit station name:', station.name);
-          if (newName && newName.trim() !== '') {
-            stations[index].name = newName.trim();
-            renderStations();
-          }
-          break;
-        case 'delete':
-          if (confirm('Are you sure you want to delete station: ' + station.name + '?')) {
-            stations.splice(index, 1);
-            renderStations();
-          }
-          break;
-      }
-    }
-
-    // Handle add station form submit
-    addStationForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const nameInput = addStationForm.stationName.value.trim();
-      if (nameInput === '') return;
-      stations.push({ name: nameInput });
-      renderStations();
-      addStationModal.classList.add('hidden');
-      addStationForm.reset();
-    });
-
-    // Initial render
-    renderStations();
-  </script>
+  <script src="js/admin.js"></script>
 </body>
 </html>

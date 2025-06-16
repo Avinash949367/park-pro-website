@@ -11,9 +11,18 @@
 <body class="bg-gray-100 font-sans flex h-screen">
 
   <!-- Sidebar -->
-  <aside class="bg-white text-gray-900 w-64 flex flex-col">
-    <div class="p-6 text-2xl font-bold border-b border-gray-300">
-      Park Pro Admin
+  <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+    <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
+      <a href="admindashboard.html"><div class="flex items-center space-x-4">
+        <img src="assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+      </div></a>
+      <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
     </div>
     <nav class="flex-1 overflow-y-auto">
       <ul class="p-4 space-y-2">
@@ -75,20 +84,18 @@
       </ul>
     </nav>
     <!-- Profile section at bottom -->
-    <div class="p-4 border-t border-gray-300">
-      <div class="relative inline-block text-left">
-        <button id="profileButton" type="button" class="flex items-center space-x-3 w-full focus:outline-none" aria-expanded="true" aria-haspopup="true">
+    <div class="p-4 border-t border-gray-300 mt-auto">
+      <div class="relative inline-block text-left w-full">
+        <button id="profileButton" type="button" class="flex items-center space-x-3 w-full focus:outline-none" aria-expanded="false" aria-haspopup="true">
           <img class="h-10 w-10 rounded-full" src="images/profile-icon.png" alt="Profile" />
           <span class="text-gray-900 font-medium">Admin</span>
           <svg class="ml-auto h-5 w-5 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div id="profileMenu" class="origin-top-left absolute left-full bottom-full ml-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-          <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="profileButton">
-            <a href="userprofile.html" class="block px-4 py-2 text-gray-900 hover:bg-orange-500 hover:text-white" role="menuitem">View Profile</a>
-            <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-900 hover:bg-orange-500 hover:text-white" role="menuitem">Logout</button>
-          </div>
+        <div id="profileMenu" class="origin-top-left absolute left-full bottom-full ml-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" role="menu" aria-orientation="vertical" aria-labelledby="profileButton">
+          <a href="userprofile.html" class="block px-4 py-2 text-gray-900 hover:bg-orange-500 hover:text-white" role="menuitem">View Profile</a>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-900 hover:bg-orange-500 hover:text-white" role="menuitem">Logout</button>
         </div>
       </div>
     </div>
@@ -97,50 +104,21 @@
   <!-- Main content -->
   <main class="flex-1 p-6 overflow-y-auto">
     <header class="mb-6 flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-      <button id="profileButtonMobile" class="md:hidden bg-blue-900 text-white px-3 py-1 rounded">Profile</button>
+      <h1 class="text-3xl font-bold text-gray-800">
+        Admin Dashboard
+      </h1>
+      <div class="flex items-center space-x-4">
+        <button id="messageButton" aria-label="Messages" class="relative text-gray-600 hover:text-orange-500 focus:outline-none">
+          <span class="material-icons text-3xl">message</span>
+          <span class="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-500"></span>
+        </button>
+        <button id="profileButtonMobile" class="md:hidden bg-blue-900 text-white px-3 py-1 rounded">Profile</button>
+      </div>
     </header>
 
     <section>
       <h2 class="text-xl font-semibold mb-4">Welcome, Admin!</h2>
       <p class="mb-6">This is the admin dashboard where you can manage the application.</p>
-
-      <div class="mb-6">
-        <h3 class="text-lg font-semibold mb-2">Total Users</h3>
-        <p id="totalUsers" class="text-2xl font-bold">Loading...</p>
-      </div>
-
-      <div>
-        <h3 class="text-lg font-semibold mb-2 flex justify-between items-center">
-          <span>Users List</span>
-          <a href="adduser.html" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Add User</a>
-        </h3>
-        <button id="clearUsersBtn" class="mb-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Clear users</button>
-        <table class="min-w-full bg-white border border-gray-300">
-          <thead>
-            <tr>
-              <th class="py-2 px-4 border-b border-gray-300 text-left">Name</th>
-              <th class="py-2 px-4 border-b border-gray-300 text-left">Email</th>
-              <th class="py-2 px-4 border-b border-gray-300 text-left">Role</th>
-              <th class="py-2 px-4 border-b border-gray-300 text-left">Password</th>
-              <th class="py-2 px-4 border-b border-gray-300 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="usersTableBody">
-            <tr><td colspan="5" class="text-center py-4">Loading users...</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- User Details Modal -->
-      <div id="userDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded shadow-lg max-w-md w-full relative">
-          <button id="closeModal" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">&times;</button>
-          <h4 class="text-xl font-semibold mb-4">User Details</h4>
-          <div id="userDetailsContent"></div>
-        </div>
-      </div>
-
     </section>
   </main>
 
