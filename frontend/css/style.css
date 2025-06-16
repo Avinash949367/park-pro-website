@@ -17,3 +17,12 @@
 #profileMenu.show {
   display: block;
 }
+
+/* Badge for message icon */
+#messageButton .material-icons {
+  vertical-align: middle;
+}
+
+#messageButton .absolute {
+  pointer-events: none;
+}
