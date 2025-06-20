@@ -1,68 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Document</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  <style>
-    .option {
-      text-decoration: none;       /* Remove underline */
-      color: #1e3740;              /* Dark teal text color */
-      padding: 8px 12px;           /* Spacing around text */
-      border-radius: 8px;          /* Rounded corners */
-      transition: all 0.3s ease;   /* Smooth hover transition */
-      font-weight: 500;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>ParkPro FastTag Account Management</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<style>
+  /*
+  Clean ParkPro FastTag page with black text, white background, green accents
+  */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+  :root {
+    --primary-color: #22c55e; /* Emerald-500 green */
+    --primary-color-hover: #16a34a; /* Emerald-600 */
+    --background-base: #ffffff;
+    --text-primary: #000000; /* Black text */
+    --text-secondary: #000000; /* Black text */
+    --border-color: rgba(0 0 0 / 0.1);
+    --shadow-color: rgba(0 0 0 / 0.1);
+    --error-color: #ef4444; /* red-500 */
+    --success-color: var(--primary-color);
+    --font-family: 'Inter', sans-serif;
+    --transition-speed: 0.3s;
+  }
 
-    /* Hover effect */
-    .option:hover {
-      color: white;                /* Text turns white */
-      background-color: #46949d;   /* Medium teal background on hover */
-      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--background-base);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Header */
+  header {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-color); /* Keep brand name in green */
+    letter-spacing: 0.1em;
+  }
+
+  /* Main content */
+  main.content-area {
+    padding: 32px 24px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  section.card {
+    background: #ffffff;
+    padding: 32px 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    margin-bottom: 32px;
+  }
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
+    font-weight: 700;
+    color: var(--text-primary); /* Black heading */
+  }
+
+  /* Forms */
+  form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary); /* Black labels */
+  }
+  form input[type="text"],
+  form input[type="number"] {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border-color);
+    background: #fafafa;
+    color: var(--text-primary); /* Black text */
+    font-size: 1rem;
+    transition: border-color var(--transition-speed);
+    outline-offset: 2px;
+  }
+  form input[type="text"]:focus,
+  form input[type="number"]:focus {
+    border-color: var(--primary-color); /* Green border on focus */
+    outline: none;
+    background: #fff;
+  }
+  .input-error {
+    border-color: var(--error-color) !important;
+  }
+  .error-message {
+    font-size: 0.85rem;
+    color: var(--error-color);
+    margin-top: 4px;
+  }
+
+  /* Buttons */
+  button.btn {
+    background: var(--primary-color); /* Green button */
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 16px;
+    transition: background-color var(--transition-speed);
+  }
+  button.btn:hover {
+    background: var(--primary-color-hover); /* Darker green on hover */
+  }
+  button.btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+
+  /* Result box */
+  .result-box {
+    margin-top: 24px;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(34, 197, 94, 0.2); /* Light green background */
+    border: 1.5px solid var(--success-color); /* Green border */
+    color: var(--text-primary); /* Black text */
+    font-weight: 700;
+    text-align: center;
+  }
+  .result-error {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--error-color);
+    color: var(--error-color);
+  }
+
+  /* Loading spinner */
+  .spinner {
+    border: 4px solid rgba(0 0 0 / 0.1);
+    border-top-color: var(--primary-color); /* Green spinner */
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 600px) {
+    main.content-area {
+      padding: 24px 16px;
     }
-  </style>
+    section.card {
+      padding: 24px 20px;
+    }
+  }
+</style>
 </head>
-<body class="font-sans bg-gray-200">
+<body>
+  <header>
+    <div class="brand">PARKPRO FASTTAG</div>
+  </header>
+  <main class="content-area">
+    <section id="check-balance" class="card">
+      <h1>Check Account Balance</h1>
+      <form id="balance-form" novalidate>
+        <label for="fasttag-id">Enter FastTag Vehicle Number or Account ID</label>
+        <input type="text" id="fasttag-id" name="fasttagId" autocomplete="off" autocorrect="off" spellcheck="false" aria-describedby="fasttag-id-error" required placeholder="e.g. MH12AB1234 or 1234567890" />
+        <div id="fasttag-id-error" class="error-message" style="display:none;" role="alert"></div>
+        <button type="submit" class="btn">Check Balance</button>
+      </form>
+      <div id="balance-result" style="min-height:48px;"></div>
+    </section>
 
-    <!-- Navbar -->
-    <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
-      <a href="index.html"><div class="flex items-center space-x-4">
-        <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-        <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-      </div></a>
-      <nav class="space-x-6 hidden md:flex font-medium">
-        <a href="index.html" class="option">About us</a>
-        <a href="#" class="option">Park Pro For Business</a>
-        <a href="#" class="option">Products</a>
-        <a href="#" class="option">Contact</a>
-      </nav>
-      <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
-        <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
-        <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
-          Get the App
-        </a>
-        <div id="profileContainer" class="hidden relative">
-          <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
-          <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
-            <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
-              <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
-              <div>
-                <p class="font-semibold text-gray-900" id="userName">User</p>
-                <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
-              </div>
-            </div>
-            <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
-          </div>
-        </div>
-    </div>
-    </div>
-    <script src="js/index.js"></script>
-    <script src="js/cardToggle.js"></script>
-    <script src="js/registerSpot.js"></script>
-    
+    <section id="recharge" class="card">
+      <h1>Recharge Your FastTag Account</h1>
+      <form id="recharge-form" novalidate>
+        <label for="recharge-fasttag-id">FastTag Vehicle Number or Account ID</label>
+        <input type="text" id="recharge-fasttag-id" name="rechargeFasttagId" autocomplete="off" autocorrect="off" spellcheck="false" aria-describedby="recharge-fasttag-id-error" required placeholder="e.g. MH12AB1234 or 1234567890" />
+        <div id="recharge-fasttag-id-error" class="error-message" style="display:none;" role="alert"></div>
+
+        <label for="recharge-amount">Amount (₹)</label>
+        <input type="number" id="recharge-amount" name="amount" min="10" max="10000" step="1" required aria-describedby="recharge-amount-error" placeholder="Minimum ₹10" />
+        <div id="recharge-amount-error" class="error-message" style="display:none;" role="alert"></div>
+
+        <button type="submit" class="btn">Recharge Account</button>
+      </form>
+      <div id="recharge-result" style="min-height:48px;"></div>
+    </section>
+  </main>
+
+<script>
+  (() => {
+    'use strict';
+
+    // Dummy data simulating stored FastTag accounts with balances
+    const accounts = {
+      'MH12AB1234': 450.75,
+      'MH12CD5678': 1250.50,
+      '1234567890': 320.10,
+      '9876543210': 0,
+    };
+
+    function showError(inputElem, message) {
+      const errorElem = document.getElementById(inputElem.id + '-error');
+      inputElem.classList.add('input-error');
+      errorElem.textContent = message;
+      errorElem.style.display = 'block';
+      inputElem.setAttribute('aria-invalid', 'true');
+    }
+
+    function clearError(inputElem) {
+      const errorElem = document.getElementById(inputElem.id + '-error');
+      inputElem.classList.remove('input-error');
+      errorElem.textContent = '';
+      errorElem.style.display = 'none';
+      inputElem.removeAttribute('aria-invalid');
+    }
+
+    function validateFasttagId(value) {
+      const pattern = /^[A-Za-z0-9]{6,15}$/;
+      return pattern.test(value.trim());
+    }
+
+    const balanceForm = document.getElementById('balance-form');
+    const fasttagIdInput = document.getElementById('fasttag-id');
+    const balanceResult = document.getElementById('balance-result');
+
+    const rechargeForm = document.getElementById('recharge-form');
+    const rechargeFasttagIdInput = document.getElementById('recharge-fasttag-id');
+    const rechargeAmountInput = document.getElementById('recharge-amount');
+    const rechargeResult = document.getElementById('recharge-result');
+
+    const STORAGE_KEY = 'parkpro-fasttag-balances';
+
+    let storedBalances;
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (stored && typeof stored === 'object') {
+        storedBalances = stored;
+      } else {
+        storedBalances = {...accounts};
+      }
+    } catch {
+      storedBalances = {...accounts};
+    }
+
+    function saveBalancesToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(storedBalances));
+    }
+
+    balanceForm.addEventListener('submit', e => {
+      e.preventDefault();
+      balanceResult.textContent = '';
+      clearError(fasttagIdInput);
+
+      const v = fasttagIdInput.value.trim().toUpperCase();
+      if (!v) {
+        showError(fasttagIdInput, 'FastTag ID or Vehicle Number is required.');
+        fasttagIdInput.focus();
+        return;
+      }
+      if (!validateFasttagId(v)) {
+        showError(fasttagIdInput, 'Invalid format: use 6-15 alphanumeric characters (letters and digits only).');
+        fasttagIdInput.focus();
+        return;
+      }
+
+      balanceResult.innerHTML = '<div class="spinner" role="status" aria-label="Loading"></div>';
+
+      setTimeout(() => {
+        if (storedBalances[v] !== undefined) {
+          balanceResult.textContent = `Account Balance: ₹${storedBalances[v].toFixed(2)}`;
+          balanceResult.className = 'result-box';
+        } else {
+          balanceResult.textContent = 'No FastTag account found with this ID.';
+          balanceResult.className = 'result-box result-error';
+        }
+      }, 600);
+    });
+
+    rechargeForm.addEventListener('submit', e => {
+      e.preventDefault();
+      rechargeResult.textContent = '';
+      clearError(rechargeFasttagIdInput);
+      clearError(rechargeAmountInput);
+
+      const idVal = rechargeFasttagIdInput.value.trim().toUpperCase();
+      const amountVal = rechargeAmountInput.value.trim();
+
+      if (!idVal) {
+        showError(rechargeFasttagIdInput, 'FastTag ID or Vehicle Number is required.');
+        rechargeFasttagIdInput.focus();
+        return;
+      }
+      if (!validateFasttagId(idVal)) {
+        showError(rechargeFasttagIdInput, 'Invalid format: use 6-15 alphanumeric characters (letters and digits only).');
+        rechargeFasttagIdInput.focus();
+        return;
+      }
+      if (!amountVal) {
+        showError(rechargeAmountInput, 'Recharge amount is required.');
+        rechargeAmountInput.focus();
+        return;
+      }
+      const amountNum = Number(amountVal);
+      if (isNaN(amountNum) || amountNum < 10 || amountNum > 10000) {
+        showError(rechargeAmountInput, 'Amount must be a number between 10 and 10,000.');
+        rechargeAmountInput.focus();
+        return;
+      }
+
+      rechargeResult.innerHTML = '<div class="spinner" role="status" aria-label="Loading"></div>';
+
+      setTimeout(() => {
+        if (storedBalances[idVal] !== undefined) {
+          storedBalances[idVal] += amountNum;
+          saveBalancesToStorage();
+          rechargeResult.textContent = `Recharge successful! Updated Balance: ₹${storedBalances[idVal].toFixed(2)}`;
+          rechargeResult.className = 'result-box';
+          rechargeForm.reset();
+          rechargeFasttagIdInput.focus();
+        } else {
+          rechargeResult.textContent = 'No FastTag account found with this ID.';
+          rechargeResult.className = 'result-box result-error';
+          rechargeFasttagIdInput.focus();
+        }
+      }, 1000);
+    });
+  })();
+</script>
 </body>
 </html>
