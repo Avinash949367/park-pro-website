@@ -40,9 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('email', email);
-        // Redirect based on user role
+        // Redirect only non-admin users to index.html
         if (data.user.role === 'admin') {
-          window.location.href = 'admindashboard.html';
+          errorElem.textContent = 'Admin users must login via the admin login page.';
+          errorElem.classList.remove('hidden');
+          // Optionally clear stored data
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          localStorage.removeItem('email');
         } else {
           window.location.href = 'index.html';
         }

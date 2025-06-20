@@ -217,6 +217,48 @@
       alert("Geolocation is not supported by this browser.");
     }
 
+    // Fetch and display active parking stations on map and list
+    async function loadActiveStations() {
+      try {
+        const response = await fetch('http://localhost:5000/api/stations/status/active');
+        if (!response.ok) throw new Error('Failed to fetch active stations');
+        const stations = await response.json();
+
+        const nearestParkingContainer = document.getElementById('nearestParkingContainer');
+        nearestParkingContainer.innerHTML = '<h2 class="text-lg font-semibold mb-4">Nearest Parking Stations</h2>';
+
+        if (stations.length === 0) {
+          nearestParkingContainer.innerHTML += '<p class="text-gray-600">No active stations found.</p>';
+          return;
+        }
+
+        const ul = document.createElement('ul');
+        ul.className = 'space-y-2';
+
+        stations.forEach(station => {
+          // Add list item
+          const li = document.createElement('li');
+          li.className = 'border p-2 rounded bg-white shadow';
+          li.textContent = `${station.name} - ${station.location}`;
+          ul.appendChild(li);
+
+          // Add marker on map
+          if (station.latitude && station.longitude) {
+            L.marker([station.latitude, station.longitude]).addTo(map)
+              .bindPopup(`<strong>${station.name}</strong><br/>${station.location}`);
+          }
+        });
+
+        nearestParkingContainer.appendChild(ul);
+      } catch (error) {
+        console.error(error);
+        alert('Failed to load active stations.');
+      }
+    }
+
+    // Load active stations on page load
+    loadActiveStations();
+
     // Search button click handler (currently placeholder)
     document.getElementById('mapSearchButton').addEventListener('click', function() {
       var query = document.getElementById('mapSearchInput').value.trim();
