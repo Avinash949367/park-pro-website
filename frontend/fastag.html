@@ -4,31 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ParkPro FastTag</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <style>
-
-.option {
-      text-decoration: none;  
-      font:bold;     /* Remove underline */
-      color: #1e3740;              /* Dark teal text color */
-      padding: 8px 12px;           /* Spacing around text */
-      border-radius: 8px;          /* Rounded corners */
-      transition: all 0.3s ease;   /* Smooth hover transition */
-      font-weight: 500;
-    }
-
-    /* Hover effect */
-    .option:hover {
-      color: white;                /* Text turns white */
-      background-color: #46949d;   /* Medium teal background on hover */
-      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
-    }
-
-    
         :root {
-            --primary-color: white; /* Green */
+            --primary-color: #22c55e; /* Green */
             --error-color: #ef4444; /* Red */
             --background: #ffffff;
             --text-primary: #000000;
@@ -44,15 +22,10 @@
             color: var(--text-primary);
             line-height: 1.6;
         }
-        .app-container {
-            display: flex;
-            min-height: 100vh;
-        }
         header {
             padding: 15px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
-            background: white;
         }
         .brand {
             font-weight: bold;
@@ -60,30 +33,30 @@
             color: var(--primary-color);
         }
         .nav-container {
-            width: 200px;
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
             background: #f8f9fa;
-            border-right: 1px solid var(--border-color);
-            padding: 20px 0;
+            overflow-x: auto;
+            white-space: nowrap;
         }
         .nav-item {
             padding: 12px 20px;
             cursor: pointer;
-            border-left: 4px solid transparent;
+            border-bottom: 3px solid transparent;
             transition: all 0.3s;
         }
         .nav-item:hover {
             background: rgba(0,0,0,0.05);
         }
         .nav-item.active {
-            border-left-color: var(--primary-color);
-            background-color: #46949d;
+            border-bottom-color: var(--primary-color);
             color: var(--primary-color);
             font-weight: bold;
         }
         .content {
-            flex: 1;
             padding: 20px;
-            overflow-y: auto;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .section {
             display: none;
@@ -97,7 +70,6 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            max-width: 800px;
         }
         input, button, select {
             width: 100%;
@@ -172,169 +144,111 @@
             margin: 15px 0;
             border-left: 4px solid var(--primary-color);
         }
-        
-        @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column;
-            }
-            .nav-container {
-                width: 100%;
-                display: flex;
-                overflow-x: auto;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-            .nav-item {
-                white-space: nowrap;
-                border-left: none;
-                border-bottom: 3px solid transparent;
-            }
-            .nav-item.active {
-                border-left: none;
-                border-bottom-color: var(--primary-color);
-            }
-        }
-        #navbar2{
-            display: flex;
-            padding-left: 400px;
-        }
-        
     </style>
 </head>
 <body>
-  <!-- navbar -->
-  <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
-    <a href="index.html"><div class="flex items-center space-x-4">
-      <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-      <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-    </div></a>
-    <nav class="space-x-6 hidden md:flex" id="nav">
-      <a href="index.html" class="option">About us</a>
-      <a href="#" class="option">Park Pro For Business</a>
-      <a href="#" class="option">Products</a>
-      <a href="#" class="option">Contact</a>
-    </nav>
-    <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
-      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
-      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
-        Get the App
-      </a>
-      <div id="profileContainer" class="hidden relative">
-        <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
-        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
-          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
-            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
-            <div>
-              <p class="font-semibold text-gray-900" id="userName">User</p>
-              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+    <header>
+        <div class="brand">PARKPRO FASTTAG</div>
+    </header>
+    
+    <div class="nav-container">
+        <div class="nav-item active" onclick="showSection('about')">About FastTag</div>
+        <div class="nav-item" onclick="showSection('balance')">Check Balance</div>
+        <div class="nav-item" onclick="showSection('recharge')">Recharge Account</div>
+        <div class="nav-item" onclick="showSection('cancel')">Cancel FastTag</div>
+    </div>
+    
+    <div class="content">
+        <!-- Enhanced About Section -->
+        <div id="about" class="section active card">
+            <h2>About FastTag</h2>
+            
+            <div class="info-item">
+                <h3>What is FastTag?</h3>
+                <p>FastTag is an electronic toll collection system in India implemented by the National Highway Authority of India (NHAI). It uses Radio Frequency Identification (RFID) technology to enable automatic deduction of toll charges without stopping vehicles at toll plazas.</p>
             </div>
-          </div>
-          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
-        </div>
-      </div>
-  </div>
-  </div>
-
-  <div id="navbar2">
-    <nav class="bg-white" style="display: flex;">
-        <div class="nav-item active cursor-pointer" onclick="showSection('about')" id="option">About FastTag</div>
-        <div class="nav-item cursor-pointer" onclick="showSection('balance')">Check Balance</div>
-        <div class="nav-item cursor-pointer" onclick="showSection('recharge')">Recharge Account</div>
-        <div class="nav-item cursor-pointer" onclick="showSection('cancel')">Cancel FastTag</div>
-    </nav>
-  </div>
-    <div>
-        <div class="content p-4">
-            <!-- Enhanced About Section -->
-            <div id="about" class="section active card">
-                <h2>About FastTag</h2>
-                
-                <div class="info-item">
-                    <h3>What is FastTag?</h3>
-                    <p>FastTag is an electronic toll collection system in India implemented by the National Highway Authority of India (NHAI). It uses Radio Frequency Identification (RFID) technology to enable automatic deduction of toll charges without stopping vehicles at toll plazas.</p>
-                </div>
-                
-                <div class="info-item">
-                    <h3>Key Benefits</h3>
+            
+            <div class="info-item">
+                <h3>Key Benefits</h3>
+                <ul class="feature-list">
+                    <li><strong>Saves time:</strong> No need to stop at toll plazas</li>
+                    <li><strong>Reduces traffic:</strong> FastTag lanes are 3x faster than cash lanes</li>
+                    <li><strong>Cashless payments:</strong> Automatic deduction from linked account</li>
+                    <li><strong>Discounts:</strong> 2.5% cashback on toll payments (NHAI FastTag)</li>
+                    <li><strong>24/7 Online management:</strong> Check balance and recharge anytime</li>
+                    <li><strong>Environment friendly:</strong> Reduces fuel consumption and pollution</li>
+                </ul>
+            </div>
+            
+            <div class="info-item">
+                <h3>How to Use FastTag</h3>
+                <div class="step">
+                    <h4>At Toll Plazas:</h4>
                     <ul class="feature-list">
-                        <li><strong>Saves time:</strong> No need to stop at toll plazas</li>
-                        <li><strong>Reduces traffic:</strong> FastTag lanes are 3x faster than cash lanes</li>
-                        <li><strong>Cashless payments:</strong> Automatic deduction from linked account</li>
-                        <li><strong>Discounts:</strong> 2.5% cashback on toll payments (NHAI FastTag)</li>
-                        <li><strong>24/7 Online management:</strong> Check balance and recharge anytime</li>
-                        <li><strong>Environment friendly:</strong> Reduces fuel consumption and pollution</li>
+                        <li>Look for dedicated FastTag lanes (usually marked with green signs)</li>
+                        <li>Reduce speed to under 25 km/h when approaching toll plaza</li>
+                        <li>RFID scanner will automatically detect your FastTag</li>
+                        <li>Toll amount will be deducted from your prepaid balance</li>
+                        <li>Barrier will open automatically without stopping</li>
                     </ul>
                 </div>
                 
-                <div class="info-item">
-                    <h3>How to Use FastTag</h3>
-                    <div class="step">
-                        <h4>At Toll Plazas:</h4>
-                        <ul class="feature-list">
-                            <li>Look for dedicated FastTag lanes (usually marked with green signs)</li>
-                            <li>Reduce speed to under 25 km/h when approaching toll plaza</li>
-                            <li>RFID scanner will automatically detect your FastTag</li>
-                            <li>Toll amount will be deducted from your prepaid balance</li>
-                            <li>Barrier will open automatically without stopping</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="step">
-                        <h4>Proper Placement:</h4>
-                        <ul class="feature-list">
-                            <li>Affix the tag on your vehicle's windshield as per instructions</li>
-                            <li>For cars: Top center position on the inside of the windshield</li>
-                            <li>For trucks: Middle of the windshield on driver's side</li>
-                            <li>Don't cover the tag with any objects or stickers</li>
-                        </ul>
-                    </div>
+                <div class="step">
+                    <h4>Proper Placement:</h4>
+                    <ul class="feature-list">
+                        <li>Affix the tag on your vehicle's windshield as per instructions</li>
+                        <li>For cars: Top center position on the inside of the windshield</li>
+                        <li>For trucks: Middle of the windshield on driver's side</li>
+                        <li>Don't cover the tag with any objects or stickers</li>
+                    </ul>
                 </div>
             </div>
-            
-            <!-- Check Balance Section -->
-            <div id="balance" class="section card">
-                <h2>Check Balance</h2>
-                <div>
-                    <label>FastTag ID/Vehicle No.</label>
-                    <input type="text" id="balanceId" placeholder="e.g. MH12AB1234">
-                    <div id="balanceError" class="error-message"></div>
-                    <button onclick="checkBalance()">Check Balance</button>
-                </div>
-                <div id="balanceResult" class="result"></div>
+        </div>
+        
+        <!-- Check Balance Section -->
+        <div id="balance" class="section card">
+            <h2>Check Balance</h2>
+            <div>
+                <label>FastTag ID/Vehicle No.</label>
+                <input type="text" id="balanceId" placeholder="e.g. MH12AB1234">
+                <div id="balanceError" class="error-message"></div>
+                <button onclick="checkBalance()">Check Balance</button>
             </div>
-            
-            <!-- Recharge Section -->
-            <div id="recharge" class="section card">
-                <h2>Recharge Account</h2>
-                <div>
-                    <label>FastTag ID/Vehicle No.</label>
-                    <input type="text" id="rechargeId" placeholder="e.g. MH12AB1234">
-                    <div id="rechargeIdError" class="error-message"></div>
-                    
-                    <label>Amount (₹)</label>
-                    <input type="number" id="amount" min="100" placeholder="Minimum ₹100">
-                    <div id="amountError" class="error-message"></div>
-                    
-                    <button onclick="rechargeAccount()">Recharge</button>
-                </div>
-                <div id="rechargeResult" class="result"></div>
+            <div id="balanceResult" class="result"></div>
+        </div>
+        
+        <!-- Recharge Section -->
+        <div id="recharge" class="section card">
+            <h2>Recharge Account</h2>
+            <div>
+                <label>FastTag ID/Vehicle No.</label>
+                <input type="text" id="rechargeId" placeholder="e.g. MH12AB1234">
+                <div id="rechargeIdError" class="error-message"></div>
+                
+                <label>Amount (₹)</label>
+                <input type="number" id="amount" min="100" placeholder="Minimum ₹100">
+                <div id="amountError" class="error-message"></div>
+                
+                <button onclick="rechargeAccount()">Recharge</button>
             </div>
-            
-            <!-- Cancel Section -->
-            <div id="cancel" class="section card">
-                <h2>Cancel FastTag</h2>
-                <div>
-                    <label>FastTag ID/Vehicle No.</label>
-                    <input type="text" id="cancelId" placeholder="e.g. MH12AB1234">
-                    <div id="cancelIdError" class="error-message"></div>
-                    
-                    <label>Reason for Cancellation</label>
-                    <select id="reason">
-                        <option value="">Select reason</option>
-                        <option value="vehicle_sold">Vehicle Sold</option>
-                        <option value="not_using">Not Using Service</option>
-                        <option value="switched_provider">Switched Provider</option>
-                        <option value="other">Other</option>
+            <div id="rechargeResult" class="result"></div>
+        </div>
+        
+        <!-- Cancel Section -->
+        <div id="cancel" class="section card">
+            <h2>Cancel FastTag</h2>
+            <div>
+                <label>FastTag ID/Vehicle No.</label>
+                <input type="text" id="cancelId" placeholder="e.g. MH12AB1234">
+                <div id="cancelIdError" class="error-message"></div>
+                
+                <label>Reason for Cancellation</label>
+                <select id="reason">
+                    <option value="">Select reason</option>
+                    <option value="vehicle_sold">Vehicle Sold</option>
+                    <option value="not_using">Not Using Service</option>
+                    <option value="switched_provider">Switched Provider</option>
+                    <option value="other">Other</option>
                     </select>
                     <div id="reasonError" class="error-message"></div>
                     
@@ -343,143 +257,142 @@
                 <div id="cancelResult" class="result"></div>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Sample account data
-        const accounts = {
-            'MH12AB1234': { balance: 500, active: true },
-            'KA01CD5678': { balance: 750, active: true },
-            'DL04EF9012': { balance: 1250, active: true }
-        };
+        <script>
+            // Sample account data
+            const accounts = {
+                'MH12AB1234': { balance: 500, active: true },
+                'KA01CD5678': { balance: 750, active: true },
+                'DL04EF9012': { balance: 1250, active: true }
+            };
 
-        // Navigation function
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Update active nav item
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
+            // Navigation function
+            function showSection(sectionId) {
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show selected section
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
 
-        // Check balance function
-        function checkBalance() {
-            const id = document.getElementById('balanceId').value.trim().toUpperCase();
-            const errorEl = document.getElementById('balanceError');
-            const resultEl = document.getElementById('balanceResult');
-            
-            // Clear previous messages
-            errorEl.textContent = '';
-            resultEl.textContent = '';
-            resultEl.className = 'result';
-            
-            // Validation
-            if (!id) {
-                errorEl.textContent = 'Please enter your FastTag ID';
-                return;
+            // Check balance function
+            function checkBalance() {
+                const id = document.getElementById('balanceId').value.trim().toUpperCase();
+                const errorEl = document.getElementById('balanceError');
+                const resultEl = document.getElementById('balanceResult');
+                
+                // Clear previous messages
+                errorEl.textContent = '';
+                resultEl.textContent = '';
+                resultEl.className = 'result';
+                
+                // Validation
+                if (!id) {
+                    errorEl.textContent = 'Please enter your FastTag ID';
+                    return;
+                }
+                
+                // Check account
+                if (accounts[id] && accounts[id].active) {
+                    resultEl.textContent = `Current Balance: ₹${accounts[id].balance.toFixed(2)}`;
+                    resultEl.classList.add('success');
+                } else {
+                    resultEl.textContent = 'Account not found or inactive';
+                    resultEl.classList.add('error-result');
+                }
             }
-            
-            // Check account
-            if (accounts[id] && accounts[id].active) {
-                resultEl.textContent = `Current Balance: ₹${accounts[id].balance.toFixed(2)}`;
-                resultEl.classList.add('success');
-            } else {
-                resultEl.textContent = 'Account not found or inactive';
-                resultEl.classList.add('error-result');
-            }
-        }
 
-        // Recharge function
-        function rechargeAccount() {
-            const id = document.getElementById('rechargeId').value.trim().toUpperCase();
-            const amount = parseFloat(document.getElementById('amount').value);
-            const idError = document.getElementById('rechargeIdError');
-            const amountError = document.getElementById('amountError');
-            const resultEl = document.getElementById('rechargeResult');
-            
-            // Clear previous messages
-            idError.textContent = '';
-            amountError.textContent = '';
-            resultEl.textContent = '';
-            resultEl.className = 'result';
-            
-            // Validation
-            let isValid = true;
-            if (!id) {
-                idError.textContent = 'Please enter your FastTag ID';
-                isValid = false;
+            // Recharge function
+            function rechargeAccount() {
+                const id = document.getElementById('rechargeId').value.trim().toUpperCase();
+                const amount = parseFloat(document.getElementById('amount').value);
+                const idError = document.getElementById('rechargeIdError');
+                const amountError = document.getElementById('amountError');
+                const resultEl = document.getElementById('rechargeResult');
+                
+                // Clear previous messages
+                idError.textContent = '';
+                amountError.textContent = '';
+                resultEl.textContent = '';
+                resultEl.className = 'result';
+                
+                // Validation
+                let isValid = true;
+                if (!id) {
+                    idError.textContent = 'Please enter your FastTag ID';
+                    isValid = false;
+                }
+                if (!amount || amount < 100) {
+                    amountError.textContent = 'Minimum recharge amount is ₹100';
+                    isValid = false;
+                }
+                if (!isValid) return;
+                
+                // Process recharge
+                if (accounts[id] && accounts[id].active) {
+                    accounts[id].balance += amount;
+                    resultEl.textContent = `
+                        Recharge Successful!
+                        Amount Added: ₹${amount.toFixed(2)}
+                        New Balance: ₹${accounts[id].balance.toFixed(2)}
+                    `;
+                    resultEl.classList.add('success');
+                } else {
+                    resultEl.textContent = 'Account not found or inactive';
+                    resultEl.classList.add('error-result');
+                }
             }
-            if (!amount || amount < 100) {
-                amountError.textContent = 'Minimum recharge amount is ₹100';
-                isValid = false;
-            }
-            if (!isValid) return;
-            
-            // Process recharge
-            if (accounts[id] && accounts[id].active) {
-                accounts[id].balance += amount;
-                resultEl.textContent = `
-                    Recharge Successful!
-                    Amount Added: ₹${amount.toFixed(2)}
-                    New Balance: ₹${accounts[id].balance.toFixed(2)}
-                `;
-                resultEl.classList.add('success');
-            } else {
-                resultEl.textContent = 'Account not found or inactive';
-                resultEl.classList.add('error-result');
-            }
-        }
 
-        // Cancel function
-        function cancelFastTag() {
-            const id = document.getElementById('cancelId').value.trim().toUpperCase();
-            const reason = document.getElementById('reason').value;
-            const idError = document.getElementById('cancelIdError');
-            const reasonError = document.getElementById('reasonError');
-            const resultEl = document.getElementById('cancelResult');
-            
-            // Clear previous messages
-            idError.textContent = '';
-            reasonError.textContent = '';
-            resultEl.textContent = '';
-            resultEl.className = 'result';
-            
-            // Validation
-            let isValid = true;
-            if (!id) {
-                idError.textContent = 'Please enter your FastTag ID';
-                isValid = false;
+            // Cancel function
+            function cancelFastTag() {
+                const id = document.getElementById('cancelId').value.trim().toUpperCase();
+                const reason = document.getElementById('reason').value;
+                const idError = document.getElementById('cancelIdError');
+                const reasonError = document.getElementById('reasonError');
+                const resultEl = document.getElementById('cancelResult');
+                
+                // Clear previous messages
+                idError.textContent = '';
+                reasonError.textContent = '';
+                resultEl.textContent = '';
+                resultEl.className = 'result';
+                
+                // Validation
+                let isValid = true;
+                if (!id) {
+                    idError.textContent = 'Please enter your FastTag ID';
+                    isValid = false;
+                }
+                if (!reason) {
+                    reasonError.textContent = 'Please select a reason';
+                    isValid = false;
+                }
+                if (!isValid) return;
+                
+                // Process cancellation
+                if (accounts[id] && accounts[id].active) {
+                    const refund = accounts[id].balance;
+                    accounts[id].active = false;
+                    resultEl.textContent = `
+                        Cancellation Successful!
+                        Refund Amount: ₹${refund.toFixed(2)}
+                        Refund will be processed to your linked bank account within 7 days.
+                        Your FastTag has been deactivated.
+                    `;
+                    resultEl.classList.add('success');
+                } else {
+                    resultEl.textContent = 'Account not found';
+                    resultEl.classList.add('error-result');
+                }
             }
-            if (!reason) {
-                reasonError.textContent = 'Please select a reason';
-                isValid = false;
-            }
-            if (!isValid) return;
-            
-            // Process cancellation
-            if (accounts[id] && accounts[id].active) {
-                const refund = accounts[id].balance;
-                accounts[id].active = false;
-                resultEl.textContent = `
-                    Cancellation Successful!
-                    Refund Amount: ₹${refund.toFixed(2)}
-                    Refund will be processed to your linked bank account within 7 days.
-                    Your FastTag has been deactivated.
-                `;
-                resultEl.classList.add('success');
-            } else {
-                resultEl.textContent = 'Account not found';
-                resultEl.classList.add('error-result');
-            }
-        }
-    </script>
-</body>
+        </script>
+    </body>
 </html>
