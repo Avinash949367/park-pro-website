@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Admin Dashboard - Park Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
+      <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
+      <nav class="flex flex-col space-y-4">
+        <a href="storeadmin.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏠</span><span>Dashboard</span>
+        </a>
+        <a href="store_station_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏢</span><span>Manage Station</span>
+        </a>
+        <a href="slot_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>📅</span><span>View Bookings</span>
+        </a>
+        <a href="slot_earning.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>💰</span><span>Earnings</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>✉️</span><span>Messages</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
+          <span>🔓</span><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <!-- Top bar -->
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold">Welcome, Store Admin</h1>
+        <div class="relative flex items-center space-x-4 profile-dropdown">
+          <span class="text-gray-600">🔔 1</span>
+          <img id="profileImage" src="https://via.placeholder.com/40" alt="Profile" class="rounded-full w-10 h-10 cursor-pointer" />
+          <div id="dropdownMenu" class="absolute right-0 mt-20 w-48 bg-white rounded-md shadow-lg opacity-0 pointer-events-none z-10 dropdown-menu transition-opacity duration-300">
+            <div class="p-4 border-b">
+              <p id="profileName" class="font-semibold text-gray-800"></p>
+              <p id="profileEmail" class="text-sm text-gray-600"></p>
+            </div>
+            <ul class="text-sm text-gray-700">
+              <li>
+                <a href="adminprofile.html" class="flex items-center px-4 py-2 hover:bg-yellow-400 hover:text-white rounded transition-colors duration-150">
+                  <!-- Profile Icon -->
+                  <svg class="w-5 h-5 mr-2 text-gray-500 group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M5.121 17.804A12.083 12.083 0 0112 15c2.486 0 4.788.76 6.879 2.052M15 11a3 3 0 11-6 0 3 3 0 016 0z">
+                    </path>
+                  </svg>
+                  Profile
+                </a>
+              </li>
+              
+              <li>
+                <a href="storeadminlogin.html" id="signOutLink"
+                  class="flex items-center px-4 py-2 hover:bg-yellow-400 hover:text-white rounded transition-colors duration-150">
+                  <!-- Logout Icon -->
+                  <svg class="w-5 h-5 mr-2 text-gray-500 group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1">
+                    </path>
+                  </svg>
+                  Sign Out
+                </a>
+              </li>
+            </ul>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white shadow rounded-lg p-4">
+          <h3 class="text-gray-500">Total Slots</h3>
+          <p class="text-2xl font-bold">50</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-4">
+          <h3 class="text-gray-500">Slots Booked Today</h3>
+          <p class="text-2xl font-bold">15</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-4">
+          <h3 class="text-gray-500">Revenue Today</h3>
+          <p class="text-2xl font-bold">₹750</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-4">
+          <h3 class="text-gray-500">Total Earnings</h3>
+          <p class="text-2xl font-bold">₹1,20,000</p>
+        </div>
+      </div>
+
+      <!-- Recent Bookings Table -->
+      <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Recent Bookings</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 border-b">Booking ID</th>
+                <th class="px-4 py-2 border-b">User Name</th>
+                <th class="px-4 py-2 border-b">Slot No</th>
+                <th class="px-4 py-2 border-b">Time</th>
+                <th class="px-4 py-2 border-b">Amount (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hover:bg-gray-100">
+                <td class="px-4 py-2 border-b">#BK00123</td>
+                <td class="px-4 py-2 border-b">John D.</td>
+                <td class="px-4 py-2 border-b">A12</td>
+                <td class="px-4 py-2 border-b">09:30 AM</td>
+                <td class="px-4 py-2 border-b">₹50</td>
+              </tr>
+              <tr class="hover:bg-gray-100">
+                <td class="px-4 py-2 border-b">#BK00124</td>
+                <td class="px-4 py-2 border-b">Ayesha K.</td>
+                <td class="px-4 py-2 border-b">A15</td>
+                <td class="px-4 py-2 border-b">10:00 AM</td>
+                <td class="px-4 py-2 border-b">₹50</td>
+              </tr>
+              <tr class="hover:bg-gray-100">
+                <td class="px-4 py-2 border-b">#BK00125</td>
+                <td class="px-4 py-2 border-b">Vikram R.</td>
+                <td class="px-4 py-2 border-b">A10</td>
+                <td class="px-4 py-2 border-b">10:45 AM</td>
+                <td class="px-4 py-2 border-b">₹50</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // On page load, update profile icon with logged-in user info and dropdown details
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const profileImage = document.getElementById('profileImage');
+      const profileName = document.getElementById('profileName');
+      const profileEmail = document.getElementById('profileEmail');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+
+      if (user) {
+        // If user has a profile image URL, use it; else use placeholder with initials
+        if (user.profileImageUrl) {
+          profileImage.src = user.profileImageUrl;
+        } else if (user.name) {
+          // Create initials avatar as data URL (simple colored circle with initials)
+          const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+          const canvas = document.createElement('canvas');
+          canvas.width = 40;
+          canvas.height = 40;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#4A90E2'; // blue background
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.font = '20px Arial';
+          ctx.fillStyle = 'white';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(initials, canvas.width / 2, canvas.height / 2);
+          profileImage.src = canvas.toDataURL();
+        }
+        // Set name and email in dropdown
+        if (user.name) {
+          profileName.textContent = user.name;
+        }
+        if (user.email) {
+          profileEmail.textContent = user.email;
+        }
+      }
+
+      // Toggle dropdown on profile image click
+      profileImage.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (dropdownMenu.classList.contains('opacity-0')) {
+          dropdownMenu.classList.remove('opacity-0', 'pointer-events-none');
+          dropdownMenu.classList.add('opacity-100', 'pointer-events-auto');
+        } else {
+          dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+          dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+      });
+
+      // Close dropdown if clicking outside
+      document.addEventListener('click', () => {
+        if (!dropdownMenu.classList.contains('opacity-0')) {
+          dropdownMenu.classList.add('opacity-0', 'pointer-events-none');
+          dropdownMenu.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
