@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Parking Slots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex text-gray-800 bg-gray-100">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white h-screen p-4">
+    <h2 class="text-xl font-bold mb-6">Dashboard</h2>
+    <nav class="space-y-4">
+      <a href="#" class="block hover:bg-gray-700 px-4 py-2 rounded">Home</a>
+      <a href="#" class="block hover:bg-gray-700 px-4 py-2 rounded">Stations</a>
+      <a href="#" class="block hover:bg-gray-700 px-4 py-2 rounded bg-gray-700">View Slots</a>
+      <a href="#" class="block hover:bg-gray-700 px-4 py-2 rounded">Bookings</a>
+      <a href="#" class="block hover:bg-gray-700 px-4 py-2 rounded">Settings</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Top Bar -->
+    <header class="bg-white shadow flex justify-between items-center p-4">
+      <h1 class="text-2xl font-semibold">View Slots</h1>
+      <div class="flex items-center gap-4">
+        <span class="text-gray-600">Welcome, Admin</span>
+        <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">Logout</button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-6 space-y-6">
+
+      <!-- Station Info -->
+      <section class="bg-white shadow p-4 rounded">
+        <h2 class="text-xl font-semibold mb-2">Station: GreenPark Parking</h2>
+        <p><strong>Location:</strong> 123 Main Street, City, Country</p>
+        <p><strong>ID:</strong> STN-001</p>
+      </section>
+
+      <!-- Filters & Actions -->
+      <section class="flex justify-between items-center">
+        <!-- Filters -->
+        <div class="flex items-center gap-4">
+          <label class="font-medium">Filter:</label>
+          <select class="p-2 border rounded">
+            <option>All</option>
+            <option>Available</option>
+            <option>Occupied</option>
+            <option>Reserved</option>
+          </select>
+        </div>
+
+        <!-- Actions -->
+        <div class="space-x-2">
+          <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Refresh</button>
+          <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Edit Slots</button>
+        </div>
+      </section>
+
+      <!-- Slot Grid -->
+      <section>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <!-- Example Slot Cards -->
+          <div class="bg-green-100 p-4 text-center rounded shadow">
+            <p class="font-semibold">Slot A1</p>
+            <p class="text-green-600">Available</p>
+          </div>
+          <div class="bg-red-100 p-4 text-center rounded shadow">
+            <p class="font-semibold">Slot A2</p>
+            <p class="text-red-600">Occupied</p>
+          </div>
+          <div class="bg-yellow-100 p-4 text-center rounded shadow">
+            <p class="font-semibold">Slot A3</p>
+            <p class="text-yellow-600">Reserved</p>
+          </div>
+          <div class="bg-gray-200 p-4 text-center rounded shadow">
+            <p class="font-semibold">Slot A4</p>
+            <p class="text-gray-600">Unavailable</p>
+          </div>
+          <!-- Add more slot cards dynamically -->
+        </div>
+      </section>
+
+      <!-- Legends -->
+      <section class="flex gap-6 items-center mt-4">
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+          <span>Available</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+          <span>Occupied</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 bg-yellow-400 rounded-full"></div>
+          <span>Reserved</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 bg-gray-400 rounded-full"></div>
+          <span>Unavailable</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>

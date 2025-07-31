@@ -37,17 +37,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Final confirm station - update status to 'active'
+  // Final confirm station - update status to 'active' and send credentials
   async function finalConfirmStation(stationId) {
     try {
-      const backendBaseUrl = 'http://localhost:5000'; // Adjust if your backend runs on a different URL or port
-      const response = await fetch(`${backendBaseUrl}/api/stations/${stationId}/status`, {
+      const backendBaseUrl = 'http://localhost:5000';
+      // First update station status
+      const statusResponse = await fetch(`${backendBaseUrl}/api/stations/${stationId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'active' }),
       });
-      if (!response.ok) throw new Error('Failed to update station status');
+      if (!statusResponse.ok) throw new Error('Failed to update station status');
+      
+      // Get station details to send credentials
+      const stationResponse = await fetch(`${backendBaseUrl}/api/stations/${stationId}`);
+      if (!stationResponse.ok) throw new Error('Failed to fetch station details');
+      const station = await stationResponse.json();
+      
+      // Send credentials email
+      const emailResponse = await fetch(`${backendBaseUrl}/api/send-credentials`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: station.email,
+          password: 'store@Login.1',
+          stationName: station.name
+        }),
+      });
+      if (!emailResponse.ok) throw new Error('Failed to send credentials email');
+
       await fetchStations();
+      alert('Station confirmed successfully! Login credentials sent to ' + station.email);
     } catch (error) {
       console.error(error);
       alert('Failed to finalize confirmation. Please try again.');
