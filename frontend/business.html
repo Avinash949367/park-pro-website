@@ -1,352 +1,419 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Park Pro Business</title>
     <style>
+      h1{
+        text-align: center;
+
+      }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color:black
+            background-color: white;
+            color: black;
         }
+
         header {
             background-color: white;
-            color: white;
+            color: black;
             padding: 20px;
             text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
+        .get-started-btn {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 30px;
+        }
+
+        .get-started-btn:hover {
+             color: white;                /* Text turns white */
+        background-color: #46949d;   /* Medium teal background on hover */
+        box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+      }
+        
+
         section {
-            padding: 20px;
+            padding: 40px;
             margin: 10px;
             background-color: white;
             border-radius: 5px;
         }
+
         h2 {
-            color: #46949d;
-       
+            color:rgb(0 170 85 / 1);
+            font-size: 45px;
+            text-align: center;
         }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #46949d;
-            color: black;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+
+        .features-container {
+        display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 10px;
         }
-        .button:hover {
-            background-color: #3b7a7d;
-        }
-       
-        
-        h2 {
-      font-size: 28px;
-      margin-bottom: 40px;
-    }
 
-   .features-container {
-      display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      
-      gap: 30px;
-    }
-
-    .feature {
-      background-color: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      width: 250px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease;
-      
-    }
-
-    .feature:hover {
-      transform: translateY(-5px);
-    }
-
-    .feature img {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 15px;
-    }
-
-    .feature-title {
-      font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .feature-description {
-      color: #555;
-      font-size: 14px;
-    }
-      .partner-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 30px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .partner-item {
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-    }
-
-    .partner-item:hover {
-      transform: translateY(-5px);
-    }
-
-    .partner-item img {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 15px;
-    }
-
-    .partner-name {
-      font-weight: 600;
-      font-size: 16px;
-      color: #333;
-    }
-     .business-features-section {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .business-features-heading {
-      font-size: 28px;
-      margin-bottom: 40px;
-    }
-
-    .business-feature-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 30px;
-    }
-
-    .business-feature-card {
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease;
-    }
-
-    .business-feature-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .feature-icon {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 15px;
-    }
-
-    .feature-title {
-      font-weight: 600;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .feature-description {
-      color: #555;
-      font-size: 14px;
-    }
-    .object-contain{
-       height: 60px;
-  width: auto;
-  object-fit: contain;
-}
-    
-    .navbar{
-       
-  background-color:white; 
+        .feature {
+             background: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  height: 200px;  /* Increase height */
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px;
-  height: 80px; 
-}
-.hero-section {
-  height: 70vh;
-  background-image: url('https://c1.wallpaperflare.com/preview/50/659/614/car-man-drive-watch-thumbnail.jpg');
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  display: flex;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .partner-grid {
+ 
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 10px;
+
+
 }
 
-.hero-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
-  width: 100%;
-  height: 100%;
+        .partner-item {
+            background: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  height: 200px;  /* Increase height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+        }
+
+        .partner-item:hover {
+  transform: translateY(-5px); /* lifts the item up */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* adds shadow */
+}
+
+        .partner-item img {
+             width: 55px;     
+  height: 55px;
+  margin-bottom: 12px;
+  transition: transform 0.3s ease;
+        }
+        .partner-item:hover img {
+  transform: scale(1.1);
+}
+
+
+        .partner-name {
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: #333;
+        }
+
+        .business-features-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+
+        .business-features-heading {
+             font-size: 42px;
+    text-align: center;
+    margin-top: 20px;  /* Or 10px, something small and clean */
+    margin-bottom: 20px;
+        }
+        .business-feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 35px;
+        }
+
+        .business-feature-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .business-feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+        }
+
+        .step-tracker {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  margin: 50px auto;
+  max-width: 1200px;
 }
 
-.hero-overlay h2 {
-  color: white;
-  font-size: 36px;
-  font-weight: bold;
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
-    
+
+.circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 25px;
+  color: white;
+}
+
+.label {
+  margin-top: 6px;
+  font-size: 20px;
+  text-align: center;
+  width: 90px;
+}
+
+.line {
+  height: 4px;
+  width: 40px;
+  background-color: lightgray;
+  margin: 0 8px;
+}
+.footer-content {
+  text-align: center;
+  background-color:black;
+color: white;
+  padding: 40px 20px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  font-size: 18px;
+}
+.footer-heading {
+  font-size: 2rem;
+  font: bold;
+  font-weight: 600;
+}
     </style>
 </head>
 <body>
+ 
 
 <header>
-    <div class="navbar bg-teal-600 px-6 py-2 flex items-center justify-between">
-       <div class="flex items-center gap-2 pl-24">
-    
-      <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-      <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-     <h1 class="text-white text-xl font-semibold">Park Pro Business</h1>
-    </div>
-    
+    <h1 style="margin-left: 30px;text-align: center;">Park<span style="color: rgb(0 170 85 / 1)
+;">Pro</span> Business</h1>
+    <button class="get-started-btn">Get Started</button>
 </header>
+
 <section class="hero-section">
-  <div class="hero-overlay">
-   
-  </div>
+  <div class="hero-overlay"></div>
 </section>
 
-
-
-    <h2>Why Should You Partner with Park Pro?</h2>
-    <div class="features-container">
-
-   
-    <div class="feature" data-aos="fade-up" data-aos-delay="200">
+<h2 style="text-align: center; ">Why Should You Partner with Park Pro?</h2>
+<div class="features-container">
+    <div class="feature">
       <img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png" alt="Management Icon">
       <div class="feature-title">Smart Management Tools</div>
       <div class="feature-description">Easily manage and track your parking slots and activity.</div>
     </div>
-
-    <div class="feature" data-aos="fade-up" data-aos-delay="300">
+    <div class="feature">
       <img src="https://cdn-icons-png.flaticon.com/512/1057/1057332.png" alt="Real-Time Icon">
       <div class="feature-title">Real-Time Availability</div>
       <div class="feature-description">Update availability instantly for users searching nearby.</div>
     </div>
-
-    <div class="feature" data-aos="fade-up" data-aos-delay="400">
+    <div class="feature">
       <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Dashboard Icon">
       <div class="feature-title">Business Dashboard</div>
       <div class="feature-description">Track earnings, view bookings, and analyze performance.</div>
     </div>
-
-    <div class="feature" data-aos="fade-up" data-aos-delay="500">
+    <div class="feature">
       <img src="https://cdn-icons-png.flaticon.com/512/2910/2910761.png" alt="Payment Icon">
       <div class="feature-title">Secure Payments</div>
       <div class="feature-description">Enable fast, contactless, and secure transactions.</div>
     </div>
-
-    <div class="feature" data-aos="fade-up" data-aos-delay="600">
+    <div class="feature">
       <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" alt="Support Icon">
       <div class="feature-title">Partner Support</div>
       <div class="feature-description">Get access to reliable support to grow your parking business.</div>
     </div>
+</div>
 
-  </div>
-
- 
 <section>
-    <h2 style="text-align: center;">Who Can Partner?</h2>
-      <div class="partner-grid">
-
-    <div class="partner-item" data-aos="fade-up" data-aos-delay="100">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSA43JGwlxgt4Otf0mrEncgGZlKiy4-cbjtA&s" alt="Mall Icon">
-      <div class="partner-name">Malls & Shopping Centers</div>
+    <h2 style="text-align: center; font-size: 3rem;">Who Can Partner?</h2>
+    <div class="partner-grid">
+        <div class="partner-item">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSA43JGwlxgt4Otf0mrEncgGZlKiy4-cbjtA&s" alt="Mall Icon">
+            <div class="partner-name">Malls & Shopping Centers</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/6879/6879751.png" alt="Apartment Icon">
+            <div class="partner-name">Apartment Complexes</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/6879/6879696.png" alt="Office Icon">
+            <div class="partner-name">Office Buildings</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/6008/6008287.png" alt="Hotel Icon">
+            <div class="partner-name">Hotels</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/1999/1999101.png" alt="Event Icon">
+            <div class="partner-name">Event Venues</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/2830/2830310.png" alt="Private Lot Icon">
+            <div class="partner-name">Private Parking Lot Owners</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.freepik.com/256/13505/13505947.png?semt=ais_white_label" alt="College Icon">
+            <div class="partner-name">Colleges & Institutions</div>
+        </div>
     </div>
+</section>
 
-    <div class="partner-item" data-aos="fade-up" data-aos-delay="200">
-      <img src="https://cdn-icons-png.flaticon.com/512/6879/6879751.png" alt="Apartment Icon">
-      <div class="partner-name">Apartment Complexes</div>
-    </div>
-
-    <div class="partner-item" data-aos="fade-up" data-aos-delay="300">
-      <img src="https://cdn-icons-png.flaticon.com/512/6879/6879696.png" alt="Office Icon">
-      <div class="partner-name">Office Buildings</div>
-    </div>
-
-    <div class="partner-item" data-aos="fade-up" data-aos-delay="400">
-      <img src="https://cdn-icons-png.flaticon.com/512/6008/6008287.png" alt="Hotel Icon">
-      <div class="partner-name">Hotels</div>
-    </div>
-
-    <div class="partner-item" data-aos="fade-up" data-aos-delay="500">
-      <img src="https://cdn-icons-png.flaticon.com/512/1999/1999101.png" alt="Event Icon">
-      <div class="partner-name">Event Venues</div>
-    </div>
-
-    <div class="partner-item" data-aos="fade-up" data-aos-delay="600">
-      <img src="https://cdn-icons-png.flaticon.com/512/2830/2830310.png" alt="Private Lot Icon">
-      <div class="partner-name">Private Parking Lot Owners</div>
-    </div>
-
-    <div class="partner-item" data-aos="fade-up" data-aos-delay="700">
-      <img src="https://cdn-icons-png.freepik.com/256/13505/13505947.png?semt=ais_white_label" alt="College Icon">
-      <div class="partner-name">Colleges & Institutions</div>
-    </div>
-  </div>
-    </section>
-     <section class="business-features-section">
+<section class="business-features-section">
     <h2 class="business-features-heading">Features for Business</h2>
-
     <div class="business-feature-list">
-
-      <div class="business-feature-card" data-aos="zoom-in" data-aos-delay="100">
-        <img src="https://cdn-icons-png.flaticon.com/512/6821/6821002.png" alt="Dashboard Icon" class="feature-icon">
-        <div class="feature-title">Business Dashboard</div>
-        <div class="feature-description">Monitor parking usage, revenue, and performance in one place.</div>
-      </div>
-
-      <div class="business-feature-card" data-aos="zoom-in" data-aos-delay="200">
-        <img src="https://img.freepik.com/premium-vector/dynamic-pricing-icon-web_116137-9110.jpg" alt="Dynamic Pricing Icon" class="feature-icon">
-        <div class="feature-title">Dynamic Pricing</div>
-        <div class="feature-description">Adjust prices based on demand, time, or day of the week.</div>
-      </div>
-
-      <div class="business-feature-card" data-aos="zoom-in" data-aos-delay="300">
-        <img src="https://cdn-icons-png.flaticon.com/512/3523/3523885.png" alt="Booking Icon" class="feature-icon">
-        <div class="feature-title">Booking Management</div>
-        <div class="feature-description">View, manage, and approve bookings through your portal.</div>
-      </div>
-
-      <div class="business-feature-card" data-aos="zoom-in" data-aos-delay="400">
-        <img src="https://img.freepik.com/premium-vector/qr-code-icon-qr-code-sample-icon-abstract-style-white-background-qr-code-scanner-blac-scan-code-business-illustration-bar-code-icon-line-symbol-modern-vector-illustration-eps-10_564974-442.jpg" alt="Checkin Icon" class="feature-icon">
-        <div class="feature-title">Automated Check-In/Out</div>
-        <div class="feature-description">Use QR codes or RFID for seamless and secure entry/exit.</div>
-      </div>
-
-      <div class="business-feature-card" data-aos="zoom-in" data-aos-delay="500">
-        <img src="https://i.pinimg.com/564x/d2/4f/16/d24f163248fd807b834be813da7b6644.jpg" alt="Analytics Icon" class="feature-icon">
-        <div class="feature-title">Reports & Analytics</div>
-        <div class="feature-description">Track usage trends, earnings, and performance insights.</div>
-      </div>
-
-      <div class="business-feature-card" data-aos="zoom-in" data-aos-delay="600">
-        <img src="https://cdn-icons-png.flaticon.com/512/1827/1827504.png" alt="Notification Icon" class="feature-icon">
-        <div class="feature-title">Custom Alerts</div>
-        <div class="feature-description">Get instant alerts for maintenance, full lots, or custom triggers.</div>
-      </div>
-
+        <div class="business-feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/6821/6821002.png" alt="Dashboard Icon" class="feature-icon">
+            <div class="feature-title">Business Dashboard</div>
+            <div class="feature-description">Monitor parking usage, revenue, and performance in one place.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://img.freepik.com/premium-vector/dynamic-pricing-icon-web_116137-9110.jpg" alt="Dynamic Pricing Icon" class="feature-icon">
+            <div class="feature-title">Dynamic Pricing</div>
+            <div class="feature-description">Adjust prices based on demand, time, or day of the week.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3523/3523885.png" alt="Booking Icon" class="feature-icon">
+            <div class="feature-title">Booking Management</div>
+            <div class="feature-description">View, manage, and approve bookings through your portal.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://img.freepik.com/premium-vector/qr-code-icon-qr-code-sample-icon-abstract-style-white-background-qr-code-scanner-blac-scan-code-business-illustration-bar-code-icon-line-symbol-modern-vector-illustration-eps-10_564974-442.jpg" alt="Checkin Icon" class="feature-icon">
+            <div class="feature-title">Automated Check-In/Out</div>
+            <div class="feature-description">Use QR codes or RFID for seamless and secure entry/exit.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://i.pinimg.com/564x/d2/4f/16/d24f163248fd807b834be813da7b6644.jpg" alt="Analytics Icon" class="feature-icon">
+            <div class="feature-title">Reports & Analytics</div>
+            <div class="feature-description">Track usage trends, earnings, and performance insights.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1827/1827504.png" alt="Notification Icon" class="feature-icon">
+            <div class="feature-title">Custom Alerts</div>
+            <div class="feature-description">Get instant alerts for maintenance, full lots, or custom triggers.</div>
+        </div>
     </div>
-  </section>
+</section>
 
 
-<footer style="text-align: center; padding: 20px;">
-    <a href="#" class="button">Get Started</a>
-</footer>
+  <div class="step-tracker">
+  <div class="step completed">
+    <div class="circle"></div>
+    <div class="label">Login Portal</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle"></div>
+    <div class="label">Click Login</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">3</div>
+    <div class="label">Enter Email</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">4</div>
+    <div class="label">Enter Password</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">5</div>
+    <div class="label">Click Sign In</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">6</div>
+    <div class="label">Enter OTP</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step active">
+    <div class="circle"><img src=""></div>
+    <div class="label">Dashboard</div>
+  </div>
+</div>
+
+
+
+    <footer class="foot">
+        <div class="footer-content">
+            <div class="footer-heading">Park<span style="color:rgb(0 170 85 / 1)
+; text-align: center;">Pro</span> </h1></div><br>
+            <p>Smart parking solutions powered by IoT technology</p><br><br>
+            <p >© 2023 ParkPro Technologies</p>
+        </div>
+    </footer>
 
 </body>
 </html>
