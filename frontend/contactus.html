@@ -1,374 +1,486 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ParkPro - Contact Us</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Contact Us | Park Pro</title>
+    <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary: #22c55e;
-            --primary-dark: #16a34a;
-            --secondary: #f8f9fa;
-            --dark: #212529;
-            --light: #ffffff;
-            --gray: #64748b;
-            --success: #16a34a;
+            --primary: #46949d;
+            --secondary: #1e3740;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --black: #000000;
         }
-
-        * {
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
         }
-
-        body {
-            background-color: var(--secondary);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 2rem;
         }
-
-        .contact-header {
-            background-color: var(--light);
-            padding: 100px 0 60px;
-            text-align: center;
-        }
-
-        .contact-header h1 {
-            font-size: 3.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
-        .contact-header p {
-            font-size: 1.4rem;
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* ADJACENT CONTACT SECTIONS */
-        .contact-sections {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 60px 0;
-        }
-
-        .contact-info, .contact-form {
-            background-color: var(--light);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .contact-info h3, .contact-form h3 {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: var(--primary);
-        }
-
-        .info-item {
+        
+        /* Navbar styles from index.html */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            background-opacity: 90%;
+            backdrop-blur: blur(12px);
+            color: #333;
+            padding: 1rem 2rem;
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 25px;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            border-bottom: 1px solid #e5e7eb;
         }
-
-        .info-icon {
-            font-size: 1.4rem;
-            color: var(--primary);
-            margin-right: 18px;
-            margin-top: 3px;
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-
-        .info-content h4 {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
+        
+        .logo-img {
+            height: 3rem;
+            width: auto;
+            object-fit: contain;
         }
-
-        .info-content p, 
-        .info-content a {
-            color: var(--gray);
-            font-size: 1.1rem;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
             font-weight: 500;
         }
-
-        .form-control {
-            width: 100%;
-            padding: 15px 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1.05rem;
-            transition: border-color 0.3s;
-        }
-
-        textarea.form-control {
-            min-height: 180px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            background-color: var(--primary);
-            color: var(--light);
-            border: none;
-            padding: 16px 40px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
-
-        .success-message {
-            display: none;
-            background-color: var(--success);
-            color: var(--light);
-            padding: 18px;
-            border-radius: 6px;
-            margin-top: 25px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        /* DOWNLOAD APP SECTION */
-        .download-section {
-            background-color: var(--light);
-            padding: 80px 0;
-            text-align: center;
-            border-top: 1px solid #eee;
-        }
-
-        .download-section h2 {
-            font-size: 2.8rem;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .download-section p {
-            font-size: 1.4rem;
-            color: var(--gray);
-            margin-bottom: 40px;
-        }
-
-        .app-showcase {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 60px;
-            flex-wrap: wrap;
-        }
-
-        .app-image {
-            width: 300px;
-            height: auto;
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .download-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .download-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--dark);
-            color: white;
-            padding: 18px 35px;
-            border-radius: 10px;
+        
+        .nav-link {
             text-decoration: none;
-            font-size: 1.15rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            width: 280px;
+            color: #1e3740;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
-
-        footer {
-            background-color: var(--dark);
-            color: var(--light);
-            padding: 60px 0 30px;
+        
+        .nav-link:hover {
+            color: white;
+            background-color: #46949d;
+            box-shadow: 0 2px 6px rgba(70, 148, 157, 0.3);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn-primary {
+            background-color: #000000;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        /* Main content styles */
+        .main-content {
+            margin-top: 5rem;
+            padding: 2rem;
+        }
+        
+        .contact-hero {
+            background: white;
+            padding: 3rem 0;
             text-align: center;
+            margin-bottom: 2rem;
         }
-
-        .copyright {
-            color: var(--gray);
+        
+        .contact-hero h2 {
+            font-size: 2.5rem;
+            color: #46949d;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .contact-hero p {
+            font-size: 1.2rem;
+            color: #1e3740;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-primary-cta {
+            background-color: #46949d;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary-cta:hover {
+            background-color: #3a7d85;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary-cta {
+            background-color: transparent;
+            color: #1e3740;
+            border: 2px solid #1e3740;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary-cta:hover {
+            background-color: rgba(26, 62, 114, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-card h2 {
+            color: #46949d;
+            margin-top: 0;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #46949d;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1e3740;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
             font-size: 1rem;
+            transition: border 0.3s ease;
         }
-
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #46949d;
+            box-shadow: 0 0 0 3px rgba(70, 148, 157, 0.1);
+        }
+        
+        button {
+            background-color: #46949d;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #3a7d85;
+        }
+        
+        .contact-info {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-icon {
+            background-color: #46949d;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .contact-details h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1e3740;
+        }
+        
+        .contact-details p {
+            margin: 0;
+            color: #666;
+        }
+        
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #25D366;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+        
+        .map-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #46949d;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .map-btn:hover {
+            background-color: #3a7d85;
+        }
+        
+        .btn-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .map-container {
+            height: 300px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
         @media (max-width: 768px) {
-            .contact-sections {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .contact-grid {
                 grid-template-columns: 1fr;
-                gap: 30px;
             }
             
-            .contact-header h1 {
-                font-size: 2.8rem;
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
             }
             
-            .contact-header p,
-            .download-section p {
-                font-size: 1.2rem;
-            }
-            
-            .app-showcase {
-                gap: 40px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .contact-header h1,
-            .download-section h2 {
-                font-size: 2.2rem;
-            }
-            
-            .app-image {
-                width: 250px;
-            }
-            
-            .download-btn {
-                width: 250px;
-                padding: 16px 25px;
+            .btn-primary-cta, .btn-secondary-cta {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <header class="contact-header">
-        <div class="container">
-            <h1>Contact Us</h1>
-            <p>Have questions about our parking solutions? Our team is here to help.</p>
+    <!-- Navbar from index.html -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="logo-img" loading="lazy" />
+                <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="logo-img" loading="lazy" />
+            </a>
         </div>
-    </header>
+        
+        <div class="nav-links">
+            <a href="aboutus.html" class="nav-link">About us</a>
+            <a href="#" class="nav-link">Park Pro For Business</a>
+            <a href="#" class="nav-link">Products</a>
+            <a href="#" class="nav-link">Contact</a>
+        </div>
+        
+        <div class="auth-buttons">
+            <a href="userlogin.html" class="btn-primary">Login</a>
+            <a href="#" class="btn-primary">Get the App</a>
+        </div>
+    </nav>
 
-    <main class="container">
-        <!-- ADJACENT CONTACT SECTIONS -->
-        <div class="contact-sections">
-            <div class="contact-info">
-                <h3>Contact Information</h3>
-                <div class="info-item">
-                    <i class="fas fa-map-marker-alt info-icon"></i>
-                    <div class="info-content">
-                        <h4>Our Location</h4>
-                        <p>123 Parking Avenue<br>San Francisco, CA 94107</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-phone-alt info-icon"></i>
-                    <div class="info-content">
-                        <h4>Phone Number</h4>
-                        <p><a href="tel:+18005551234">+1 (800) 555-1234</a></p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-envelope info-icon"></i>
-                    <div class="info-content">
-                        <h4>Email Address</h4>
-                        <p><a href="mailto:info@parkpro.com">info@parkpro.com</a></p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-clock info-icon"></i>
-                    <div class="info-content">
-                        <h4>Working Hours</h4>
-                        <p>Mon-Fri: 8AM - 8PM<br>Sat: 9AM - 5PM<br>Sun: Closed</p>
-                    </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Contact Hero Section -->
+        <section class="contact-hero">
+            <div class="container">
+                <h2>Contact Us</h2>
+                <p>Get in touch with us to learn more about our services, partnerships, and how we can help you with your parking needs.</p>
+                <div class="cta-buttons">
+                    <a href="#contact-form" class="btn-primary-cta">Get in Touch</a>
+                    <a href="#contact-info" class="btn-secondary-cta">Contact Us →</a>
                 </div>
             </div>
+        </section>
 
-            <div class="contact-form">
-                <h3>Send Us a Message</h3>
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" class="form-control" placeholder="What's this about?" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" class="form-control" placeholder="Your message here..." required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Send Message</button>
-                    <div id="successMessage" class="success-message">
-                        Thank you! Your message has been sent successfully.
-                    </div>
-                </form>
-            </div>
-        </div>
-    </main>
-
-    <section class="download-section">
         <div class="container">
-            <h2>Download ParkPro App</h2>
-            <p>Book your parking slot in a jiffy</p>
-            
-            <div class="app-showcase">
-                <img src="https://cdn.dribbble.com/users/879147/screenshots/5454247/media/0a7c0a0a9a0b9b0b9b0b9b0b9b0b9b0b.png" 
-                     alt="ParkPro Mobile App" 
-                     class="app-image">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-card" id="contact-form">
+                    <h2>Send Us a Message</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" name="subject">
+                                <option value="">Select a subject</option>
+                                <option value="parking">Parking Inquiry</option>
+                                <option value="facilities">Facility Booking</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="partnership">Business Partnership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
                 
-                <div class="download-buttons">
-                    <a href="#" class="download-btn">
-                        <i class="fab fa-apple"></i>
-                        Download for iOS
+                <!-- Contact Information -->
+                <div class="contact-card" id="contact-info">
+                    <h2>Get In Touch</h2>
+                    
+                    <div class="contact-info">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>MRD Block (Silver Jubilee)</h3>
+                            <p>PES University, 100 Feet Ring Road BSK<br>
+                            III Stage, Bangalore – 560085</p>
+                            <a href="https://maps.app.goo.gl/13j7J6LH1tvjpQAo6" class="map-btn" target="_blank">
+                                <span class="btn-icon"><i class="fab fa-google"></i></span>
+                                View On Google Map
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Phone Numbers</h3>
+                            <p>+91 80 26721983<br>+91 80 26722108</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email</h3>
+                            <p><a href="mailto:parkpro@gmail.com">parkpro@gmail.com</a></p>
+                        </div>
+                    </div>
+                    
+                    <a href="https://wa.me/918026721983" class="whatsapp-btn" target="_blank">
+                        <span class="btn-icon"><i class="fab fa-whatsapp"></i></span>
+                        Chat on WhatsApp
                     </a>
-                    <a href="#" class="download-btn">
-                        <i class="fab fa-google-play"></i>
-                        Download for Android
-                    </a>
+                    
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.0799357548176!2d77.53604072010222!3d12.935081724101627!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3e468d8d36d3%3A0x694d74f6ac640acf!2sPES%20University!5e1!3m2!1sen!2sin!4v1754576661930!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <footer>
-        <div class="container">
-            <p class="copyright">© 2023 ParkPro. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            setTimeout(function() {
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('contactForm').reset();
-                
-                setTimeout(function() {
-                    document.getElementById('successMessage').style.display = 'none';
-                }, 5000);
-            }, 1000);
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
