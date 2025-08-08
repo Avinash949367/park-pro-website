@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkPro | Smart Parking Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #46949d;
+            --dark-green: rgb(18, 105, 28);
+            --black: #000000;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-border: #e0e0e0;
+            --text-primary: #212121;
+            --text-secondary: #424242;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        
+        .product-card {
+            background: var(--white);
+            border: 1px solid var(--gray-border);
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .product-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 32px;
+        }
+        
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        
+        .product-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 24px;
+            min-height: 48px;
+        }
+        
+        .learn-more {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .learn-more:hover {
+            background: var(--white);
+            color: var(--black);
+            outline: 1px solid var(--black);
+        }
+
+        .product-details {
+            background: var(--white);
+            border: 1px solid var(--gray-border);
+            padding: 30px;
+            margin-top: 20px;
+            grid-column: 1 / -1;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-details h4 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .product-details ul {
+            list-style-type: none;
+            columns: 2;
+            column-gap: 40px;
+        }
+
+        .product-details li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+            break-inside: avoid;
+        }
+
+        .product-details li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 16px;
+            width: 16px;
+            height: 2px;
+            background: var(--primary-green);
+        }
+
+        .partnership-section {
+            max-width: 1000px;
+            margin: 80px auto 0;
+            padding: 60px 20px 0;
+            text-align: center;
+            border-top: 1px solid var(--gray-border);
+        }
+
+        .partnership-label {
+            color: var(--primary-green);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .partnership-heading {
+            color: var(--text-primary);
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+
+        .partnership-description {
+            color: var(--dark-green);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 680px;
+            margin: 0 auto 36px;
+            font-weight: 400;
+        }
+
+        .partnership-cta {
+            display: inline-block;
+            background: var(--primary-green);
+            color: var(--white);
+            padding: 14px 36px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .partnership-cta:hover {
+            background: var(--dark-green);
+        }
+
+        .partnership-cta span {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .partnership-cta:hover span {
+            transform: translateX(3px);
+        }
+        
+        @media (max-width: 900px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+            
+            .product-details ul {
+                columns: 1;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .container {
+                padding: 40px 16px;
+            }
+            
+            .product-card {
+                padding: 24px;
+            }
+
+            .partnership-section {
+                padding: 40px 16px 0;
+                margin-top: 40px;
+            }
+
+            .partnership-heading {
+                font-size: 1.6rem;
+            }
+
+            .partnership-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-icon">🅿️</div>
+                <h3 class="product-title">Smart Parking Sensors</h3>
+                <p class="product-description">Detect real-time vehicle presence using ground or overhead sensors.</p>
+                <button class="learn-more" data-target="smart-sensors-content">Learn More</button>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-icon">🚧</div>
+                <h3 class="product-title">Automatic Boom Barriers</h3>
+                <p class="product-description">Manage entry and exit with automated gate systems and RFID/mobile access.</p>
+                <button class="learn-more" data-target="boom-barriers-content">Learn More</button>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-icon">📷</div>
+                <h3 class="product-title">ANPR Cameras</h3>
+                <p class="product-description">Read and log license plates for seamless access and security control.</p>
+                <button class="learn-more" data-target="anpr-cameras-content">Learn More</button>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-icon">📺</div>
+                <h3 class="product-title">Digital Display Boards</h3>
+                <p class="product-description">Show live parking slot availability to assist drivers at entry points.</p>
+                <button class="learn-more" data-target="display-boards-content">Learn More</button>
+            </div>
+            
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-icon">🌐</div>
+                <h3 class="product-title">IoT Controllers</h3>
+                <p class="product-description">Centralized controllers to connect and sync all smart parking devices.</p>
+                <button class="learn-more" data-target="iot-controllers-content">Learn More</button>
+            </div>
+            
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-icon">💳</div>
+                <h3 class="product-title">Payment Integration</h3>
+                <p class="product-description">QR, UPI, and card-enabled hardware for smooth and secure payments.</p>
+                <button class="learn-more" data-target="payment-devices-content">Learn More</button>
+            </div>
+            
+            <!-- Product Details Sections -->
+            <div id="smart-sensors-content" class="product-details">
+                <h4>Smart Parking Sensors Specifications</h4>
+                <ul>
+                    <li>Dual-mode ultrasonic/magnetic detection technology</li>
+                    <li>5-7 year battery life (depending on usage)</li>
+                    <li>IP68 waterproof and dustproof rating</li>
+                    <li>Real-time status updates </li>
+                    <li>Tool-free installation with magnetic mounting</li>
+                    <li>BLE and LoRaWAN connectivity options</li>
+                </ul>
+            </div>
+
+            <div id="boom-barriers-content" class="product-details">
+                <h4>Automatic Boom Barrier Specifications</h4>
+                <ul>
+                    
+                    <li>Integrated infrared obstacle detection</li>
+                    <li>Remote diagnostics via web portal</li>
+                    <li>Customizable lengths: 3m, 4m, 5m, 6m</li>
+                    <li>Dual power supply (AC + battery backup)</li>
+                    <li>Control options: RFID, ANPR, remote, mobile app</li>
+                </ul>
+            </div>
+
+            <div id="anpr-cameras-content" class="product-details">
+                <h4>ANPR Camera Specifications</h4>
+                <ul>
+                    <li>98.7% recognition accuracy (day/night)</li>
+                    <li>IR illumination range: up to 30m</li>
+                    <li>1/1000s shutter speed for moving vehicles</li>
+                    <li>Integrated with security and payment systems</li>
+                    <li>License plate database integration</li>
+                    <li>Weather-resistant housing (IP67 rated)</li>
+                </ul>
+            </div>
+
+            <div id="display-boards-content" class="product-details">
+                <h4>Digital Display Specifications</h4>
+                <ul>
+                    <li>Full-color LED displays (500-1500 nits)</li>
+                    <li>IP65 outdoor rating</li>
+                    <li>Cloud-based content management</li>
+                    <li>Real-time parking data integration</li>
+                    <li>Customizable layouts and messaging</li>
+                    <li>Energy efficient operation</li>
+                </ul>
+            </div>
+
+            <div id="iot-controllers-content" class="product-details">
+                <h4>IoT Controller Specifications</h4>
+                <ul>
+                    <li>Unified device management dashboard</li>
+                    <li>4G/5G, WiFi 6, and Ethernet connectivity</li>
+                    <li>Edge computing with local processing</li>
+                    <li>REST API for third-party integration</li>
+                    <li>Scalable architecture (supports 500+ devices)</li>
+                    <li>Data encryption (AES-256)</li>
+                </ul>
+            </div>
+
+            <div id="payment-devices-content" class="product-details">
+                <h4>Payment Integration Specifications</h4>
+                <ul>
+                    <li>Contactless/NFC (Apple Pay, Google Pay)</li>
+                    <li>QR code scanning integration</li>
+                    <li>Multi-currency and language support</li>
+                    <li>PCI-DSS Level 1 compliant</li>
+                    <li>Offline transaction capability</li>
+                    <li>Fraud detection algorithms</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Partnership Section -->
+        <div class="partnership-section">
+            <span class="partnership-label">STRATEGIC INTEGRATION</span>
+            <h3 class="partnership-heading">Elevate Your Parking Infrastructure</h3>
+            <p class="partnership-description">
+                Our partner program delivers turnkey implementation of these smart parking solutions, 
+                with white-glove support from initial consultation through system optimization.
+            </p>
+            <a href="#" class="partnership-cta">
+                Explore Partnership Opportunities
+                <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const learnMoreButtons = document.querySelectorAll('.learn-more');
+            
+            learnMoreButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+                    const isContentVisible = targetContent.style.display === 'block';
+                    
+                    // Close all open details first
+                    document.querySelectorAll('.product-details').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    
+                    // Toggle current content if it wasn't already visible
+                    if (!isContentVisible) {
+                        targetContent.style.display = 'block';
+                        // Smooth scroll to the content
+                        targetContent.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'nearest'
+                        });
+                    }
+                    
+                    // Update button text
+                    learnMoreButtons.forEach(btn => {
+                        btn.textContent = 'Learn More';
+                    });
+                    if (!isContentVisible) {
+                        this.textContent = 'Close Details';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
