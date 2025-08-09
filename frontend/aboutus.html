@@ -10,15 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <style>
-        @layer utilities {
-            .bg-gradient-primary {
-                background: linear-gradient(135deg, rgba(0,170,85,0.1) 0%, rgba(0,170,85,0.05) 100%);
-            }
-            .border-left-primary {
-                border-left: 4px solid #00AA55;
-            }
-        }
-
+        
         .option {
         text-decoration: none;       /* Remove underline */
         color: #1e3740;              /* Dark teal text color */
@@ -36,6 +28,259 @@
       }
   
 
+      /* body sttyling */
+      .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+        
+        .about-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .about-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .about-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .about-image {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .about-text h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .mission-card, .vision-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .mission-card h3, .vision-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .team-section {
+            margin-top: 4rem;
+        }
+        
+        .team-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .team-member {
+            text-align: center;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            height: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+        
+        .member-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 5px solid rgba(67, 97, 238, 0.1);
+        }
+        
+        .member-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .member-position {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            margin: 5rem 0;
+            padding: 3rem 0;
+            background-color: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .testimonials-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: #555;
+            position: relative;
+        }
+        
+        .testimonial-text::before {
+            content: '"';
+            font-size: 4rem;
+            position: absolute;
+            left: -1rem;
+            top: -1.5rem;
+            color: rgba(70, 148, 157, 0.1);
+            z-index: 0;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .testimonial-author h4 {
+            margin: 0;
+            color: var(--dark);
+        }
+        
+        .testimonial-author p {
+            margin: 0.25rem 0 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Partners Section */
+        .partners-section {
+            margin: 5rem 0;
+        }
+        
+        .partners-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 3rem;
+            align-items: center;
+            justify-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .partner-logo {
+            max-width: 150px;
+            height: auto;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .mission-vision {
+                grid-template-columns: 1fr;
+            }
+
+            .partners-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+        }
         
     </style>
 </head>
@@ -72,105 +317,124 @@
           </div>
       </div>
       </div>
-    <header class="py-[60px] md:py-[60px] px-0">
-        <div class="max-w-[800px] mx-auto px-5 text-center">
-            <div class="text-[2.5rem] md:text-[2.5rem] font-bold mb-4 text-[#121212]">Park<span class="text-[#00AA55]">Pro</span></div>
-            <p class="text-[1.2rem] text-[#666] max-w-[600px] mx-auto">Smart parking solutions for the modern world</p>
+
+
+      <!-- body of the page  -->
+
+      <div class="about-container">
+        <div class="about-header">
+            <h1>About ParkSmart</h1>
+            <strong><p style="color:#46949d; ">Find parking solution for all type of vehicles with Modern technology</p></strong>
         </div>
-    </header>
+        
+        <div class="about-content">
+            <div class="about-image">
+                <!-- Replace with your actual image -->
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Smart parking solution">
+            </div>
+            
+            <div class="about-text">
+                <h2>Our Story</h2>
+                <p>Built in 2025, ParkPro began as a group of <span style="color:rgb(18, 105, 28)"><strong>Students</strong></span> with a big vision: to solve the growing parking crisis in urban areas. Our team came together with a shared mission to create intelligent parking solutions that reduce congestion, lower emissions, and improve quality of life in cities.</p>
+                
+                <p>What started as a university project has now grown into a leading parking management platform serving over 50 cities worldwide. Our patented sensor technology and AI-powered prediction algorithms help drivers find parking faster while giving cities valuable data to optimize their parking infrastructure.</p>
+                <p>Today, we continue to innovate with new features AI Assisstent, infrastructure GPS and <span>more</span> to create seamless mobility experiences.</p>
 
-    <main class="max-w-[1000px] mx-auto px-5">
-        <section class="my-[50px] px-[10px]">
-            <h2 class="text-[1.8rem] md:text-[1.8rem] font-bold mb-[30px] text-[#121212] text-center">Revolutionizing <span class="text-[#00AA55]">Urban Parking</span></h2>
+                
+            </div>
             
-            <p class="mb-5 text-[1.1rem]">ParkPro is transforming urban mobility through its IoT-powered smart parking ecosystem. Combining cutting-edge hardware with intuitive software, we're solving the parking challenges that cities and drivers face every day.</p>
+        </div>
+       
+        <div class="mission-vision">
+            <div class="mission-card">
+                <h3>Our Mission</h3>
+                <p>To transform urban mobility by developing intelligent parking solutions that reduce congestion, lower emissions, and make cities more livable through cutting-edge technology and data-driven insights.</p>
+            </div>
             
-            <p class="mb-5 text-[1.1rem]">Our platform connects available parking spaces with drivers in real-time, eliminating the frustration of searching for parking while reducing congestion and emissions.</p>
-        </section>
+            <div class="vision-card">
+                <h3>Our Vision</h3>
+                <p>To create a world where finding parking is effortless, cities are less congested, and transportation systems are seamlessly integrated - making urban living more sustainable and enjoyable for everyone.</p>
+            </div>
+        </div>
+        
+        <div class="team-section">
+            <h2>Meet Our Development Team</h2>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="assets/images/WhatsApp Image 2024-03-28 at 17.51.05_3d94f0ae.jpg" alt="Avinash" class="member-photo">
+                    <h3 class="member-name">Avinash</h3>
+                    <!-- <p class="member-position">Team Lead </p> -->
+                    
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen" class="member-photo">
+                    <h3 class="member-name">Michael Chen</h3>
+                    <!-- <p class="member-position">CTO</p>
+                    <p>AI and IoT specialist leading our technology development.</p> -->
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Patel" class="member-photo">
+                    <h3 class="member-name">Priya Patel</h3>
+                    <!-- <p class="member-position">Head of Operations</p>
+                    <p>Oversees implementation and partnerships with cities.</p> -->
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="David Kim" class="member-photo">
+                    <h3 class="member-name">David Kim</h3>
+                    <!-- <p class="member-position">Head of Product</p>
+                    <p>Designs user experiences that make parking effortless.</p> -->
+                </div>
+            </div>
+        </div>
 
-        <section class="my-[50px] px-[10px]">
-            <h2 class="text-[1.8rem] md:text-[1.8rem] font-bold mb-[30px] text-[#121212] text-center">Our <span class="text-[#00AA55]">Technology</span></h2>
-            
-            <div class="my-10">
-                <div class="flex mb-[30px] items-start">
-                    <span class="text-[#00AA55] font-bold mr-4 text-[1.2rem]">•</span>
-                    <div>
-                        <h3 class="text-[1.2rem] mb-2 text-[#121212] font-bold">Smart Sensors</h3>
-                        <p class="text-[1.1rem]">Advanced IoT sensors provide real-time parking space detection with industry-leading accuracy.</p>
+        <!-- Testimonials Section -->
+        <div class="testimonials-section">
+            <h2>What Our Partners Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "ParkPro reduced downtown congestion by 28% in the first year of implementation, exceeding all our expectations. Their technology is truly transformative for urban mobility."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Robert Chen">
+                        <div>
+                            <h4>Robert Chen</h4>
+                            <p>Transportation Director, Austin, TX</p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex mb-[30px] items-start">
-                    <span class="text-[#00AA55] font-bold mr-4 text-[1.2rem]">•</span>
-                    <div>
-                        <h3 class="text-[1.2rem] mb-2 text-[#121212] font-bold">Real-Time Data</h3>
-                        <p class="text-[1.1rem]">Live parking availability updates with predictive analytics to forecast space availability.</p>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The data insights from ParkPro helped us optimize our parking infrastructure investments and reduce enforcement costs by 40%. Their team is incredibly responsive and professional."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Maria Gonzalez">
+                        <div>
+                            <h4>Maria Gonzalez</h4>
+                            <p>Urban Planner, Miami, FL</p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex mb-[30px] items-start">
-                    <span class="text-[#00AA55] font-bold mr-4 text-[1.2rem]">•</span>
-                    <div>
-                        <h3 class="text-[1.2rem] mb-2 text-[#121212] font-bold">Seamless Integration</h3>
-                        <p class="text-[1.1rem]">Works with existing infrastructure while enabling smart city development.</p>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "As a commercial property owner, ParkPro's solution has increased our parking revenue by 35% while improving customer satisfaction. It's been a game-changer for our business."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="James Wilson">
+                        <div>
+                            <h4>James Wilson</h4>
+                            <p>Commercial Real Estate Developer</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <div class="bg-gradient-primary border border-[rgba(0,170,85,0.2)] rounded-xl py-10 px-8 my-[60px] text-center relative overflow-hidden border-left-primary">
-            <h2 class="text-[1.6rem] text-[#121212] mb-4 relative">Experience Smart Parking</h2>
-            <p class="text-[#333333] max-w-[600px] mx-auto mb-6">Download the ParkPro app to reserve spots, navigate effortlessly, and pay automatically - all in one seamless experience.</p>
-            <div class="flex justify-center gap-4 mt-6 flex-wrap">
-                <a href="#" class="flex items-center gap-2 py-3 px-5 rounded-lg no-underline font-medium transition-all duration-300 bg-[#121212] text-white hover:-translate-y-[2px] hover:shadow-md">
-                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 54-64.4h1.3c29.3 0 53.8 23.4 53.8 53.8v.2c0 36-22.9 62.7-58.2 62.7-30.9 0-54.4-24.6-54.4-54.6zM41.4 352.6c15.3-26.6 31.4-51.5 46.2-75.5 20.5-33.6 39.7-65.2 56.2-94.7 7.4-13.3 20.6-34.6 30.3-34.6 6.5 0 15.1 12 15.1 12s20.4 35.2 30.9 55.9c26.1 51.7 44.4 89.7 68.3 138.4H226.3c-11.8-25.5-22.3-44.8-32.4-64.5-10.5-20.6-19.4-37.2-28.1-52.1-4.1-6.9-8-13.4-11.9-19.4-1.3-2-2.5-3.9-3.8-5.7-1.2-1.8-2.4-3.5-3.5-5.2-7.4-10.6-14.9-20.8-22.5-30.4-4.3-5.4-8.5-10.5-12.8-15.1-1.7-1.8-3.5-3.5-5.3-5.1-1.8-1.6-3.6-3.1-5.4-4.5-4.6-3.6-9.3-6.8-14.1-9.7-1.5-1-3.1-1.9-4.7-2.8-1.6-.9-3.2-1.7-4.9-2.5-1.7-.8-3.4-1.5-5.1-2.2-1.7-.7-3.5-1.3-5.3-1.9-1.8-.6-3.6-1.1-5.4-1.6-1.8-.5-3.7-.9-5.5-1.3-1.9-.4-3.7-.7-5.6-1-1.9-.3-3.7-.5-5.6-.7-1.9-.2-3.8-.3-5.7-.4-1.9-.1-3.8-.1-5.7-.1-1.9 0-3.8 0-5.7.1-1.9.1-3.8.2-5.6.4-1.9.2-3.7.4-5.6.7-1.9.3-3.7.6-5.6 1-1.8.4-3.6.8-5.4 1.3-1.8.5-3.5 1.1-5.3 1.7-1.7.7-3.4 1.4-5.1 2.2-1.7.8-3.3 1.6-4.9 2.5-1.6.9-3.2 1.9-4.7 2.9-4.8 3-9.5 6.4-14.1 10.1-1.8 1.5-3.6 3-5.4 4.6-1.8 1.6-3.5 3.4-5.3 5.2-4.3 4.7-8.5 9.8-12.8 15.3-7.6 9.7-15.1 20-22.5 30.7-1.1 1.7-2.3 3.5-3.5 5.3-1.3 1.9-2.5 3.8-3.8 5.7-3.9 6.1-7.8 12.6-11.9 19.6-8.7 14.9-17.6 31.5-28.1 52.1-10.1 19.7-20.6 39-32.4 64.5H41.4z"/></svg>
-                    App Store
-                </a>
-                <a href="#" class="flex items-center gap-2 py-3 px-5 rounded-lg no-underline font-medium transition-all duration-300 bg-[#121212] text-white hover:-translate-y-[2px] hover:shadow-md">
-                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
-                    Google Play
-                </a>
-            </div>
         </div>
+    </div>
 
-        <section class="my-[50px] px-[10px]">
-            <h2 class="text-[1.8rem] md:text-[1.8rem] font-bold mb-[30px] text-[#121212] text-center">The <span class="text-[#00AA55]">ParkPro Advantage</span></h2>
-            
-            <div class="my-10">
-                <div class="flex mb-[30px] items-start">
-                    <span class="text-[#00AA55] font-bold mr-4 text-[1.2rem]">→</span>
-                    <div>
-                        <h3 class="text-[1.2rem] mb-2 text-[#121212] font-bold">For Drivers</h3>
-                        <p class="text-[1.1rem]">Book guaranteed parking before leaving home, get turn-by-turn navigation to your spot, and enjoy automatic payments with no tickets or hassles.</p>
-                    </div>
-                </div>
-                <div class="flex mb-[30px] items-start">
-                    <span class="text-[#00AA55] font-bold mr-4 text-[1.2rem]">→</span>
-                    <div>
-                        <h3 class="text-[1.2rem] mb-2 text-[#121212] font-bold">For Cities</h3>
-                        <p class="text-[1.1rem]">Reduce traffic congestion, lower emissions, and gain valuable insights to optimize your parking infrastructure and urban planning.</p>
-                    </div>
-                </div>
-                <div class="flex mb-[30px] items-start">
-                    <span class="text-[#00AA55] font-bold mr-4 text-[1.2rem]">→</span>
-                    <div>
-                        <h3 class="text-[1.2rem] mb-2 text-[#121212] font-bold">For Businesses</h3>
-                        <p class="text-[1.1rem]">Increase customer satisfaction with reliable parking, dynamic pricing options, and premium reservation services.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="bg-[#F5F5F5] border-left-primary py-6 px-6 my-[50px]">
-            <h3 class="text-[1.3rem] text-[#121212] mb-4">Have questions? We're here to help</h3>
-            <p class="text-[1.1rem]">Contact our support team at <a href="mailto:support@parkpro.com" class="text-[#00AA55] font-medium no-underline">support@parkpro.com</a> for any inquiries about our services or technology.</p>
-        </div>
-    </main>
-
-    <footer class="bg-[#121212] text-white py-[50px] text-center mt-[50px]">
-        <div class="max-w-[800px] mx-auto px-5">
-            <div class="text-[1.8rem] font-bold mb-4">Park<span class="text-[#00AA55]">Pro</span></div>
-            <p>Smart parking solutions powered by IoT technology</p>
-            <p class="mt-5">© 2023 ParkPro Technologies</p>
-        </div>
-    </footer>
+    
 </body>
 </html>
