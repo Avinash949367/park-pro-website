@@ -1,497 +1,812 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ParkPro FastTag</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <style>
-        @layer utilities {
-            .bg-gradient-primary {
-                background: linear-gradient(135deg, rgba(0,170,85,0.1) 0%, rgba(0,170,85,0.05) 100%);
-            }
-            .border-left-primary {
-                border-left: 4px solid #22c55e;
-            }
-            .nav-item {
-                border-bottom: 3px solid transparent;
-                transition: all 0.3s;
-            }
-            .nav-item:hover {
-                background: rgba(0,0,0,0.05);
-            }
-            .nav-item.active {
-                border-bottom-color: #22c55e;
-                color: #22c55e;
-                font-weight: bold;
-            }
-            .step {
-                border-left: 3px solid #22c55e;
-            }
-            .note {
-                border-left: 4px solid #22c55e;
-            }
-            .option {
-                transition: all 0.3s ease;
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="css/style.css" /> -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    .option {
+      text-decoration: none;       /* Remove underline */
+      color: #1e3740;              /* Dark teal text color */
+      padding: 8px 12px;           /* Spacing around text */
+      border-radius: 8px;          /* Rounded corners */
+      transition: all 0.3s ease;   /* Smooth hover transition */
+      font-weight: 500;
+    }
+
+    /* Hover effect */
+    .option:hover {
+      color: white;                /* Text turns white */
+      background-color: #46949d;   /* Medium teal background on hover */
+      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+    }
+
+     /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-    </style>
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom checkbox style */
+        .custom-radio {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .custom-radio:checked {
+            background-color:  #46949d;
+            border: 4px solid #bfdbfe;
+        }
+
+        .hero-style {
+            background-image: url('https://media.assettype.com/outlookbusiness/2025-06-19/rw91udgo/BlogGenericChange-fastag-mobile-number.jpg?w=1200&h=675&auto=format%2Ccompress&fit=max&enlarge=true');
+            background-repeat: no-repeat;
+            background-size: cover; /* This will make the image cover the entire container */
+            background-position: center; /* Center the image */
+            width: 100%;
+            height: 500px; /* Increased height */
+            position: relative; /* For overlay positioning */
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for better text contrast */
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: rgb(255, 255, 255);
+        }
+       
+       
+  </style>
 </head>
-<body class="font-sans bg-white text-gray-900 leading-relaxed">
+<body class="font-sans bg-gray-200">
+
     <!-- Navbar -->
-    <div class="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
-        <a href="index.html"><div class="flex items-center space-x-4">
-          <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-          <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
-        </div></a>
-        <nav class="space-x-6 hidden md:flex font-medium">
-          <a href="index.html" class="option no-underline text-[#1e3740] px-3 py-2 rounded-lg font-bold hover:text-white hover:bg-[#46949d] hover:shadow-md">About us</a>
-          <a href="#" class="option no-underline text-[#1e3740] px-3 py-2 rounded-lg font-bold hover:text-white hover:bg-[#46949d] hover:shadow-md">Park Pro For Business</a>
-          <a href="#" class="option no-underline text-[#1e3740] px-3 py-2 rounded-lg font-bold hover:text-white hover:bg-[#46949d] hover:shadow-md">Products</a>
-          <a href="#" class="option no-underline text-[#1e3740] px-3 py-2 rounded-lg font-bold hover:text-white hover:bg-[#46949d] hover:shadow-md">Contact</a>
-        </nav>
-        <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
-          <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
-          <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
-            Get the App
-          </a>
-          <div id="profileContainer" class="hidden relative">
-            <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
-            <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
-              <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
-                <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
-                <div>
-                  <p class="font-semibold text-gray-900" id="userName">User</p>
-                  <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
-                </div>
+    <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+      <a href="index.html"><div class="flex items-center space-x-4">
+        <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+        <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+      </div></a>
+      <nav class="space-x-6 hidden md:flex font-medium">
+        <a href="index.html" class="option">About us</a>
+        <a href="#" class="option">Park Pro For Business</a>
+        <a href="#" class="option">Products</a>
+        <a href="#" class="option">Contact</a>
+      </nav>
+      <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+        <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
+        <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+          Get the App
+        </a>
+        <div id="profileContainer" class="hidden relative">
+          <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+          <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+            <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+              <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+              <div>
+                <p class="font-semibold text-gray-900" id="userName">User</p>
+                <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
               </div>
-              <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
             </div>
+            <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
           </div>
-      </div>
-      </div>
-    
-    <div class="flex border-b border-gray-200 bg-gray-100 overflow-x-auto whitespace-nowrap justify-around items-center py-2 px-4">
-        <div class="nav-item active px-5 py-3 cursor-pointer" onclick="showSection('about')">About FastTag</div>
-        <div class="nav-item px-5 py-3 cursor-pointer" onclick="showSection('balance')">Check Balance</div>
-        <div class="nav-item px-5 py-3 cursor-pointer" onclick="showSection('recharge')">Recharge Account</div>
-        <div class="nav-item px-5 py-3 cursor-pointer" onclick="showSection('cancel')">Cancel FastTag</div>
+        </div>
     </div>
+    </div>
+    <script src="js/index.js"></script>
+    <script src="js/cardToggle.js"></script>
+    <script src="js/registerSpot.js"></script>
     
-    <div class="max-w-[1000px] mx-auto px-4 py-0">
-        <!-- Enhanced About Section -->
-        <div id="about" class="section active bg-white p-6 rounded-lg">
-            <div class="bg-white rounded-lg shadow-sm p-8 mx-auto my-0 max-w-6xl">
-                <header class="bg-primary text-white p-5 rounded-t-lg mb-8">
-                    <h1 class="m-0 text-2xl font-bold">ParkPro FASTag Information</h1>
-                </header>
+    
 
-                <div class="container mx-auto px-8">
-                    <h2 class="text-primary text-xl font-semibold border-b-2 border-secondary pb-1 mt-8 mb-4">
-                        <span class="mr-2">🏷️</span> What is FASTag?
-                    </h2>
-                    <p class="mb-4">FASTag is a Radio Frequency Identification (RFID) passive tag used for automatic toll payments directly from your linked prepaid, savings, or current bank account. It is affixed to the windscreen of your vehicle, allowing you to drive through toll plazas without stopping, saving time and fuel.</p>
-                    
-                    <div class="bg-light border-l-4 border-secondary p-4 my-5 rounded-r-lg">
-                        <p class="font-semibold">Important: FASTag is vehicle-specific and once installed, it cannot be transferred to another vehicle. If linked to a prepaid account, it requires timely recharges to remain active.</p>
+    <!-- Hero Section -->
+    <section class="hero-style">
+        <div class="hero-overlay">
+            <div class="container mx-auto px-4 hero-content">
+                <div class="md:w-1/2 mb-8 md:mb-0 animate-fade-in">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Manage Your FASTag Seamlessly</h1>
+                    <p class="text-xl mb-6 opacity-90">Instant recharge, balance checks, and transaction history all in one place.</p>
+                    <button class="bg-black text-white-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition shadow-lg">
+                      <a href="get-fastag.html"> Get FASTag Now </a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FASTag Services Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">FASTag Services</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Buy New FASTag -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 animate-fade-in delay-100">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-tag text-blue-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Buy New FASTag</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Purchase a new FASTag for your vehicle and enjoy seamless toll payments.</p>
+                        <button class="text-blue-600 font-medium hover:text-blue-800 transition">Get Started →</button>
                     </div>
+                </div>
+                
+                <!-- Recharge FASTag -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 animate-fade-in delay-200">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-rupee-sign text-green-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Recharge FASTag</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Add money to your FASTag wallet instantly with multiple payment options.</p>
+                        <button class="text-blue-600 font-medium hover:text-blue-800 transition">Recharge Now →</button>
+                    </div>
+                </div>
+                
+                <!-- Check Balance -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 animate-fade-in delay-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-wallet text-purple-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Check Balance</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Check your current FASTag balance and transaction history instantly.</p>
+                        <button onclick="showBalanceModal()" class="text-blue-600 font-medium hover:text-blue-800 transition">Check Balance →</button>
+                    </div>
+                </div>
+                
+                <!-- Transaction History -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 animate-fade-in delay-100">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-history text-yellow-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Transaction History</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">View detailed history of all your toll payments and recharges.</p>
+                        <button class="text-blue-600 font-medium hover:text-blue-800 transition">View History →</button>
+                    </div>
+                </div>
+                
+                <!-- Link Vehicle -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 animate-fade-in delay-200">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-car text-red-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Link Vehicle</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Link your vehicle to FASTag or update vehicle details.</p>
+                        <button class="text-blue-600 font-medium hover:text-blue-800 transition">Link Now →</button>
+                    </div>
+                </div>
+                
+                <!-- Deactivate FASTag -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 animate-fade-in delay-300">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-gray-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-times-circle text-gray-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Deactivate FASTag</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Close your FASTag account and request for refund of remaining balance.</p>
+                        <button class="text-blue-600 font-medium hover:text-blue-800 transition">Deactivate →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recharge Form Section -->
+    <section class="py-16 bg-gray-50" id="recharge">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">FASTag Recharge</h2>
+            
+            <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden animate-fade-in">
+                <div class="p-8">
+                    <form id="rechargeForm">
+                        <!-- Vehicle Number -->
+                        <div class="mb-6">
+                            <label for="vehicleNumber" class="block text-gray-700 font-medium mb-2">Vehicle Number</label>
+                            <div class="flex">
+                                <select class="bg-gray-100 border border-gray-300 rounded-l-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>DL</option>
+                                    <option>KA</option>
+                                    <option>MH</option>
+                                    <option>TN</option>
+                                    <option>AP</option>
+                                </select>
+                                <input type="text" id="vehicleNumber" class="flex-1 border border-gray-300 rounded-r-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g. 01AB1234" required>
+                            </div>
+                        </div>
+                        
+                        <!-- FASTag ID -->
+                        <div class="mb-6">
+                            <label for="fastagId" class="block text-gray-700 font-medium mb-2">FASTag ID</label>
+                            <input type="text" id="fastagId" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your FASTag ID" required>
+                        </div>
+                        
+                        <!-- Amount Selection -->
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2">Recharge Amount</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <button type="button" class="amount-option border border-gray-300 rounded-lg py-3 px-4 hover:bg-blue-50 hover:border-blue-500 transition" data-amount="100">₹100</button>
+                                <button type="button" class="amount-option border border-gray-300 rounded-lg py-3 px-4 hover:bg-blue-50 hover:border-blue-500 transition" data-amount="200">₹200</button>
+                                <button type="button" class="amount-option border border-gray-300 rounded-lg py-3 px-4 hover:bg-blue-50 hover:border-blue-500 transition" data-amount="500">₹500</button>
+                                <button type="button" id="customAmountBtn" class="border border-gray-300 rounded-lg py-3 px-4 hover:bg-blue-50 hover:border-blue-500 transition">Custom</button>
+                            </div>
+                            <div id="customAmountContainer" class="mt-3 hidden">
+                                <input type="number" id="customAmount" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter amount (min ₹100)">
+                            </div>
+                            <input type="hidden" id="selectedAmount" name="amount" value="">
+                        </div>
+                        
+                        <!-- Payment Method -->
+                        <div class="mb-8">
+                            <label class="block text-gray-700 font-medium mb-3">Payment Method</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="paymentMethod" value="upi" class="custom-radio" checked>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-mobile-alt text-purple-600 mr-2"></i>
+                                        <span>UPI</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="paymentMethod" value="card" class="custom-radio">
+                                    <span class="flex items-center">
+                                        <i class="far fa-credit-card text-blue-600 mr-2"></i>
+                                        <span>Debit/Credit Card</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer">
+                                    <input type="radio" name="paymentMethod" value="netbanking" class="custom-radio">
+                                    <span class="flex items-center">
+                                        <i class="fas fa-university text-green-600 mr-2"></i>
+                                        <span>Net Banking</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <button type="submit" id="rechargeBtn" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center justify-center">
+                            <span>Recharge Now</span>
+                            <span id="loadingSpinner" class="ml-2 hidden">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transaction History Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Transaction History</h2>
+            
+            <div class="overflow-x-auto bg-white rounded-xl shadow-md animate-fade-in">
+                <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-700">Recent Transactions</h3>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1 bg-gray-100 rounded-md text-sm hover:bg-gray-200 transition">Filter</button>
+                        <button class="px-3 py-1 bg-gray-100 rounded-md text-sm hover:bg-gray-200 transition" onclick="sortTable()">Sort by Date</button>
+                    </div>
+                </div>
+                <table class="min-w-full divide-y divide-gray-200" id="transactionTable">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 Jun 2023, 09:45 AM</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Delhi-Mumbai Expressway</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">DL01AB1234</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹125</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">14 Jun 2023, 05:30 PM</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Chennai Bypass</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">TN02CD5678</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹85</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">12 Jun 2023, 11:20 AM</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Bangalore Outer Ring Road</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">KA03EF9012</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹65</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10 Jun 2023, 08:15 AM</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hyderabad ORR</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AP04GH3456</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹95</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">08 Jun 2023, 03:40 PM</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mumbai-Pune Expressway</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MH05IJ7890</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹110</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="p-4 border-t border-gray-200 text-center">
+                    <button class="text-blue-600 font-medium hover:text-blue-800 transition">View All Transactions →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">FASTag Support</h2>
+            
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- FAQ Section -->
+                <div class="lg:w-1/2 animate-fade-in">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-700">Frequently Asked Questions</h3>
                     
-                    <h2 class="text-primary text-xl font-semibold border-b-2 border-secondary pb-1 mt-8 mb-4">
-                        <span class="mr-2">🧭</span> How to Use FASTag
-                    </h2>
-                    <p class="mb-4">Using FASTag is simple:</p>
-                    <ol class="list-decimal pl-5 mb-4 space-y-2">
-                        <li>Affix the FASTag on your vehicle's front windscreen (from inside).</li>
-                        <li>Link it to ParkPro wallet (QR provided by us after registration with linked account)</li>
-                        <li>As you pass through any ParkPro-enabled toll plaza, the system will:
-                            <ul class="list-disc pl-5 mt-1">
-                                <li>Automatically detect your FASTag</li>
-                                <li>Deduct the applicable toll amount and detect amount and give access to the entry</li>
-                                <li>Send you an SMS confirmation of the transaction</li>
-                            </ul>
-                        </li>
-                    </ol>
-                    <p class="mb-4">You don't need to stop or handle cash. Just drive through the FASTag lane!</p>
-                    
-                    <h2 class="text-primary text-xl font-semibold border-b-2 border-secondary pb-1 mt-8 mb-4 text-center">
-                        <span class="mr-2">🛒</span> How to Get FASTag
-                    </h2>
-                    <p class="mb-4">You can buy FASTag from the <a href="#" class="inline-block bg-secondary text-white px-5 py-2 rounded font-bold mx-1 my-2 hover:bg-primary transition-colors">ParkPro website</a>. The process includes:</p>
-                    <ul class="list-disc pl-5 mb-4 space-y-1">
-                        <li>Provide your vehicle registration details and KYC documents</li>
-                        <li>The new wallet will be created</li>
-                        <li>Once issued, your tag will be activated and ready for use</li>
+                    <div class="space-y-4">
+                        <!-- FAQ Item 1 -->
+                        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                            <button class="faq-toggle w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                                <span class="font-medium text-gray-800">How do I activate my new FASTag?</span>
+                                <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-4 pb-4 text-gray-600">
+                                <p>Your FASTag is activated automatically when you complete the purchase process. It may take up to 24 hours for activation. You'll receive an SMS confirmation once activated.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 2 -->
+                        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                            <button class="faq-toggle w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                                <span class="font-medium text-gray-800">What should I do if my FASTag isn't working at toll plazas?</span>
+                                <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-4 pb-4 text-gray-600">
+                                <p>First, check your FASTag balance. If you have sufficient balance, ensure the tag is properly affixed to your vehicle's windshield. If issues persist, contact our customer support with your FASTag ID and vehicle details.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 3 -->
+                        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                            <button class="faq-toggle w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                                <span class="font-medium text-gray-800">How long does it take for recharge amount to reflect?</span>
+                                <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-4 pb-4 text-gray-600">
+                                <p>Recharges are typically processed instantly. In rare cases, it may take up to 15 minutes. You'll receive an SMS confirmation once the recharge is successful.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 4 -->
+                        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                            <button class="faq-toggle w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 transition">
+                                <span class="font-medium text-gray-800">Can I transfer my FASTag to another vehicle?</span>
+                                <i class="fas fa-chevron-down text-gray-500 transition-transform"></i>
+                            </button>
+                            <div class="faq-content hidden px-4 pb-4 text-gray-600">
+                                <p>No, FASTags are vehicle-specific and cannot be transferred. You'll need to purchase a new FASTag for another vehicle and can deactivate the old one if needed.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div class="lg:w-1/2 animate-fade-in delay-100">
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-700">Contact Support</h3>
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <form id="supportForm">
+                            <div class="mb-4">
+                                <label for="supportName" class="block text-gray-700 font-medium mb-2">Your Name</label>
+                                <input type="text" id="supportName" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="supportEmail" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                                <input type="email" id="supportEmail" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="supportPhone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                                <input type="tel" id="supportPhone" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="supportSubject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                                <select id="supportSubject" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                    <option value="" disabled selected>Select an option</option>
+                                    <option>FASTag Activation Issue</option>
+                                    <option>Recharge Problem</option>
+                                    <option>Toll Plaza Issue</option>
+                                    <option>Account Management</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label for="supportMessage" class="block text-gray-700 font-medium mb-2">Message</label>
+                                <textarea id="supportMessage" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition">
+                                Submit Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="https://via.placeholder.com/50x50" alt="Logo" class="h-10 mr-2">
+                        <span class="text-xl font-bold">SmartPark</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Revolutionizing vehicle management and parking solutions with cutting-edge technology.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FASTag Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Recharge FASTag</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Transaction History</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">My Account</a></li>
                     </ul>
-                    
-                    <div class="bg-light border-l-4 border-secondary p-4 my-5 rounded-r-lg">
-                        <p><span class="mr-2">💡</span> You can recharge your FASTag online via UPI, Net Banking, Credit/Debit Card, NEFT or RTGS.</p>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Refund Policy</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>123 Tech Park, Bangalore, Karnataka 560001</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3"></i>
+                            <span>+91 9876543210</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <span>support@smartpark.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 SmartPark. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Balance Check Modal -->
+    <div id="balanceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 animate-fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Check FASTag Balance</h3>
+                <button onclick="closeBalanceModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label for="balanceFastagId" class="block text-gray-700 font-medium mb-2">FASTag ID</label>
+                <input type="text" id="balanceFastagId" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter your FASTag ID">
+            </div>
+            <div class="mb-4">
+                <label for="balanceVehicle" class="block text-gray-700 font-medium mb-2">Vehicle Number</label>
+                <input type="text" id="balanceVehicle" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter vehicle number">
+            </div>
+            <button onclick="checkBalance()" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition">
+                Check Balance
+            </button>
+            <div id="balanceResult" class="mt-4 hidden">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium text-gray-800">Current Balance</h4>
+                            <p id="balanceAmount" class="text-2xl font-bold text-blue-600">₹0</p>
+                        </div>
+                        <i class="fas fa-wallet text-blue-500 text-3xl"></i>
                     </div>
-
-                    <h1 class="text-primary text-2xl font-bold text-center my-8">🚀 How It Works: ParkPro FASTag Transaction Flow</h1>
-                    
-                    <div class="bg-white rounded-lg shadow-lg p-8 my-8 relative">
-                        <div class="flow-steps relative">
-                            <div class="connector-line bg-secondary"></div>
-                            
-                            <!-- Step 1 -->
-                            <div class="mb-4 relative z-10">
-                                <div class="step-header flex items-center cursor-pointer p-4 bg-white rounded-lg shadow-sm hover:bg-light transition-all active:bg-light active:shadow-md" onclick="toggleStep(this)">
-                                    <div class="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">1</div>
-                                    <h3 class="text-primary m-0 text-lg flex items-center grow">
-                                        <i class="fas fa-car text-secondary mr-2 text-xl"></i>
-                                        Vehicle Approaches Entry Gate
-                                    </h3>
-                                    <div class="step-arrow ml-auto transition-transform">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </div>
-                                </div>
-                                <div class="step-content bg-gray-50 rounded-b-lg">
-                                    <div class="p-0 px-5">
-                                        <div class="py-5 m-0">
-                                            <p>The vehicle enters the <strong>ParkPro Smart Parking Zone</strong>.</p>
-                                            <p>The <strong>QR scanner camera</strong> is installed at the entry gate.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 2 -->
-                            <div class="mb-4 relative z-10">
-                                <div class="step-header flex items-center cursor-pointer p-4 bg-white rounded-lg shadow-sm hover:bg-light transition-all active:bg-light active:shadow-md" onclick="toggleStep(this)">
-                                    <div class="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">2</div>
-                                    <h3 class="text-primary m-0 text-lg flex items-center grow">
-                                        <i class="fas fa-qrcode text-secondary mr-2 text-xl"></i>
-                                        QR Code Presented
-                                    </h3>
-                                    <div class="step-arrow ml-auto transition-transform">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </div>
-                                </div>
-                                <div class="step-content bg-gray-50 rounded-b-lg">
-                                    <div class="p-0 px-5">
-                                        <div class="py-5 m-0">
-                                            <p>The driver presents a QR code from:</p>
-                                            <ul class="list-disc pl-5 mt-2 space-y-1">
-                                                <li>The <strong>ParkPro mobile app</strong>, or</li>
-                                                <li>A <strong>pre-booked pass</strong>, or</li>
-                                                <li>The <strong>Fastag QR</strong></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 3 -->
-                            <div class="mb-4 relative z-10">
-                                <div class="step-header flex items-center cursor-pointer p-4 bg-white rounded-lg shadow-sm hover:bg-light transition-all active:bg-light active:shadow-md" onclick="toggleStep(this)">
-                                    <div class="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">3</div>
-                                    <h3 class="text-primary m-0 text-lg flex items-center grow">
-                                        <i class="fas fa-check-circle text-secondary mr-2 text-xl"></i>
-                                        QR Code Scanning & Validation
-                                    </h3>
-                                    <div class="step-arrow ml-auto transition-transform">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </div>
-                                </div>
-                                <div class="step-content bg-gray-50 rounded-b-lg">
-                                    <div class="p-0 px-5">
-                                        <div class="py-5 m-0">
-                                            <p>The system scans the QR code and instantly sends the data to the <strong>ParkPro Cloud Server</strong>.</p>
-                                            <p>ParkPro validates:</p>
-                                            <ul class="list-disc pl-5 mt-2 space-y-1">
-                                                <li>QR Code authenticity (not expired, not reused)</li>
-                                                <li>Booking or subscription status</li>
-                                                <li>Linked vehicle number (if required)</li>
-                                                <li>Parking zone match (is the QR valid at this entry point?)</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 4 -->
-                            <div class="mb-4 relative z-10">
-                                <div class="step-header flex items-center cursor-pointer p-4 bg-white rounded-lg shadow-sm hover:bg-light transition-all active:bg-light active:shadow-md" onclick="toggleStep(this)">
-                                    <div class="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">4</div>
-                                    <h3 class="text-primary m-0 text-lg flex items-center grow">
-                                        <i class="fas fa-car-alt text-secondary mr-2 text-xl"></i>
-                                        Vehicle Identity Mapping
-                                    </h3>
-                                    <div class="step-arrow ml-auto transition-transform">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </div>
-                                </div>
-                                <div class="step-content bg-gray-50 rounded-b-lg">
-                                    <div class="p-0 px-5">
-                                        <div class="py-5 m-0">
-                                            <p>If QR is linked with vehicle registration:</p>
-                                            <ul class="list-disc pl-5 mt-2 space-y-1">
-                                                <li>The system fetches <strong>vehicle class</strong> (2-wheeler, 4-wheeler, etc.)</li>
-                                                <li>Verifies against the parking rules or assigned slot type</li>
-                                            </ul>
-                                            <p class="italic mt-2">(Optional step for enhanced verification)</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 5 -->
-                            <div class="mb-4 relative z-10">
-                                <div class="step-header flex items-center cursor-pointer p-4 bg-white rounded-lg shadow-sm hover:bg-light transition-all active:bg-light active:shadow-md" onclick="toggleStep(this)">
-                                    <div class="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">5</div>
-                                    <h3 class="text-primary m-0 text-lg flex items-center grow">
-                                        <i class="fas fa-key text-secondary mr-2 text-xl"></i>
-                                        Entry Authorization
-                                    </h3>
-                                    <div class="step-arrow ml-auto transition-transform">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </div>
-                                </div>
-                                <div class="step-content bg-gray-50 rounded-b-lg">
-                                    <div class="p-0 px-5">
-                                        <div class="py-5 m-0">
-                                            <p>If validation is successful:</p>
-                                            <ul class="list-disc pl-5 mt-2 space-y-1">
-                                                <li>ParkPro records <strong>entry time</strong>, <strong>QR code ID</strong>, and <strong>vehicle details</strong></li>
-                                                <li>A <strong>temporary entry token</strong> is generated and stored in the database</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 6 -->
-                            <div class="mb-4 relative z-10">
-                                <div class="step-header flex items-center cursor-pointer p-4 bg-white rounded-lg shadow-sm hover:bg-light transition-all active:bg-light active:shadow-md" onclick="toggleStep(this)">
-                                    <div class="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">6</div>
-                                    <h3 class="text-primary m-0 text-lg flex items-center grow">
-                                        <i class="fas fa-traffic-light text-secondary mr-2 text-xl"></i>
-                                        Barrier Control
-                                    </h3>
-                                    <div class="step-arrow ml-auto transition-transform">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </div>
-                                </div>
-                                <div class="step-content bg-gray-50 rounded-b-lg">
-                                    <div class="p-0 px-5">
-                                        <div class="py-5 m-0">
-                                            <p>The <strong>entry gate barrier lifts automatically</strong>.</p>
-                                            <p>LED display or audio prompts can show:</p>
-                                            <ul class="list-disc pl-5 mt-2 space-y-1">
-                                                <li>"Welcome [User/Vehicle]"</li>
-                                                <li>"Slot assigned: A12" (if auto slot allocation is enabled)</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 7 -->
-                            <div class="mb-4 relative z-10">
-                                <div class="step-header flex items-center cursor-pointer p-4 bg-white rounded-lg shadow-sm hover:bg-light transition-all active:bg-light active:shadow-md" onclick="toggleStep(this)">
-                                    <div class="bg-secondary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">7</div>
-                                    <h3 class="text-primary m-0 text-lg flex items-center grow">
-                                        <i class="fas fa-map-marker-alt text-secondary mr-2 text-xl"></i>
-                                        Slot Allocation (AI + IoT)
-                                    </h3>
-                                    <div class="step-arrow ml-auto transition-transform">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </div>
-                                </div>
-                                <div class="step-content bg-gray-50 rounded-b-lg">
-        
-        <!-- Check Balance Section -->
-        <div id="balance" class="section hidden bg-white p-6 rounded-lg shadow-sm mb-5">
-            <h2 class="text-[#22c55e] text-2xl font-bold">Check Balance</h2>
-            <div class="mt-4">
-                <label class="block">FastTag ID/Vehicle No.</label>
-                <input type="text" id="balanceId" placeholder="e.g. MH12AB1234" class="w-full p-3 mt-2 mb-1 border border-gray-300 rounded">
-                <div id="balanceError" class="text-red-500 text-sm mt-[-12px] mb-3"></div>
-                <button class="w-full p-3 mt-2 mb-4 bg-[#22c55e] text-white font-bold rounded cursor-pointer hover:bg-[#1e9c4a]">Check Balance</button>
+                    <p id="balanceDetails" class="text-sm text-gray-600 mt-2"></p>
+                </div>
             </div>
-            <div id="balanceResult" class="p-3 rounded text-center"></div>
         </div>
-        
-        <!-- Recharge Section -->
-        <div id="recharge" class="section hidden bg-white p-6 rounded-lg shadow-sm mb-5">
-            <h2 class="text-[#22c55e] text-2xl font-bold">Recharge Account</h2>
-            <div class="mt-4">
-                <label class="block">FastTag ID/Vehicle No.</label>
-                <input type="text" id="rechargeId" placeholder="e.g. MH12AB1234" class="w-full p-3 mt-2 mb-1 border border-gray-300 rounded">
-                <div id="rechargeIdError" class="text-red-500 text-sm mt-[-12px] mb-3"></div>
-                
-                <label class="block mt-4">Amount (₹)</label>
-                <input type="number" id="amount" min="100" placeholder="Minimum ₹100" class="w-full p-3 mt-2 mb-1 border border-gray-300 rounded">
-                <div id="amountError" class="text-red-500 text-sm mt-[-12px] mb-3"></div>
-                
-                <button class="w-full p-3 mt-2 mb-4 bg-[#22c55e] text-white font-bold rounded cursor-pointer hover:bg-[#1e9c4a]">Recharge</button>
-            </div>
-            <div id="rechargeResult" class="p-3 rounded text-center"></div>
-        </div>
-        
-        <!-- Cancel Section -->
-        <div id="cancel" class="section hidden bg-white p-6 rounded-lg shadow-sm mb-5">
-            <h2 class="text-[#22c55e] text-2xl font-bold">Cancel FastTag</h2>
-            <div class="mt-4">
-                <label class="block">FastTag ID/Vehicle No.</label>
-                <input type="text" id="cancelId" placeholder="e.g. MH12AB1234" class="w-full p-3 mt-2 mb-1 border border-gray-300 rounded">
-                <div id="cancelIdError" class="text-red-500 text-sm mt-[-12px] mb-3"></div>
-                
-                <label class="block mt-4">Reason for Cancellation</label>
-                <select id="reason" class="w-full p-3 mt-2 mb-1 border border-gray-300 rounded">
-                    <option value="">Select reason</option>
-                    <option value="vehicle_sold">Vehicle Sold</option>
-                    <option value="not_using">Not Using Service</option>
-                    <option value="switched_provider">Switched Provider</option>
-                    <option value="other">Other</option>
-                </select>
-                <div id="reasonError" class="text-red-500 text-sm mt-[-12px] mb-3"></div>
-                
-                <button class="w-full p-3 mt-2 mb-4 bg-red-500 text-white font-bold rounded cursor-pointer hover:bg-red-600">Cancel FastTag</button>
-            </div>
-            <div id="cancelResult" class="p-3 rounded text-center"></div>
-        </div>
+    </div>
 
-        <script>
-            // Sample account data
-            const accounts = {
-                'MH12AB1234': { balance: 500, active: true },
-                'KA01CD5678': { balance: 750, active: true },
-                'DL04EF9012': { balance: 1250, active: true }
-            };
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 animate-fade-in text-center">
+            <div class="mb-4">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Recharge Successful!</h3>
+                <p id="successMessage" class="text-gray-600">Your FASTag has been recharged successfully.</p>
+            </div>
+            <button onclick="closeSuccessModal()" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition">
+                Done
+            </button>
+        </div>
+    </div>
 
-            // Navigation function
-            function showSection(sectionId) {
-                // Hide all sections
-                document.querySelectorAll('.section').forEach(section => {
-                    section.classList.add('hidden');
-                    section.classList.remove('active');
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.md\\:hidden').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                
+                // Toggle content
+                content.classList.toggle('hidden');
+                
+                // Rotate icon
+                if (content.classList.contains('hidden')) {
+                    icon.classList.remove('transform', 'rotate-180');
+                } else {
+                    icon.classList.add('transform', 'rotate-180');
+                }
+            });
+        });
+
+        // Amount selection
+        document.querySelectorAll('.amount-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                document.querySelectorAll('.amount-option').forEach(opt => {
+                    opt.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
                 });
                 
-                // Show selected section
-                const section = document.getElementById(sectionId);
-                section.classList.remove('hidden');
-                section.classList.add('active');
+                // Add active class to clicked option
+                this.classList.add('bg-blue-50', 'border-blue-500', 'text-blue-600');
                 
-                // Update active nav item
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.classList.remove('active');
+                // Hide custom amount field if showing
+                document.getElementById('customAmountContainer').classList.add('hidden');
+                document.getElementById('customAmountBtn').classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
+                
+                // Set selected amount
+                const amount = this.getAttribute('data-amount');
+                document.getElementById('selectedAmount').value = amount;
+            });
+        });
+
+        // Custom amount button
+        document.getElementById('customAmountBtn').addEventListener('click', function() {
+            // Remove active class from all fixed amount options
+            document.querySelectorAll('.amount-option').forEach(opt => {
+                opt.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
+            });
+            
+            // Toggle custom amount field
+            const container = document.getElementById('customAmountContainer');
+            container.classList.toggle('hidden');
+            
+            // Toggle active state
+            if (!container.classList.contains('hidden')) {
+                this.classList.add('bg-blue-50', 'border-blue-500', 'text-blue-600');
+                document.getElementById('customAmount').focus();
+            } else {
+                this.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
+            }
+        });
+
+        // Custom amount input
+        document.getElementById('customAmount').addEventListener('input', function() {
+            document.getElementById('selectedAmount').value = this.value;
+        });
+
+        // Form submission
+        document.getElementById('rechargeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('rechargeBtn');
+            const spinner = document.getElementById('loadingSpinner');
+            
+            // Validate amount
+            const amount = document.getElementById('selectedAmount').value;
+            if (!amount || amount < 100) {
+                alert('Please select an amount (minimum ₹100)');
+                return;
+            }
+            
+            // Show loading
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Hide loading
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+                
+                // Show success modal
+                document.getElementById('successMessage').textContent = `Your FASTag has been recharged with ₹${amount}. The amount will reflect in your account within 15 minutes.`;
+                document.getElementById('successModal').classList.remove('hidden');
+                
+                // Reset form
+                this.reset();
+                document.querySelectorAll('.amount-option').forEach(opt => {
+                    opt.classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
                 });
-                event.target.classList.add('active');
-            }
+                document.getElementById('customAmountContainer').classList.add('hidden');
+                document.getElementById('customAmountBtn').classList.remove('bg-blue-50', 'border-blue-500', 'text-blue-600');
+            }, 2000);
+        });
 
-            // Check balance function
-            function checkBalance() {
-                const id = document.getElementById('balanceId').value.trim().toUpperCase();
-                const errorEl = document.getElementById('balanceError');
-                const resultEl = document.getElementById('balanceResult');
-                
-                // Clear previous messages
-                errorEl.textContent = '';
-                resultEl.textContent = '';
-                resultEl.className = 'p-3 rounded text-center';
-                
-                // Validation
-                if (!id) {
-                    errorEl.textContent = 'Please enter your FastTag ID';
-                    return;
-                }
-                
-                // Check account
-                if (accounts[id] && accounts[id].active) {
-                    resultEl.textContent = `Current Balance: ₹${accounts[id].balance.toFixed(2)}`;
-                    resultEl.classList.add('bg-green-50', 'border', 'border-green-500', 'text-green-700');
-                } else {
-                    resultEl.textContent = 'Account not found or inactive';
-                    resultEl.classList.add('bg-red-50', 'border', 'border-red-500', 'text-red-700');
-                }
-            }
+        // Support form submission
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your support request has been submitted. We will contact you shortly.');
+            this.reset();
+        });
 
-            // Recharge function
-            function rechargeAccount() {
-                const id = document.getElementById('rechargeId').value.trim().toUpperCase();
-                const amount = parseFloat(document.getElementById('amount').value);
-                const idError = document.getElementById('rechargeIdError');
-                const amountError = document.getElementById('amountError');
-                const resultEl = document.getElementById('rechargeResult');
-                
-                // Clear previous messages
-                idError.textContent = '';
-                amountError.textContent = '';
-                resultEl.textContent = '';
-                resultEl.className = 'p-3 rounded text-center';
-                
-                // Validation
-                let isValid = true;
-                if (!id) {
-                    idError.textContent = 'Please enter your FastTag ID';
-                    isValid = false;
-                }
-                if (!amount || amount < 100) {
-                    amountError.textContent = 'Minimum recharge amount is ₹100';
-                    isValid = false;
-                }
-                if (!isValid) return;
-                
-                // Process recharge
-                if (accounts[id] && accounts[id].active) {
-                    accounts[id].balance += amount;
-                    resultEl.textContent = `
-                        Recharge Successful!
-                        Amount Added: ₹${amount.toFixed(2)}
-                        New Balance: ₹${accounts[id].balance.toFixed(2)}
-                    `;
-                    resultEl.classList.add('bg-green-50', 'border', 'border-green-500', 'text-green-700');
-                } else {
-                    resultEl.textContent = 'Account not found or inactive';
-                    resultEl.classList.add('bg-red-50', 'border', 'border-red-500', 'text-red-700');
-                }
-            }
+        // Balance modal functions
+        function showBalanceModal() {
+            document.getElementById('balanceModal').classList.remove('hidden');
+            document.getElementById('balanceResult').classList.add('hidden');
+        }
 
-            // Cancel function
-            function cancelFastTag() {
-                const id = document.getElementById('cancelId').value.trim().toUpperCase();
-                const reason = document.getElementById('reason').value;
-                const idError = document.getElementById('cancelIdError');
-                const reasonError = document.getElementById('reasonError');
-                const resultEl = document.getElementById('cancelResult');
-                
-                // Clear previous messages
-                idError.textContent = '';
-                reasonError.textContent = '';
-                resultEl.textContent = '';
-                resultEl.className = 'p-3 rounded text-center';
-                
-                // Validation
-                let isValid = true;
-                if (!id) {
-                    idError.textContent = 'Please enter your FastTag ID';
-                    isValid = false;
-                }
-                if (!reason) {
-                    reasonError.textContent = 'Please select a reason';
-                    isValid = false;
-                }
-                if (!isValid) return;
-                
-                // Process cancellation
-                if (accounts[id] && accounts[id].active) {
-                    const refund = accounts[id].balance;
-                    accounts[id].active = false;
-                    resultEl.textContent = `
-                        Cancellation Successful!
-                        Refund Amount: ₹${refund.toFixed(2)}
-                        Refund will be processed to your linked bank account within 7 days.
-                        Your FastTag has been deactivated.
-                    `;
-                    resultEl.classList.add('bg-green-50', 'border', 'border-green-500', 'text-green-700');
-                } else {
-                    resultEl.textContent = 'Account not found';
-                    resultEl.classList.add('bg-red-50', 'border', 'border-red-500', 'text-red-700');
-                }
+        function closeBalanceModal() {
+            document.getElementById('balanceModal').classList.add('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        function checkBalance() {
+            const fastagId = document.getElementById('balanceFastagId').value;
+            const vehicle = document.getElementById('balanceVehicle').value;
+            
+            if (!fastagId || !vehicle) {
+                alert('Please enter both FASTag ID and Vehicle Number');
+                return;
             }
+            
+            // In a real app, this would be an API call
+            const balance = Math.floor(Math.random() * 1000) + 50;
+            const lastRecharge = new Date(Date.now() - Math.floor(Math.random() * 7 * 24 * 60 * 60 * 1000)).toLocaleDateString();
+            
+            document.getElementById('balanceAmount').textContent = `₹${balance}`;
+            document.getElementById('balanceDetails').textContent = `Last recharged on ${lastRecharge}. Vehicle: ${vehicle}`;
+            document.getElementById('balanceResult').classList.remove('hidden');
+        }
+
+        // Table sorting
+        let sortDirection = 1; // 1 for ascending, -1 for descending
+        function sortTable() {
+            const table = document.getElementById('transactionTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                const dateA = new Date(a.cells[0].textContent);
+                const dateB = new Date(b.cells[0].textContent);
+                return (dateA - dateB) * sortDirection;
+            });
+            
+            // Reverse sort direction for next click
+            sortDirection *= -1;
+            
+            // Rebuild table
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Initialize animations on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animate-fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
         </script>
-    </body>
+</body>
 </html>
