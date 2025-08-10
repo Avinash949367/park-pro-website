@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="css/style.css" /> -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    .option {
+      text-decoration: none;       /* Remove underline */
+      color: #1e3740;              /* Dark teal text color */
+      padding: 8px 12px;           /* Spacing around text */
+      border-radius: 8px;          /* Rounded corners */
+      transition: all 0.3s ease;   /* Smooth hover transition */
+      font-weight: 500;
+    }
+
+    /* Hover effect */
+    .option:hover {
+      color: white;                /* Text turns white */
+      background-color: #46949d;   /* Medium teal background on hover */
+      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+    }
+
+     .service-card {
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .availability-pulse {
+            animation: pulse-slow 2s infinite;
+        }
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        .testimonial-card:hover {
+            transform: scale(1.02);
+        }
+
+  </style>
+</head>
+<body class="font-sans bg-gray-200">
+
+    <!-- Navbar -->
+    <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+      <a href="index.html"><div class="flex items-center space-x-4">
+        <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+        <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+      </div></a>
+      <nav class="space-x-6 hidden md:flex font-medium">
+        <a href="index.html" class="option">About us</a>
+        <a href="#" class="option">Park Pro For Business</a>
+        <a href="#" class="option">Products</a>
+        <a href="#" class="option">Contact</a>
+      </nav>
+      
+      <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+        <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
+        <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+          Get the App
+        </a>
+        <div id="profileContainer" class="hidden relative">
+          <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+          <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+            <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+              <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+              <div>
+                <p class="font-semibold text-gray-900" id="userName">User</p>
+                <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+              </div>
+            </div>
+            <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+          </div>
+        </div>
+    </div>
+    </div>
+    <script src="js/index.js"></script>
+    <script src="js/cardToggle.js"></script>
+    <script src="js/registerSpot.js"></script>
+
+      <!-- Hero Section -->
+    <div class="relative bg-dark text-white">
+        <div class="absolute inset-0 bg-black/50 z-0"></div>
+        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80" 
+             alt="Car Service Center" class="w-full h-96 object-cover z-0">
+        <div class="container mx-auto px-4 relative z-10 h-96 flex flex-col justify-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Car Services</h1>
+            <p class="text-xl md:text-2xl max-w-2xl mb-6">Book professional car care services while you park. Quality service at your convenience.</p>
+            <div class="flex space-x-4">
+                <a href="#services" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition">
+                    Explore Services
+                </a>
+                <a href="#booking" class="bg-white hover:bg-gray-100 text-dark px-6 py-3 rounded-lg font-medium transition">
+                    Book Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Our Services</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Professional car care services available at all PARK-PRO locations while you park your vehicle.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Car Wash Service -->
+                <div class="service-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="h-48 bg-blue-50 flex items-center justify-center">
+                        <i class="fas fa-car-wash text-6xl text-primary"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Car Wash</h3>
+                        <p class="text-gray-600 mb-4">Exterior wash, interior cleaning, waxing, and detailing services for a showroom finish.</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-dark">$25+</span>
+                                <span class="text-gray-500 text-sm ml-1">starting</span>
+                            </div>
+                            <button onclick="showBookingForm('Car Wash')" class="text-primary hover:text-primary/80 font-medium">
+                                Book Now <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Garage & Repairs -->
+                <div class="service-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="h-48 bg-green-50 flex items-center justify-center">
+                        <i class="fas fa-tools text-6xl text-secondary"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Garage & Repairs</h3>
+                        <p class="text-gray-600 mb-4">Professional mechanics for oil changes, brake service, diagnostics, and general repairs.</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-dark">$50+</span>
+                                <span class="text-gray-500 text-sm ml-1">starting</span>
+                            </div>
+                            <button onclick="showBookingForm('Garage & Repairs')" class="text-primary hover:text-primary/80 font-medium">
+                                Book Now <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EV Charging -->
+                <div class="service-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="h-48 bg-purple-50 flex items-center justify-center">
+                        <i class="fas fa-charging-station text-6xl text-purple-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">EV Charging Station</h3>
+                        <p class="text-gray-600 mb-4">Fast charging for electric vehicles while you park. Pay per kWh or with subscription.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <span class="text-2xl font-bold text-dark">$0.35</span>
+                                <span class="text-gray-500 text-sm ml-1">/kWh</span>
+                                <div class="ml-3 flex items-center">
+                                    <span class="relative flex h-3 w-3">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                    </span>
+                                    <span class="text-green-600 text-sm ml-1">5 available</span>
+                                </div>
+                            </div>
+                            <button onclick="showBookingForm('EV Charging')" class="text-primary hover:text-primary/80 font-medium">
+                                Reserve <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Center -->
+                <div class="service-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="h-48 bg-yellow-50 flex items-center justify-center">
+                        <i class="fas fa-car-alt text-6xl text-accent"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Service Center</h3>
+                        <p class="text-gray-600 mb-4">Comprehensive vehicle maintenance including inspections, tune-ups, and fluid changes.</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-dark">$80+</span>
+                                <span class="text-gray-500 text-sm ml-1">starting</span>
+                            </div>
+                            <button onclick="showBookingForm('Service Center')" class="text-primary hover:text-primary/80 font-medium">
+                                Book Now <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Assistance -->
+                <div class="service-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="h-48 bg-red-50 flex items-center justify-center">
+                        <i class="fas fa-ambulance text-6xl text-red-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Emergency Assistance</h3>
+                        <p class="text-gray-600 mb-4">24/7 roadside assistance including towing, jump starts, tire changes, and lockout service.</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-dark">$75+</span>
+                                <span class="text-gray-500 text-sm ml-1">starting</span>
+                            </div>
+                            <button onclick="showEmergencyModal()" class="text-primary hover:text-primary/80 font-medium">
+                                Call Now <i class="fas fa-phone ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Membership Plans -->
+                <div class="service-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="h-48 bg-indigo-50 flex items-center justify-center">
+                        <i class="fas fa-crown text-6xl text-indigo-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Service Memberships</h3>
+                        <p class="text-gray-600 mb-4">Save up to 30% with our monthly plans for car washes, maintenance, and EV charging.</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-dark">$29</span>
+                                <span class="text-gray-500 text-sm ml-1">/month</span>
+                            </div>
+                            <button onclick="showMembershipPlans()" class="text-primary hover:text-primary/80 font-medium">
+                                View Plans <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Toggle -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-xl shadow-sm p-6 max-w-4xl mx-auto">
+                <div class="flex justify-center mb-8">
+                    <div class="inline-flex bg-gray-100 rounded-lg p-1">
+                        <button id="monthlyBtn" class="px-4 py-2 rounded-lg font-medium bg-primary text-white">
+                            Monthly Plans
+                        </button>
+                        <button id="yearlyBtn" class="px-4 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-200">
+                            Yearly Plans (Save 15%)
+                        </button>
+                    </div>
+                </div>
+
+                <div id="monthlyPlans" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Basic Plan -->
+                    <div class="border rounded-xl p-6 hover:border-primary transition">
+                        <h3 class="text-xl font-bold mb-2">Basic Care</h3>
+                        <p class="text-gray-600 mb-4">For occasional car maintenance</p>
+                        <div class="mb-6">
+                            <span class="text-3xl font-bold">$29</span>
+                            <span class="text-gray-500">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>2 Car Washes</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>1 Basic Inspection</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>10% Off Repairs</span>
+                            </li>
+                            <li class="flex items-center text-gray-400">
+                                <i class="fas fa-times text-gray-300 mr-2"></i>
+                                <span>No EV Charging</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-gray-100 hover:bg-gray-200 text-dark rounded-lg py-2 px-4 transition">
+                            Select Plan
+                        </button>
+                    </div>
+
+                    <!-- Premium Plan -->
+                    <div class="border-2 border-primary rounded-xl p-6 relative">
+                        <div class="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+                            POPULAR
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Premium Care</h3>
+                        <p class="text-gray-600 mb-4">For regular car maintenance</p>
+                        <div class="mb-6">
+                            <span class="text-3xl font-bold">$59</span>
+                            <span class="text-gray-500">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>4 Car Washes</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>2 Full Inspections</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>15% Off Repairs</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>20% Off EV Charging</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-primary hover:bg-primary/90 text-white rounded-lg py-2 px-4 transition">
+                            Select Plan
+                        </button>
+                    </div>
+
+                    <!-- Ultimate Plan -->
+                    <div class="border rounded-xl p-6 hover:border-primary transition">
+                        <h3 class="text-xl font-bold mb-2">Ultimate Care</h3>
+                        <p class="text-gray-600 mb-4">For complete car care</p>
+                        <div class="mb-6">
+                            <span class="text-3xl font-bold">$99</span>
+                            <span class="text-gray-500">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Unlimited Washes</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Monthly Inspections</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>20% Off Repairs</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>50% Off EV Charging</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-gray-100 hover:bg-gray-200 text-dark rounded-lg py-2 px-4 transition">
+                            Select Plan
+                        </button>
+                    </div>
+                </div>
+
+                <div id="yearlyPlans" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Yearly plans would go here with similar structure -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section id="booking" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-gray-50 rounded-xl shadow-sm overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 bg-primary text-white p-8 md:p-12">
+                        <h2 class="text-2xl font-bold mb-4">Book Your Service</h2>
+                        <p class="mb-6">Fill out the form to schedule your car service at your preferred PARK-PRO location.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-xl mr-3"></i>
+                                <span>Certified professionals</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-xl mr-3"></i>
+                                <span>Convenient timing</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-xl mr-3"></i>
+                                <span>Transparent pricing</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 p-8 md:p-12">
+                        <form id="serviceBookingForm" class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium mb-1">Full Name</label>
+                                <input type="text" id="name" name="name" required 
+                                       class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium mb-1">Email</label>
+                                <input type="email" id="email" name="email" required 
+                                       class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium mb-1">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required 
+                                       class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary">
+                            </div>
+                            <div>
+                                <label for="service" class="block text-sm font-medium mb-1">Service Type</label>
+                                <select id="service" name="service" required 
+                                        class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary">
+                                    <option value="">Select a service</option>
+                                    <option value="Car Wash">Car Wash</option>
+                                    <option value="Garage & Repairs">Garage & Repairs</option>
+                                    <option value="EV Charging">EV Charging</option>
+                                    <option value="Service Center">Service Center</option>
+                                    <option value="Emergency Assistance">Emergency Assistance</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="date" class="block text-sm font-medium mb-1">Date</label>
+                                    <input type="date" id="date" name="date" required 
+                                           class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary">
+                                </div>
+                                <div>
+                                    <label for="time" class="block text-sm font-medium mb-1">Time</label>
+                                    <input type="time" id="time" name="time" required 
+                                           class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="vehicle" class="block text-sm font-medium mb-1">Vehicle Type</label>
+                                <select id="vehicle" name="vehicle" required 
+                                        class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary">
+                                    <option value="">Select vehicle type</option>
+                                    <option value="Sedan">Sedan</option>
+                                    <option value="SUV">SUV</option>
+                                    <option value="Truck">Truck</option>
+                                    <option value="EV">Electric Vehicle</option>
+                                    <option value="Luxury">Luxury Vehicle</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="notes" class="block text-sm font-medium mb-1">Special Requests</label>
+                                <textarea id="notes" name="notes" rows="2" 
+                                          class="w-full px-4 py-2 border rounded-lg form-input focus:border-primary focus:ring-primary"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition">
+                                Confirm Booking
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-time Availability -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Real-time Availability</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Check current service availability at our downtown location</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-car-wash text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="font-bold mb-2">Car Wash</h3>
+                    <div class="flex items-center justify-center">
+                        <span class="relative flex h-3 w-3 mr-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-green-600">2 slots available</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tools text-2xl text-secondary"></i>
+                    </div>
+                    <h3 class="font-bold mb-2">Garage Service</h3>
+                    <div class="flex items-center justify-center">
+                        <span class="relative flex h-3 w-3 mr-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+                        </span>
+                        <span class="text-yellow-600">1 slot available</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-charging-station text-2xl text-purple-500"></i>
+                    </div>
+                    <h3 class="font-bold mb-2">EV Charging</h3>
+                    <div class="flex items-center justify-center">
+                        <span class="relative flex h-3 w-3 mr-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-green-600">3 stations available</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-ambulance text-2xl text-red-500"></i>
+                    </div>
+                    <h3 class="font-bold mb-2">Emergency</h3>
+                    <div class="flex items-center justify-center">
+                        <span class="relative flex h-3 w-3 mr-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-green-600">Available 24/7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">What Our Customers Say</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Trusted by thousands of drivers who use our car services</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="testimonial-card bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center mr-4">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">2 days ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"The car wash service is fantastic! My car has never looked better. The convenience of getting it done while I'm at work is unbeatable."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J." class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-medium">Sarah J.</h4>
+                            <p class="text-sm text-gray-500">Premium Member</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center mr-4">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">1 week ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"Had my brakes checked while I shopped. The mechanic was professional and explained everything clearly. Will definitely use again."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T." class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-medium">Michael T.</h4>
+                            <p class="text-sm text-gray-500">Basic Member</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card bg-gray-50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center mr-4">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">3 weeks ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"The EV charging membership saved me so much money! I charge while at work and the app shows real-time availability. Brilliant service!"</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya K." class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-medium">Priya K.</h4>
+                            <p class="text-sm text-gray-500">EV Member</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Map -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 p-8 md:p-12">
+                        <h2 class="text-2xl font-bold mb-6">Contact Our Service Team</h2>
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="bg-primary/10 text-primary p-3 rounded-lg mr-4">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Our Location</h4>
+                                    <p class="text-gray-600">123 Parking Avenue, Downtown, NY 10001</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-primary/10 text-primary p-3 rounded-lg mr-4">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Service Hotline</h4>
+                                    <p class="text-gray-600">+1 (555) 123-4567 (24/7 Support)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-primary/10 text-primary p-3 rounded-lg mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Email Us</h4>
+                                    <p class="text-gray-600">service@park-pro.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-primary/10 text-primary p-3 rounded-lg mr-4">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Service Hours</h4>
+                                    <p class="text-gray-600">Monday - Friday: 7:00 AM - 10:00 PM<br>Weekends: 8:00 AM - 8:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 bg-gray-200">
+                        <!-- Map placeholder - in a real implementation you would embed Google Maps -->
+                        <div class="h-full flex items-center justify-center">
+                            <div class="text-center p-8">
+                                <i class="fas fa-map-marked-alt text-5xl text-gray-400 mb-4"></i>
+                                <p class="text-gray-600">Interactive map would display here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-car text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-bold">PARK-PRO</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Smart parking solutions with car services for modern drivers.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Car Wash</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Garage & Repairs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">EV Charging</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Service Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Emergency Help</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Locations</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-medium mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2023 PARK-PRO. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Emergency Assistance Modal -->
+    <div id="emergencyModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Emergency Assistance</h3>
+                <button onclick="closeEmergencyModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4 mb-6">
+                <p class="text-gray-600">Please select the type of assistance you need:</p>
+                <div class="grid grid-cols-1 gap-3">
+                    <button class="flex items-center p-4 border rounded-lg hover:bg-red-50 hover:border-red-100 transition text-left">
+                        <div class="bg-red-100 text-red-600 p-3 rounded-lg mr-4">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Towing Service</h4>
+                            <p class="text-sm text-gray-500">Vehicle breakdown or accident</p>
+                        </div>
+                    </button>
+                    <button class="flex items-center p-4 border rounded-lg hover:bg-yellow-50 hover:border-yellow-100 transition text-left">
+                        <div class="bg-yellow-100 text-yellow-600 p-3 rounded-lg mr-4">
+                            <i class="fas fa-car-battery"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Jump Start</h4>
+                            <p class="text-sm text-gray-500">Dead battery assistance</p>
+                        </div>
+                    </button>
+                    <button class="flex items-center p-4 border rounded-lg hover:bg-blue-50 hover:border-blue-100 transition text-left">
+                        <div class="bg-blue-100 text-blue-600 p-3 rounded-lg mr-4">
+                            <i class="fas fa-gas-pump"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Fuel Delivery</h4>
+                            <p class="text-sm text-gray-500">Out of gas/fuel</p>
+                        </div>
+                    </button>
+                    <button class="flex items-center p-4 border rounded-lg hover:bg-green-50 hover:border-green-100 transition text-left">
+                        <div class="bg-green-100 text-green-600 p-3 rounded-lg mr-4">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Lockout Service</h4>
+                            <p class="text-sm text-gray-500">Locked keys in vehicle</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                <div class="flex">
+                    <div class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-1">Call Emergency Services</h4>
+                        <p class="text-blue-600 font-bold">+1 (555) 123-4567</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md text-center">
+            <div class="bg-green-100 text-green-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-check text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Booking Confirmed!</h3>
+            <p class="text-gray-600 mb-6">Your service has been successfully scheduled. A confirmation has been sent to your email.</p>
+            <button onclick="closeSuccessModal()" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition">
+                Done
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between monthly and yearly plans
+        document.getElementById('monthlyBtn').addEventListener('click', function() {
+            this.classList.add('bg-primary', 'text-white');
+            this.classList.remove('text-gray-700', 'hover:bg-gray-200');
+            document.getElementById('yearlyBtn').classList.remove('bg-primary', 'text-white');
+            document.getElementById('yearlyBtn').classList.add('text-gray-700', 'hover:bg-gray-200');
+            document.getElementById('monthlyPlans').classList.remove('hidden');
+            document.getElementById('yearlyPlans').classList.add('hidden');
+        });
+
+        document.getElementById('yearlyBtn').addEventListener('click', function() {
+            this.classList.add('bg-primary', 'text-white');
+            this.classList.remove('text-gray-700', 'hover:bg-gray-200');
+            document.getElementById('monthlyBtn').classList.remove('bg-primary', 'text-white');
+            document.getElementById('monthlyBtn').classList.add('text-gray-700', 'hover:bg-gray-200');
+            document.getElementById('yearlyPlans').classList.remove('hidden');
+            document.getElementById('monthlyPlans').classList.add('hidden');
+        });
+
+        // Show booking form with service pre-selected
+        function showBookingForm(service) {
+            document.getElementById('service').value = service;
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show emergency modal
+        function showEmergencyModal() {
+            document.getElementById('emergencyModal').classList.remove('hidden');
+        }
+
+        function closeEmergencyModal() {
+            document.getElementById('emergencyModal').classList.add('hidden');
+        }
+
+        // Show success modal
+        function showSuccessModal() {
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        // Form validation and submission
+        document.getElementById('serviceBookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const service = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const vehicle = document.getElementById('vehicle').value;
+            
+            if (!name || !email || !phone || !service || !date || !time || !vehicle) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // In a real app, you would send this data to your backend
+            console.log('Booking submitted:', { name, email, phone, service, date, time, vehicle });
+            
+            // Show success message
+            showSuccessModal();
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Update availability indicators periodically
+        function updateAvailability() {
+            // In a real app, this would fetch data from your backend
+            const evAvailability = Math.floor(Math.random() * 5) + 1;
+            const washAvailability = Math.floor(Math.random() * 3) + 1;
+            const garageAvailability = Math.floor(Math.random() * 2) + 1;
+            
+            // Update the UI
+            document.querySelectorAll('.availability-pulse').forEach(el => {
+                el.textContent = `${evAvailability} available`;
+            });
+            
+            // This is just a simulation - in reality you would update each indicator separately
+        }
+
+        // Update every 30 seconds
+        setInterval(updateAvailability, 30000);
+        updateAvailability(); // Initial update
+    </script>
+    
+</body>
+</html>
