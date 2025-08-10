@@ -93,7 +93,7 @@ router.get('/users/count', passport.authenticate('jwt', { session: false }), ens
 router.get('/users/list', passport.authenticate('jwt', { session: false }), ensureAdmin, getUsersList);
 router.delete('/users/clear', passport.authenticate('jwt', { session: false }), ensureAdmin, deleteUsersExceptAdmins);
 
-const Stations = require("../models/Stations");
+
 
 
 // Store admin login route - authenticate user with role 'store admin'

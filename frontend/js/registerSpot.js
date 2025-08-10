@@ -220,14 +220,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Submit form data via API call
   function submitForm() {
     const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
     // Show loading spinner on submit button
     nextBtn.disabled = true;
     nextBtn.textContent = 'Submitting...';
 
-    fetch('/api/parking-spots', {
+    fetch('http://localhost:5000/api/register', {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
     })
       .then(async (response) => {
         nextBtn.disabled = false;
@@ -237,15 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
           form.reset();
           currentStep = 0;
           showStep(currentStep);
-          // Clear previews
-          document.getElementById('parkingPhotosPreview').innerHTML = '';
-          document.getElementById('ownershipDocsPreview').innerHTML = '';
-          // Reset map marker to default
-          const defaultPos = { lat: 37.7749, lng: -122.4194 };
-          map.setCenter(defaultPos);
-          marker.setPosition(defaultPos);
-          document.getElementById('latitude').value = defaultPos.lat.toFixed(6);
-          document.getElementById('longitude').value = defaultPos.lng.toFixed(6);
         } else {
           const errorData = await response.json();
           showToast(errorData.message || 'Failed to register parking spot.', 'bg-danger');

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkPro - Document Submission</title>
+    <!-- Navbar dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Navbar styles (copied exactly from original) */
+        .option {
+            text-decoration: none;
+            color: #1e3740;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .option:hover {
+            color: white;
+            background-color: #46949d;
+            box-shadow: 0 2px 6px rgb(18, 105, 28);
+        }
+
+        /* Document submission page styles (isolated from navbar styles) */
+        .document-submission-body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .document-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .document-section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .document-title {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .file-requirements {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .success-message {
+            display: none;
+            background-color: #dff0d8;
+            color: #3c763d;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-200">
+
+    <!-- Navbar (copied exactly from original) -->
+    <div class="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+        <a href="index.html"><div class="flex items-center space-x-4">
+          <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+          <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+        </div></a>
+        <nav class="space-x-6 hidden md:flex font-medium">
+          <a href="aboutus.html" class="option">About us</a>
+          <a href="business.html" class="option">Park Pro For Business</a>
+          <a href="product.html" class="option">Products</a>
+          <a href="contactus.html" class="option">Contact</a>
+        </nav>
+        <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+          <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
+          <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+            Get the App
+          </a>
+          <div id="profileContainer" class="hidden relative">
+            <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+            <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+              <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+                <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+                <div>
+                  <p class="font-semibold text-gray-900" id="userName">User</p>
+                  <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+                </div>
+              </div>
+              <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Document Submission Content -->
+    <div class="document-container">
+        <div class="success-message" id="successMessage">
+            Your documents have been submitted successfully! You'll receive a confirmation email shortly.
+        </div>
+
+        <form id="documentForm">
+            <div class="document-section">
+                <h2 class="document-title">Required Documents</h2>
+                
+                <div class="form-group">
+                    <label class="form-label required" for="landDocs">Land/Lease Documents</label>
+                    <input type="file" id="landDocs" name="landDocs" class="form-input" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <div class="file-requirements">Accepted formats: PDF, JPG, PNG (Max 5MB)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label required" for="parkingPhotos">Parking Station Photos</label>
+                    <input type="file" id="parkingPhotos" name="parkingPhotos" class="form-input" accept=".jpg,.jpeg,.png" multiple required>
+                    <div class="file-requirements">Upload 3-5 photos showing different angles (JPG/PNG, Max 5MB each)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label required" for="aadhar">Aadhar Card</label>
+                    <input type="file" id="aadhar" name="aadhar" class="form-input" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <div class="file-requirements">Front and back in single file (PDF/JPG/PNG, Max 5MB)</div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Documents</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('documentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            window.scrollTo(0, 0);
+            
+            // In a real implementation, you would send the form data to your server
+        });
+    </script>
+
+    <!-- Navbar scripts -->
+    <script src="js/index.js"></script>
+    <script src="js/cardToggle.js"></script>
+    <script src="js/registerSpot.js"></script>
+</body>
+</html>
