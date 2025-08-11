@@ -60,13 +60,13 @@
         }
 
         .features-container {
-        display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* exactly 3 per row */
   gap: 24px;
   max-width: 1000px;
   margin: 100px auto;
   padding: 10px;
-        }
+}
 
         .feature {
              background: white;
@@ -105,16 +105,28 @@
         }
 
         .partner-grid {
- 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* Exactly 3 per row on desktop */
   gap: 24px;
   max-width: 1000px;
   margin: 100px auto;
   padding: 10px;
-
-
 }
+
+/* Tablet view - 2 per row */
+@media (max-width: 900px) {
+  .partner-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile view - 1 per row */
+@media (max-width: 600px) {
+  .partner-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
         .partner-item {
             background: white;
@@ -167,8 +179,11 @@
         }
         .business-feature-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 35px;
+              grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 10px;
         }
 
         .business-feature-card {
@@ -200,30 +215,35 @@
 
 .step {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
+  flex-direction: column; /* circle above text */
+  align-items: center;    /* center horizontally */
+  margin: 15px;
 }
 
 .circle {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  
+  background-color: #4CAF50; /* green circle */
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 30px;
   font-weight: bold;
-  font-size: 25px;
-  color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .label {
-  margin-top: 6px;
-  font-size: 20px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
   text-align: center;
-  width: 90px;
 }
+
+
+
+
 
 .line {
   height: 4px;
@@ -231,21 +251,8 @@
   background-color: lightgray;
   margin: 0 8px;
 }
-.footer-content {
-  text-align: center;
-  background-color:black;
-color: white;
-  padding: 40px 20px;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  font-size: 18px;
-}
-.footer-heading {
-  font-size: 2rem;
-  font: bold;
-  font-weight: 600;
-}
+
+ 
     </style>
 </head>
 <body>
@@ -278,6 +285,7 @@ color: white;
       <div class="feature-title">Business Dashboard</div>
       <div class="feature-description">Track earnings, view bookings, and analyze performance.</div>
     </div>
+    
     <div class="feature">
       <img src="https://cdn-icons-png.flaticon.com/512/2910/2910761.png" alt="Payment Icon">
       <div class="feature-title">Secure Payments</div>
@@ -287,6 +295,11 @@ color: white;
       <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" alt="Support Icon">
       <div class="feature-title">Partner Support</div>
       <div class="feature-description">Get access to reliable support to grow your parking business.</div>
+    </div>
+     <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" alt="Support Icon">
+      <div class="feature-title">Seamless Integration</div>
+      <div class="feature-description">Quick onboarding, easy setup, and minimal disruption to your existing operations.</div>
     </div>
 </div>
 
@@ -309,10 +322,7 @@ color: white;
             <img src="https://cdn-icons-png.flaticon.com/512/6008/6008287.png" alt="Hotel Icon">
             <div class="partner-name">Hotels</div>
         </div>
-        <div class="partner-item">
-            <img src="https://cdn-icons-png.flaticon.com/512/1999/1999101.png" alt="Event Icon">
-            <div class="partner-name">Event Venues</div>
-        </div>
+       
         <div class="partner-item">
             <img src="https://cdn-icons-png.flaticon.com/512/2830/2830310.png" alt="Private Lot Icon">
             <div class="partner-name">Private Parking Lot Owners</div>
@@ -360,16 +370,17 @@ color: white;
     </div>
 </section>
 
+<h2 style="text-align: center; color: green;">Steps to Register</h2>
 
-  <div class="step-tracker">
+<div class="step-tracker">
   <div class="step completed">
-    <div class="circle"></div>
+    <div class="circle">1</div>
     <div class="label">Login Portal</div>
   </div>
   <div class="line"></div>
 
   <div class="step completed">
-    <div class="circle"></div>
+    <div class="circle">2</div>
     <div class="label">Click Login</div>
   </div>
   <div class="line"></div>
@@ -398,22 +409,15 @@ color: white;
   </div>
   <div class="line"></div>
 
-  <div class="step active">
-    <div class="circle"><img src=""></div>
+  <div class="step completed">
+    <div class="circle">7</div>
     <div class="label">Dashboard</div>
   </div>
+  
 </div>
 
 
 
-    <footer class="foot">
-        <div class="footer-content">
-            <div class="footer-heading">Park<span style="color:rgb(0 170 85 / 1)
-; text-align: center;">Pro</span> </h1></div><br>
-            <p>Smart parking solutions powered by IoT technology</p><br><br>
-            <p >© 2023 ParkPro Technologies</p>
-        </div>
-    </footer>
 
 </body>
 </html>
