@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Pro - Partner Products Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #12691c, #46949d);
+            color: white;
+            border-radius: 0.75rem;
+        }
+        .product-section {
+            background: white;
+            padding: 2.5I have created the user-products.html page with detailed information for the user products.
+
+Next, I will create the partner-products.html page with the partner products' detailed information and the collaboration message.
+
+<create_file>
+<path>frontend/partner-products.html</path>
+<content>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Park Pro - Partner Products Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #46949d, #12691c);
+            color: white;
+            border-radius: 0.75rem;
+        }
+        .product-section {
+            background: white;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #46949d;
+        }
+        .product-icon {
+            font-size: 2.5rem;
+            color: #46949d;
+            margin-bottom: 1rem;
+        }
+        .product-title {
+            color: #12691c;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .product-description {
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+        .features-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .features-list li:before {
+            content: "✓";
+            color: #12691c;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .collaboration-message {
+            background: #46949d;
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            margin-top: 3rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        }
+        .collaboration-message h2 {
+            margin-top: 0;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+        .collaboration-message p {
+            font-size: 1.2rem;
+            margin: 1rem 0 2rem;
+        }
+        .partner-button {
+            background-color: #12691c;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .partner-button:hover {
+            background-color: #0f4e14;
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #46949d;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #12691c;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="product-updated.html" class="back-button">
+            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>Back to Products
+        </a>
+
+        <div class="header">
+            <h1><i class="fas fa-handshake" style="margin-right: 10px;"></i>Partner Products</h1>
+            <p>Explore our advanced partner solutions designed to enhance parking infrastructure and management.</p>
+        </div>
+
+        <div class="product-section">
+            <div class="product-icon">
+                <i class="fas fa-traffic-light"></i>
+            </div>
+            <h2 class="product-title">Smart IoT Parking System</h2>
+            <p class="product-description">
+                Seamlessly connect all parking infrastructure — from entry gates to payment kiosks — into one intelligent network.
+            </p>
+            <h3>Key Features:</h3>
+            <ul class="features-list">
+                <li>Real-time monitoring of parking space availability</li>
+                <li>Automated access control for smooth entry and exit</li>
+                <li>Data-driven insights to improve efficiency and revenue</li>
+                <li>Remote management from any location</li>
+                <li>Scalable and low maintenance design</li>
+                <li>Future-ready integration with smart city technologies</li>
+            </ul>
+        </div>
+
+        <div class="product-section">
+            <div class="product-icon">
+                <i class="fas fa-camera"></i>
+            </div>
+            <h2 class="product-title">Web Admin Dashboard</h2>
+            <p class="product-description">
+                Centralized control over all connected parking devices, sensors, and access points in real time.
+            </p>
+            <h3>Key Features:</h3>
+            <ul class="features-list">
+                <li>Live analytics for occupancy rates, peak hours, and revenue tracking</li>
+                <li>User and access management with role-based permissions and activity logs</li>
+                <li>Alerts and notifications for system errors and unauthorized access</li>
+                <li>Customizable reports for operational and financial planning</li>
+                <li>Secure, responsive interface for smooth operations from any device</li>
+            </ul>
+        </div>
+
+        <div class="collaboration-message">
+            <h2>You've to collaborate to unlock all these features</h2>
+            <p>Unlock the full potential of smart parking through partnership.</p>
+            <a href="contactus.html" class="partner-button">Start Collaborating Today <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></a>
+        </div>
+    </div>
+</body>
+</html>

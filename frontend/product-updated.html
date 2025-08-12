@@ -36,7 +36,7 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
         }
         h2 {
-            color: black;
+            color: #46949d;
         }
         .learn-more {
             display: inline-flex;
@@ -93,28 +93,6 @@
             margin-right: 15px;
             color: #46949d;
         }
-        .hidden {
-            display: none;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #f9f9f9;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 12px rgba(70, 148, 157, 0.15);
-            border-top: 4px solid #46949d;
-            max-width: 800px;
-        }
-        .hidden h3 {
-            color: #12691c;
-            margin-top: 0;
-            font-size: 1.5rem;
-        }
-        .hidden ul {
-            line-height: 1.8;
-            margin: 1rem 0;
-        }
-        .hidden li {
-            margin-bottom: 0.5rem;
-        }
     </style>
 </head>
 <body>
@@ -134,7 +112,7 @@
                 <div class="product-content">
                     <strong>Mobile Application:</strong> Access parking information and manage reservations on the go.
                     <div class="learn-more-container">
-                        <a href="#mobile-application" class="learn-more" onclick="toggleInfo('mobile-application-info')">Learn More</a>
+                        <a href="user-products.html" class="learn-more">Learn More</a>
                     </div>
                 </div>
             </div>
@@ -144,7 +122,7 @@
                 <div class="product-content">
                     <strong>Web Portal:</strong> Manage parking spaces and view analytics from a centralized web interface.
                     <div class="learn-more-container">
-                        <a href="#web-portal" class="learn-more" onclick="toggleInfo('web-portal-info')">Learn More</a>
+                        <a href="user-products.html" class="learn-more">Learn More</a>
                     </div>
                 </div>
             </div>
@@ -157,7 +135,7 @@
                 <div class="product-content">
                     <strong>Smart IoT Parking System:</strong> Enhance security and control access to parking areas.
                     <div class="learn-more-container">
-                        <a href="#boom-barriers" class="learn-more" onclick="toggleInfo('boom-barriers-info')">Learn More</a>
+                        <a href="partner-products.html" class="learn-more">Learn More</a>
                     </div>
                 </div>
             </div>
@@ -167,12 +145,10 @@
                 <div class="product-content">
                     <strong>Web Admin Dashboard</strong> Automatically recognize vehicle license plates for efficient entry and exit management.
                     <div class="learn-more-container">
-                        <a href="#anpr-cameras" class="learn-more" onclick="toggleInfo('anpr-cameras-info')">Learn More</a>
+                        <a href="partner-products.html" class="learn-more">Learn More</a>
                     </div>
                 </div>
             </div>
-
-        
         </div>
     </div>
 
@@ -183,75 +159,10 @@
         <p style="max-width: 600px; margin: 0 auto 1.5rem; font-weight: normal; line-height: 1.5;">
             Unlock the full potential of smart parking through partnership
         </p>
-        <a href="#contact" class="learn-more" style="background-color: #12691c; color: white; padding: 1rem 2rem; font-size: 1.1rem;">
+        <a href="contactus.html" class="learn-more" style="background-color: #46949d; color: white; padding: 1rem 2rem; font-size: 1.1rem;">
             Start Collaborating Today <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
         </a>
     </div>
-
-    <!-- Hidden Info Sections -->
-    <div id="mobile-application-info" class="hidden">
-        <h3>Mobile Application</h3>
-        <p>The Park Pro mobile application provides:</p>
-        <ul>
-            <li>Real-time parking availability and guidance</li>
-            <li>Reservation management with customizable alerts</li>  
-            <li>Integrated payment processing</li>
-            <li>Navigation to available spaces</li>
-            <li>Usage analytics and history</li>
-        </ul>
-    </div>
-
-    <div id="web-portal-info" class="hidden">
-        <h3>Web Portal</h3>
-        <p>The Park Pro web management portal includes:</p>
-        <ul>
-            <li>Centralized dashboard with real-time monitoring</li>
-            <li>Advanced analytics and reporting tools</li>
-            <li>Remote configuration of parking assets</li>
-            <li>User management and permissions</li>
-            <li>API integrations with other systems</li>
-        </ul>
-    </div>
-
-    <div id="boom-barriers-info" class="hidden">
-        <h3>Smart IoT parking System</h3>
-        <p>Seamlessly connect all parking infrastructure — from entry gates to payment kiosks — into one intelligent network. Our IoT-based platform ensures:
-            Real-time monitoring of parking space availability.
-            Automated access control for smooth entry and exit.
-            Data-driven insights to improve efficiency and revenue.
-            Remote management from any location.
-            This system is designed for scalability, low maintenance, and future-ready integration with emerging smart city technologies..</p>
-    </div>
-
-    <div id="anpr-cameras-info" class="hidden">
-        <h3>Web Admin dashboard</h3>
-        <p>Centralized control over all connected parking devices, sensors, and access points in real time.
-            Live analytics for occupancy rates, peak hours, and revenue tracking.
-            User and access management with role-based permissions and activity logs.
-            Alerts and notifications for system errors, unauthorized access, and maintenance updates.
-            Customizable reports for operational and financial planning.
-            Secure, responsive interface for smooth operations from any device.
-            </p>
-    </div>
-
-    <div id="iot-controllers-info" class="hidden">
-        <h3>IoT Controllers / Hubs</h3>
-        <p>IoT controllers centralize the management of all parking devices, providing better control and analytics for parking operations.</p>
-    </div>
-
-    <script>
-        function toggleInfo(infoId) {
-            const infoSection = document.getElementById(infoId);
-            if (infoSection.classList.contains('hidden')) {
-                infoSection.classList.remove('hidden');
-                infoSection.scrollIntoView({behavior: 'smooth'});
-                document.querySelector(`[onclick="toggleInfo('${infoId}')"]`).textContent = 'Close';
-            } else {
-                infoSection.classList.add('hidden');
-                document.querySelector(`[onclick="toggleInfo('${infoId}')"]`).textContent = 'Learn More';
-            }
-        }
-    </script>
 
 </body>
 </html>
