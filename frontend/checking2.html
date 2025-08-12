@@ -1,279 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How Park Pro Works</title>
-    <style>
-        /* Base Styles */
-        :root {
-            --primary: #4a6bff;
-            --secondary: #00c853;
-            --dark: #1a237e;
-            --light: #f5f7ff;
-            --gray: #6c757d;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* Section Styling */
-        .how-it-works {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            padding: 40px;
-            margin: 40px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            color: var(--dark);
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-        
-        .section-title i {
-            vertical-align: middle;
-            margin-right: 10px;
-            font-size: 2.2rem;
-        }
-        
-        /* Steps Grid */
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .step-card {
-            background-color: var(--light);
-            border-radius: 10px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Submission - ParkPro</title>
+<style>
+    :root {
+        --primary-color: #2C3E50;
+        --secondary-color: #3498db;
+        --success-color: #2ecc71;
+        --light-gray: #f5f7fa;
+        --medium-gray: #dcdcdc;
+        --dark-gray: #555;
+        --text-color: #333;
+        --white: #fff;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--light-gray);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: var(--white);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 12px;
+        font-size: 28px;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .description {
+        text-align: center;
+        font-size: 15px;
+        color: var(--dark-gray);
+        margin-bottom: 30px;
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Process Tracker */
+    .process-container {
+        margin-bottom: 40px;
+    }
+    
+    .process {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .process::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        width: 80%;
+        height: 4px;
+        background-color: var(--medium-gray);
+        z-index: 0;
+        transform: translateY(-50%);
+    }
+
+    .step-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .step {
+        background: var(--white);
+        border: 3px solid var(--medium-gray);
+        color: var(--dark-gray);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .step.active {
+        border-color: var(--secondary-color);
+        color: var(--secondary-color);
+        background-color: #ecf6fd;
+        transform: scale(1.1);
+    }
+
+    .step.completed {
+        border-color: var(--success-color);
+        background-color: #e9f9f1;
+        color: var(--success-color);
+    }
+
+    .step-label {
+        text-align: center;
+        font-size: 13px;
+        margin-top: 10px;
+        font-weight: 500;
+        color: var(--dark-gray);
+    }
+
+    /* Form */
+    .form-section {
+        margin-top: 30px;
+    }
+
+    .section-title {
+        font-size: 20px;
+        margin: 25px 0 15px;
+        color: var(--primary-color);
+        font-weight: 600;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .instructions {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--secondary-color);
+    }
+
+    .instructions ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .instructions li {
+        margin-bottom: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-color);
+        font-size: 15px;
+    }
+
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+
+    input[type="text"], 
+    input[type="file"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border 0.3s;
+    }
+
+    input[type="text"]:focus, 
+    input[type="file"]:focus {
+        outline: none;
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    input[type="file"] {
+        background: #fafafa;
+        padding: 10px;
+    }
+
+    .upload-section {
+        padding: 20px;
+        border: 1px dashed #ccc;
+        border-radius: 8px;
+        background: #fafafa;
+        transition: all 0.3s;
+    }
+
+    .upload-section:hover {
+        border-color: var(--secondary-color);
+        background: #f5f9ff;
+    }
+
+    .submit-container {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    button {
+        display: inline-block;
+        padding: 14px 30px;
+        font-size: 16px;
+        color: var(--white);
+        background-color: black;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    button:hover {
+        background-color: #46949d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .warning-text {
+        color: red;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 20px;
             padding: 25px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-left: 4px solid var(--primary);
         }
         
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        .description {
+            max-width: 100%;
         }
         
-        .step-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
+        .process {
+            width: 100%;
         }
         
-        .step-number i {
-            margin-right: 10px;
-            font-size: 1.5rem;
+        .process::before {
+            left: 5%;
+            width: 90%;
         }
         
-        .step-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--dark);
+        .step {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
         }
         
-        .step-content {
-            color: var(--gray);
+        .step-label {
+            font-size: 11px;
         }
-        
-        .step-content ul {
-            padding-left: 20px;
-        }
-        
-        .step-content li {
-            margin-bottom: 8px;
-        }
-        
-        /* Why Choose Section */
-        .why-choose {
-            background-color: var(--dark);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-top: 40px;
-        }
-        
-        .why-choose h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .benefits-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-        
-        .benefit-item {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 15px 20px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .benefit-item i {
-            margin-right: 10px;
-            color: var(--secondary);
-        }
-        
-        /* CTA Button */
-        .cta-button {
-            display: block;
-            width: fit-content;
-            margin: 30px auto 0;
-            background-color: var(--secondary);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            text-align: center;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 200, 83, 0.3);
-        }
-        
-        .cta-button:hover {
-            background-color: #00b34a;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
-        }
-        
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .how-it-works {
-                padding: 25px;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .steps-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    }
+</style>
 </head>
 <body>
-    <section class="how-it-works">
-        <h2 class="section-title"><i class="fas fa-car"></i> How Park Pro Works</h2>
-        
-        <div class="steps-grid">
-            <!-- Step 1 -->
-            <div class="step-card">
-                <div class="step-number"><i class="fas fa-search"></i> 1</div>
-                <h3 class="step-title">Search for Parking</h3>
-                <div class="step-content">
-                    <ul>
-                        <li>Enter your destination to see <strong>available parking spots nearby</strong></li>
-                        <li><strong>Filter by</strong>:
-                            <br>• Price <i class="fas fa-tag"></i>
-                            <br>• Distance <i class="fas fa-map-marker-alt"></i>
-                            <br>• EV charging <i class="fas fa-bolt"></i>
-                            <br>• Security <i class="fas fa-shield-alt"></i>
-                        </li>
-                        <li><strong>AI-powered real-time updates</strong> using IoT sensors</li>
-                    </ul>
-                </div>
+
+<div class="container">
+    <h1>Documentation Process</h1>
+    <p class="description">Submit the required documents to proceed with your registration. This step helps us verify your station details before activation.</p>
+
+    <!-- Process Tracker -->
+    <div class="process-container">
+        <div class="process">
+            <div class="step-container">
+                <div class="step completed">✔</div>
+                <div class="step-label">Register</div>
             </div>
-            
-            <!-- Step 2 -->
-            <div class="step-card">
-                <div class="step-number"><i class="fas fa-lock"></i> 2</div>
-                <h3 class="step-title">Secure Login</h3>
-                <div class="step-content">
-                    <ul>
-                        <li>Log in via <strong>email, password, or social login</strong></li>
-                        <li>Save <strong>favorite locations, vehicle details, and payment methods</strong></li>
-                        <li>All sessions are <strong>encrypted</strong> for security</li>
-                    </ul>
-                </div>
+            <div class="step-container">
+                <div class="step active">📄</div>
+                <div class="step-label">Documentation</div>
             </div>
-            
-            <!-- Step 3 -->
-            <div class="step-card">
-                <div class="step-number"><i class="fas fa-calendar-check"></i> 3</div>
-                <h3 class="step-title">Reserve Your Spot</h3>
-                <div class="step-content">
-                    <ul>
-                        <li>Select your preferred <strong>time slot and parking spot</strong></li>
-                        <li>View <strong>amenities, photos, and user reviews</strong></li>
-                        <li><strong>FastPass Parking</strong> for priority check-in</li>
-                        <li><strong>Flexible cancellations & rescheduling</strong></li>
-                    </ul>
-                </div>
+            <div class="step-container">
+                <div class="step">3</div>
+                <div class="step-label">Confirmation</div>
             </div>
-            
-            <!-- Step 4 -->
-            <div class="step-card">
-                <div class="step-number"><i class="fas fa-parking"></i> 4</div>
-                <h3 class="step-title">Park with Ease</h3>
-                <div class="step-content">
-                    <ul>
-                        <li><strong>Smart navigation</strong> to your reserved spot</li>
-                        <li><strong>QR code check-in/out</strong> for instant access</li>
-                        <li><strong>Dynamic reallocation</strong> if needed</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Step 5 -->
-            <div class="step-card">
-                <div class="step-number"><i class="fas fa-credit-card"></i> 5</div>
-                <h3 class="step-title">Pay Securely</h3>
-                <div class="step-content">
-                    <ul>
-                        <li>Multiple payment options: <strong>UPI, wallets, cards, subscriptions</strong></li>
-                        <li><strong>Blockchain-backed transactions</strong> for transparency</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Step 6 -->
-            <div class="step-card">
-                <div class="step-number"><i class="fas fa-leaf"></i> 6</div>
-                <h3 class="step-title">Eco-Friendly Rewards</h3>
-                <div class="step-content">
-                    <ul>
-                        <li>Earn bonuses for using <strong>Eco-Parking zones</strong></li>
-                        <li>Track your <strong>green impact</strong> in the dashboard</li>
-                    </ul>
-                </div>
+            <div class="step-container">
+                <div class="step">4</div>
+                <div class="step-label">Activate</div>
             </div>
         </div>
+    </div>
+
+    <!-- Form -->
+    <form class="form-section">
         
-        <div class="why-choose">
-            <h3>Why Choose Park Pro?</h3>
-            <div class="benefits-list">
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Real-time parking availability</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Secure, user-friendly booking</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Smart navigation & QR check-in</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Flexible payments & eco-rewards</div>
+        <div class="form-group">
+            <label for="registrationId" class="required-field">Registration ID</label>
+            <span class="warning-text">(Check your Mail to Know your registration Id)</span>
+            <input type="text" id="registrationId" name="registrationId" placeholder="Enter your registration ID" required>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Land/Lease Documents</h2>
+            <div class="instructions">
+                <ul>
+                    <li>This Documents are required to verify that this particular station belongs to you or not</li>
+                    <li>Make sure You submit the correct documents</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Land/Lease Documents</label>
+                <input type="file" name="landDocs" multiple required>
             </div>
         </div>
-        
-        <a href="#" class="cta-button">Download Park Pro Now <i class="fas fa-arrow-right"></i></a>
-    </section>
+
+        <div class="document-section">
+            <h2 class="section-title">Station Pictures</h2>
+            <div class="instructions">
+                <ul>
+                    <li>This picture is to verify whether you have a station or not</li>
+                    <li>Submit with the location of your station</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Location</label>
+                <input type="text" name="station location" required placeholder="Location of your station">
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Parking Station Pictures</label>
+                <input type="file" name="stationPics" multiple required>
+            </div>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Partnership Documents</h2>
+            <div class="instructions">
+                <ul>
+                    <li>Check Your Mail we have sent a partnership Agreement sheet</li>
+                    <li>Take a print Out and sign it - <span class="warning-text">make sure you have read the Agreement Fully</span></li>
+                    <li>Once you have signed submit the softcopy here and keep the copy with you and shortly you will receive the original copy of Agreement</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Partnership Agreement</label>
+                <input type="file" name="partnershipDocs" multiple required>
+            </div>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Digital Signature</h2>
+            <div class="instructions">
+                <ul>
+                    <li>Submit Your signature which is signed in paper <span class="warning-text">(note: crop the image before submitting)</span></li>
+                    <li>This signature will be printed in the original copy</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Digital Signature</label>
+                <input type="file" name="digitalSign" required>
+            </div>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Personal Documents</h2>
+            <div class="instructions">
+                <ul>
+                    <li>This documents is used to Identify the identity <span class="warning-text">(No Proper Documents - rejection)</span></li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Personal Documents (Aadhar, Photo)</label>
+                <input type="file" name="personalDocs" multiple required>
+            </div>
+        </div>
+
+        <div class="submit-container">
+            <button type="submit">Submit Documents</button>
+        </div>
+    </form>
+</div>
+
 </body>
 </html>
