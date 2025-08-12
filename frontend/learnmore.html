@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Pro - Smart Parking Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .section-title {
+            color: #46949d;
+            font-size: 2.5rem;
+            text-align: center;
+            margin: 2rem 0;
+            font-weight: 700;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .product-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            transition: all 0.4s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        .product-row {
+            margin-bottom: 3rem;
+        }
+        .product-row h2 {
+            color: #46949d;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .product-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .product-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #46949d;
+        }
+        .product-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #46949d;
+            min-width: 30px;
+        }
+        .product-content {
+            flex-grow: 1;
+        }
+        .product-content strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .learn-more-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.85rem 1.75rem;
+            background-color: black;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 550;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .learn-more-btn:hover {
+            background-color: #333;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .collaboration-section {
+            text-align: center;
+            margin: 3rem auto;
+            padding: 3rem 2rem;
+            max-width: 800px;
+            background: #46949d;
+            border-radius: 0.75rem;
+            color: white;
+        }
+        .collaboration-section h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .collaboration-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .collaborate-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: #12691c;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 550;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .collaborate-btn:hover {
+            background-color: #0f4e14;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="section-title">
+            <i class="fas fa-parking"></i> Park Pro - Smart Parking Solutions
+        </h1>
+
+        <!-- User Products Row -->
+        <div class="product-row">
+            <h2>User Products</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-item">
+                        <i class="fas fa-mobile-alt product-icon"></i>
+                        <div class="product-content">
+                            <strong>Mobile Application</strong>
+                            Access parking information and manage reservations on the go.
+                            <a href="user-products.html" class="learn-more-btn">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-item">
+                        <i class="fas fa-desktop product-icon"></i>
+                        <div class="product-content">
+                            <strong>Web Portal</strong>
+                            Manage parking spaces and view analytics from a centralized web interface.
+                            <a href="user-products.html" class="learn-more-btn">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Partner Products Row -->
+        <div class="product-row">
+            <h2>Partner Products</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-item">
+                        <i class="fas fa-traffic-light product-icon"></i>
+                        <div class="product-content">
+                            <strong>Smart IoT Parking System</strong>
+                            Enhance security and control access to parking areas.
+                            <a href="partner-products.html" class="learn-more-btn">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-item">
+                        <i class="fas fa-camera product-icon"></i>
+                        <div class="product-content">
+                            <strong>Web Admin Dashboard</strong>
+                            Automatically recognize vehicle license plates for efficient entry and exit management.
+                            <a href="partner-products.html" class="learn-more-btn">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collaboration Section -->
+        <div class="collaboration-section">
+            <h3><i class="fas fa-handshake"></i> Ready to Collaborate?</h3>
+            <p>Unlock the full potential of smart parking through partnership. Join thousands of businesses already using Park Pro to transform their parking operations.</p>
+            <a href="contactus.html" class="collaborate-btn">
+                Start Collaborating Today <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
