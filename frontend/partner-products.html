@@ -28,44 +28,7 @@
         }
         .product-section {
             background: white;
-            padding: 2.5I have created the user-products.html page with detailed information for the user products.
-
-Next, I will create the partner-products.html page with the partner products' detailed information and the collaboration message.
-
-<create_file>
-<path>frontend/partner-products.html</path>
-<content>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Park Pro - Partner Products Details</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: white;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, #46949d, #12691c);
-            color: white;
-            border-radius: 0.75rem;
-        }
-        .product-section {
-            background: white;
-            padding: 2.5rem;
+            padding: 2.5rem; 
             margin: 2rem 0;
             border-radius: 0.75rem;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
@@ -151,6 +114,14 @@ Next, I will create the partner-products.html page with the partner products' de
             background-color: #12691c;
             transform: translateY(-2px);
         }
+        .section-title {
+            color: #12691c;
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        .how-it-works {
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -169,10 +140,30 @@ Next, I will create the partner-products.html page with the partner products' de
                 <i class="fas fa-traffic-light"></i>
             </div>
             <h2 class="product-title">Smart IoT Parking System</h2>
-            <p class="product-description">
-                Seamlessly connect all parking infrastructure — from entry gates to payment kiosks — into one intelligent network.
-            </p>
-            <h3>Key Features:</h3>
+            
+            <div class="how-it-works">
+                <h3 class="section-title">Overview</h3>
+                <p class="product-description">
+                    The Smart IoT Parking System is an advanced, sensor-driven solution designed to optimize parking space utilization and enhance user convenience. By combining IoT-enabled sensors, cloud-based data processing, and automated access control, it delivers real-time visibility and control over parking operations.
+                </p>
+                
+                <h3 class="section-title">How It Works</h3>
+                <p class="product-description">
+                    Each parking bay is equipped with IoT sensors that detect vehicle presence and transmit data to a secure cloud platform. This information is instantly synchronized with mobile applications, the web portal, and the admin dashboard, allowing seamless monitoring, reservation, and navigation for end users and operators.
+                </p>
+            </div>
+            
+            <h3 class="section-title">Process</h3>
+            <ul class="features-list">
+                <li>Vehicle Detection – High-accuracy sensors identify whether a space is occupied.</li>
+                <li>Data Transmission – Occupancy data is securely sent to the cloud in real time.</li>
+                <li>System Synchronization – Updates are reflected across all user and admin interfaces.</li>
+                <li>Reservation & Access – Users reserve available spaces and gain entry through integrated gate systems.</li>
+                <li>Navigation – Drivers receive guided directions to their reserved parking spot.</li>
+                <li>Operational Analytics – The system records and analyzes usage patterns for performance optimization.</li>
+            </ul>
+            
+            <h3 class="section-title">Key Features:</h3>
             <ul class="features-list">
                 <li>Real-time monitoring of parking space availability</li>
                 <li>Automated access control for smooth entry and exit</li>
@@ -188,16 +179,41 @@ Next, I will create the partner-products.html page with the partner products' de
                 <i class="fas fa-camera"></i>
             </div>
             <h2 class="product-title">Web Admin Dashboard</h2>
-            <p class="product-description">
-                Centralized control over all connected parking devices, sensors, and access points in real time.
-            </p>
-            <h3>Key Features:</h3>
+            
+            <div class="how-it-works">
+                <p class="product-description">
+                    The Web Admin Dashboard is the centralized command interface for parking facility operators. It provides real-time operational oversight, advanced analytics, and complete control over user access, reservations, and revenue tracking — all within a secure, responsive web platform.
+                </p>
+                
+                <h3 class="section-title">How It Works</h3>
+                <p class="product-description">
+                    Administrators log in via a secure, role-based authentication system. Once inside, they can monitor occupancy across multiple facilities, manage user accounts, approve or modify bookings, and review financial performance. Integrated alert systems notify operators of maintenance requirements, security breaches, or operational anomalies.
+                </p>
+            </div>
+            
+            <h3 class="section-title">Process</h3>
+            <ul class="features-list">
+                <li>Secure Login – Role-based access control ensures data confidentiality.</li>
+                <li>Live Monitoring – View current occupancy, reservations, and system status in real time.</li>
+                <li>User & Reservation Management – Approve, edit, or cancel bookings as needed.</li>
+                <li>Financial Oversight – Track transactions, generate revenue reports, and monitor trends.</li>
+                <li>Data Analysis – Create customized reports for operational and strategic decision-making.</li>
+                <li>System Alerts – Receive automated notifications for technical and security events.</li>
+            </ul>
+            
+            <h3 class="section-title">Key Features:</h3>
             <ul class="features-list">
                 <li>Live analytics for occupancy rates, peak hours, and revenue tracking</li>
                 <li>User and access management with role-based permissions and activity logs</li>
                 <li>Alerts and notifications for system errors and unauthorized access</li>
                 <li>Customizable reports for operational and financial planning</li>
                 <li>Secure, responsive interface for smooth operations from any device</li>
+                <li>Real-time monitoring of parking availability and usage.</li>
+                <li>Multi-location management from a single dashboard.</li>
+                <li>Comprehensive financial tracking and reporting tools.</li>
+                <li>Configurable alerts for maintenance and security.</li>
+                <li>User and role management with detailed activity logs.</li>
+                <li>Responsive design for seamless access on any device.</li>
             </ul>
         </div>
 
