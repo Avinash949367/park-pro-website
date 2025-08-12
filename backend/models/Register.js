@@ -13,10 +13,9 @@ const RegisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    reason :{
-
-        type:String,
-        required:true
+    reason: {
+        type: String,
+        required: true
     },
     address: {
         type: String,
@@ -53,7 +52,30 @@ const RegisterSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+    },
+    approvedBy: {
+        type: String,
+        default: null
+    },
+    approvedAt: {
+        type: Date,
+        default: null
+    },
+    rejectedAt: {
+        type: Date,
+        default: null
+    },
+    rejectionReason: {
+        type: String,
+        default: null
     }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Register', RegisterSchema);
