@@ -217,10 +217,23 @@ document.addEventListener('DOMContentLoaded', () => {
   handleFilePreview('parkingPhotos', 'parkingPhotosPreview');
   handleFilePreview('ownershipDocs', 'ownershipDocsPreview');
 
+  // Function to generate a unique registration ID
+function generateRegistrationId() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(now.getDate()).padStart(2, '0');
+    const randomNum = String(Math.floor(Math.random() * 100000)).padStart(5, '0'); // 00000-99999
+    return `REG-${year}-${month}-${day}-${randomNum}`;
+}
+
   // Submit form data via API call
   function submitForm() {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+
+    // Generate and add registration ID
+    data.registrationId = generateRegistrationId();
 
     // Show loading spinner on submit button
     nextBtn.disabled = true;
@@ -237,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextBtn.disabled = false;
         nextBtn.textContent = 'Submit';
         if (response.ok) {
-          showToast('Parking spot registered successfully!', 'bg-success');
+          showToast('Parking spot registered successfully! Registration ID: ' + data.registrationId, 'bg-success'); // Added ID to toast
           form.reset();
           currentStep = 0;
           showStep(currentStep);

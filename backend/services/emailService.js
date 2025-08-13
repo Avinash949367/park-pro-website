@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Send approval email
-const sendApprovalEmail = async (toEmail, userName) => {
+const sendApprovalEmail = async (toEmail, userName, registrationId) => {
     try {
         const mailOptions = {
             from: process.env.EMAIL_USER || 'parkproplus@gmail.com',
@@ -21,11 +21,13 @@ const sendApprovalEmail = async (toEmail, userName) => {
                     <h2 style="color: #46949d;">Registration Approved!</h2>
                     <p>Dear ${userName},</p>
                     <p>Great news! Your registration has been approved and is ready for the documentation process.</p>
+                    <p><strong>Your Registration ID:</strong> ${registrationId}</p>
+                    <p>Submit your Documents here - http://127.0.0.1:5501/frontend/registerprocess/document_submission.html</p>
                     <p>Next steps:</p>
                     <ol>
-                        <li>Check your email for documentation requirements</li>
                         <li>Complete the document submission process</li>
-                        <li>Start listing your parking spots</li>
+                        <li>Get Approved by parkpro+ and get login credentails 
+                        <li>Login in to your station dashboard & Start listing your parking spots</li>
                     </ol>
                     <p>Thank you for choosing ParkPro!</p>
                     <p>Best regards,<br>The ParkPro Team</p>

@@ -418,24 +418,27 @@
 
 <!-- Firebase App (Core SDK) -->
 <script type="module">
-    // Import the required Firebase services
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js";
-
-    // Your Firebase configuration
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
-        apiKey: "AIzaSyDmGQ2Q8qlO6nq-wgkhtQfvu8bIemXOav4",
-        authDomain: "park-proplus.firebaseapp.com",
-        projectId: "park-proplus",
-        storageBucket: "park-proplus.firebasestorage.app",
-        messagingSenderId: "167540473766",
-        appId: "1:167540473766:web:ca14bb9cbbdba42c74d967",
-        measurementId: "G-H4NP7RZ862"
+      apiKey: "AIzaSyDu_eqU1JWR4VlLG9vpNVstZwg42ofqSTE",
+      authDomain: "park-pro-plus.firebaseapp.com",
+      projectId: "park-pro-plus",
+      storageBucket: "park-pro-plus.firebasestorage.app",
+      messagingSenderId: "575961778553",
+      appId: "1:575961778553:web:2844d2e236d5664a7a07a8",
+      measurementId: "G-04SV3MCK04"
     };
-
+  
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
+    const analytics = getAnalytics(app);
 
     // Helper functions
     function sanitizeFilename(filename) {
