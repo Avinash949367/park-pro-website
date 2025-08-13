@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | ParkPro Plus Parking Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    .option {
+      text-decoration: none;       /* Remove underline */
+      color: #1e3740;              /* Dark teal text color */
+      padding: 8px 12px;           /* Spacing around text */
+      border-radius: 8px;          /* Rounded corners */
+      transition: all 0.3s ease;   /* Smooth hover transition */
+      font-weight: 500;
+    }
+
+    /* Hover effect */
+    .option:hover {
+      color: white;                /* Text turns white */
+      background-color: #46949d;   /* Medium teal background on hover */
+      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+    }
+  </style>
+</head>
+<body class="font-sans bg-gray-200">
+
+  <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+    <a href="index.html"><div class="flex items-center space-x-4">
+      <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+      <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+    </div></a>
+    <nav class="space-x-6 hidden md:flex font-medium">
+      <a href="index.html" class="option">About us</a>
+      <a href="business.html" class="option">Park Pro For Business</a>
+      <a href="products.html">Products</a>
+
+
+      <a href="contactus.html" class="option">Contact</a>
+    </nav>
+    <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+        Get the App
+      </a>
+      <div id="profileContainer" class="hidden relative">
+        <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+            <div>
+              <p class="font-semibold text-gray-900" id="userName">User</p>
+              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+            </div>
+          </div>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+        </div>
+      </div>
+  </div>
+  </div>
+    <script src="js/index.js"></script>
+    <script src="js/cardToggle.js"></script>
+    <script src="js/registerSpot.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #2d7a83;
+            --primary-accent: #46949d;
+            --secondary-color: #f8fafb;
+            --text-color: #333333;
+            --light-gray: #f0f3f5;
+            --medium-gray: #e0e5e7;
+            --dark-gray: #666666;
+            --border-radius: 4px;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.65;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+            margin: 0;
+            padding: 0px;
+            font-size: 15px;
+        }
+        
+        .legal-container {
+            background-color: white;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 50px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            
+            padding-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        .subheader {
+            color: var(--dark-gray);
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 5px;
+        }
+        
+        .last-updated {
+            font-style: italic;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+        
+        .acknowledgment {
+            background-color: var(--light-gray);
+            padding: 25px;
+            border-left: 4px solid var(--primary-color);
+            margin: 40px 0;
+            font-size: 0.95rem;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-top: 45px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            
+        }
+        
+        p {
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        ul {
+            padding-left: 24px;
+            margin-bottom: 30px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 15px;
+            line-height: 1.6;
+        }
+        
+        li:before {
+            content: "•";
+            color: var(--primary-accent);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .highlight {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .legal-container {
+                padding: 30px;
+            }
+            
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            h2 {
+                font-size: 1.2rem;
+                margin-top: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="legal-container">
+        <div class="header">
+            <h1>Privacy Policy</h1>
+            <div class="subheader">ParkPro Plus Parking Solutions</div>
+            <p class="last-updated">Effective Date: <span id="current-date"></span></p>
+        </div>
+
+        <div class="acknowledgment">
+            <p><strong>Acknowledgment:</strong> By using ParkPro Plus, you acknowledge that you have read and understood this Privacy Policy, which outlines how we collect, use, and protect your personal information.</p>
+        </div>
+
+        <h2>1. Information We Collect</h2>
+        <p>We may collect and process the following categories of information:</p>
+        <ul>
+            <li><strong>Personal Identification Data:</strong> Name, contact number, email address, billing details</li>
+            <li><strong>Account Information:</strong> Username, encrypted password, and preferences</li>
+            <li><strong>Vehicle Details:</strong> License plate number, make, model, and color</li>
+            <li><strong>Location Data:</strong> Real-time GPS data for identifying nearby parking facilities</li>
+            <li><strong>Usage Data:</strong> Booking history, search preferences, and interactions within our platform</li>
+            <li><strong>Technical Data:</strong> IP address, browser type, operating system, device identifiers, and network details</li>
+        </ul>
+
+        <h2>2. Purpose of Data Collection</h2>
+        <p>We collect and use your information to:</p>
+        <ul>
+            <li>Process bookings and manage your account</li>
+            <li>Provide accurate parking availability and navigation services</li>
+            <li>Send booking confirmations, alerts, and transaction receipts</li>
+            <li>Enhance platform performance and user experience</li>
+            <li>Ensure security, prevent fraudulent activities, and resolve technical issues</li>
+            <li>Share relevant offers and service updates (with your consent)</li>
+        </ul>
+
+        <h2>3. Data Sharing and Disclosure</h2>
+        <p>Your information is never sold. It may be shared only in the following situations:</p>
+        <ul>
+            <li><strong>Service Providers & Partners:</strong> To facilitate bookings, payment processing, and customer support</li>
+            <li><strong>Legal Requirements:</strong> When disclosure is necessary to comply with laws, regulations, or legal processes</li>
+            <li><strong>Corporate Transactions:</strong> In the event of a merger, acquisition, or asset transfer involving ParkPro Plus</li>
+        </ul>
+
+        <h2>4. Data Security & Retention</h2>
+        <ul>
+            <li>We implement strict technical and organizational measures to safeguard your information</li>
+            <li>Data is encrypted in storage and during transmission</li>
+            <li>Access to personal data is restricted to authorized personnel only</li>
+            <li>We retain data only for as long as necessary to fulfill the purposes outlined in this policy or as required by law</li>
+        </ul>
+
+        <h2>5. Cookies and Tracking Technologies</h2>
+        <p>We use cookies and similar technologies to:</p>
+        <ul>
+            <li>Improve platform functionality and user navigation</li>
+            <li>Remember your preferences for future visits</li>
+            <li>Analyze usage trends to enhance our services</li>
+        </ul>
+        <p>You may disable cookies in your browser settings, though this may affect functionality.</p>
+
+        <h2>6. Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+            <li>Request access to your personal data</li>
+            <li>Correct or update inaccurate information</li>
+            <li>Request deletion of your data, subject to legal obligations</li>
+            <li>Withdraw consent for marketing communications at any time</li>
+        </ul>
+
+        <h2>7. Children's Privacy</h2>
+        <p>Our services are not intended for individuals under the age of 13. We do not knowingly collect personal data from children.</p>
+
+        <h2>8. Policy Updates</h2>
+        <p>We may update this Privacy Policy periodically. Any changes will be posted on our website, and the "Effective Date" will be updated accordingly.</p>
+
+    </div>
+
+    <script>
+        // Automatically update date
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', options);
+    </script>
+    <footer class="bg-[#46949d] text-white py-12">
+        <div class="container mx-auto px-6 lg:px-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            
+            <!-- Company Info -->
+            <div>
+              <div class="flex items-center mb-4">
+                <img src="assets/images/logo_edited-removebg-preview.png" alt="Logo" class="h-14 w-auto mr-3">
+                <span class="text-2xl font-extrabold tracking-wide">ParkPro+</span>
+              </div>
+              <p class="text-black leading-relaxed mb-6">
+                Your smart companion for parking anywhere, anytime.  
+                Find, reserve, and park with ease — powered by smart technology.
+              </p>
+              <div class="flex space-x-4 text-lg">
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-facebook-f"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-twitter"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                 <center> <i class="fab fa-instagram"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-linkedin-in"></i></center>
+                </a>
+              </div>
+            </div>
+      
+            <!-- Quick Links -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Quick Links</h4>
+              <ul class="space-y-2">
+                <li><a href="index.html" class="text-black hover:text-white transition duration-200">Home</a></li>
+                <li><a href="service.html" class="text-black hover:text-white transition duration-200">FASTag Services</a></li>
+                <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Recharge FASTag</a></li>
+                <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Transaction History</a></li>
+                <li><a href="userprofile.html" class="text-black hover:text-white transition duration-200">My Account</a></li>
+              </ul>
+            </div>
+      
+            <!-- Support -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Support</h4>
+              <ul class="space-y-2">
+                <li><a href="#" class="text-black hover:text-white transition duration-200">FAQs</a></li>
+                <li><a href="contactus.html" class="text-black hover:text-white transition duration-200">Contact Us</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Privacy Policy</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Terms of Service</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Refund Policy</a></li>
+              </ul>
+            </div>
+      
+            <!-- Contact Info -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Contact Us</h4>
+              <ul class="space-y-3 text-black">
+                <li class="flex items-start">
+                  <i class="fas fa-map-marker-alt mt-1 mr-3 text-white"></i>
+                  <span>MRD Block - PES University, Bangalore, Karnataka 560001</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-phone-alt mr-3 text-white"></i>
+                  <span>+91 8309113119</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-envelope mr-3 text-white"></i>
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=parkproplus@gmail.com&su=Parking%20Inquiry&body=Hello,%20I%20would%20like%20to%20know%20more%20about..." target="_blank">
+                    parkproplus@gmail.com
+                  </a>
+                  
+                </li>
+                
+              </ul>
+            </div>
+      
+          </div>
+      
+          <!-- Bottom Footer -->
+          <div class="border-t border-white/40 mt-10 pt-6 text-center">
+            <p class="text-sm text-white/80">&copy; 2025 ParkPro+. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+</body>
+</html>
