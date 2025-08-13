@@ -75,6 +75,7 @@
 
         if (!data.user || data.user.role !== 'admin') {
           throw new Error('Access denied: Invalid admin credentials');
+  
         }
 
         // Store token and user info in localStorage
