@@ -13,7 +13,7 @@
   <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
     <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
       <a href="admindashboard.html"><div class="flex items-center space-x-4">
-        <img src="assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+        <img src="../assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
       </div></a>
       <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
         <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
@@ -99,11 +99,27 @@
       </button>
     </div>
 
+    <!-- Pending Registrations Popup -->
+    <div id="pendingRegistrationsPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Pending Registrations</h2>
+          <button id="closePendingPopup" aria-label="Close" class="text-gray-600 hover:text-gray-900">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+        <div id="pendingRegistrationsList" class="space-y-4">
+          <!-- Pending registrations will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+
     <!-- Received Stations Popup -->
     <div id="receivedStationsPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
       <div class="bg-white rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto p-4">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">Stations with Status "Received"</h2>
+          <h2 class="text-xl font-semibold">Stations with Status "Pending"        <br>   List : Waiting for confirming for Documentation process</h2>
+
           <button id="closePopup" aria-label="Close" class="text-gray-600 hover:text-gray-900">
             <span class="material-icons">close</span>
           </button>

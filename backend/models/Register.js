@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const RegisterSchema = new mongoose.Schema({
+    registrationId: {
+        type: String,
+        unique: true,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -13,10 +18,9 @@ const RegisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    reason :{
-
-        type:String,
-        required:true
+    reason: {
+        type: String,
+        required: true
     },
     address: {
         type: String,
@@ -53,7 +57,33 @@ const RegisterSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'doc-processing'],
+        default: 'pending'
+    },
+    approvedBy: {
+        type: String,
+        default: null
+    },
+    approvedAt: {
+        type: Date,
+        default: null
+    },
+    rejectedAt: {
+        type: Date,
+        default: null
+    },
+    rejectionReason: {
+        type: String,
+        default: null
     }
+}, {
+    timestamps: true
 });
+
+// Pre-save hook to generate registration ID
+
 
 module.exports = mongoose.model('Register', RegisterSchema);
