@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Submission - ParkPro</title>
+<style>
+    :root {
+        --primary-color: #2C3E50;
+        --secondary-color: #3498db;
+        --success-color: #2ecc71;
+        --light-gray: #f5f7fa;
+        --medium-gray: #dcdcdc;
+        --dark-gray: #555;
+        --text-color: #333;
+        --white: #fff;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--light-gray);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: var(--white);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 12px;
+        font-size: 28px;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .description {
+        text-align: center;
+        font-size: 15px;
+        color: var(--dark-gray);
+        margin-bottom: 30px;
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Process Tracker */
+    .process-container {
+        margin-bottom: 40px;
+    }
+    
+    .process {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .process::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        width: 80%;
+        height: 4px;
+        background-color: var(--medium-gray);
+        z-index: 0;
+        transform: translateY(-50%);
+    }
+
+    .step-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .step {
+        background: var(--white);
+        border: 3px solid var(--medium-gray);
+        color: var(--dark-gray);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .step.active {
+        border-color: var(--secondary-color);
+        color: var(--secondary-color);
+        background-color: #ecf6fd;
+        transform: scale(1.1);
+    }
+
+    .step.completed {
+        border-color: var(--success-color);
+        background-color: #e9f9f1;
+        color: var(--success-color);
+    }
+
+    .step-label {
+        text-align: center;
+        font-size: 13px;
+        margin-top: 10px;
+        font-weight: 500;
+        color: var(--dark-gray);
+    }
+
+    /* Form */
+    .form-section {
+        margin-top: 30px;
+    }
+
+    .section-title {
+        font-size: 20px;
+        margin: 25px 0 15px;
+        color: var(--primary-color);
+        font-weight: 600;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .instructions {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--secondary-color);
+    }
+
+    .instructions ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .instructions li {
+        margin-bottom: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-color);
+        font-size: 15px;
+    }
+
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+
+    input[type="text"], 
+    input[type="file"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border 0.3s;
+    }
+
+    input[type="text"]:focus, 
+    input[type="file"]:focus {
+        outline: none;
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    input[type="file"] {
+        background: #fafafa;
+        padding: 10px;
+    }
+
+    .upload-section {
+        padding: 20px;
+        border: 1px dashed #ccc;
+        border-radius: 8px;
+        background: #fafafa;
+        transition: all 0.3s;
+    }
+
+    .upload-section:hover {
+        border-color: var(--secondary-color);
+        background: #f5f9ff;
+    }
+
+    .submit-container {
+        text-align: center;
+        margin-top: 40px;
+        position: relative;
+    }
+
+    button {
+        display: inline-block;
+        padding: 14px 30px;
+        font-size: 16px;
+        color: var(--white);
+        background-color: black;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    button:hover {
+        background-color: #46949d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .warning-text {
+        color: red;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* Loading indicator */
+    .loader {
+        display: none;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+
+    .progress-text {
+        margin-top: 10px;
+        font-size: 14px;
+        color: var(--dark-gray);
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 20px;
+            padding: 25px;
+        }
+        
+        .description {
+            max-width: 100%;
+        }
+        
+        .process {
+            width: 100%;
+        }
+        
+        .process::before {
+            left: 5%;
+            width: 90%;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+        
+        .step-label {
+            font-size: 11px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Documentation Process</h1>
+    <p class="description">Submit the required documents to proceed with your registration. This step helps us verify your station details before activation.</p>
+
+    <!-- Process Tracker -->
+    <div class="process-container">
+        <div class="process">
+            <div class="step-container">
+                <div class="step completed">✔</div>
+                <div class="step-label">Register</div>
+            </div>
+            <div class="step-container">
+                <div class="step active">📄</div>
+                <div class="step-label">Documentation</div>
+            </div>
+            <div class="step-container">
+                <div class="step">3</div>
+                <div class="step-label">Confirmation</div>
+            </div>
+            <div class="step-container">
+                <div class="step">4</div>
+                <div class="step-label">Activate</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form id="uploadForm" class="form-section">
+        
+        <div class="form-group">
+            <label for="registrationId" class="required-field">Registration ID</label>
+            <span class="warning-text">(Check your Mail to Know your registration Id)</span>
+            <input type="text" id="regId" name="registrationId" placeholder="Enter your registration ID" required>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Land/Lease Documents</h2>
+            <div class="instructions">
+                <ul>
+                    <li>This Documents are required to verify that this particular station belongs to you or not</li>
+                    <li>Make sure You submit the correct documents</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Land/Lease Documents (PDF, DOC, JPG, PNG)</label>
+                <input type="file" id="landLeaseDocs" name="landDocs" multiple required accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            </div>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Station Pictures</h2>
+            <div class="instructions">
+                <ul>
+                    <li>This picture is to verify whether you have a station or not</li>
+                    <li>Submit with the location of your station</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Location</label>
+                <input type="text" id="stationLocation" name="stationLocation" required placeholder="Location of your station">
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Parking Station Pictures (JPG, PNG)</label>
+                <input type="file" id="stationPics" name="stationPics" multiple required accept=".jpg,.jpeg,.png">
+            </div>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Partnership Documents</h2>
+            <div class="instructions">
+                <ul>
+                    <li>Check Your Mail we have sent a partnership Agreement sheet</li>
+                    <li>Take a print Out and sign it - <span class="warning-text">make sure you have read the Agreement Fully</span></li>
+                    <li>Once you have signed submit the softcopy here and keep the copy with you and shortly you will receive the original copy of Agreement</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Partnership Agreement (PDF, DOC)</label>
+                <input type="file" id="partnershipDocs" name="partnershipDocs" multiple required accept=".pdf,.doc,.docx">
+            </div>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Digital Signature</h2>
+            <div class="instructions">
+                <ul>
+                    <li>Submit Your signature which is signed in paper <span class="warning-text">(note: crop the image before submitting)</span></li>
+                    <li>This signature will be printed in the original copy</li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Digital Signature (JPG, PNG)</label>
+                <input type="file" id="digitalSignature" name="digitalSign" required accept=".jpg,.jpeg,.png">
+            </div>
+        </div>
+
+        <div class="document-section">
+            <h2 class="section-title">Personal Documents</h2>
+            <div class="instructions">
+                <ul>
+                    <li>This documents is used to Identify the identity <span class="warning-text">(No Proper Documents - rejection)</span></li>
+                </ul>
+            </div>
+            <div class="form-group upload-section">
+                <label class="required-field">Personal Documents (Aadhar, Photo) (PDF, JPG, PNG)</label>
+                <input type="file" id="personalDocs" name="personalDocs" multiple required accept=".pdf,.jpg,.jpeg,.png">
+            </div>
+        </div>
+
+        <div class="submit-container">
+            <button type="submit" id="submitBtn">Submit Documents</button>
+            <div class="loader" id="loader"></div>
+            <div class="progress-text" id="progressText"></div>
+        </div>
+    </form>
+</div>
+
+<!-- Firebase App (Core SDK) -->
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyDu_eqU1JWR4VlLG9vpNVstZwg42ofqSTE",
+      authDomain: "park-pro-plus.firebaseapp.com",
+      projectId: "park-pro-plus",
+      storageBucket: "park-pro-plus.firebasestorage.app",
+      messagingSenderId: "575961778553",
+      appId: "1:575961778553:web:2844d2e236d5664a7a07a8",
+      measurementId: "G-04SV3MCK04"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // Helper functions
+    function sanitizeFilename(filename) {
+        return filename.replace(/[^a-z0-9_.-]/gi, '_').toLowerCase();
+    }
+
+    function updateProgress(text) {
+        const progressText = document.getElementById('progressText');
+        progressText.textContent = text;
+    }
+
+    // Upload files to specific category folder
+    async function uploadFilesToCategory(regId, category, files) {
+        const results = [];
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const sanitizedFilename = sanitizeFilename(file.name);
+            const storagePath = `${regId}/${category}/${sanitizedFilename}`;
+            const storageRef = ref(storage, storagePath);
+            
+            updateProgress(`Uploading ${i+1}/${files.length} in ${category}...`);
+            
+            try {
+                await uploadBytes(storageRef, file);
+                console.log(`✅ Uploaded: ${storagePath}`);
+                results.push({ success: true, path: storagePath });
+            } catch (error) {
+                console.error(`❌ Error uploading ${storagePath}:`, error);
+                results.push({ success: false, path: storagePath, error });
+            }
+        }
+        
+        return results;
+    }
+
+    // Main form submission handler
+    document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById("submitBtn");
+        const loader = document.getElementById("loader");
+        const regId = document.getElementById("regId").value.trim();
+        
+        if (!regId) {
+            alert("Please enter your Registration ID");
+            return;
+        }
+
+        // Get all file inputs
+        const categories = [
+            { id: "landLeaseDocs", name: "LandLeaseDocs" },
+            { id: "stationPics", name: "StationPics" },
+            { id: "partnershipDocs", name: "PartnershipDocs" },
+            { id: "digitalSignature", name: "DigitalSignature" },
+            { id: "personalDocs", name: "PersonalDocs" }
+        ];
+
+        // Show loading state
+        submitBtn.disabled = true;
+        loader.style.display = "block";
+        updateProgress("Starting upload process...");
+        
+        try {
+            let allUploadsSuccessful = true;
+            const allResults = [];
+            
+            // Process all categories
+            for (const category of categories) {
+                const files = document.getElementById(category.id).files;
+                if (files.length > 0) {
+                    updateProgress(`Processing ${category.name} documents...`);
+                    const results = await uploadFilesToCategory(regId, category.name, files);
+                    allResults.push(...results);
+                    
+                    if (results.some(result => !result.success)) {
+                        allUploadsSuccessful = false;
+                    }
+                }
+            }
+            
+            // Save location if provided
+            const location = document.getElementById("stationLocation").value.trim();
+            if (location) {
+                updateProgress("Saving location information...");
+                const locationRef = ref(storage, `${regId}/location.txt`);
+                try {
+                    await uploadBytes(locationRef, new Blob([location], { type: "text/plain" }));
+                    console.log(`✅ Saved location: ${location}`);
+                } catch (error) {
+                    console.error("❌ Error saving location:", error);
+                    allUploadsSuccessful = false;
+                }
+            }
+            
+            // Show final result
+            if (allUploadsSuccessful) {
+                updateProgress("All documents uploaded successfully!");
+                alert(`All documents uploaded successfully!\n\nFiles stored in:\n${regId}/\n` +
+                      "├── LandLeaseDocs/\n" +
+                      "├── StationPics/\n" +
+                      "├── PartnershipDocs/\n" +
+                      "├── DigitalSignature/\n" +
+                      "└── PersonalDocs/");
+            } else {
+                const failedUploads = allResults.filter(r => !r.success);
+                updateProgress("Some documents failed to upload");
+                alert(`Some documents failed to upload. Please try again.\n\nFailed uploads:\n${failedUploads.map(f => f.path).join("\n")}`);
+            }
+        } catch (error) {
+            console.error("Upload error:", error);
+            updateProgress("Error during upload");
+            alert(`Error during upload: ${error.message}`);
+        } finally {
+            // Reset loading state
+            submitBtn.disabled = false;
+            loader.style.display = "none";
+        }
+    });
+</script>
+</body>
+</html>
