@@ -43,7 +43,9 @@ createAdminUser();
 
 const allowedOrigins = [
   'http://127.0.0.1:5500', 
+  'http://127.0.0.1:5501', 
   'http://localhost:5500',
+  'http://localhost:5501',
   'http://localhost:3000',
   'http://127.0.0.1:3000',
   'http://localhost:8080',
@@ -78,6 +80,8 @@ app.use(passport.session());
 app.use('/', authRoutes);
 app.use('/api/registrations', registerRoutes);
 app.use('/api', stationRoutes);
+const mediaRoutes = require('./routes/mediaRoutes');
+app.use('/api/media', mediaRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

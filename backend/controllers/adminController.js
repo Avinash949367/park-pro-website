@@ -23,7 +23,7 @@ exports.getAllRegistrations = async (req, res) => {
     }
 };
 
-// Approve a registration
+// Approve a registration - changes status to 'doc-processing'
 exports.approveRegistration = async (req, res) => {
     try {
         const { id } = req.params;
@@ -38,17 +38,17 @@ exports.approveRegistration = async (req, res) => {
             return res.status(400).json({ message: 'Registration is not pending' });
         }
 
-        registration.status = 'approved';
+        registration.status = 'doc-processing';
         registration.approvedBy = approvedBy;
         registration.approvedAt = new Date();
 
         await registration.save();
 
         // Send approval email
-        await sendApprovalEmail(registration.email, registration.name);
+        await sendApprovalEmail(registration.email, registration.name, registration.registrationId);
 
         res.status(200).json({
-            message: 'Registration approved successfully',
+            message: 'Registration approved for documentation process',
             registration
         });
     } catch (error) {
