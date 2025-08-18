@@ -60,7 +60,7 @@ const RegisterSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'approved', 'rejected', 'doc-processing'],
+        enum: ['pending', 'approved', 'rejected', 'doc-processing', 'active'],
         default: 'pending'
     },
     approvedBy: {
