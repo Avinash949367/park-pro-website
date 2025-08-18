@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registration Details - Park Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans flex h-screen">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+    <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
+      <a href="admindashboard.html"><div class="flex items-center space-x-4">
+        <img src="../assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+      </div></a>
+      <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <nav class="flex-1 overflow-y-auto">
+      <ul class="p-4 space-y-2">
+        <li>
+          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">dashboard</i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="stations.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">local_parking</i>
+            <span>Stations</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold text-gray-800">Registration Details</h1>
+      <a href="stations.html" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200">
+        <span class="material-icons mr-2 align-middle">arrow_back</span>
+        Back to Stations
+      </a>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="flex justify-center items-center h-64">
+      <div class="text-center">
+        <i class="material-icons text-4xl text-gray-400 animate-spin">hourglass_empty</i>
+        <p class="text-gray-500 mt-2">Loading registration details...</p>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+      <div class="flex items-center">
+        <i class="material-icons text-red-500 mr-2">error</i>
+        <p id="errorMessage" class="text-red-700"></p>
+      </div>
+    </div>
+
+    <!-- Registration Details -->
+    <div id="registrationDetails" class="hidden">
+      <!-- Registration Information Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Basic Information -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+            <span class="material-icons mr-2 text-blue-600">person</span>
+            Basic Information
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <span class="text-sm font-medium text-gray-600">Registration ID:</span>
+              <span id="viewRegistrationId" class="ml-2 text-sm font-mono text-gray-900 bg-gray-100 px-2 py-1 rounded"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">Name:</span>
+              <span id="viewName" class="ml-2 text-sm text-gray-900 font-medium"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">Email:</span>
+              <span id="viewEmail" class="ml-2 text-sm text-gray-900"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">Phone:</span>
+              <span id="viewPhone" class="ml-2 text-sm text-gray-900"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Information -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+            <span class="material-icons mr-2 text-green-600">location_on</span>
+            Location Details
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <span class="text-sm font-medium text-gray-600">Address:</span>
+              <span id="viewAddress" class="ml-2 text-sm text-gray-900 block"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">City:</span>
+              <span id="viewCity" class="ml-2 text-sm text-gray-900"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">State:</span>
+              <span id="viewState" class="ml-2 text-sm text-gray-900"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">ZIP Code:</span>
+              <span id="viewZip" class="ml-2 text-sm text-gray-900"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">Country:</span>
+              <span id="viewCountry" class="ml-2 text-sm text-gray-900"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coordinates -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+            <span class="material-icons mr-2 text-purple-600">my_location</span>
+            Coordinates
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <span class="text-sm font-medium text-gray-600">Latitude:</span>
+              <span id="viewLatitude" class="ml-2 text-sm font-mono text-gray-900 bg-gray-100 px-2 py-1 rounded"></span>
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-600">Longitude:</span>
+              <span id="viewLongitude" class="ml-2 text-sm font-mono text-gray-900 bg-gray-100 px-2 py-1 rounded"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Information -->

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -89,27 +89,261 @@
   <main class="flex-1 p-6 overflow-y-auto">
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-3xl font-bold text-gray-800">Registered Parking Stations</h1>
-      <button id="messageIcon" aria-label="Received Stations" class="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
-        <span class="material-icons text-orange-500 text-3xl">message</span>
-        <span id="messageBadge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full hidden">0</span>
-      </button>
       <button id="checkingIcon" aria-label="Checking Stations" class="relative p-2 rounded-full ml-4 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
         <span class="material-icons text-blue-500 text-3xl">hourglass_top</span>
         <span id="checkingBadge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full hidden">0</span>
       </button>
     </div>
 
-    <!-- Pending Registrations Popup -->
+    <!-- Navigation Bar -->
+    <nav class="flex mb-6 border-b border-gray-200" style="justify-content: space-evenly;">
+      <button id="activeStationsTab" class="py-2 px-4 font-medium text-orange-500 border-b-2 border-orange-500">
+        Active Stations
+      </button>
+      <button id="registrationTab" class="py-2 px-4 font-medium text-gray-500 hover:text-orange-500">
+        Documentation
+      </button>
+      <button id="messageIcon" aria-label="Received Stations" class="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <span class="material-icons text-orange-500 text-3xl">message</span>
+        <span id="messageBadge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full hidden">0</span>
+      </button>
+    </nav>
+
+    <!-- Pending Documentation Popup -->
     <div id="pendingRegistrationsPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
       <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto p-6">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">Pending Registrations</h2>
+          <h2 class="text-xl font-semibold">Pending Documentation</h2>
           <button id="closePendingPopup" aria-label="Close" class="text-gray-600 hover:text-gray-900">
             <span class="material-icons">close</span>
           </button>
         </div>
         <div id="pendingRegistrationsList" class="space-y-4">
-          <!-- Pending registrations will be dynamically added here -->
+          <!-- Pending documentation will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- View Registration Details Modal -->
+    <div id="viewRegistrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+        <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+          <h2 class="text-2xl font-bold text-gray-800">Registration Details</h2>
+          <button id="closeViewModal" class="text-gray-500 hover:text-gray-700">
+            <span class="material-icons text-2xl">close</span>
+          </button>
+        </div>
+        
+        <div class="p-6">
+          <!-- Registration Information Section -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Basic Information -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                <span class="material-icons mr-2">person</span>
+                Basic Information
+              </h3>
+              <div class="space-y-2">
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Registration ID:</span>
+                  <span id="viewRegistrationId" class="ml-2 text-sm font-mono text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Name:</span>
+                  <span id="viewName" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Email:</span>
+                  <span id="viewEmail" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Phone:</span>
+                  <span id="viewPhone" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location Information -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                <span class="material-icons mr-2">location_on</span>
+                Location Details
+              </h3>
+              <div class="space-y-2">
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Address:</span>
+                  <span id="viewAddress" class="ml-2 text-sm text-gray-900 block"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">City:</span>
+                  <span id="viewCity" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">State:</span>
+                  <span id="viewState" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">ZIP Code:</span>
+                  <span id="viewZip" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Country:</span>
+                  <span id="viewCountry" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coordinates -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                <span class="material-icons mr-2">my_location</span>
+                Coordinates
+              </h3>
+              <div class="space-y-2">
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Latitude:</span>
+                  <span id="viewLatitude" class="ml-2 text-sm font-mono text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Longitude:</span>
+                  <span id="viewLongitude" class="ml-2 text-sm font-mono text-gray-900"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Information -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                <span class="material-icons mr-2">business</span>
+                Business Details
+              </h3>
+              <div class="space-y-2">
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Total Slots:</span>
+                  <span id="viewSlots" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Price per Slot:</span>
+                  <span id="viewPrice" class="ml-2 text-sm text-gray-900"></span>
+                </div>
+                <div>
+                  <span class="text-sm font-medium text-gray-600">Reason for Registration:</span>
+                  <span id="viewReason" class="ml-2 text-sm text-gray-900 block mt-1"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status and Timeline -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <span class="material-icons mr-2">timeline</span>
+              Status & Timeline
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <span class="text-sm font-medium text-gray-600">Current Status:</span>
+                <span id="viewStatus" class="ml-2 px-2 py-1 rounded-full text-xs font-medium"></span>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-600">Created At:</span>
+                <span id="viewCreatedAt" class="ml-2 text-sm text-gray-900"></span>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-600">Updated At:</span>
+                <span id="viewUpdatedAt" class="ml-2 text-sm text-gray-900"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media Files Section -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+              <span class="material-icons mr-2">photo_library</span>
+              Uploaded Documents & Images
+            </h3>
+            
+            <!-- Categorized Media Display -->
+            <div id="categorizedMedia">
+              <!-- Land Lease Documents -->
+              <div class="mb-4">
+                <h4 class="text-md font-semibold text-gray-600 mb-2 flex items-center">
+                  <i class="material-icons mr-2 text-green-600">description</i>
+                  Land Lease Documents
+                </h4>
+                <div id="landLeaseDocs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <!-- Land lease documents will be loaded here -->
+                </div>
+                <div id="noLandLeaseDocs" class="text-sm text-gray-500 hidden">No land lease documents uploaded</div>
+              </div>
+
+              <!-- Station Pictures -->
+              <div class="mb-4">
+                <h4 class="text-md font-semibold text-gray-600 mb-2 flex items-center">
+                  <i class="material-icons mr-2 text-blue-600">photo_camera</i>
+                  Station Pictures
+                </h4>
+                <div id="stationPics" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <!-- Station pictures will be loaded here -->
+                </div>
+                <div id="noStationPics" class="text-sm text-gray-500 hidden">No station pictures uploaded</div>
+              </div>
+
+              <!-- Partnership Documents -->
+              <div class="mb-4">
+                <h4 class="text-md font-semibold text-gray-600 mb-2 flex items-center">
+                  <i class="material-icons mr-2 text-purple-600">business_center</i>
+                  Partnership Documents
+                </h4>
+                <div id="partnershipDocs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <!-- Partnership documents will be loaded here -->
+                </div>
+                <div id="noPartnershipDocs" class="text-sm text-gray-500 hidden">No partnership documents uploaded</div>
+              </div>
+
+              <!-- Digital Signature -->
+              <div class="mb-4">
+                <h4 class="text-md font-semibold text-gray-600 mb-2 flex items-center">
+                  <i class="material-icons mr-2 text-orange-600">draw</i>
+                  Digital Signature
+                </h4>
+                <div id="digitalSign" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <!-- Digital signatures will be loaded here -->
+                </div>
+                <div id="noDigitalSign" class="text-sm text-gray-500 hidden">No digital signatures uploaded</div>
+              </div>
+
+              <!-- Personal Documents -->
+              <div class="mb-4">
+                <h4 class="text-md font-semibold text-gray-600 mb-2 flex items-center">
+                  <i class="material-icons mr-2 text-red-600">person</i>
+                  Personal Documents
+                </h4>
+                <div id="personalDocs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <!-- Personal documents will be loaded here -->
+                </div>
+                <div id="noPersonalDocs" class="text-sm text-gray-500 hidden">No personal documents uploaded</div>
+              </div>
+            </div>
+
+            <div id="noMediaFound" class="text-center py-8 text-gray-500 hidden">
+              <i class="material-icons text-4xl mb-2">photo_library</i>
+              <p>No documents or images uploaded for this registration.</p>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end space-x-3 pt-4 border-t">
+            <button id="closeViewModalBtn" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200">
+              Close
+            </button>
+            <button id="approveBtn" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200 hidden">
+              Approve
+            </button>
+            <button id="rejectBtn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 hidden">
+              Reject
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -145,13 +379,434 @@
       </div>
     </div>
 
-    <!-- Add your stations page content here -->
-    <section id="activeStationsContainer" class="mt-6">
+    <!-- Active Stations Section -->
+    <section id="activeStationsContainer" class="mt-2">
       <h2 class="text-2xl font-semibold mb-4">Active Stations</h2>
       <!-- Active stations list will be loaded here -->
+    </section>
+
+    <!-- Documentation Section (initially hidden) -->
+    <section id="registrationContainer" class="mt-2 hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-semibold">Documentation</h2>
+      </div>
+      
+      <!-- Doc-Processing Stations Section -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800">Stations with Documentation Processing Status</h3>
+        <div id="docProcessingStations" class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Register Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="docProcessingStationsBody" class="bg-white divide-y divide-gray-200">
+              <!-- Stations will be dynamically loaded here -->
+            </tbody>
+          </table>
+          <div id="noDocProcessingStations" class="text-center py-8 text-gray-500 hidden">
+            <i class="material-icons text-4xl mb-2">info</i>
+            <p>No stations with documentation processing status found.</p>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
   <script src="../js/admin.js"></script>
+  <script>
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const activeStationsTab = document.getElementById('activeStationsTab');
+      const registrationTab = document.getElementById('registrationTab');
+      const activeStationsContainer = document.getElementById('activeStationsContainer');
+      const registrationContainer = document.getElementById('registrationContainer');
+
+      activeStationsTab.addEventListener('click', function() {
+        activeStationsTab.classList.add('text-orange-500', 'border-orange-500');
+        activeStationsTab.classList.remove('text-gray-500');
+        registrationTab.classList.add('text-gray-500');
+        registrationTab.classList.remove('text-orange-500', 'border-orange-500');
+        activeStationsContainer.classList.remove('hidden');
+        registrationContainer.classList.add('hidden');
+      });
+
+      registrationTab.addEventListener('click', function() {
+        registrationTab.classList.add('text-orange-500', 'border-orange-500');
+        registrationTab.classList.remove('text-gray-500');
+        activeStationsTab.classList.add('text-gray-500');
+        activeStationsTab.classList.remove('text-orange-500', 'border-orange-500');
+        registrationContainer.classList.remove('hidden');
+        activeStationsContainer.classList.add('hidden');
+        
+        // Load doc-processing stations when documentation tab is clicked
+        loadDocProcessingStations();
+      });
+
+      // Function to load stations with doc-processing status
+      async function loadDocProcessingStations() {
+        try {
+          const response = await fetch('http://localhost:5000/api/registrations/status/doc-processing');          ;
+          const registrations = await response.json();
+          
+          // Filter for doc-processing status
+          const docProcessingStations = registrations;
+          
+          const tbody = document.getElementById('docProcessingStationsBody');
+          const noStationsDiv = document.getElementById('noDocProcessingStations');
+          
+          tbody.innerHTML = '';
+          
+          if (docProcessingStations.length === 0) {
+            noStationsDiv.classList.remove('hidden');
+            return;
+          }
+          
+          noStationsDiv.classList.add('hidden');
+          
+          docProcessingStations.forEach(station => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${station.name || 'N/A'}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">${station.registrationId || 'N/A'}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${station.email || 'N/A'}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${station.phone || 'N/A'}</td>
+              
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
+                  ${station.status || 'N/A'}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button class="text-blue-600 hover:text-blue-900 mr-2" onclick="viewDetails('${station._id}')">
+                  View
+                </button>
+                
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+          
+        } catch (error) {
+          console.error('Error loading doc-processing stations:', error);
+          const noStationsDiv = document.getElementById('noDocProcessingStations');
+          noStationsDiv.innerHTML = `
+            <i class="material-icons text-4xl mb-2 text-red-500">error</i>
+            <p>Error loading stations. Please try again.</p>
+          `;
+          noStationsDiv.classList.remove('hidden');
+        }
+      }
+
+      // View registration details functionality
+      window.viewDetails = async function(stationId) {
+        try {
+          const response = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch registration details');
+          }
+          
+          const data = await response.json();
+          const registration = data.registration;
+          const media = data.media;
+          
+          // Populate the modal with registration data
+          document.getElementById('viewRegistrationId').textContent = registration.registrationId || 'N/A';
+          document.getElementById('viewName').textContent = registration.name || 'N/A';
+          document.getElementById('viewEmail').textContent = registration.email || 'N/A';
+          document.getElementById('viewPhone').textContent = registration.phone || 'N/A';
+          document.getElementById('viewAddress').textContent = registration.address || 'N/A';
+          document.getElementById('viewCity').textContent = registration.city || 'N/A';
+          document.getElementById('viewState').textContent = registration.state || 'N/A';
+          document.getElementById('viewZip').textContent = registration.zip || 'N/A';
+          document.getElementById('viewCountry').textContent = registration.country || 'N/A';
+          document.getElementById('viewLatitude').textContent = registration.latitude || 'N/A';
+          document.getElementById('viewLongitude').textContent = registration.longitude || 'N/A';
+          document.getElementById('viewSlots').textContent = registration.slots || 'N/A';
+          document.getElementById('viewPrice').textContent = registration.price ? `₹${registration.price}` : 'N/A';
+          document.getElementById('viewReason').textContent = registration.reason || 'N/A';
+          
+          // Format dates
+          const createdAt = registration.createdAt ? new Date(registration.createdAt).toLocaleString() : 'N/A';
+          const updatedAt = registration.updatedAt ? new Date(registration.updatedAt).toLocaleString() : 'N/A';
+          document.getElementById('viewCreatedAt').textContent = createdAt;
+          document.getElementById('viewUpdatedAt').textContent = updatedAt;
+          
+          // Set status with appropriate styling
+          const statusElement = document.getElementById('viewStatus');
+          statusElement.textContent = registration.status || 'N/A';
+          statusElement.className = 'ml-2 px-2 py-1 rounded-full text-xs font-medium';
+          
+          switch (registration.status) {
+            case 'pending':
+              statusElement.classList.add('bg-yellow-100', 'text-yellow-800');
+              break;
+            case 'approved':
+              statusElement.classList.add('bg-green-100', 'text-green-800');
+              break;
+            case 'rejected':
+              statusElement.classList.add('bg-red-100', 'text-red-800');
+              break;
+            case 'doc-processing':
+              statusElement.classList.add('bg-blue-100', 'text-blue-800');
+              break;
+            default:
+              statusElement.classList.add('bg-gray-100', 'text-gray-800');
+          }
+          
+          // Display categorized media files
+          const categories = {
+            'LandLeaseDocs': 'landLeaseDocs',
+            'StationPics': 'stationPics',
+            'PartnershipDocs': 'partnershipDocs',
+            'DigitalSignature': 'digitalSign',
+            'PersonalDocs': 'personalDocs'
+          };
+
+          // Clear all containers
+          Object.values(categories).forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) container.innerHTML = '';
+          });
+
+          // Hide all "no documents" messages
+          ['noLandLeaseDocs', 'noStationPics', 'noPartnershipDocs', 'noDigitalSign', 'noPersonalDocs', 'noMediaFound']
+            .forEach(id => {
+              const element = document.getElementById(id);
+              if (element) element.classList.add('hidden');
+            });
+
+          // Categorize and display media
+          const categorizedMedia = {
+            'LandLeaseDocs': [],
+            'StationPics': [],
+            'PartnershipDocs': [],
+            'DigitalSignature': [],
+            'PersonalDocs': []
+          };
+
+          if (media && media.length > 0) {
+            media.forEach(file => {
+              if (categorizedMedia[file.category]) {
+                categorizedMedia[file.category].push(file);
+              }
+            });
+
+            // Display each category
+            Object.keys(categorizedMedia).forEach(category => {
+              const files = categorizedMedia[category];
+              const containerId = categories[category];
+              const container = document.getElementById(containerId);
+              const noFilesId = `no${category.replace('Docs', '').replace('Pics', 'Pics').replace('Signature', 'Sign')}`;
+              const noFilesElement = document.getElementById(noFilesId);
+
+              if (container) {
+                if (files.length > 0) {
+                  files.forEach(file => {
+                    const mediaItem = document.createElement('div');
+                    mediaItem.className = 'bg-white rounded-lg shadow-md p-3 border border-gray-200 hover:shadow-lg transition-shadow';
+                    
+                    const isImage = file.cloudinaryUrl.match(/\.(jpeg|jpg|png|gif|webp)$/i);
+                    
+                    if (isImage) {
+                      mediaItem.innerHTML = `
+                        <div class="relative">
+                          <img src="${file.cloudinaryUrl}" alt="${file.originalFilename}" 
+                               class="w-full h-32 object-cover rounded-md mb-2 cursor-pointer hover:opacity-90 transition-opacity"
+                               onclick="window.open('${file.cloudinaryUrl}', '_blank')">
+                          <button onclick="window.open('${file.cloudinaryUrl}', '_blank')" 
+                                  class="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-1 rounded-full hover:bg-opacity-70">
+                            <i class="material-icons text-sm">open_in_new</i>
+                          </button>
+                        </div>
+                        <p class="text-sm font-medium text-gray-700 truncate">${file.originalFilename}</p>
+                        <button onclick="window.open('${file.cloudinaryUrl}', '_blank')" 
+                                class="mt-1 text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
+                          Preview
+                        </button>
+                      `;
+                    } else {
+                      mediaItem.innerHTML = `
+                        <div class="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center mb-2">
+                          <i class="material-icons text-3xl text-gray-400">description</i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-700 truncate">${file.originalFilename}</p>
+                        <button onclick="window.open('${file.cloudinaryUrl}', '_blank')" 
+                                class="mt-1 text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
+                          Preview Document
+                        </button>
+                      `;
+                    }
+                    
+                    container.appendChild(mediaItem);
+                  });
+                } else if (noFilesElement) {
+                  noFilesElement.classList.remove('hidden');
+                }
+              }
+            });
+          } else {
+            document.getElementById('noMediaFound').classList.remove('hidden');
+          }
+          
+          // Show/hide action buttons based on status
+          const approveBtn = document.getElementById('approveBtn');
+          const rejectBtn = document.getElementById('rejectBtn');
+          
+          if (registration.status === 'doc-processing' || registration.status === 'pending') {
+            approveBtn.classList.remove('hidden');
+            rejectBtn.classList.remove('hidden');
+            approveBtn.onclick = () => approveStation(stationId);
+            rejectBtn.onclick = () => rejectStation(stationId);
+          } else {
+            approveBtn.classList.add('hidden');
+            rejectBtn.classList.add('hidden');
+          }
+          
+          // Show the modal
+          document.getElementById('viewRegistrationModal').classList.remove('hidden');
+          
+        } catch (error) {
+          console.error('Error loading registration details:', error);
+          alert('Error loading registration details. Please try again.');
+        }
+      };
+
+      // Close modal functionality
+      document.getElementById('closeViewModal').addEventListener('click', () => {
+        document.getElementById('viewRegistrationModal').classList.add('hidden');
+      });
+      
+      document.getElementById('closeViewModalBtn').addEventListener('click', () => {
+        document.getElementById('viewRegistrationModal').classList.add('hidden');
+      });
+      
+      // Close modal when clicking outside
+    });
+
+    // Approve station function
+    window.approveStation = async function(stationId) {
+      try {
+        // First, get the registration details to check current status
+        const detailsResponse = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+        if (!detailsResponse.ok) {
+          throw new Error('Failed to fetch registration details');
+        }
+        
+        const detailsData = await detailsResponse.json();
+        const registration = detailsData.registration;
+        
+        let endpoint;
+        let successMessage;
+        
+        // Determine which endpoint to call based on current status
+        if (registration.status === 'pending') {
+          endpoint = `http://localhost:5000/api/registrations/approve/${stationId}`;
+          successMessage = 'Registration approved for documentation process!';
+        } else if (registration.status === 'doc-processing') {
+          endpoint = `http://localhost:5000/api/registrations/final-approve/${stationId}`;
+          successMessage = 'Registration approved and station activated successfully!';
+        } else {
+          throw new Error(`Cannot approve registration with status: ${registration.status}`);
+        }
+        
+        const response = await fetch(endpoint, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            approvedBy: 'admin' // You might want to get this from session/auth
+          })
+        });
+        
+        const responseData = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(responseData.message || 'Failed to approve registration');
+        }
+        
+        alert(successMessage);
+        document.getElementById('viewRegistrationModal').classList.add('hidden');
+        
+        // Refresh the appropriate list based on current tab
+        if (document.getElementById('registrationContainer').classList.contains('hidden')) {
+          // Active stations tab is active, refresh doc-processing list
+          loadDocProcessingStations();
+        } else {
+          // Documentation tab is active, refresh doc-processing list
+          loadDocProcessingStations();
+        }
+      } catch (error) {
+        console.error('Error approving registration:', error);
+        alert(`Error: ${error.message}`);
+      }
+    };
+
+    // Reject station function
+    window.rejectStation = async function(stationId) {
+      try {
+        // First, get the registration details to check current status
+        const detailsResponse = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+        if (!detailsResponse.ok) {
+          throw new Error('Failed to fetch registration details');
+        }
+        
+        const detailsData = await detailsResponse.json();
+        const registration = detailsData.registration;
+        
+        let endpoint;
+        let successMessage;
+        
+        // Determine which endpoint to call based on current status
+        if (registration.status === 'pending') {
+          endpoint = `http://localhost:5000/api/registrations/reject/${stationId}`;
+          successMessage = 'Registration rejected successfully!';
+        } else if (registration.status === 'doc-processing') {
+          endpoint = `http://localhost:5000/api/registrations/final-reject/${stationId}`;
+          successMessage = 'Registration rejected successfully!';
+        } else {
+          throw new Error(`Cannot reject registration with status: ${registration.status}`);
+        }
+        
+        const rejectionReason = prompt('Please provide a reason for rejection:');
+        if (!rejectionReason) {
+          alert('Rejection cancelled - reason is required.');
+          return;
+        }
+        
+        const response = await fetch(endpoint, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            rejectedBy: 'admin',
+            rejectionReason: rejectionReason
+          })
+        });
+        
+        const responseData = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(responseData.message || 'Failed to reject registration');
+        }
+        
+        alert(successMessage);
+        document.getElementById('viewRegistrationModal').classList.add('hidden');
+        loadDocProcessingStations(); // Refresh the list
+      } catch (error) {
+        console.error('Error rejecting registration:', error);
+        alert(`Error: ${error.message}`);
+      }
+    };
+  </script>
 </body>
 </html>
