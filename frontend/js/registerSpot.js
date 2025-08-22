@@ -1,3 +1,4 @@
+
 // JavaScript for register-spot.html multi-step form with map and validation
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -109,8 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     html += `<li><strong>Owner Email:</strong> ${formData.get('ownerEmail')}</li>`;
     html += `<li><strong>Owner Phone:</strong> ${formData.get('ownerPhone')}</li>`;
 
-    html += `<li><strong>Latitude:</strong> ${formData.get('latitude')}</li>`;
-    html += `<li><strong>Longitude:</strong> ${formData.get('longitude')}</li>`;
     html += `<li><strong>IoT GPS Serial Number:</strong> ${formData.get('iotSerial') || 'N/A'}</li>`;
 
     html += '</ul>';
@@ -160,8 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
           };
           map.setCenter(pos);
           marker.setPosition(pos);
-          document.getElementById('latitude').value = pos.lat.toFixed(6);
-          document.getElementById('longitude').value = pos.lng.toFixed(6);
           showToast('Location fetched successfully.', 'bg-success');
         },
         () => {
