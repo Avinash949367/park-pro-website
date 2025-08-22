@@ -46,14 +46,6 @@ const stationSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  latitude: {
-    type: Number,
-    required: true
-  },
-  longitude: {
-    type: Number,
-    required: true
-  },
   slots: {
     type: Number,
     required: true

@@ -81,3 +81,72 @@ exports.updateRegistrationStatus = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Update address and location details
+exports.updateAddress = async (req, res) => {
+    try {
+        const { registrationId, address, city, state, zipCode, country, totalSlots, pricePerSlot, googleMapLocation } = req.body;
+        
+        if (!registrationId) {
+            return res.status(400).json({ error: "Missing registrationId in request body" });
+        }
+
+        // Validate required fields
+        const missingFields = [];
+        if (!address || address.trim() === '') missingFields.push('address');
+        if (!city || city.trim() === '') missingFields.push('city');
+        if (!state || state.trim() === '') missingFields.push('state');
+        if (!zipCode || zipCode.trim() === '') missingFields.push('zipCode');
+        if (!country || country.trim() === '') missingFields.push('country');
+        if (!totalSlots || isNaN(parseInt(totalSlots))) missingFields.push('totalSlots');
+        if (!pricePerSlot || isNaN(parseFloat(pricePerSlot))) missingFields.push('pricePerSlot');
+        if (!googleMapLocation || googleMapLocation.trim() === '') missingFields.push('googleMapLocation');
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({ 
+                error: `Missing or invalid required fields: ${missingFields.join(', ')}`
+            });
+        }
+
+        // Google Maps location is stored as-is without coordinate extraction
+        // No latitude/longitude extraction needed
+        
+
+        // Find the registration by registrationId
+        const registration = await Register.findOne({ registrationId });
+        
+        if (!registration) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+
+        // Update the registration with address details
+        const updatedRegistration = await Register.findOneAndUpdate(
+            { registrationId: registrationId },
+            {
+                address: address,
+                city: city,
+                state: state,
+                zip: zipCode,
+                country: country,
+                slots: parseInt(totalSlots),
+                price: parseFloat(pricePerSlot),
+                googleMapLocation: googleMapLocation,
+                status: 'doc-processing',
+                updatedAt: new Date()
+            },
+            { new: true, runValidators: true }
+        );
+
+        res.status(200).json({
+            message: "Address and location updated successfully",
+            registration: updatedRegistration
+        });
+
+    } catch (error) {
+        console.error('Update address error:', error);
+        res.status(500).json({ 
+            message: "Failed to update address",
+            error: error.message 
+        });
+    }
+};

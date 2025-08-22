@@ -20,6 +20,9 @@ router.get('/doc-processing', finalApprovalController.getDocProcessingStations);
 // Get detailed registration with media
 router.get('/:id/details', registerController.getRegistrationDetails);
 
+// Update address and location details
+router.post('/update-address', registerController.updateAddress);
+
 // Final approval routes
 router.put('/final-approve/:id', finalApprovalController.finalApproveRegistration);
 router.put('/final-reject/:id', finalApprovalController.rejectRegistrationWithReason);
