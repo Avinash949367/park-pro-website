@@ -55,6 +55,23 @@ exports.uploadMedia = async (req, res) => {
       uploadedFilesInfo[folderMap[fieldName]] = [];
 
       for (const file of files[fieldName]) {
+        // Check if file already exists for this registration and filename
+        const existingFile = await Media.findOne({
+          registrationId,
+          category: folderMap[fieldName],
+          originalFilename: file.originalname
+        });
+
+        if (existingFile) {
+          // Skip if file already exists
+          uploadedFilesInfo[folderMap[fieldName]].push({
+            originalFilename: existingFile.originalFilename,
+            url: existingFile.cloudinaryUrl,
+            status: 'already_exists'
+          });
+          continue;
+        }
+
         // Remove extension from original name for Cloudinary public_id
         const originalNameWithoutExt = file.originalname.replace(/\.[^/.]+$/, "");
         const publicId = `${registrationId}/${folderMap[fieldName]}/${originalNameWithoutExt}`;
@@ -73,6 +90,7 @@ exports.uploadMedia = async (req, res) => {
         uploadedFilesInfo[folderMap[fieldName]].push({
           originalFilename: file.originalname,
           url: uploadResult.secure_url,
+          status: 'uploaded'
         });
       }
     }

@@ -22,7 +22,7 @@ const sendApprovalEmail = async (toEmail, userName, registrationId) => {
                     <p>Dear ${userName},</p>
                     <p>Great news! Your registration has been approved and is ready for the documentation process.</p>
                     <p><strong>Your Registration ID:</strong> ${registrationId}</p>
-                    <p>Submit your Documents here - http://127.0.0.1:5501/frontend/registerprocess/document_submission.html</p>
+                    <p>Submit your Documents here - http://127.0.0.1:5502/frontend/registerprocess/document_submission.html</p>
                     <p>Next steps:</p>
                     <ol>
                         <li>Complete the document submission process</li>
