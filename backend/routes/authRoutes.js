@@ -27,25 +27,6 @@ router.post("/login", async (req, res, next) => {
 });
 router.post("/verify-otp", verifyOtp);
 
-router.post("/signup", register);
-// Regular login route - reject admin attempts
-router.post("/login", async (req, res, next) => {
-  const { email } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (user && user.role === 'admin') {
-      return res.status(403).json({
-        message: 'Admin users must login via the admin login page'
-      });
-    }
-    // Proceed with regular login
-    login(req, res, next);
-  } catch (err) {
-    next(err);
-  }
-});
-router.post("/verify-otp", verifyOtp);
-
 // Admin login route with role check and referrer validation
 router.post("/admin/login", async (req, res, next) => {
   // Verify request came from admin login page
