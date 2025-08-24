@@ -140,9 +140,4 @@ document.addEventListener('DOMContentLoaded', () => {
   googleLoginBtn.addEventListener('click', () => {
     window.location.href = 'http://localhost:5000/auth/google';
   });
-
-  // Handle Facebook login button click
-  facebookLoginBtn.addEventListener('click', () => {
-    window.location.href = 'http://localhost:5000/auth/facebook';
-  });
 });
