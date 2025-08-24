@@ -93,20 +93,33 @@ exports.verifyOtp = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log('Login attempt for email:', email);
+  console.log('Password received:', password);
+
   try {
     const user = await User.findOne({ email });
-    if (!user)
+    if (!user) {
+      console.log('User not found for email:', email);
       return res.status(400).json({ message: "User not found" });
+    }
+
+    console.log('User found:', user.email, 'Role:', user.role, 'Confirmed:', user.isConfirmed);
 
     if (!user.isConfirmed && user.role !== 'admin') {
+      console.log('Account not confirmed for user:', user.email);
       return res.status(400).json({ message: "Account not confirmed. Please verify your email." });
     }
 
+    console.log('About to compare passwords...');
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password comparison result:', isMatch);
+
     if (!isMatch) {
+      console.log('Password mismatch for user:', user.email);
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    console.log('Login successful for user:', user.email);
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET || 'default_jwt_secret_key',
@@ -118,6 +131,7 @@ exports.login = async (req, res) => {
       user: { name: user.name, role: user.role },
     });
   } catch (err) {
+    console.error('Error during login:', err.message);
     res.status(500).json({ message: "Error logging in", error: err.message });
   }
 };

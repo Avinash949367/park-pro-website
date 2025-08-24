@@ -24,13 +24,19 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Hash password before saving
+// Hash password before saving - only hash if password is not already hashed
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   
   try {
     // For admin users with default password, don't re-hash
     if (this.password === 'store@Login.1' && this.role === 'admin') {
+      return next();
+    }
+    
+    // Check if password is already hashed (bcrypt hashes start with $2a$, $2b$, $2y$)
+    if (this.password.startsWith('$2a$') || this.password.startsWith('$2b$') || this.password.startsWith('$2y$')) {
+      console.log('Password appears to be already hashed, skipping re-hashing');
       return next();
     }
     
@@ -44,11 +50,23 @@ userSchema.pre('save', async function(next) {
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function(candidatePassword) {
+  console.log('Comparing passwords:');
+  console.log('Stored password (hashed):', this.password);
+  console.log('Candidate password:', candidatePassword);
+  console.log('User role:', this.role);
+  
   // For admin default password, do direct comparison
   if (this.password === 'store@Login.1' && this.role === 'admin') {
-    return candidatePassword === this.password;
+    console.log('Using direct comparison for admin default password');
+    const result = candidatePassword === this.password;
+    console.log('Direct comparison result:', result);
+    return result;
   }
-  return await bcrypt.compare(candidatePassword, this.password);
+  
+  console.log('Using bcrypt comparison');
+  const result = await bcrypt.compare(candidatePassword, this.password);
+  console.log('Bcrypt comparison result:', result);
+  return result;
 };
 
 module.exports = mongoose.model("User", userSchema);
