@@ -1,3 +1,4 @@
+
 // JavaScript for register-spot.html multi-step form with map and validation
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -109,8 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     html += `<li><strong>Owner Email:</strong> ${formData.get('ownerEmail')}</li>`;
     html += `<li><strong>Owner Phone:</strong> ${formData.get('ownerPhone')}</li>`;
 
-    html += `<li><strong>Latitude:</strong> ${formData.get('latitude')}</li>`;
-    html += `<li><strong>Longitude:</strong> ${formData.get('longitude')}</li>`;
     html += `<li><strong>IoT GPS Serial Number:</strong> ${formData.get('iotSerial') || 'N/A'}</li>`;
 
     html += '</ul>';
@@ -160,8 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
           };
           map.setCenter(pos);
           marker.setPosition(pos);
-          document.getElementById('latitude').value = pos.lat.toFixed(6);
-          document.getElementById('longitude').value = pos.lng.toFixed(6);
           showToast('Location fetched successfully.', 'bg-success');
         },
         () => {
@@ -217,10 +214,23 @@ document.addEventListener('DOMContentLoaded', () => {
   handleFilePreview('parkingPhotos', 'parkingPhotosPreview');
   handleFilePreview('ownershipDocs', 'ownershipDocsPreview');
 
+  // Function to generate a unique registration ID
+function generateRegistrationId() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(now.getDate()).padStart(2, '0');
+    const randomNum = String(Math.floor(Math.random() * 100000)).padStart(5, '0'); // 00000-99999
+    return `REG-${year}-${month}-${day}-${randomNum}`;
+}
+
   // Submit form data via API call
   function submitForm() {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+
+    // Generate and add registration ID
+    data.registrationId = generateRegistrationId();
 
     // Show loading spinner on submit button
     nextBtn.disabled = true;
@@ -237,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextBtn.disabled = false;
         nextBtn.textContent = 'Submit';
         if (response.ok) {
-          showToast('Parking spot registered successfully!', 'bg-success');
+          showToast('Parking spot registered successfully! Registration ID: ' + data.registrationId, 'bg-success'); // Added ID to toast
           form.reset();
           currentStep = 0;
           showStep(currentStep);
