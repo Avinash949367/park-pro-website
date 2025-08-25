@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Send approval email for documentation process
-const sendApprovalEmail = async (toEmail, userName, registrationId) => {
+// Send approval email for documentation process with partnership deed attachment
+const sendApprovalEmail = async (toEmail, userName, registrationId, attachments = []) => {
     try {
         const mailOptions = {
             from: process.env.EMAIL_USER || 'parkproplus@gmail.com',
@@ -32,7 +32,8 @@ const sendApprovalEmail = async (toEmail, userName, registrationId) => {
                     <p>Thank you for choosing ParkPro!</p>
                     <p>Best regards,<br>The ParkPro Team</p>
                 </div>
-            `
+            `,
+            attachments: attachments
         };
 
         await transporter.sendMail(mailOptions);
@@ -45,7 +46,7 @@ const sendApprovalEmail = async (toEmail, userName, registrationId) => {
 };
 
 // Send final approval email with login credentials
-const sendFinalApprovalEmail = async (toEmail, userName, registrationId, username, password) => {
+const sendFinalApprovalEmail = async (toEmail, userName, registrationId, username, password, attachments = []) => {
     try {
         const mailOptions = {
             from: process.env.EMAIL_USER || 'parkproplus@gmail.com',
@@ -84,7 +85,8 @@ const sendFinalApprovalEmail = async (toEmail, userName, registrationId, usernam
                     <p>Thank you for choosing ParkPro! We look forward to a successful partnership.</p>
                     <p>Best regards,<br>The ParkPro Team</p>
                 </div>
-            `
+            `,
+            attachments: attachments
         };
 
         await transporter.sendMail(mailOptions);

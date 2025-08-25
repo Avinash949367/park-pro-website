@@ -22,6 +22,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Check for token and user data in URL parameters (for OAuth redirects)
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlToken = urlParams.get('token');
+  const urlUser = urlParams.get('user');
+  const urlEmail = urlParams.get('email');
+  
+  if (urlToken) {
+    // Store the token from URL in localStorage
+    localStorage.setItem('token', urlToken);
+    
+    // Store user data if available
+    if (urlUser) {
+      try {
+        const userData = JSON.parse(decodeURIComponent(urlUser));
+        localStorage.setItem('user', JSON.stringify(userData));
+      } catch (e) {
+        console.error('Error parsing user data from URL:', e);
+      }
+    }
+    
+    // Store email if available
+    if (urlEmail) {
+      localStorage.setItem('email', decodeURIComponent(urlEmail));
+    }
+    
+    // Remove token and user data from URL to prevent showing it in the address bar
+    const newUrl = window.location.pathname;
+    window.history.replaceState({}, document.title, newUrl);
+  }
+
   const token = localStorage.getItem('token');
   if (token) {
     // Hide login button

@@ -159,8 +159,8 @@ exports.googleCallback = (req, res) => {
     process.env.JWT_SECRET || 'default_jwt_secret_key',
     { expiresIn: "1d" }
   );
-  // Redirect to frontend with token or set cookie
-  res.redirect(`/user.html?token=${token}`);
+  // Redirect to frontend with token and user data
+  res.redirect(`/index.html?token=${token}&user=${encodeURIComponent(JSON.stringify(user))}&email=${encodeURIComponent(user.email)}`);
 };
 
 exports.facebookCallback = (req, res) => {
@@ -170,7 +170,7 @@ exports.facebookCallback = (req, res) => {
     process.env.JWT_SECRET || 'default_jwt_secret_key',
     { expiresIn: "1d" }
   );
-  res.redirect(`/user.html?token=${token}`);
+  res.redirect(`/index.html?token=${token}`);
 };
 
 exports.getUsersList = async (req, res) => {
