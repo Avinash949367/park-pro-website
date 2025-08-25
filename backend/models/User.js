@@ -2,15 +2,51 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
   email: {
     type: String,
+    required: true,
     unique: true,
+    lowercase: true,
+    trim: true
   },
-  password: String,
+  phone: {
+    type: String,
+    trim: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  vehicle: {
+    type: String,
+    trim: true
+  },
+  membershipStatus: {
+    type: String,
+    enum: ['Basic', 'Premium', 'Gold'],
+    default: 'Basic'
+  },
+  walletBalance: {
+    type: Number,
+    default: 0
+  },
+  savedVehicles: [{
+    type: String,
+    trim: true
+  }],
+  preferredSpots: [{
+    type: String,
+    trim: true
+  }],
   role: {
     type: String,
-    default: "user", // can be "admin" or "user"
+    enum: ["user", "admin"],
+    default: "user"
   },
   isConfirmed: {
     type: Boolean,
@@ -22,6 +58,8 @@ const userSchema = new mongoose.Schema({
   otpExpiry: {
     type: Date,
   },
+}, {
+  timestamps: true
 });
 
 // Hash password before saving - only hash if password is not already hashed
