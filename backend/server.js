@@ -82,6 +82,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Serve static files from the frontend directory
+app.use(express.static('../frontend'));
+
 // Routes
 app.use('/', authRoutes);
 app.use('/api/registrations', registerRoutes);

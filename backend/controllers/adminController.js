@@ -44,8 +44,21 @@ exports.approveRegistration = async (req, res) => {
 
         await registration.save();
 
-        // Send approval email
-        await sendApprovalEmail(registration.email, registration.name, registration.registrationId);
+        // Send approval email with partnership deed attachment
+        const partnershipDeedPath = 'D:/BCA Capstone 25/park-pro-web/frontend/registerprocess/ParkPro_Partnership_Deed_With_Green_Seal.pdf';
+        
+        await sendApprovalEmail(
+            registration.email, 
+            registration.name, 
+            registration.registrationId,
+            [
+                {
+                    filename: 'ParkPro_Partnership_Deed_With_Green_Seal.pdf',
+                    path: partnershipDeedPath,
+                    contentType: 'application/pdf'
+                }
+            ]
+        );
 
         res.status(200).json({
             message: 'Registration approved for documentation process',
@@ -77,8 +90,21 @@ exports.acceptRegistration = async (req, res) => {
 
         await registration.save();
 
-        // Send approval email
-        await sendApprovalEmail(registration.email, registration.name);
+        // Send approval email with partnership deed attachment
+        const partnershipDeedPath = 'D:/BCA Capstone 25/park-pro-web/frontend/registerprocess/ParkPro_Partnership_Deed_With_Green_Seal.pdf';
+        
+        await sendApprovalEmail(
+            registration.email, 
+            registration.name, 
+            registration.registrationId,
+            [
+                {
+                    filename: 'ParkPro_Partnership_Deed_With_Green_Seal.pdf',
+                    path: partnershipDeedPath,
+                    contentType: 'application/pdf'
+                }
+            ]
+        );
 
         res.status(200).json({
             message: 'Registration accepted for documentation process',

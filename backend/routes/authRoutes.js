@@ -115,12 +115,12 @@ router.get('/auth/google/callback',
 // New route for Flutter app Google sign-in
 router.post('/auth/google-signin', googleSignIn);
 
-// Facebook OAuth routes
-router.get('/auth/facebook',
-  passport.authenticate('facebook', { scope: ['email'] }));
+// Facebook OAuth routes (disabled temporarily)
+// router.get('/auth/facebook',
+//   passport.authenticate('facebook', { scope: ['email'] }));
 
-router.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/userlogin.html' }),
-  facebookCallback);
+// router.get('/auth/facebook/callback',
+//   passport.authenticate('facebook', { failureRedirect: '/userlogin.html' }),
+//   facebookCallback);
 
 module.exports = router;

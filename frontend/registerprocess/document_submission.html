@@ -348,12 +348,7 @@
                 <div class="instructions">
                     <ul>
                         <li>This picture is to verify whether you have a station or not</li>
-                        <li>Submit with the location of your station</li>
                     </ul>
-                </div>
-                <div class="form-group upload-section">
-                    <label class="required-field">Location</label>
-                    <input type="text" name="stationLocation" required placeholder="Location of your station">
                 </div>
                 <div class="form-group upload-section">
                     <label class="required-field">Parking Station Pictures</label>
@@ -517,16 +512,6 @@
           return;
         }
         formData.append("registrationId", registrationIdInput.value.trim());
-
-        // Add station location text input
-        const stationLocationInput = documentForm.querySelector('input[name="stationLocation"]');
-        if (!stationLocationInput || !stationLocationInput.value.trim()) {
-          alert('Please enter station location');
-          submitBtn.disabled = false;
-          submitText.textContent = 'Submit Documents';
-          return;
-        }
-        formData.append("stationLocation", stationLocationInput.value.trim());
 
         // Add files from each input
         fileFields.forEach(fieldName => {
@@ -773,10 +758,10 @@
       if (state) document.getElementById('state').value = state;
       if (zipCode) document.getElementById('zipCode').value = zipCode;
     }
-  </script>
+</script>
 
-  <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
-  
+<!-- Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+
 </body>
 </html>
