@@ -7,6 +7,7 @@ const session = require('express-session');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const registerRoutes = require('./routes/registerRoutes');
+const stationRoutes = require('./routes/stationRoutes');
 require('./config/passport'); // Passport config
 
 const bcrypt = require('bcryptjs');
@@ -40,13 +41,31 @@ const createAdminUser = async () => {
 
 createAdminUser();
 
-const allowedOrigins = ['http://127.0.0.1:5500', 'http://localhost:5500'];
+const allowedOrigins = [
+  'http://127.0.0.1:5500', 
+  'http://127.0.0.1:5501', 
+  'http://127.0.0.1:5502',
+  'http://localhost:5500',
+  'http://localhost:5501',
+  'http://localhost:5502',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'http://localhost:8080',
+  'http://127.0.0.1:8080',
+  'http://localhost:5000',
+  'http://127.0.0.1:5000',
+  'http://localhost:5001', // Added this line to allow requests from port 5001
+  'http://127.0.0.1:5001' ,
+  'null'
+ // Added this line to allow requests from port 5001
+];
 
 app.use(cors({
   origin: function(origin, callback){
     // allow requests with no origin (like mobile apps or curl requests)
     if(!origin) return callback(null, true);
     if(allowedOrigins.indexOf(origin) === -1){
+      console.log('CORS blocked origin:', origin);
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
     }
@@ -65,7 +84,10 @@ app.use(passport.session());
 
 // Routes
 app.use('/', authRoutes);
-app.use('/api', registerRoutes);
+app.use('/api/registrations', registerRoutes);
+app.use('/api', stationRoutes);
+const mediaRoutes = require('./routes/mediaRoutes');
+app.use('/api/media', mediaRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

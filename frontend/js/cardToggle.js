@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const findSpotBtn = document.getElementById('findSpotBtn');
     const registerSpotBtn = document.getElementById('registerSpotBtn');

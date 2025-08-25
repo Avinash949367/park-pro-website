@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const backendBaseUrl = 'http://localhost:5000'; // Adjust if your backend runs on a different URL or port
 
-  // Fetch count of received stations and update badge
-  async function updateReceivedCount() {
+  // Fetch count of pending registrations and update badge
+  async function updatePendingCount() {
     try {
-      const response = await fetch(`${backendBaseUrl}/api/stations/status/received`);
-      if (!response.ok) throw new Error('Failed to fetch received stations');
-      const stations = await response.json();
-      if (stations.length > 0) {
-        messageBadge.textContent = stations.length;
+      const response = await fetch(`${backendBaseUrl}/api/registrations/pending`);
+      if (!response.ok) throw new Error('Failed to fetch pending registrations');
+      const registrations = await response.json();
+      if (registrations.length > 0) {
+        messageBadge.textContent = registrations.length;
         messageBadge.classList.remove('hidden');
       } else {
         messageBadge.classList.add('hidden');
@@ -24,31 +24,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Fetch and display received stations in popup
-  async function showReceivedStations() {
+  // Fetch and display pending registrations in popup
+  async function showPendingRegistrations() {
     try {
-      const response = await fetch(`${backendBaseUrl}/api/stations/status/received`);
-      if (!response.ok) throw new Error('Failed to fetch received stations');
-      const stations = await response.json();
+      const response = await fetch(`${backendBaseUrl}/api/registrations/pending`);
+      if (!response.ok) throw new Error('Failed to fetch pending registrations');
+      const registrations = await response.json();
 
       receivedStationsList.innerHTML = '';
-      if (stations.length === 0) {
-        receivedStationsList.innerHTML = '<li class="text-gray-600">No stations with status "received".</li>';
+      if (registrations.length === 0) {
+        receivedStationsList.innerHTML = '<li class="text-gray-600">No pending registrations found.</li>';
       } else {
-        stations.forEach(station => {
+        registrations.forEach(registration => {
           const li = document.createElement('li');
           li.className = 'flex justify-between items-center border p-2 rounded';
 
           const infoDiv = document.createElement('div');
-          infoDiv.innerHTML = `<strong>${station.name}</strong><br/><small>${station.location}</small>`;
+          infoDiv.innerHTML = `<strong>${registration.name}</strong><br/><small>${registration.email}</small><br/><small>${registration.address}</small>`;
 
-          const confirmBtn = document.createElement('button');
-          confirmBtn.textContent = 'Confirm';
-          confirmBtn.className = 'bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600';
-          confirmBtn.addEventListener('click', () => confirmStation(station._id));
+          const approveBtn = document.createElement('button');
+          approveBtn.textContent = 'Approve';
+          approveBtn.className = 'bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2';
+          approveBtn.addEventListener('click', () => approveRegistration(registration._id));
+
+          const rejectBtn = document.createElement('button');
+          rejectBtn.textContent = 'Reject';
+          rejectBtn.className = 'bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600';
+          rejectBtn.addEventListener('click', () => rejectRegistration(registration._id));
 
           li.appendChild(infoDiv);
-          li.appendChild(confirmBtn);
+          li.appendChild(approveBtn);
+          li.appendChild(rejectBtn);
           receivedStationsList.appendChild(li);
         });
       }
@@ -107,8 +113,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Approve registration
+  async function approveRegistration(registrationId) {
+    try {
+      const response = await fetch(`${backendBaseUrl}/api/registrations/approve/${registrationId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ approvedBy: 'admin' }),
+      });
+      if (!response.ok) throw new Error('Failed to approve registration');
+      await updatePendingCount();
+      await showPendingRegistrations();
+    } catch (error) {
+      console.error(error);
+      alert('Failed to approve registration. Please try again.');
+    }
+  }
+
+  // Reject registration
+  async function rejectRegistration(registrationId) {
+    const rejectionReason = prompt('Please enter the reason for rejection:');
+    if (!rejectionReason) return;
+
+    try {
+      const response = await fetch(`${backendBaseUrl}/api/registrations/reject/${registrationId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rejectedBy: 'admin', rejectionReason }),
+      });
+      if (!response.ok) throw new Error('Failed to reject registration');
+      await updatePendingCount();
+      await showPendingRegistrations();
+    } catch (error) {
+      console.error(error);
+      alert('Failed to reject registration. Please try again.');
+    }
+  }
+
   // Event listeners
-  messageIcon.addEventListener('click', showReceivedStations);
+  messageIcon.addEventListener('click', showPendingRegistrations);
   closePopupBtn.addEventListener('click', () => {
     receivedStationsPopup.classList.add('hidden');
   });
@@ -122,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Initial badge update and load active stations
-  updateReceivedCount();
+  updatePendingCount();
   loadActiveStations();
 
   // New code for admin dashboard user loading
