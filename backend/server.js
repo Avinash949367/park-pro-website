@@ -88,6 +88,8 @@ app.use('/api/registrations', registerRoutes);
 app.use('/api', stationRoutes);
 const mediaRoutes = require('./routes/mediaRoutes');
 app.use('/api/media', mediaRoutes);
+const userProfileRoutes = require('./routes/userProfileRoutes');
+app.use('/api/user', userProfileRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
