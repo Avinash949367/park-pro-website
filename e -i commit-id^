@@ -1,0 +1,35 @@
+[33mcommit 5cbe9494169ab145b330fbdf2d07b5670881474b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Avinash949367 <avinash46479@gmail.com>
+Date:   Tue Aug 26 11:40:09 2025 +0530
+
+    Remove .env from repo and add to gitignore
+
+[33mcommit 53501a5d23bad9b38c7940b3bf4693249838f237[m
+Author: Avinash949367 <avinash46479@gmail.com>
+Date:   Mon Aug 25 22:26:33 2025 +0530
+
+    fixes google authentication
+
+[33mcommit 7080fcba8e5ad3bde0a42e1ad53c24c21b185902[m
+Author: Avinash949367 <avinash46479@gmail.com>
+Date:   Sun Aug 24 19:58:31 2025 +0530
+
+    fixes login issue
+
+[33mcommit 4e377ae88b0db19e79debddebc91d8fa74047762[m
+Author: Ayesha <achukatlaayesha2005@gmail.com>
+Date:   Fri Aug 22 13:38:28 2025 +0530
+
+    Updated auth.js
+
+[33mcommit 02cc2ec3c3102d393ca44342b00fdc92f646b2a3[m
+Author: Avinash949367 <avinash46479@gmail.com>
+Date:   Wed Aug 13 22:35:34 2025 +0530
+
+    update registration process
+
+[33mcommit ac44873ab24c3b0c1b9451bd9d2e7e16f111eea6[m
+Author: Avinash949367 <avinash46479@gmail.com>
+Date:   Sat May 24 15:35:22 2025 +0530
+
+    push local files to github repo
