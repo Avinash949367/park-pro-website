@@ -12,8 +12,9 @@
     .text-shadow-md {
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
     }
-    .gradient-orange {
-      background: linear-gradient(90deg, #ff7e29, #ff5400);
+    /* Updated color scheme to match register-spot.html */
+    .gradient-teal {
+      background: linear-gradient(90deg, #46949d, #1e3740);
     }
     /* Additional padding and spacing for main section UI */
     section.relative.bg-white {
@@ -77,23 +78,40 @@
       transform: translateY(0);
     }
 
-    /*--------------------------------------------------------------------------------------------------*/
+    /* Updated option styling to match register-spot.html */
     .option {
-  text-decoration: none;       /* Remove underline */
-  color: #1e3740;              /* Dark teal text color */
-  padding: 8px 12px;           /* Spacing around text */
-  border-radius: 8px;          /* Rounded corners */
-  transition: all 0.3s ease;   /* Smooth hover transition */
-  font-weight: 500;
-}
+      text-decoration: none;
+      color: #1e3740;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
 
-/* Hover effect */
-.option:hover {
-  color: white;                /* Text turns white */
-  background-color: #46949d;   /* Medium teal background on hover */
-  box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
-}
+    .option:hover {
+      color: white;
+      background-color: #46949d;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
 
+    /* Updated button colors */
+    .btn-teal {
+      background-color: #46949d;
+      color: white;
+    }
+    
+    .btn-teal:hover {
+      background-color: #1e3740;
+    }
+    
+    .btn-black {
+      background-color: black;
+      color: white;
+    }
+    
+    .btn-black:hover {
+      background-color: #46949d;
+    }
   </style>
 </head>
 <body class="font-sans bg-gray-200">
@@ -111,8 +129,8 @@
       <a href="contactus.html" class="option">Contact</a>
     </nav>
     <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
-      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
-      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+      <a href="userlogin.html" id="loginButton" class="btn-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold btn-black hover:bg-teal transition transform hover:scale-110 duration-300">
         Get the App
       </a>
       <div id="profileContainer" class="hidden relative">
@@ -134,7 +152,7 @@
   <script src="js/cardToggle.js"></script>
 
   <!-- Hero Section -->
-  <section id="heroSection" class="relative bg-white py-20 px-4 sm:px-10 mt-20" style="background-image: url('https://c1.wallpaperflare.com/preview/50/659/614/car-man-drive-watch-thumbnail.jpg'); background-size: cover; background-position: center;">
+  <section id="heroSection" class="relative bg-white py-20 px-4 sm:px-10 mt-20" style="background-image: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8ZHJpdmluZ3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 700px;">
     <div class="max-w-7xl mx-auto flex justify-end items-start min-h-[100px] relative">
       <!-- Right Card -->
       <div class="bg-white bg-opacity-90 shadow-lg rounded-2xl p-6 w-full max-w-md mx-4 mt-8">
@@ -159,7 +177,7 @@
                 <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>-->
               <br>
-              <a href="search.html" class="w-full inline-block text-center bg-black text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
+              <a href="search.html" class="w-full inline-block text-center btn-black py-3 px-4 rounded-lg font-semibold hover:bg-teal transition duration-200">
                 Search now
               </a>
              
@@ -170,7 +188,7 @@
                 Join our platform to manage your parking space efficiently and reach potential users.
               </p>-->
              
-              <a href="register-spot.html" class="w-full bg-black text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 mb-4 inline-block text-center">
+              <a href="register-spot.html" class="w-full btn-black py-3 px-4 rounded-lg font-semibold hover:bg-teal transition duration-200 mb-4 inline-block text-center">
                 Register now
               </a>
               <!-- <a href="#" class="text-[#46949d] text-sm hover:underline flex justify-center">
@@ -194,34 +212,34 @@
     <div class="grid gap-8 md:grid-cols-3">
       
       <!-- Card 1 -->
-      <div class="bg-blue-50 rounded-lg shadow-md p-8 flex flex-col items-center text-center">
-        <div class="w-20 h-20 flex items-center justify-center rounded-full border-4 border-green-400 mb-4">
+      <div class="bg-[#e8f5e9] rounded-lg shadow-md p-8 flex flex-col items-center text-center">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full border-4 border-[#46949d] mb-4">
           <i class="fas fa-microchip text-[#46949d] text-3xl"></i>
         </div>
-        <h3 class="text-xl font-bold text-[#46949d] mb-2">Superior Service</h3>
-        <p class="text-dark black-700 text-sm">
+        <h3 class="text-xl font-bold text-[#1e3740] mb-2">Superior Service</h3>
+        <p class="text-gray-700 text-sm">
         We provide hassle-free parking with trained staff, 24/7 assistance, and quick support to ensure a smooth and safe experience from entry to exit.
         </p>
       </div>
 
       <!-- Card 2 -->
-      <div class="bg-blue-50 rounded-lg shadow-md p-8 flex flex-col items-center text-center">
-        <div class="w-20 h-20 flex items-center justify-center rounded-full border-4 border-green-400 mb-4">
+      <div class="bg-[#e8f5e9] rounded-lg shadow-md p-8 flex flex-col items-center text-center">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full border-4 border-[#46949d] mb-4">
           <i class="fas fa-cogs text-[#46949d] text-3xl"></i>
         </div>
-        <h3 class="text-xl font-bold text-[#46949d] mb-2">Innovative Technology</h3>
-        <p class="text-dark black-700 text-sm">
+        <h3 class="text-xl font-bold text-[#1e3740] mb-2">Innovative Technology</h3>
+        <p class="text-gray-700 text-sm">
           Our smart parking system uses cutting-edge IoT sensors, AI-based slot detection, and real-time data processing to provide accurate availability updates. Integrated with mobile apps, secure online payments, and navigation support, it ensures a seamless parking experience from booking to exit.
         </p>
       </div>
 
       <!-- Card 3 -->
-      <div class="bg-blue-50 rounded-lg shadow-md p-8 flex flex-col items-center text-center">
-        <div class="w-20 h-20 flex items-center justify-center rounded-full border-4 border-green-400 mb-4">
+      <div class="bg-[#e8f5e9] rounded-lg shadow-md p-8 flex flex-col items-center text-center">
+        <div class="w-20 h-20 flex items-center justify-center rounded-full border-4 border-[#46949d] mb-4">
           <i class="fas fa-award text-[#46949d] text-3xl"></i>
         </div>
-        <h3 class="text-xl font-bold text-[#46949d] mb-2">End-to-End Solution</h3>
-        <p class="text-dark black-700 text-sm">
+        <h3 class="text-xl font-bold text-[#1e3740] mb-2">End-to-End Solution</h3>
+        <p class="text-gray-700 text-sm">
           Our platform offers a complete parking management system, covering everything from slot booking and real-time availability tracking to secure payments, navigation assistance, and post-parking services. We integrate advanced technology to ensure smooth, hassle-free parking for both customers and operators.
         </p>
       </div>
@@ -242,15 +260,15 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <!-- Consultancy Services -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl">
+      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl border-l-4 border-[#46949d]">
         <div class="p-8">
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4 relative pb-3 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-[#d4af37]">
+          <h2 class="text-2xl font-semibold text-[#1e3740] mb-4 relative pb-3 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-[#46949d]">
             Consultancy Services
           </h2>
           <p class="text-gray-600 leading-relaxed mb-6">
             The important role of car park within an office building, shopping center, hospital or airport is often underestimated. In many cases, the car park provides the first and the la...
           </p>
-          <a href="#" class="inline-flex items-center font-semibold text-[#d4af37] hover:text-[#b8941f] transition-colors duration-300">
+          <a href="#" class="inline-flex items-center font-semibold text-[#46949d] hover:text-[#1e3740] transition-colors duration-300">
             Read more
             <span class="ml-1 transition-transform duration-300 hover:translate-x-1">→</span>
           </a>
@@ -258,15 +276,15 @@
       </div>
 
       <!-- Products and Technology Services -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl">
+      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl border-l-4 border-[#46949d]">
         <div class="p-8">
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4 relative pb-3 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-[#d4af37]">
+          <h2 class="text-2xl font-semibold text-[#1e3740] mb-4 relative pb-3 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-[#46949d]">
             Products and Technology Services
           </h2>
           <p class="text-gray-600 leading-relaxed mb-6">
             New technology and equipment has made car park more efficient, user-friendly and profitable than ever before. Secure Parking established Secure Tech, the in-house, state-of-the...
           </p>
-          <a href="#" class="inline-flex items-center font-semibold text-[#d4af37] hover:text-[#b8941f] transition-colors duration-300">
+          <a href="#" class="inline-flex items-center font-semibold text-[#46949d] hover:text-[#1e3740] transition-colors duration-300">
             Read more
             <span class="ml-1 transition-transform duration-300 hover:translate-x-1">→</span>
           </a>
@@ -274,15 +292,15 @@
       </div>
 
       <!-- Management of Car Park Operations -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl">
+      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl border-l-4 border-[#46949d]">
         <div class="p-8">
-          <h2 class="text-2xl font-semibold text-gray-900 mb-4 relative pb-3 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-[#d4af37]">
+          <h2 class="text-2xl font-semibold text-[#1e3740] mb-4 relative pb-3 after:absolute after:bottom-0 after:left-0 after:w-10 after:h-0.5 after:bg-[#46949d]">
             Management of Car Park Operations
           </h2>
           <p class="text-gray-600 leading-relaxed mb-6">
             As a commercial or retail parking operator we strive to maximize parking occupancy while at the same time reducing congestion and pollution. It is essential that customers can g...
           </p>
-          <a href="#" class="inline-flex items-center font-semibold text-[#d4af37] hover:text-[#b8941f] transition-colors duration-300">
+          <a href="#" class="inline-flex items-center font-semibold text-[#46949d] hover:text-[#1e3740] transition-colors duration-300">
             Read more
             <span class="ml-1 transition-transform duration-300 hover:translate-x-1">→</span>
           </a>
@@ -301,10 +319,10 @@
 
   <!-- Floating Fasttag Button -->
   <div id="fasttagContainer" class="fixed bottom-4 left-4 flex items-center space-x-4 z-50">
-    <button id="fasttagButton" class="text-white rounded-full px-6 py-3 shadow-lg cursor-pointer bg-gradient-to-r from-orange-500 via-purple-600 to-blue-600 hover:from-orange-600 hover:to-blue-700 transform hover:scale-110 transition-transform duration-300 font-bold text-lg">
+    <button id="fasttagButton" class="text-white rounded-full px-6 py-3 shadow-lg cursor-pointer bg-gradient-to-r from-[#46949d] via-[#1e3740] to-black hover:from-[#1e3740] hover:to-black transform hover:scale-110 transition-transform duration-300 font-bold text-lg">
      <a href="fastag.html"> Fastag </a>
     </button>
-    <div id="fasttagTyping" class="font-bold text-lg max-w-xs" style="color: #FFD700; text-shadow: 1px 1px 2px #000000;"></div>
+    <div id="fasttagTyping" class="font-bold text-lg max-w-xs" style="color: orange; text-shadow: 1px 1px 2px #000000;"></div>
   </div>
 
   <body class="bg-gray-50 font-sans">
@@ -456,5 +474,95 @@
 
     typeMessage();
   </script>
+
+  <!-- Footer from register-spot.html -->
+  <footer class="bg-[#46949d] text-white py-12">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        
+        <!-- Company Info -->
+        <div>
+          <div class="flex items-center mb-4">
+            <img src="assets/images/logo_edited-removebg-preview.png" alt="Logo" class="h-14 w-auto mr-3">
+            <span class="text-2xl font-extrabold tracking-wide">ParkPro+</span>
+          </div>
+          <p class="text-black leading-relaxed mb-6">
+            Your smart companion for parking anywhere, anytime.  
+            Find, reserve, and park with ease — powered by smart technology.
+          </p>
+          <div class="flex space-x-4 text-lg">
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+              <center><i class="fab fa-facebook-f"></i></center>
+            </a>
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+              <center><i class="fab fa-twitter"></i></center>
+            </a>
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+             <center> <i class="fab fa-instagram"></i></center>
+            </a>
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+              <center><i class="fab fa-linkedin-in"></i></center>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-black hover:text-white transition duration-200">Home</a></li>
+            <li><a href="service.html" class="text-black hover:text-white transition duration-200">FASTag Services</a></li>
+            <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Recharge FASTag</a></li>
+            <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Transaction History</a></li>
+            <li><a href="userprofile.html" class="text-black hover:text-white transition duration-200">My Account</a></li>
+          </ul>
+        </div>
+
+        <!-- Support -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-black hover:text-white transition duration-200">FAQs</a></li>
+            <li><a href="contactus.html" class="text-black hover:text-white transition duration-200">Contact Us</a></li>
+            <li><a href="#" class="text-black hover:text-white transition duration-200">Privacy Policy</a></li>
+            <li><a href="#" class="text-black hover:text-white transition duration-200">Terms of Service</a></li>
+            <li><a href="#" class="text-black hover:text-white transition duration-200">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Contact Us</h4>
+          <ul class="space-y-3 text-black">
+            <li class="flex items-start">
+              <i class="fas fa-map-marker-alt mt-1 mr-3 text-white"></i>
+              <span>MRD Block - PES University, Bangalore, Karnataka 560001</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone-alt mr-3 text-white"></i>
+              <span>+91 8309113119</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-3 text-white"></i>
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=parkproplus@gmail.com&su=Parking%20Inquiry&body=Hello,%20I%20would%20like%20to%20know%20more%20about..." target="_blank">
+                parkproplus@gmail.com
+              </a>
+              
+            </li>
+            
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Footer -->
+      <div class="border-t border-white/40 mt-10 pt-6 text-center">
+        <p class="text-sm text-white/80">&copy; 2025 ParkPro+. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Font Awesome for footer icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </body>
 </html>

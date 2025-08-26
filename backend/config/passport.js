@@ -1,5 +1,4 @@
 console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
-console.log('FACEBOOK_APP_ID:', process.env.FACEBOOK_APP_ID);
 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;

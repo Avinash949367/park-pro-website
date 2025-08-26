@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         registerSpotView.classList.add('hidden');
 
         // Change background image for Find Spot
-        heroSection.style.backgroundImage = "url('https://c1.wallpaperflare.com/preview/50/659/614/car-man-drive-watch-thumbnail.jpg')";
+        heroSection.style.backgroundImage = "url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8ZHJpdmluZ3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80')";
     });
     
     registerSpotBtn.addEventListener('click', function() {
