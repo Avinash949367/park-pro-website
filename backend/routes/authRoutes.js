@@ -1,6 +1,6 @@
 const express = require("express");
 const passport = require("passport");
-const { register, login, googleCallback, facebookCallback, getUserCount, getUsersList, deleteUsersExceptAdmins, googleSignIn, verifyOtp } = require("../controllers/authController");
+const { register, login, googleCallback, getUserCount, getUsersList, deleteUsersExceptAdmins, googleSignIn, verifyOtp } = require("../controllers/authController");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
@@ -76,7 +76,6 @@ router.delete('/users/clear', passport.authenticate('jwt', { session: false }), 
 
 
 
-
 // Store admin login route - authenticate user with role 'store admin'
 router.post("/storeadmin/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -114,13 +113,5 @@ router.get('/auth/google/callback',
 
 // New route for Flutter app Google sign-in
 router.post('/auth/google-signin', googleSignIn);
-
-// Facebook OAuth routes (disabled temporarily)
-// router.get('/auth/facebook',
-//   passport.authenticate('facebook', { scope: ['email'] }));
-
-// router.get('/auth/facebook/callback',
-//   passport.authenticate('facebook', { failureRedirect: '/userlogin.html' }),
-//   facebookCallback);
 
 module.exports = router;

@@ -1,4 +1,3 @@
-
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -163,16 +162,6 @@ exports.googleCallback = (req, res) => {
   res.redirect(`/index.html?token=${token}&user=${encodeURIComponent(JSON.stringify(user))}&email=${encodeURIComponent(user.email)}`);
 };
 
-exports.facebookCallback = (req, res) => {
-  const user = req.user;
-  const token = jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_SECRET || 'default_jwt_secret_key',
-    { expiresIn: "1d" }
-  );
-  res.redirect(`/index.html?token=${token}`);
-};
-
 exports.getUsersList = async (req, res) => {
   try {
     if (!req.user || req.user.role !== 'admin') {
@@ -198,9 +187,7 @@ exports.deleteUsersExceptAdmins = async (req, res) => {
   }
 };
 
-
 // Add this function to your existing authController.js file manually:
-
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -242,6 +229,3 @@ exports.googleSignIn = async (req, res) => {
     res.status(401).json({ message: "Invalid Google token", error: err.message });
   }
 };
-
-// After adding this function, add the route in authRoutes.js:
-// router.post('/auth/google-signin', googleSignIn);
