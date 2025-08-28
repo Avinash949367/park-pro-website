@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Submission - ParkPro</title>
+<style>
+    :root {
+        --primary-color: #2C3E50;
+        --secondary-color: #3498db;
+        --success-color: #2ecc71;
+        --light-gray: #f5f7fa;
+        --medium-gray: #dcdcdc;
+        --dark-gray: #555;
+        --text-color: #333;
+        --white: #fff;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--light-gray);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: var(--white);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 12px;
+        font-size: 28px;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .description {
+        text-align: center;
+        font-size: 15px;
+        color: var(--dark-gray);
+        margin-bottom: 30px;
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Process Tracker */
+    .process-container {
+        margin-bottom: 40px;
+    }
+    
+    .process {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .process::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        width: 80%;
+        height: 4px;
+        background-color: var(--medium-gray);
+        z-index: 0;
+        transform: translateY(-50%);
+    }
+
+    .step-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .step {
+        background: var(--white);
+        border: 3px solid var(--medium-gray);
+        color: var(--dark-gray);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .step.active {
+        border-color: var(--secondary-color);
+        color: var(--secondary-color);
+        background-color: #ecf6fd;
+        transform: scale(1.1);
+    }
+
+    .step.completed {
+        border-color: var(--success-color);
+        background-color: #e9f9f1;
+        color: var(--success-color);
+    }
+
+    .step-label {
+        text-align: center;
+        font-size: 13px;
+        margin-top: 10px;
+        font-weight: 500;
+        color: var(--dark-gray);
+    }
+
+    /* Form */
+    .form-section {
+        margin-top: 30px;
+    }
+
+    .section-title {
+        font-size: 20px;
+        margin: 25px 0 15px;
+        color: var(--primary-color);
+        font-weight: 600;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--medium-gray);
+    }
+
+    .instructions {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--secondary-color);
+    }
+
+    .instructions ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .instructions li {
+        margin-bottom: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-color);
+        font-size: 15px;
+    }
+
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+
+    input[type="text"], 
+    input[type="file"],
+    input[type="number"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border 0.3s;
+    }
+
+    input[type="text"]:focus, 
+    input[type="file"]:focus,
+    input[type="number"]:focus {
+        outline: none;
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    input[type="file"] {
+        background: #fafafa;
+        padding: 10px;
+    }
+
+    .upload-section {
+        padding: 20px;
+        border: 1px dashed #ccc;
+        border-radius: 8px;
+        background: #fafafa;
+        transition: all 0.3s;
+    }
+
+    .upload-section:hover {
+        border-color: var(--secondary-color);
+        background: #f5f9ff;
+    }
+
+    .submit-container {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    button {
+        display: inline-block;
+        padding: 14px 30px;
+        font-size: 16px;
+        color: var(--white);
+        background-color: black;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    button:hover {
+        background-color: #46949d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    button:disabled {
+        background-color: var(--medium-gray);
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .warning-text {
+        color: red;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--secondary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 20px;
+            padding: 25px;
+        }
+        
+        .description {
+            max-width: 100%;
+        }
+        
+        .process {
+            width: 100%;
+        }
+        
+        .process::before {
+            left: 5%;
+            width: 90%;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+        
+        .step-label {
+            font-size: 11px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Documentation Process</h1>
+    <p class="description">Submit the required documents to proceed with your registration. This step helps us verify your station details before activation.</p>
+
+    <!-- Process Tracker -->
+    <div class="process-container">
+        <div class="process">
+            <div class="step-container">
+                <div class="step completed">✔</div>
+                <div class="step-label">Register</div>
+            </div>
+            <div class="step-container">
+                <div class="step active">📄</div>
+                <div class="step-label">Documentation</div>
+            </div>
+            <div class="step-container">
+                <div class="step">3</div>
+                <div class="step-label">Confirmation</div>
+            </div>
+            <div class="step-container">
+                <div class="step">4</div>
+                <div class="step-label">Activate</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 1: Document Submission -->
+    <div id="step1-container">
+        <form class="form-section" id="documentForm">
+            
+            <div class="form-group">
+                <label for="registrationId" class="required-field">Registration ID</label>
+                <span class="warning-text">(Check your Mail to Know your registration Id)</span>
+                <input type="text" id="registrationId" name="registrationId" placeholder="Enter your registration ID" required>
+            </div>
+
+            <div class="document-section">
+                <h2 class="section-title">Land/Lease Documents</h2>
+                <div class="instructions">
+                    <ul>
+                        <li>This Documents are required to verify that this particular station belongs to you or not</li>
+                        <li>Make sure You submit the correct documents</li>
+                    </ul>
+                </div>
+                <div class="form-group upload-section">
+                    <label class="required-field">Land/Lease Documents</label>
+                    <input type="file" name="landDocs" multiple required>
+                </div>
+            </div>
+
+            <div class="document-section">
+                <h2 class="section-title">Station Pictures</h2>
+                <div class="instructions">
+                    <ul>
+                        <li>This picture is to verify whether you have a station or not</li>
+                    </ul>
+                </div>
+                <div class="form-group upload-section">
+                    <label class="required-field">Parking Station Pictures</label>
+                    <input type="file" name="stationPics" multiple required>
+                </div>
+            </div>
+
+            <div class="document-section">
+                <h2 class="section-title">Partnership Documents</h2>
+                <div class="instructions">
+                    <ul>
+                        <li>Check Your Mail we have sent a partnership Agreement sheet</li>
+                        <li>Take a print Out and sign it - <span class="warning-text">make sure you have read the Agreement Fully</span></li>
+                        <li>Once you have signed submit the softcopy here and keep the copy with you and shortly you will receive the original copy of Agreement</li>
+                    </ul>
+                </div>
+                <div class="form-group upload-section">
+                    <label class="required-field">Partnership Agreement</label>
+                    <input type="file" name="partnershipDocs" multiple required>
+                </div>
+            </div>
+
+            <div class="document-section">
+                <h2 class="section-title">Digital Signature</h2>
+                <div class="instructions">
+                    <ul>
+                        <li>Submit Your signature which is signed in paper <span class="warning-text">(note: crop the image before submitting)</span></li>
+                        <li>This signature will be printed in the original copy</li>
+                    </ul>
+                </div>
+                <div class="form-group upload-section">
+                    <label class="required-field">Digital Signature</label>
+                    <input type="file" name="digitalSign" required>
+                </div>
+            </div>
+
+            <div class="document-section">
+                <h2 class="section-title">Personal Documents</h2>
+                <div class="instructions">
+                    <ul>
+                        <li>This documents is used to Identify the identity <span class="warning-text">(No Proper Documents - rejection)</span></li>
+                    </ul>
+                </div>
+                <div class="form-group upload-section">
+                    <label class="required-field">Personal Documents (Aadhar, Photo)</label>
+                    <input type="file" name="personalDocs" multiple required>
+                </div>
+            </div>
+
+            <div class="submit-container">
+                <button type="submit" id="submitBtn">
+                    <span id="submitText">Submit Documents</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Step 2: Address & Location Details -->
+    <div id="step2-container" style="display: none;">
+        <form class="form-section" id="addressForm">
+            <h2 class="section-title">Step 2: Address & Location Details</h2>
+            <p class="description">Please provide your station's address and exact location for verification and mapping purposes.</p>
+
+            <div class="form-group">
+                <label for="address" class="required-field">Address</label>
+                <input type="text" id="address" name="address" placeholder="Enter your station address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="city" class="required-field">City</label>
+                <input type="text" id="city" name="city" placeholder="Enter city" required>
+            </div>
+
+            <div class="form-group">
+                <label for="state" class="required-field">State</label>
+                <input type="text" id="state" name="state" placeholder="Enter state" required>
+            </div>
+
+            <div class="form-group">
+                <label for="zipCode" class="required-field">ZIP Code</label>
+                <input type="text" id="zipCode" name="zipCode" placeholder="Enter ZIP code" pattern="[0-9]{6}" maxlength="6" required>
+            </div>
+
+            <div class="form-group">
+                <label for="country" class="required-field">Country</label>
+                <input type="text" id="country" name="country" value="India" readonly required>
+            </div>
+
+            <div class="form-group">
+                <label for="totalSlots" class="required-field">Total Slots</label>
+                <input type="number" id="totalSlots" name="totalSlots" value="1" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pricePerSlot" class="required-field">Price per Slot (₹)</label>
+                <input type="number" id="pricePerSlot" name="pricePerSlot" placeholder="Enter price per slot" min="0" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="googleMapLocation" class="required-field">Google Map Location</label>
+                <input type="text" id="googleMapLocation" name="googleMapLocation" placeholder="Paste Google Maps URL or search location" required>
+                <button type="button" onclick="extractLocation()" style="margin-top: 10px; padding: 8px 16px; font-size: 14px;">Extract Location</button>
+            </div>
+
+            <div id="locationPreview" style="margin-top: 20px; display: none;">
+                <h3>Location Preview:</h3>
+                <p><strong>Latitude:</strong> <span id="latitudeDisplay"></span></p>
+                <p><strong>Longitude:</strong> <span id="longitudeDisplay"></span></p>
+                <div id="map" style="height: 300px; border: 1px solid #ccc; border-radius: 8px; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Latitude and longitude fields removed - using Google Maps location instead -->
+
+            <div class="submit-container">
+                <button type="submit" id="addressSubmitBtn">
+                    <span id="addressSubmitText">Save Address & Location</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Document submission form handler
+    const documentForm = document.getElementById("documentForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const submitText = document.getElementById("submitText");
+    
+    documentForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      // Disable submit button to prevent double submission
+      submitBtn.disabled = true;
+      submitText.innerHTML = '<span class="loading"></span>Uploading...';
+
+      try {
+        // Check file sizes before proceeding
+        const fileFields = ["landDocs", "stationPics", "partnershipDocs", "digitalSign", "personalDocs"];
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        
+        for (const fieldName of fileFields) {
+          const files = documentForm.querySelector(`input[name="${fieldName}"]`).files;
+          for (let i = 0; i < files.length; i++) {
+            if (files[i].size > maxSize) {
+              alert('File size must be less than 5MB');
+              submitBtn.disabled = false;
+              submitText.textContent = 'Submit Documents';
+              return;
+            }
+          }
+        }
+
+        const formData = new FormData();
+
+        // Add registration ID
+        const registrationIdInput = documentForm.querySelector('#registrationId');
+        if (!registrationIdInput || !registrationIdInput.value.trim()) {
+          alert('Please enter your registration ID');
+          submitBtn.disabled = false;
+          submitText.textContent = 'Submit Documents';
+          return;
+        }
+        formData.append("registrationId", registrationIdInput.value.trim());
+
+        // Add files from each input
+        fileFields.forEach(fieldName => {
+          const files = documentForm.querySelector(`input[name="${fieldName}"]`).files;
+          for (let i = 0; i < files.length; i++) {
+            formData.append(fieldName, files[i]);
+          }
+        });
+
+        const response = await fetch("http://localhost:5000/api/media/upload-media", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert("Documents uploaded successfully! Proceeding to Step 2...");
+          
+          // Store the registration ID for Step 2
+          currentRegistrationId = document.getElementById('registrationId').value;
+          
+          // Hide Step 1 and show Step 2
+          document.getElementById('step1-container').style.display = 'none';
+          document.getElementById('step2-container').style.display = 'block';
+          
+          // Update process tracker
+          document.querySelector('.step:nth-child(2)').classList.add('completed');
+          document.querySelector('.step:nth-child(2)').innerHTML = '✔';
+          document.querySelector('.step:nth-child(3)').classList.add('active');
+          
+          // Initialize map for Step 2
+          setTimeout(initMap, 100);
+          
+        } else {
+          alert("Upload failed: " + (result.error || "Unknown error"));
+          submitBtn.disabled = false;
+          submitText.textContent = 'Submit Documents';
+        }
+      } catch (err) {
+        alert("Upload error: " + err.message);
+        submitBtn.disabled = false;
+        submitText.textContent = 'Submit Documents';
+      }
+    });
+
+    // Store registration ID globally
+    let currentRegistrationId = '';
+
+    // Address form handler
+    const addressForm = document.getElementById("addressForm");
+    const addressSubmitBtn = document.getElementById("addressSubmitBtn");
+    const addressSubmitText = document.getElementById("addressSubmitText");
+    
+    addressForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      // Disable submit button
+      addressSubmitBtn.disabled = true;
+      addressSubmitText.innerHTML = '<span class="loading"></span>Saving...';
+
+      try {
+        // Use the stored registration ID
+        if (!currentRegistrationId) {
+          alert('Registration ID not found. Please go back to Step 1.');
+          addressSubmitBtn.disabled = false;
+          addressSubmitText.textContent = 'Save Address & Location';
+          return;
+        }
+
+        // Create data object with all required fields
+        const data = {
+          registrationId: currentRegistrationId,
+          address: document.getElementById('address').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          state: document.getElementById('state').value.trim(),
+          zipCode: document.getElementById('zipCode').value.trim(),
+          country: document.getElementById('country').value.trim(),
+          totalSlots: parseInt(document.getElementById('totalSlots').value) || 1,
+          pricePerSlot: parseFloat(document.getElementById('pricePerSlot').value) || 0,
+          googleMapLocation: document.getElementById('googleMapLocation').value.trim(), // Add this required field
+          latitude: 0, // Default values since we're using Google Maps location
+          longitude: 0
+        };
+
+        // Validate all required fields (excluding latitude/longitude)
+        const emptyFields = [];
+        Object.entries(data).forEach(([key, value]) => {
+          if (!value && key !== 'pricePerSlot' && key !== 'totalSlots' && key !== 'latitude' && key !== 'longitude') {
+            emptyFields.push(key);
+          }
+        });
+
+        if (emptyFields.length > 0) {
+          alert(`Please fill in all required fields: ${emptyFields.join(', ')}`);
+          addressSubmitBtn.disabled = false;
+          addressSubmitText.textContent = 'Save Address & Location';
+          return;
+        }
+
+        console.log('Sending data:', data);
+
+        const response = await fetch("http://localhost:5000/api/registrations/update-address", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        console.log('Response:', result);
+
+        if (response.ok) {
+          alert("Address and location saved successfully!");
+          
+          // Redirect to confirmation page or next step
+          window.location.href = '/frontend/register-process.html';
+          
+        } else {
+          alert("Save failed: " + (result.error || result.message || "Unknown error"));
+          addressSubmitBtn.disabled = false;
+          addressSubmitText.textContent = 'Save Address & Location';
+        }
+      } catch (err) {
+        alert("Save error: " + err.message);
+        addressSubmitBtn.disabled = false;
+        addressSubmitText.textContent = 'Save Address & Location';
+      }
+    });
+
+    // Google Maps API
+    let map;
+    let marker;
+    let geocoder;
+
+    // Initialize Google Maps
+    function initMap() {
+      geocoder = new google.maps.Geocoder();
+      
+      // Default location (India)
+      const defaultLocation = { lat: 20.5937, lng: 78.9629 };
+      
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: defaultLocation
+      });
+      
+      marker = new google.maps.Marker({
+        position: defaultLocation,
+        map: map,
+        draggable: true
+      });
+      
+      // Add drag event listener to marker
+      marker.addListener('dragend', function(event) {
+        updateLatLng(event.latLng.lat(), event.latLng.lng());
+      });
+    }
+
+    // Extract location from Google Maps URL or search
+    function extractLocation() {
+      const locationInput = document.getElementById('googleMapLocation').value;
+      
+      if (!locationInput) {
+        alert('Please enter a location or Google Maps URL');
+        return;
+      }
+
+      let searchQuery = locationInput;
+      
+      // Check if it's a Google Maps URL
+      if (locationInput.includes('google.com/maps')) {
+        const url = new URL(locationInput);
+        const params = new URLSearchParams(url.search);
+        
+        if (params.has('q')) {
+          searchQuery = params.get('q');
+        } else if (url.pathname.includes('/place/')) {
+          const placeName = url.pathname.split('/place/')[1].split('/')[0].replace(/\+/g, ' ');
+          searchQuery = decodeURIComponent(placeName);
+        }
+      }
+
+      // Geocode the location
+      geocoder.geocode({ address: searchQuery }, function(results, status) {
+        if (status === 'OK') {
+          const location = results[0].geometry.location;
+          const lat = location.lat();
+          const lng = location.lng();
+          
+          updateLatLng(lat, lng);
+          
+          // Center map and place marker
+          map.setCenter(location);
+          marker.setPosition(location);
+          
+          // Show location preview
+          document.getElementById('locationPreview').style.display = 'block';
+          
+          // Fill address fields if available
+          const addressComponents = results[0].address_components;
+          fillAddressFields(addressComponents);
+          
+        } else {
+          alert('Location not found: ' + status);
+        }
+      });
+    }
+
+    // Update latitude and longitude fields
+    function updateLatLng(lat, lng) {
+      // Update display elements
+      document.getElementById('latitudeDisplay').textContent = lat;
+      document.getElementById('longitudeDisplay').textContent = lng;
+    }
+
+    // Fill address fields from Google Maps data
+    function fillAddressFields(components) {
+      let address = '';
+      let city = '';
+      let state = '';
+      let zipCode = '';
+      
+      components.forEach(component => {
+        const types = component.types;
+        
+        if (types.includes('street_number') || types.includes('route')) {
+          address += component.long_name + ' ';
+        }
+        if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+          city = component.long_name;
+        }
+        if (types.includes('administrative_area_level_1')) {
+          state = component.long_name;
+        }
+        if (types.includes('postal_code')) {
+          zipCode = component.long_name;
+        }
+      });
+      
+      if (address) document.getElementById('address').value = address.trim();
+      if (city) document.getElementById('city').value = city;
+      if (state) document.getElementById('state').value = state;
+      if (zipCode) document.getElementById('zipCode').value = zipCode;
+    }
+</script>
+
+<!-- Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+
+</body>
+</html>

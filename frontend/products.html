@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Pro - Smart Parking Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
+      option {
+      text-decoration: none;       /* Remove underline */
+      color: #1e3740;              /* Dark teal text color */
+      padding: 8px 12px;           /* Spacing around text */
+      border-radius: 8px;          /* Rounded corners */
+      transition: all 0.3s ease;   /* Smooth hover transition */
+      font-weight: 500;
+    }
+
+    /* Hover effect */
+    .option:hover {
+      color: white;                /* Text turns white */
+      background-color: #46949d;   /* Medium teal background on hover */
+      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .column {
+            flex: 1;
+            min-width: 320px;
+            margin: 1.5rem;
+            padding: 2.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            background: #fff;
+            transition: all 0.4s ease;
+        }
+        .column:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        h2 {
+            color: #46949d;
+        }
+        .learn-more {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 0.75rem;
+            padding: 0.85rem 1.75rem;
+            background-color: black;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 550;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .learn-more:hover {
+            background-color: #333;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .collaboration-message {
+            text-align: center;
+            margin: 3rem auto;
+            padding: 2rem;
+            max-width: 800px;
+            background: #46949d;
+            border-radius: 0.75rem;
+            color: white;
+        }
+        .product-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        .product-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #46949d;
+        }
+        .product-content {
+            flex-grow: 1;
+        }
+        .learn-more-container {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .product-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #46949d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+        <a href="index.html"><div class="flex items-center space-x-4">
+          <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+          <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+        </div></a>
+        <nav class="space-x-6 hidden md:flex font-medium">
+          <a href="index.html" class="option">About us</a>
+          <a href="business.html" class="option">Park Pro For Business</a>
+          <a href="products.html" class="option">Products</a>
+          <a href="contactus.html" class="option">Contact</a>
+        </nav>
+        <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+          <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+          <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+            Get the App
+          </a>
+          <div id="profileContainer" class="hidden relative">
+            <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+            <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+              <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+                <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+                <div>
+                  <p class="font-semibold text-gray-900" id="userName">User</p>
+                  <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+                </div>
+              </div>
+              <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+            </div>
+          </div>
+      </div>
+      </div>
+
+    <div style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+        <h1 style="color: black; font-weight: 700; font-size: 2.5rem; margin-bottom: 0;">
+            <i class="fas fa-parking" style="margin-right: 10px; color: #46949d;"></i>Park Pro - Smart Parking Solutions
+        </h1>
+    </div>
+
+    <div class="container">
+        <div class="column">
+            <h2>User Products</h2>
+
+            <div class="product-item">
+                <i class="fas fa-mobile-alt product-icon"></i>
+                <div class="product-content">
+                    <strong>Mobile Application:</strong> Access parking information and manage reservations on the go.
+                    <div class="learn-more-container">
+                        <a href="user-products.html" class="learn-more">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <i class="fas fa-desktop product-icon"></i>
+                <div class="product-content">
+                    <strong>Web Portal:</strong> Manage parking spaces and view analytics from a centralized web interface.
+                    <div class="learn-more-container">
+                        <a href="user-products.html" class="learn-more">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <h2>Partner Products</h2>
+            <div class="product-item">
+                <i class="fas fa-traffic-light product-icon"></i>
+                <div class="product-content">
+                    <strong>Smart IoT Parking System:</strong> Enhance security and control access to parking areas.
+                    <div class="learn-more-container">
+                        <a href="partner-products.html" class="learn-more">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-item">
+                <i class="fas fa-camera product-icon"></i>
+                <div class="product-content">
+                    <strong>Web Admin Dashboard</strong> Automatically recognize vehicle license plates for efficient entry and exit management.
+                    <div class="learn-more-container">
+                        <a href="partner-products.html" class="learn-more">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="collaboration-message">
+        <div style="margin-bottom: 10px;">
+            <i class="fas fa-handshake"></i> You've to collaborate to unlock all these features <i class="fas fa-lock-open"></i>
+        </div>
+        <p style="max-width: 600px; margin: 0 auto 1.5rem; font-weight: normal; line-height: 1.5;">
+            Unlock the full potential of smart parking through partnership
+        </p>
+        <a href="contactus.html" class="learn-more" style="background-color: #46949d; color: white; padding: 1rem 2rem; font-size: 1.1rem;">
+            Start Collaborating Today <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+        </a>
+    </div>
+    <footer class="bg-[#46949d] text-white py-12">
+        <div class="container mx-auto px-6 lg:px-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            
+            <!-- Company Info -->
+            <div>
+              <div class="flex items-center mb-4">
+                <img src="assets/images/logo_edited-removebg-preview.png" alt="Logo" class="h-14 w-auto mr-3">
+                <span class="text-2xl font-extrabold tracking-wide">ParkPro+</span>
+              </div>
+              <p class="text-black leading-relaxed mb-6">
+                Your smart companion for parking anywhere, anytime.  
+                Find, reserve, and park with ease — powered by smart technology.
+              </p>
+              <div class="flex space-x-4 text-lg">
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-facebook-f"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-twitter"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                 <center> <i class="fab fa-instagram"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-linkedin-in"></i></center>
+                </a>
+              </div>
+            </div>
+      
+            <!-- Quick Links -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Quick Links</h4>
+              <ul class="space-y-2">
+                <li><a href="index.html" class="text-black hover:text-white transition duration-200">Home</a></li>
+                <li><a href="service.html" class="text-black hover:text-white transition duration-200">FASTag Services</a></li>
+                <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Recharge FASTag</a></li>
+                <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Transaction History</a></li>
+                <li><a href="userprofile.html" class="text-black hover:text-white transition duration-200">My Account</a></li>
+              </ul>
+            </div>
+      
+            <!-- Support -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Support</h4>
+              <ul class="space-y-2">
+                <li><a href="#" class="text-black hover:text-white transition duration-200">FAQs</a></li>
+                <li><a href="contactus.html" class="text-black hover:text-white transition duration-200">Contact Us</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Privacy Policy</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Terms of Service</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Refund Policy</a></li>
+              </ul>
+            </div>
+      
+            <!-- Contact Info -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Contact Us</h4>
+              <ul class="space-y-3 text-black">
+                <li class="flex items-start">
+                  <i class="fas fa-map-marker-alt mt-1 mr-3 text-white"></i>
+                  <span>MRD Block - PES University, Bangalore, Karnataka 560001</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-phone-alt mr-3 text-white"></i>
+                  <span>+91 8309113119</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-envelope mr-3 text-white"></i>
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=parkproplus@gmail.com&su=Parking%20Inquiry&body=Hello,%20I%20would%20like%20to%20know%20more%20about..." target="_blank">
+                    parkproplus@gmail.com
+                  </a>
+                  
+                </li>
+                
+              </ul>
+            </div>
+      
+          </div>
+      
+          <!-- Bottom Footer -->
+          <div class="border-t border-white/40 mt-10 pt-6 text-center">
+            <p class="text-sm text-white/80">&copy; 2025 ParkPro+. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+</body>
+</html>

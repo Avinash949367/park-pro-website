@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About ParkPro | Smart Parking Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        
+        .option {
+        text-decoration: none;       /* Remove underline */
+        color: #1e3740;              /* Dark teal text color */
+        padding: 8px 12px;           /* Spacing around text */
+        border-radius: 8px;          /* Rounded corners */
+        transition: all 0.3s ease;   /* Smooth hover transition */
+        font-weight: 500;
+      }
+  
+      /* Hover effect */
+      .option:hover {
+        color: white;                /* Text turns white */
+        background-color: #46949d;   /* Medium teal background on hover */
+        box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+      }
+  
+
+      /* body sttyling */
+      .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+        
+        .about-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .about-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .about-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .about-image {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .about-text h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .mission-card, .vision-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .mission-card h3, .vision-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .team-section {
+            margin-top: 4rem;
+        }
+        
+        .team-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .team-member {
+            text-align: center;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            height: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+        
+        .member-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 5px solid rgba(67, 97, 238, 0.1);
+        }
+        
+        .member-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .member-position {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            margin: 5rem 0;
+            padding: 3rem 0;
+            background-color: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .testimonials-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            color: #555;
+            position: relative;
+        }
+        
+        .testimonial-text::before {
+            content: '"';
+            font-size: 4rem;
+            position: absolute;
+            left: -1rem;
+            top: -1.5rem;
+            color: rgba(70, 148, 157, 0.1);
+            z-index: 0;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .testimonial-author h4 {
+            margin: 0;
+            color: var(--dark);
+        }
+        
+        .testimonial-author p {
+            margin: 0.25rem 0 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Partners Section */
+        .partners-section {
+            margin: 5rem 0;
+        }
+        
+        .partners-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+        
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 3rem;
+            align-items: center;
+            justify-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .partner-logo {
+            max-width: 150px;
+            height: auto;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .mission-vision {
+                grid-template-columns: 1fr;
+            }
+
+            .partners-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+        }
+        
+    </style>
+</head>
+<body class="bg-white text-[#333333] font-['Inter',_system-ui,_sans-serif] leading-relaxed">
+      <!-- Navbar -->
+      <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+        <a href="index.html"><div class="flex items-center space-x-4">
+          <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+          <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+        </div></a>
+        <nav class="space-x-6 hidden md:flex font-medium">
+            <a href="aboutus.html" class="option">About us</a>
+            <a href="business.html" class="option">Park Pro For Business</a>
+            <a href="products.html" class="option">Products</a>
+            <a href="contactus.html" class="option">Contact</a>
+        </nav>
+        <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+          <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
+          <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+            Get the App
+          </a>
+          <div id="profileContainer" class="hidden relative">
+            <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+            <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+              <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+                <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+                <div>
+                  <p class="font-semibold text-gray-900" id="userName">User</p>
+                  <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+                </div>
+              </div>
+              <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+            </div>
+          </div>
+      </div>
+      </div>
+
+
+      <!-- body of the page  -->
+
+      <div class="about-container">
+        <div class="about-header">
+            <h1>About ParkPro</h1>
+            <strong><p style="color:#46949d; ">Find parking solution for all type of vehicles with Modern technology</p></strong>
+        </div>
+        
+        <div class="about-content">
+            <div class="about-image">
+                <!-- Replace with your actual image -->
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Smart parking solution">
+            </div>
+            
+            <div class="about-text">
+                <h2>Our Story</h2>
+                <p>Built in 2025, ParkPro began as a group of <span style="color:rgb(18, 105, 28)"><strong>Students</strong></span> with a big vision: to solve the growing parking crisis in urban areas. Our team came together with a shared mission to create intelligent parking solutions that reduce congestion, lower emissions, and improve quality of life in cities.</p>
+                
+                <p>What started as a university project has now grown into a leading parking management platform serving over 50 cities worldwide. Our patented sensor technology and AI-powered prediction algorithms help drivers find parking faster while giving cities valuable data to optimize their parking infrastructure.</p>
+                <p>Today, we continue to innovate with new features AI Assisstent, infrastructure GPS and <span>more</span> to create seamless mobility experiences.</p>
+
+                
+            </div>
+            
+        </div>
+       
+        <div class="mission-vision">
+            <div class="mission-card">
+                <h3 style="color: #46949d; font-size: 35px;">Our Mission</h3>
+                <p>To transform urban mobility by developing intelligent parking solutions that reduce congestion, lower emissions, and make cities more livable through cutting-edge technology and data-driven insights.</p>
+            </div>
+            
+            <div class="vision-card">
+                <h3 style="color: #46949d; font-size: 35px;">Our Vision</h3>
+                <p>To create a world where finding parking is effortless, cities are less congested, and transportation systems are seamlessly integrated - making urban living more sustainable and enjoyable for everyone.</p>
+            </div>
+        </div>
+        
+        <div class="team-section">
+            <h2 style="color: #46949d;">Meet Our Development Team</h2>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="assets/images/WhatsApp Image 2024-03-28 at 17.51.05_3d94f0ae.jpg" alt="Avinash" class="member-photo">
+                    <h3 class="member-name">Avinash</h3>
+                    <!-- <p class="member-position">Team Lead </p> -->
+                    
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen" class="member-photo">
+                    <h3 class="member-name">Michael Chen</h3>
+                    <!-- <p class="member-position">CTO</p>
+                    <p>AI and IoT specialist leading our technology development.</p> -->
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Patel" class="member-photo">
+                    <h3 class="member-name">Priya Patel</h3>
+                    <!-- <p class="member-position">Head of Operations</p>
+                    <p>Oversees implementation and partnerships with cities.</p> -->
+                </div>
+                
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="David Kim" class="member-photo">
+                    <h3 class="member-name">David Kim</h3>
+                    <!-- <p class="member-position">Head of Product</p>
+                    <p>Designs user experiences that make parking effortless.</p> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials Section -->
+        <div class="testimonials-section">
+            <h2 style="color: #46949d;">What Our Partners Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "ParkPro reduced downtown congestion by 28% in the first year of implementation, exceeding all our expectations. Their technology is truly transformative for urban mobility."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Robert Chen">
+                        <div>
+                            <h4>Robert Chen</h4>
+                            <p>Transportation Director, Austin, TX</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The data insights from ParkPro helped us optimize our parking infrastructure investments and reduce enforcement costs by 40%. Their team is incredibly responsive and professional."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Maria Gonzalez">
+                        <div>
+                            <h4>Maria Gonzalez</h4>
+                            <p>Urban Planner, Miami, FL</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "As a commercial property owner, ParkPro's solution has increased our parking revenue by 35% while improving customer satisfaction. It's been a game-changer for our business."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="James Wilson">
+                        <div>
+                            <h4>James Wilson</h4>
+                            <p>Commercial Real Estate Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+<footer class="bg-[#46949d] text-white py-12">
+    <div class="container mx-auto px-6 lg:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        
+        <!-- Company Info -->
+        <div>
+          <div class="flex items-center mb-4">
+            <img src="assets/images/logo_edited-removebg-preview.png" alt="Logo" class="h-14 w-auto mr-3">
+            <span class="text-2xl font-extrabold tracking-wide">ParkPro+</span>
+          </div>
+          <p class="text-black leading-relaxed mb-6">
+            Your smart companion for parking anywhere, anytime.  
+            Find, reserve, and park with ease — powered by smart technology.
+          </p>
+          <div class="flex space-x-4 text-lg">
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+              <center><i class="fab fa-facebook-f"></i></center>
+            </a>
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+              <center><i class="fab fa-twitter"></i></center>
+            </a>
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+             <center> <i class="fab fa-instagram"></i></center>
+            </a>
+            <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+              <center><i class="fab fa-linkedin-in"></i></center>
+            </a>
+          </div>
+        </div>
+  
+        <!-- Quick Links -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-black hover:text-white transition duration-200">Home</a></li>
+            <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Get Fasttag</a></li>
+            <li><a href="register-spot.html" class="text-black hover:text-white transition duration-200">Become Partner Now</a></li>
+            <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Other Services</a></li>
+            <li><a href="userprofile.html" class="text-black hover:text-white transition duration-200">My Account</a></li>
+          </ul>
+        </div>
+  
+        <!-- Support -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-black hover:text-white transition duration-200">FAQs</a></li>
+            <li><a href="contactus.html" class="text-black hover:text-white transition duration-200">Contact Us</a></li>
+            <li><a href="#" class="text-black hover:text-white transition duration-200">Privacy Policy</a></li>
+            <li><a href="#" class="text-black hover:text-white transition duration-200">Terms of Service</a></li>
+            <li><a href="#" class="text-black hover:text-white transition duration-200">Refund Policy</a></li>
+          </ul>
+        </div>
+  
+        <!-- Contact Info -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Contact Us</h4>
+          <ul class="space-y-3 text-black">
+            <li class="flex items-start">
+              <i class="fas fa-map-marker-alt mt-1 mr-3 text-white"></i>
+              <span>MRD Block - PES University, Bangalore, Karnataka 560001</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone-alt mr-3 text-white"></i>
+              <span>+91 8309113119</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-3 text-white"></i>
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=parkproplus@gmail.com&su=Parking%20Inquiry&body=Hello,%20I%20would%20like%20to%20know%20more%20about..." target="_blank">
+                parkproplus@gmail.com
+              </a>
+              
+            </li>
+            
+          </ul>
+        </div>
+  
+      </div>
+  
+      <!-- Bottom Footer -->
+      <div class="border-t border-white/40 mt-10 pt-6 text-center">
+        <p class="text-sm text-white/80">&copy; 2025 ParkPro+. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  
+</body>
+</html>

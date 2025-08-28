@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Pro - User Products Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #46949d, #12691c);
+            color: white;
+            border-radius: 0.75rem;
+        }
+        .product-section {
+            background: white;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #46949d;
+        }
+        .product-icon {
+            font-size: 2.5rem;
+            color: #46949d;
+            margin-bottom: 1rem;
+        }
+        .product-title {
+            color: #12691c;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .product-description {
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+        .features-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .features-list li:before {
+            content: "✓";
+            color: #12691c;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #46949d;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #12691c;
+            transform: translateY(-2px);
+        }
+        .how-it-works {
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            color: #12691c;
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+    </style>
+</head>
+<body>
+  <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+    <a href="index.html"><div class="flex items-center space-x-4">
+      <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+      <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+    </div></a>
+    <nav class="space-x-6 hidden md:flex font-medium">
+      <a href="index.html" class="option">About us</a>
+      <a href="business.html" class="option">Park Pro For Business</a>
+      <a href="products.html">Products</a>
+
+
+      <a href="contactus.html" class="option">Contact</a>
+    </nav>
+    <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+        Get the App
+      </a>
+      <div id="profileContainer" class="hidden relative">
+        <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+            <div>
+              <p class="font-semibold text-gray-900" id="userName">User</p>
+              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+            </div>
+          </div>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+        </div>
+      </div>
+  </div>
+  </div>
+    <div class="container">
+        <a href="products.html" class="back-button">
+            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>Back to Products
+        </a>
+        
+        <div class="header">
+            <h1><i class="fas fa-user" style="margin-right: 10px;"></i>User Products</h1>
+            <p>Discover our comprehensive suite of user-focused parking solutions designed to make your parking experience seamless and efficient.</p>
+        </div>
+
+        <div class="product-section">
+            <div class="product-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h2 class="product-title">Mobile Application</h2>
+            
+            <div class="how-it-works">
+                <h3 class="section-title">How It Works</h3>
+                <p class="product-description">
+                    The Parkpro Mobile Application connects drivers directly to our Smart IoT Parking System, providing live data on space availability, enabling instant booking, and guiding users straight to their reserved spot. By integrating IoT sensors, cloud-based processing, and secure payment gateways, the app ensures that parking is no longer a hassle — it's planned, confirmed, and ready before you arrive.
+                </p>
+            </div>
+            
+            <h3 class="section-title">Installation</h3>
+            <ul class="features-list">
+                <li>Download from Google Play or Apple App Store, register or log in with secure credentials.</li>
+            </ul>
+            
+            <h3 class="section-title">Process</h3>
+            <ul class="features-list">
+                <li>Locate Parking – Instantly view available spaces in real time, powered by IoT sensors.</li>
+                <li>Reserve & Confirm – Book your spot and receive instant confirmation with a digital ticket.</li>
+                <li>Navigate to Spot – Use built-in GPS guidance to reach your exact location.</li>
+                <li>Manage Booking – Extend, modify, or cancel your reservation at any time from the app.</li>
+                <li>Exit & Review – Leave the parking area and access digital receipts and usage history for reference.</li>
+            </ul>
+            
+            <h3 class="section-title">Key Features</h3>
+            <ul class="features-list">
+                <li>Live Availability Tracking – Real-time updates on parking occupancy.</li>
+                <li>One-Tap Booking – Secure, fast reservations from anywhere.</li>
+                <li>Contactless Payment – Multiple payment options for convenience.</li>
+                <li>Integrated Navigation – Route guidance to the exact space.</li>
+                <li>Push Notifications – Alerts for upcoming expiry or changes.</li>
+                <li>Booking History – Complete records of past transactions and invoices.</li>
+            </ul>
+        </div>
+
+        <div class="product-section">
+            <div class="product-icon">
+                <i class="fas fa-desktop"></i>
+            </div>
+            <h2 class="product-title">Web Portal</h2>
+            
+            <div class="how-it-works">
+                <h3 class="section-title">How It Works</h3>
+                <p class="product-description">
+                    The Parkpro Web Portal acts as the command center for all parking management needs. Designed for both customers and administrators, it integrates with our IoT parking infrastructure to provide live status updates, secure booking and payment facilities, and detailed analytics. This ensures operational efficiency while giving users complete transparency and control.
+                </p>
+            </div>
+            
+            <h3 class="section-title">Process</h3>
+            <ul class="features-list">
+                <li>Secure Login – Access the portal through any web browser with verified credentials.</li>
+                <li>Search & Filter – Find available spaces using advanced search and location filters.</li>
+                <li>Reserve & Pay – Complete the booking process with integrated payment security.</li>
+                <li>Manage Account – Update personal information, subscription plans, and preferences.</li>
+                <li>Track & Report – Generate and download reports on past bookings, usage, and payments.</li>
+                <li>Admin Functions (if applicable) – Monitor occupancy trends, manage parking zones, and optimize pricing.</li>
+            </ul>
+            
+            <h3 class="section-title">Key Features</h3>
+            <ul class="features-list">
+                <li>Centralized Dashboard – Unified view of all parking locations and availability.</li>
+                <li>Online Booking System – Real-time reservations with instant confirmations.</li>
+                <li>Subscription Management – Monthly and annual membership handling.</li>
+                <li>Advanced Analytics – Data-driven insights to improve efficiency.</li>
+                <li>Role-Based Access – Different access levels for users, operators, and administrators.</li>
+                <li>Secure Transactions – SSL-encrypted payments and data storage.</li>
+            </ul>
+        </div>
+    </div>
+    <footer class="bg-[#46949d] text-white py-12">
+        <div class="container mx-auto px-6 lg:px-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            
+            <!-- Company Info -->
+            <div>
+              <div class="flex items-center mb-4">
+                <img src="assets/images/logo_edited-removebg-preview.png" alt="Logo" class="h-14 w-auto mr-3">
+                <span class="text-2xl font-extrabold tracking-wide">ParkPro+</span>
+              </div>
+              <p class="text-black leading-relaxed mb-6">
+                Your smart companion for parking anywhere, anytime.  
+                Find, reserve, and park with ease — powered by smart technology.
+              </p>
+              <div class="flex space-x-4 text-lg">
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-facebook-f"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-twitter"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                 <center> <i class="fab fa-instagram"></i></center>
+                </a>
+                <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+                  <center><i class="fab fa-linkedin-in"></i></center>
+                </a>
+              </div>
+            </div>
+      
+            <!-- Quick Links -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Quick Links</h4>
+              <ul class="space-y-2">
+                <li><a href="index.html" class="text-black hover:text-white transition duration-200">Home</a></li>
+                <li><a href="service.html" class="text-black hover:text-white transition duration-200">FASTag Services</a></li>
+                <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Recharge FASTag</a></li>
+                <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Transaction History</a></li>
+                <li><a href="userprofile.html" class="text-black hover:text-white transition duration-200">My Account</a></li>
+              </ul>
+            </div>
+      
+            <!-- Support -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Support</h4>
+              <ul class="space-y-2">
+                <li><a href="#" class="text-black hover:text-white transition duration-200">FAQs</a></li>
+                <li><a href="contactus.html" class="text-black hover:text-white transition duration-200">Contact Us</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Privacy Policy</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Terms of Service</a></li>
+                <li><a href="#" class="text-black hover:text-white transition duration-200">Refund Policy</a></li>
+              </ul>
+            </div>
+      
+            <!-- Contact Info -->
+            <div>
+              <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Contact Us</h4>
+              <ul class="space-y-3 text-black">
+                <li class="flex items-start">
+                  <i class="fas fa-map-marker-alt mt-1 mr-3 text-white"></i>
+                  <span>MRD Block - PES University, Bangalore, Karnataka 560001</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-phone-alt mr-3 text-white"></i>
+                  <span>+91 8309113119</span>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-envelope mr-3 text-white"></i>
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=parkproplus@gmail.com&su=Parking%20Inquiry&body=Hello,%20I%20would%20like%20to%20know%20more%20about..." target="_blank">
+                    parkproplus@gmail.com
+                  </a>
+                  
+                </li>
+                
+              </ul>
+            </div>
+      
+          </div>
+      
+          <!-- Bottom Footer -->
+          <div class="border-t border-white/40 mt-10 pt-6 text-center">
+            <p class="text-sm text-white/80">&copy; 2025 ParkPro+. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Confirm Stations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 font-sans flex h-screen">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+    <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
+      <a href="admindashboard.html">
+        <div class="flex items-center space-x-4">
+          <img src="assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+        </div>
+      </a>
+      <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <nav class="flex-1 overflow-y-auto">
+      <ul class="p-4 space-y-2">
+        <li>
+          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">dashboard</i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="stations.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">local_parking</i>
+            <span>Stations</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Stations Awaiting Final Confirmation</h1>
+    <ul id="adminConfirmStationsList" class="space-y-4">
+      <!-- Stations will be dynamically added here -->
+    </ul>
+  </main>
+
+  <script src="js/adminConfirm.js"></script>
+</body>
+</html>

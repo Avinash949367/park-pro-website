@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile - Park Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 py-3 shadow-sm border-b bg-white">
+    <div class="flex items-center space-x-2">
+      <span class="material-icons-outlined text-black cursor-pointer" id="backButton">arrow_back</span>
+      <h1 class="text-lg font-semibold">Profile</h1>
+    </div>
+    <div class="flex space-x-4">
+      <button class="px-4 py-1.5 bg-purple-100 text-purple-600 rounded-md text-sm font-medium hover:bg-purple-200">Edit</button>
+      <button id="logoutButton" class="px-4 py-1.5 bg-red-100 text-red-600 rounded-md text-sm font-medium hover:bg-red-200">Logout</button>
+    </div>
+  </div>
+
+
+  <!-- Profile Section -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    <div class="flex flex-col items-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" alt="Profile Avatar" class="w-24 h-24 rounded-full mb-4" />
+      <h2 class="text-xl font-semibold" id="userNameDisplay">User  Name</h2>
+      <p class="text-gray-600" id="userEmail">user@example.com</p>
+      <p class="text-gray-600" id="userPhone">+1234567890</p>
+    </div>
+
+    <div class="mt-6">
+      <h3 class="text-lg font-semibold mb-2">Basic Information</h3>
+      <div class="space-y-2">
+        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+          <span>Name:</span>
+          <span id="userNameDisplay">User  Name</span>
+        </div>
+        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+          <span>Email:</span>
+          <span id="userEmail">user@example.com</span>
+        </div>
+        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+          <span>Phone:</span>
+          <span id="userPhone">+1234567890</span>
+        </div>
+        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+          <span>Vehicle:</span>
+          <span id="userVehicle">KA-09-AB-1234 (Car)</span>
+        </div>
+      </div>
+      <button id="editButton" class="mt-4 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+      <h3 class="text-lg font-semibold mb-4">Edit Profile</h3>
+      <form id="editForm">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Name</label>
+          <input type="text" id="editName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" id="editEmail" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Phone</label>
+          <input type="tel" id="editPhone" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Vehicle</label>
+          <input type="text" id="editVehicle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">New Password</label>
+          <input type="password" id="editPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+        </div>
+        <div class="flex justify-end">
+          <button type="button" id="closeModal" class="px-4 py-1.5 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+          <button type="submit" class="ml-2 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="changePasswordModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+      <h3 class="text-lg font-semibold mb-4">Change Password</h3>
+      <form id="changePasswordForm">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Current Password</label>
+          <input type="password" id="currentPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">New Password</label>
+          <input type="password" id="newPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" required />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+          <input type="password" id="confirmNewPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" required />
+        </div>
+        <div class="flex justify-end">
+          <button type="button" id="closeChangePasswordModal" class="px-4 py-1.5 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+          <button type="submit" class="ml-2 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600">Change</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Parking-related Details -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    <h3 class="text-lg font-semibold mb-2">Parking-related Details</h3>
+    <div class="space-y-2">
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Saved Vehicles:</span>
+        <span>2 Vehicles</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Preferred Parking Spots:</span>
+        <span>3 Locations</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Membership Status:</span>
+        <span>Premium</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity & History -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    <h3 class="text-lg font-semibold mb-2">Activity & History</h3>
+    <div class="space-y-2">
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Recent Bookings:</span>
+        <span>5 Bookings</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Upcoming Reservations:</span>
+        <span>2 Reservations</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Payment History:</span>
+        <span>View Invoices</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment & Wallet -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    <h3 class="text-lg font-semibold mb-2">Payment & Wallet</h3>
+    <div class="space-y-2">
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Saved Payment Methods:</span>
+        <span>2 Methods</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Parking Wallet:</span>
+        <span>₹500</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Transaction History:</span>
+        <span>View Transactions</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications & Alerts -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    <h3 class="text-lg font-semibold mb-2">Notifications & Alerts</h3>
+    <div class="space-y-2">
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Parking Reminders:</span>
+        <span>Enabled</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Offers & Discounts:</span>
+        <span>Enabled</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Lot Availability Alerts:</span>
+        <span>Subscribed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Smart Features -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    <h3 class="text-lg font-semibold mb-2">Smart Features</h3>
+    <div class="space-y-2">
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>EV Charging History:</span>
+        <span>View History</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Nearest Charging Spots:</span>
+        <span>Find Spots</span>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>QR Code Check-in/Out:</span>
+        <span>Enabled</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings & Support -->
+  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+    <h3 class="text-lg font-semibold mb-2">Settings & Support</h3>
+    <div class="space-y-2">
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Change Password:</span>
+        <button id="changePasswordButton" class="text-blue-500">Change</button>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Privacy Settings:</span>
+        <button class="text-blue-500">Manage</button>
+      </div>
+      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+        <span>Help & Support:</span>
+        <button class="text-blue-500">Contact Us</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    });
+
+    // Load user data from localStorage and display
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const userEmail = document.getElementById('userEmail');
+    const userPhone = document.getElementById('userPhone');
+    const userVehicle = document.getElementById('userVehicle');
+    const storedUser  = localStorage.getItem('user');
+    if (storedUser ) {
+      try {
+        const userObj = JSON.parse(storedUser );
+        userNameDisplay.textContent = userObj.name || 'User  Name';
+        userEmail.textContent = userObj.email || 'user@example.com';
+        userPhone.textContent = userObj.phone || '+1234567890';
+        userVehicle.textContent = userObj.vehicle || 'Vehicle not added';
+      } catch {
+        userNameDisplay.textContent = 'User  Name';
+        userEmail.textContent = 'user@example.com';
+        userPhone.textContent = '+1234567890';
+        userVehicle.textContent = 'Vehicle not added';
+      }
+    }
+
+    // Edit button functionality
+    document.getElementById('editButton').addEventListener('click', () => {
+      document.getElementById('editModal').classList.remove('hidden');
+      // Populate the modal with current user data
+      document.getElementById('editName').value = userNameDisplay.textContent;
+      document.getElementById('editEmail').value = userEmail.textContent;
+      document.getElementById('editPhone').value = userPhone.textContent;
+      document.getElementById('editVehicle').value = userVehicle.textContent;
+    });
+
+    // Close edit modal functionality
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('editModal').classList.add('hidden');
+    });
+
+    // Save changes functionality
+    document.getElementById('editForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      // Update user data
+      userNameDisplay.textContent = document.getElementById('editName').value;
+      userEmail.textContent = document.getElementById('editEmail').value;
+      userPhone.textContent = document.getElementById('editPhone').value;
+      userVehicle.textContent = document.getElementById('editVehicle').value;
+      // Optionally, save to localStorage
+      const updatedUser  = {
+        name: userNameDisplay.textContent,
+        email: userEmail.textContent,
+        phone: userPhone.textContent,
+        vehicle: userVehicle.textContent
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUser ));
+      // Close the modal
+      document.getElementById('editModal').classList.add('hidden');
+    });
+
+    // Change Password button functionality
+    document.getElementById('changePasswordButton').addEventListener('click', () => {
+      document.getElementById('changePasswordModal').classList.remove('hidden');
+    });
+
+    // Close change password modal functionality
+    document.getElementById('closeChangePasswordModal').addEventListener('click', () => {
+      document.getElementById('changePasswordModal').classList.add('hidden');
+    });
+
+    // Change password functionality
+    document.getElementById('changePasswordForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+      // Here you can add logic to validate the current password and update it
+      if (newPassword === confirmNewPassword) {
+        // Simulate password change success
+        alert('Password changed successfully!');
+        document.getElementById('changePasswordModal').classList.add('hidden');
+      } else {
+        alert('New passwords do not match!');
+      }
+    });
+  </script>
+
+</body>
+</html>
+
+ 

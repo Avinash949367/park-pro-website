@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Pro Business</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  
+<style>
+  h1{
+    text-align: center;
+
+  }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+        }
+
+        
+
+        .get-started-btn {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 30px;
+        }
+
+        .get-started-btn:hover {
+             color: white;                /* Text turns white */
+        background-color: #46949d;   /* Medium teal background on hover */
+        box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+      }
+        
+
+        section {
+            padding: 40px;
+            margin: 10px;
+            background-color: white;
+            border-radius: 5px;
+        }
+
+        h2 {
+            color:#46949d !important;
+             font-size: 60px !important;
+            text-align: center;
+        }
+
+        .features-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* exactly 3 per row */
+  gap: 24px;
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 10px;
+}
+
+        .feature {
+             background: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 8px 24px #46949d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  height: 200px;  /* Increase height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .partner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Exactly 3 per row on desktop */
+  gap: 24px;
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 10px;
+}
+
+/* Tablet view - 2 per row */
+@media (max-width: 900px) {
+  .partner-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile view - 1 per row */
+@media (max-width: 600px) {
+  .partner-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+        .partner-item {
+            background: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 8px 24px #46949d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  height: 200px;  /* Increase height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+        }
+
+        .partner-item:hover {
+  transform: translateY(-5px); /* lifts the item up */
+  box-shadow: 0 8px 16px #46949d; /* adds shadow */
+}
+
+        .partner-item img {
+             width: 55px;     
+  height: 55px;
+  margin-bottom: 12px;
+  transition: transform 0.3s ease;
+        }
+        .partner-item:hover img {
+  transform: scale(1.1);
+}
+
+
+        .partner-name {
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: #333;
+        }
+
+        .business-features-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+
+        .business-features-heading {
+             font-size: 42px;
+    text-align: center;
+    margin-top: 20px;  /* Or 10px, something small and clean */
+    margin-bottom: 20px;
+        }
+        .business-feature-list {
+            display: grid;
+              grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 10px;
+        }
+
+        .business-feature-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px #46949d;
+            transition: transform 0.2s ease;
+        }
+
+        .business-feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+        }
+
+        .step-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 50px auto;
+  max-width: 1200px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column; /* circle above text */
+  align-items: center;    /* center horizontally */
+  margin: 15px;
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #46949d; /* green circle */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.label {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+
+
+
+
+.line {
+  height: 4px;
+  width: 40px;
+  background-color: lightgray;
+  margin: 0 8px;
+}
+
+   .option {
+  text-decoration: none;
+  color: #1e3740; /* Normal text color */
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.option:hover {
+  color: white; /* Hover text color */
+  background-color: #46949d; /* Hover background */
+  box-shadow: 0 2px 6px rgb(18, 105, 28);
+}
+
+
+
+    </style>
+</head>
+<body>
+ 
+<div class="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 px-8 py-3 flex items-center justify-between z-50 border-b border-gray-200">
+
+  <!-- Logo -->
+  <a href="index.html" class="flex items-center space-x-3">
+    <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+    <!-- Updated Heading -->
+    <div class="flex flex-col leading-tight" ;>
+      <span class="text-3xl font-extrabold">
+        <span style="color: black;">ParkP</span><span style="color: #6D8B59;">r</span><span style="color: black;">o</span><span style="color: #4A7C82;">+</span>
+        
+        
+      </span>
+      <span class="text-base text-gray-800 font-bold">Find parking for all type of vehicles</span>
+    </div>
+  </a>
+
+  <!-- Navigation -->
+  <nav class="space-x-8 hidden md:flex font-80px font-bold">
+    <a href="index.html" class="option">About us</a>
+    <a href="business.html" class="option">Park Pro For Business</a>
+    <a href="products.html" class="option">Products</a>
+    <a href="contactus.html" class="option">Contact</a>
+  </nav>
+
+  <!-- Buttons -->
+  <div class="flex space-x-4 items-center">
+    <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+    <a href="#" id="getAppButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+      Get the App
+    </a>
+  </div>
+
+</div>
+
+<script src="js/index.js"></script>
+<script src="js/cardToggle.js"></script>
+<script src="js/registerSpot.js"></script>
+<br>
+<br>
+
+
+<h2 style="text-align: center; font-size: 90px; ">Why Should You Partner with Park Pro?</h2>
+<div class="features-container">
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png" alt="Management Icon">
+      <div class="feature-title">Smart Management Tools</div>
+      <div class="feature-description">Easily manage and track your parking slots and activity.</div>
+    </div>
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/1057/1057332.png" alt="Real-Time Icon">
+      <div class="feature-title">Real-Time Availability</div>
+      <div class="feature-description">Update availability instantly for users searching nearby.</div>
+    </div>
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Dashboard Icon">
+      <div class="feature-title">Business Dashboard</div>
+      <div class="feature-description">Track earnings, view bookings, and analyze performance.</div>
+    </div>
+    
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/2910/2910761.png" alt="Payment Icon">
+      <div class="feature-title">Secure Payments</div>
+      <div class="feature-description">Enable fast, contactless, and secure transactions.</div>
+    </div>
+    <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" alt="Support Icon">
+      <div class="feature-title">Partner Support</div>
+      <div class="feature-description">Get access to reliable support to grow your parking business.</div>
+    </div>
+     <div class="feature">
+      <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" alt="Support Icon">
+      <div class="feature-title">Seamless Integration</div>
+      <div class="feature-description">Quick onboarding, easy setup, and minimal disruption to your existing operations.</div>
+    </div>
+</div>
+
+<section>
+    <h2 style="text-align: center; font-size: 3rem;">Who Can Partner?</h2>
+    <div class="partner-grid">
+        <div class="partner-item">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSA43JGwlxgt4Otf0mrEncgGZlKiy4-cbjtA&s" alt="Mall Icon">
+            <div class="partner-name">Malls & Shopping Centers</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/6879/6879751.png" alt="Apartment Icon">
+            <div class="partner-name">Apartment Complexes</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/6879/6879696.png" alt="Office Icon">
+            <div class="partner-name">Office Buildings</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/6008/6008287.png" alt="Hotel Icon">
+            <div class="partner-name">Hotels</div>
+        </div>
+       
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/2830/2830310.png" alt="Private Lot Icon">
+            <div class="partner-name">Private Parking Lot Owners</div>
+        </div>
+        <div class="partner-item">
+            <img src="https://cdn-icons-png.freepik.com/256/13505/13505947.png?semt=ais_white_label" alt="College Icon">
+            <div class="partner-name">Colleges & Institutions</div>
+        </div>
+    </div>
+</section>
+
+<section class="business-features-section">
+    <h2 class="business-features-heading">Features for Business</h2>
+    <div class="business-feature-list">
+        <div class="business-feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/6821/6821002.png" alt="Dashboard Icon" class="feature-icon">
+            <div class="feature-title">Business Dashboard</div>
+            <div class="feature-description">Monitor parking usage, revenue, and performance in one place.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://img.freepik.com/premium-vector/dynamic-pricing-icon-web_116137-9110.jpg" alt="Dynamic Pricing Icon" class="feature-icon">
+            <div class="feature-title">Dynamic Pricing</div>
+            <div class="feature-description">Adjust prices based on demand, time, or day of the week.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3523/3523885.png" alt="Booking Icon" class="feature-icon">
+            <div class="feature-title">Booking Management</div>
+            <div class="feature-description">View, manage, and approve bookings through your portal.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://img.freepik.com/premium-vector/qr-code-icon-qr-code-sample-icon-abstract-style-white-background-qr-code-scanner-blac-scan-code-business-illustration-bar-code-icon-line-symbol-modern-vector-illustration-eps-10_564974-442.jpg" alt="Checkin Icon" class="feature-icon">
+            <div class="feature-title">Automated Check-In/Out</div>
+            <div class="feature-description">Use QR codes or RFID for seamless and secure entry/exit.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://i.pinimg.com/564x/d2/4f/16/d24f163248fd807b834be813da7b6644.jpg" alt="Analytics Icon" class="feature-icon">
+            <div class="feature-title">Reports & Analytics</div>
+            <div class="feature-description">Track usage trends, earnings, and performance insights.</div>
+        </div>
+        <div class="business-feature-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1827/1827504.png" alt="Notification Icon" class="feature-icon">
+            <div class="feature-title">Custom Alerts</div>
+            <div class="feature-description">Get instant alerts for maintenance, full lots, or custom triggers.</div>
+        </div>
+    </div>
+</section>
+
+
+<div class="steps.container"></div>
+<h2 style="text-align: center; color: green;">Steps to Register</h2>
+<div class="step-tracker">
+  <div class="step completed">
+    <div class="circle">1</div>
+    <div class="label">Login Portal</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">2</div>
+    <div class="label">Click Login</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">3</div>
+    <div class="label">Enter Email</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">4</div>
+    <div class="label">Enter Password</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">5</div>
+    <div class="label">Click Sign In</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">6</div>
+    <div class="label">Enter OTP</div>
+  </div>
+  <div class="line"></div>
+
+  <div class="step completed">
+    <div class="circle">7</div>
+    <div class="label">Dashboard</div>
+  </div>
+<br>
+<br>
+  <p class="corner-text" style="padding: 5px;font: size 30px; font-weight: bold; ">Click here to begin </p>
+<div class="flex space-x-4 items-center">
+    <a href="register-spot.html" id="registerButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Register</a>
+   
+  </div>
+</div>
+<!-- Footer -->
+<footer class="bg-[#46949d] text-white py-12">
+  <div class="container mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      
+      <!-- Company Info -->
+      <div>
+        <div class="flex items-center mb-4">
+          <img src="assets/images/logo_edited-removebg-preview.png" alt="Logo" class="h-14 w-auto mr-3">
+          <span class="text-2xl font-extrabold tracking-wide">ParkPro+</span>
+        </div>
+        <p class="text-black leading-relaxed mb-6">
+          Your smart companion for parking anywhere, anytime.  
+          Find, reserve, and park with ease — powered by smart technology.
+        </p>
+        <div class="flex space-x-4 text-lg">
+          <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+            <center><i class="fab fa-facebook-f"></i></center>
+          </a>
+          <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+            <center><i class="fab fa-twitter"></i></center>
+          </a>
+          <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+           <center> <i class="fab fa-instagram"></i></center>
+          </a>
+          <a href="#" class="p-2 bg-white/20 rounded-full hover:bg-white hover:text-[#46949d] transition" style="width: 40px;">
+            <center><i class="fab fa-linkedin-in"></i></center>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Quick Links</h4>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="text-black hover:text-white transition duration-200">Home</a></li>
+          <li><a href="service.html" class="text-black hover:text-white transition duration-200">FASTag Services</a></li>
+          <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Recharge FASTag</a></li>
+          <li><a href="fastag.html" class="text-black hover:text-white transition duration-200">Transaction History</a></li>
+          <li><a href="userprofile.html" class="text-black hover:text-white transition duration-200">My Account</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Support</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-black hover:text-white transition duration-200">FAQs</a></li>
+          <li><a href="contactus.html" class="text-black hover:text-white transition duration-200">Contact Us</a></li>
+          <li><a href="#" class="text-black hover:text-white transition duration-200">Privacy Policy</a></li>
+          <li><a href="#" class="text-black hover:text-white transition duration-200">Terms of Service</a></li>
+          <li><a href="#" class="text-black hover:text-white transition duration-200">Refund Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <h4 class="text-lg font-semibold mb-4 border-b border-white/40 pb-2">Contact Us</h4>
+        <ul class="space-y-3 text-black">
+          <li class="flex items-start">
+            <i class="fas fa-map-marker-alt mt-1 mr-3 text-white"></i>
+            <span>MRD Block - PES University, Bangalore, Karnataka 560001</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-phone-alt mr-3 text-white"></i>
+            <span>+91 8309113119</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-envelope mr-3 text-white"></i>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=parkproplus@gmail.com&su=Parking%20Inquiry&body=Hello,%20I%20would%20like%20to%20know%20more%20about..." target="_blank">
+              parkproplus@gmail.com
+            </a>
+            
+          </li>
+          
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="border-t border-white/40 mt-10 pt-6 text-center">
+      <p class="text-sm text-white/80">&copy; 2025 ParkPro+. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // Toggle FAQ items
+  function toggleFAQ(id) {
+    const content = document.getElementById(`faq-content-${id}`);
+    const icon = document.getElementById(`faq-icon-${id}`);
+    
+    content.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180');
+  }
+
+  // Open chat function
+  function openChat() {
+    alert("Our chat service will open in a new window. For now, you can contact us via phone or email.");
+    // In a real implementation, this would open your chat widget
+  }
+</script>
+
+<style>
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+</style>
+
+
+
+</body>
+</html>
