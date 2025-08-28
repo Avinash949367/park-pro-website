@@ -17,9 +17,56 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
 }
 
+// Helper function to validate password complexity
+function validatePassword(password) {
+  const errors = [];
+  
+  // Check for at least one uppercase letter
+  if (!/[A-Z]/.test(password)) {
+    errors.push("uppercase letter");
+  }
+  
+  // Check for at least one lowercase letter
+  if (!/[a-z]/.test(password)) {
+    errors.push("lowercase letter");
+  }
+  
+  // Check for at least one number
+  if (!/[0-9]/.test(password)) {
+    errors.push("number");
+  }
+  
+  // Check for at least one special character
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    errors.push("special character");
+  }
+  
+  return errors;
+}
+
 // Signup Controller with OTP email
 exports.register = async (req, res) => {
   const { name, email, role, password } = req.body;
+
+  // Email validation for @gmail.com
+  if (!email.endsWith('@gmail.com')) {
+    console.log('Invalid email domain for signup:', email);
+    return res.status(400).json({ message: "Only Gmail addresses are allowed for registration" });
+  }
+
+  // Name length validation
+  if (name.length > 10) {
+    console.log('Name too long:', name);
+    return res.status(400).json({ message: "Name must not exceed 10 characters" });
+  }
+
+  // Password validation
+  const passwordErrors = validatePassword(password);
+  if (passwordErrors.length > 0) {
+    const errorMessage = `Password must contain at least one ${passwordErrors.join(', ')}`;
+    console.log('Password validation failed:', errorMessage);
+    return res.status(400).json({ message: errorMessage });
+  }
 
   try {
     const existingUser = await User.findOne({ email });
@@ -94,6 +141,12 @@ exports.login = async (req, res) => {
 
   console.log('Login attempt for email:', email);
   console.log('Password received:', password);
+
+  // Email validation for @gmail.com
+  if (!email.endsWith('@gmail.com')) {
+    console.log('Invalid email domain:', email);
+    return res.status(400).json({ message: "Only Gmail addresses are allowed for login" });
+  }
 
   try {
     const user = await User.findOne({ email });

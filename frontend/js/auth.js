@@ -1,3 +1,30 @@
+// Helper function to validate password complexity
+function validatePassword(password) {
+  const errors = [];
+  
+  // Check for at least one uppercase letter
+  if (!/[A-Z]/.test(password)) {
+    errors.push("uppercase letter");
+  }
+  
+  // Check for at least one lowercase letter
+  if (!/[a-z]/.test(password)) {
+    errors.push("lowercase letter");
+  }
+  
+  // Check for at least one number
+  if (!/[0-9]/.test(password)) {
+    errors.push("number");
+  }
+  
+  // Check for at least one special character
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    errors.push("special character");
+  }
+  
+  return errors;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const errorElem = document.getElementById('loginError');
@@ -5,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const signUpFormContainer = document.getElementById('signUpForm');
   const registerForm = document.getElementById('registerForm');
   const googleLoginBtn = document.getElementById('googleLogin');
-  // const facebookLoginBtn = document.getElementById('facebookLogin');
   const otpVerificationForm = document.getElementById('otpVerificationForm');
   const otpForm = document.getElementById('otpForm');
   const otpErrorElem = document.getElementById('otpError');
@@ -21,6 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = document.getElementById('password').value.trim();
     errorElem.classList.add('hidden');
     errorElem.textContent = '';
+
+    // Email validation for @gmail.com
+    if (!email.endsWith('@gmail.com')) {
+      errorElem.textContent = 'Email must be a Gmail address (@gmail.com)';
+      errorElem.classList.remove('hidden');
+      return;
+    }
 
     console.log('Submitting login for:', email);
 
@@ -81,6 +114,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('emailSignUp').value.trim();
     const password = document.getElementById('passwordSignUp').value.trim();
+
+    // Email validation for @gmail.com
+    if (!email.endsWith('@gmail.com')) {
+      alert('Email must be a Gmail address (@gmail.com) for registration');
+      return;
+    }
+
+    // Name length validation
+    if (name.length > 10) {
+      alert('Name must not exceed 10 characters');
+      return;
+    }
+
+    // Client-side password validation
+    const passwordErrors = validatePassword(password);
+    if (passwordErrors.length > 0) {
+      const errorMessage = `Password must contain at least one ${passwordErrors.join(', ')}`;
+      alert(errorMessage);
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:5000/signup', {
