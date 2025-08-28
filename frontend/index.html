@@ -114,7 +114,7 @@
     }
   </style>
 </head>
-<body class="font-sans bg-gray-200">
+<body class="font-sans bg-white">
   
   <!-- Navbar -->
   <div class="fixed top-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
@@ -324,119 +324,149 @@
     </button>
     <div id="fasttagTyping" class="font-bold text-lg max-w-xs" style="color: orange; text-shadow: 1px 1px 2px #000000;"></div>
   </div>
-
-  <body class="bg-gray-50 font-sans">
   
-  <!-- Intro Section -->
-  <section class="max-w-5xl mx-auto text-center py-12 px-4">
-    <h2 class="text-3xl font-bold text-gray-800 mb-6">Features</h2>
-    <p class="text-lg text-gray-600 leading-relaxed">
-      Car parking is a major problem in urban areas in both developed and developing countries. 
-      Following the rapid increase of car ownership, many cities are suffering from a lack of 
-      parking areas. Smart parking solves these issues.
-    </p>
-  </section>
-
-  <!-- Features Section -->
-  <section class="max-w-6xl mx-auto px-4">
-    <!-- Tabs -->
-    <div class="flex flex-wrap justify-center gap-4 mb-10">
-      <button class="tab px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold transition hover:border-blue-500 hover:text-blue-500 active-tab" onclick="showFeature('availability', this)">Availability</button>
-      <button class="tab px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold transition hover:border-blue-500 hover:text-blue-500" onclick="showFeature('fee', this)">Parking Fee</button>
-      <button class="tab px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold transition hover:border-blue-500 hover:text-blue-500" onclick="showFeature('booking', this)">Advance Booking</button>
-      <button class="tab px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold transition hover:border-blue-500 hover:text-blue-500" onclick="showFeature('revenue', this)">Revenue Leakage</button>
-    </div>
-
-    <!-- Content -->
-    <div id="feature-content" class="flex flex-col md:flex-row items-center gap-10 text-left">
-      <!-- Default Feature -->
-      <div class="flex-1">
-        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Real-Time Parking Availability</h3>
-        <p class="text-gray-600 mb-4">Track parking slot availability in real-time with IoT sensors and a smart dashboard.</p>
-        <ul class="space-y-2 text-gray-700">
-          <li class="flex items-center gap-2"><span class="text-blue-500">✔</span> Instant slot status updates</li>
-          <li class="flex items-center gap-2"><span class="text-blue-500">✔</span> IoT-enabled monitoring</li>
-          <li class="flex items-center gap-2"><span class="text-blue-500">✔</span> Reduce waiting time</li>
-        </ul>
+  <!-- Modern Features Section -->
+  <section class="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4 relative">
+          <span class="relative inline-block">
+            Advanced Features
+            <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-[#46949d] to-[#1e3740]"></span>
+          </span>
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          Experience the future of parking management with our cutting-edge smart solutions designed 
+          to revolutionize urban mobility and parking efficiency.
+        </p>
       </div>
-      <div class="flex-1">
-        <img src="images/availability.png" alt="Availability Feature" class="rounded-xl shadow-lg">
-      </div>
-    </div>
-  </section>
 
-  <script>
-    const features = {
-      availability: {
-        title: "Real-Time Parking Availability",
-        desc: "Track parking slot availability in real-time with IoT sensors and a smart dashboard.",
-        points: [
-          "Instant slot status updates",
-          "IoT-enabled monitoring",
-          "Reduce waiting time"
-        ],
-        img: "images/availability.png"
-      },
-      fee: {
-        title: "Smart Parking Fee Management",
-        desc: "Automated and transparent fee management for every parking session.",
-        points: [
-          "Automated billing",
-          "Digital payments",
-          "Prevent overcharging"
-        ],
-        img: "images/fee.png"
-      },
-      booking: {
-        title: "Advance Booking System",
-        desc: "Book your parking slots online in advance to save time.",
-        points: [
-          "Reserve slots anytime",
-          "Avoid last-minute hassle",
-          "Seamless integration with app"
-        ],
-        img: "images/booking.png"
-      },
-      revenue: {
-        title: "Prevent Revenue Leakage",
-        desc: "Secure and efficient system to prevent revenue loss in parking operations.",
-        points: [
-          "Digital records",
-          "No manual errors",
-          "100% transparent system"
-        ],
-        img: "images/revenue.png"
-      }
-    };
-
-    function showFeature(key, element) {
-      // Reset active tab style
-      document.querySelectorAll(".tab").forEach(tab => {
-        tab.classList.remove("bg-blue-500", "text-white", "border-blue-500");
-        tab.classList.add("border-gray-300", "text-gray-800");
-      });
-
-      // Set active tab
-      element.classList.add("bg-blue-500", "text-white", "border-blue-500");
-      element.classList.remove("border-gray-300", "text-gray-800");
-
-      // Update feature content
-      const feature = features[key];
-      const content = document.getElementById("feature-content");
-      content.innerHTML = `
-        <div class="flex-1">
-          <h3 class="text-2xl font-semibold text-gray-800 mb-3">${feature.title}</h3>
-          <p class="text-gray-600 mb-4">${feature.desc}</p>
-          <ul class="space-y-2 text-gray-700">
-            ${feature.points.map(point => `<li class="flex items-center gap-2"><span class="text-blue-500">✔</span> ${point}</li>`).join("")}
+      <!-- Features Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <!-- Feature 1 -->
+        <div class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+          <div class="w-16 h-16 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas fa-satellite-dish text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-4">Real-Time Availability</h3>
+          <p class="text-gray-600 mb-4">IoT sensors provide instant parking slot status updates with 99.9% accuracy.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              Live slot monitoring
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              Reduced waiting time
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              Smart dashboard
+            </li>
           </ul>
         </div>
-        <div class="flex-1">
-          <img src="${feature.img}" alt="${feature.title}" class="rounded-xl shadow-lg">
+
+        <!-- Feature 2 -->
+        <div class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+          <div class="w-16 h-16 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas fa-credit-card text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-4">Smart Fee Management</h3>
+          <p class="text-gray-600 mb-4">Automated billing system ensures transparent and accurate parking fees.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              Digital payments
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              No overcharging
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              Instant receipts
+            </li>
+          </ul>
         </div>
-      `;
-    }
-  </script>
+
+        <!-- Feature 3 -->
+        <div class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+          <div class="w-16 h-16 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas fa-calendar-check text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-4">Advance Booking</h3>
+          <p class="text-gray-600 mb-4">Reserve your parking spot anytime, anywhere through our mobile app.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              24/7 booking
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              App integration
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              No last-minute hassle
+            </li>
+          </ul>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+          <div class="w-16 h-16 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas fa-shield-alt text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-4">Revenue Protection</h3>
+          <p class="text-gray-600 mb-4">Prevent revenue leakage with our secure digital transaction system.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              Digital records
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              No manual errors
+            </li>
+            <li class="flex items-center text-sm text-gray-600">
+              <span class="w-2 h-2 bg-[#46949d] rounded-full mr-3"></span>
+              100% transparency
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Interactive Demo Section -->
+      <div class="bg-white rounded-3xl shadow-2xl p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 class="text-3xl font-bold text-gray-900 mb-6">Live Parking Demo</h3>
+            <p class="text-lg text-gray-600 mb-8">
+              See how our smart parking system works in real-time. Watch the IoT sensors detect 
+              vehicle presence and update availability instantly on our dashboard.
+            </p>
+            <div class="flex space-x-4">
+              <div class="w-12 h-12 bg-[#46949d] rounded-full flex items-center justify-center">
+                <i class="fas fa-play text-white text-lg"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-900">Watch Demo</p>
+                <p class="text-sm text-gray-600">2:30 min video</p>
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <img src="https://b2bblogassets.airtel.in/wp-content/uploads/2022/05/iot-based-smart-parking-2048x1347.jpg" 
+                 alt="Smart Parking System Demo" 
+                 class="rounded-2xl shadow-lg w-full h-80 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
 
   <script>
@@ -474,6 +504,229 @@
 
     typeMessage();
   </script>
+
+  <!-- FAQ Search Form JavaScript -->
+  <script>
+    document.getElementById('faqSearchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const query = document.getElementById('query').value.trim();
+      
+      if (query) {
+        // Encode the query for URL
+        const encodedQuery = encodeURIComponent(query);
+        
+        // Redirect to contact page with query parameter
+        window.location.href = `contactus.html?query=${encodedQuery}`;
+      } else {
+        // If no query, just go to contact page
+        window.location.href = 'contactus.html';
+      }
+    });
+  </script>
+
+  <!-- FAQ and Contact Section -->
+  <section class="py-16 bg-gradient-to-br from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4 relative">
+          <span class="relative inline-block">
+            Frequently Asked Questions
+            <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-[#46949d] to-[#1e3740]"></span>
+          </span>
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          Quick answers to the most common questions about our services.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <!-- FAQ Content - Left Side -->
+        <div class="space-y-8">
+          <!-- FAQ Item 1 -->
+          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-start mb-6">
+              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
+                <i class="fas fa-home"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
+                  Q1. How do I register my parking spot?
+                </h3>
+                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+                  To register your spot, go to your account dashboard and select 'Register Spot'. Fill in the location details, availability schedule, and pricing information to get started.
+                </p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="font-medium">Was this helpful?</span>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-start mb-6">
+              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
+                <i class="fas fa-credit-card"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
+                  Q2. What payment methods are supported?
+                </h3>
+                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+                  We support credit/debit cards, UPI payments, net banking, and popular digital wallets. All transactions are secured with SSL encryption for your safety.
+                </p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="font-medium">Was this helpful?</span>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-start mb-6">
+              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
+                <i class="fas fa-cogs"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
+                  Q3. How does the smart parking system work?
+                </h3>
+                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+                  Our system uses IoT sensors to detect vehicle presence and update availability in real-time. Users can book slots through our app, and operators can manage multiple locations efficiently.
+                </p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="font-medium">Was this helpful?</span>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-start mb-6">
+              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
+                <i class="fas fa-headset"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
+                  Q4. How can I contact customer support?
+                </h3>
+                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+                  You can reach our 24/7 customer support through phone, email, WhatsApp, or live chat. Our team is always ready to assist you with any questions or issues.
+                </p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="font-medium">Was this helpful?</span>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+            <div class="flex items-start mb-6">
+              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
+                <i class="fas fa-calendar-times"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
+                  Q5. What happens if I cancel a booking?
+                </h3>
+                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+                  Cancellations made more than 2 hours before the booking time receive a full refund. Late cancellations may incur a small processing fee as per our cancellation policy.
+                </p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="font-medium">Was this helpful?</span>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
+                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- View All FAQs CTA -->
+          <div class="text-center mt-12">
+            <a href="#" class="inline-flex items-center bg-gradient-to-r from-[#46949d] to-[#1e3740] text-white font-semibold px-8 py-4 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              View All FAQs
+              <i class="fas fa-arrow-right ml-3"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Search + Contact Panel - Right Side -->
+        <div class="sticky top-8">
+          <div class="bg-gradient-to-br from-[#46949d] to-[#1e3740] rounded-3xl p-10 text-white shadow-2xl">
+            <div class="text-center">
+              <div class="w-24 h-24 bg-white/20 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg">
+                <i class="fas fa-search text-white text-4xl"></i>
+              </div>
+              <h3 class="text-3xl font-bold mb-6">Find Your Answer</h3>
+              <p class="text-white/90 mb-8 leading-relaxed text-lg">
+                Can't find what you're looking for? Search our knowledge base or contact us directly.
+              </p>
+              
+              <form id="faqSearchForm" class="space-y-6">
+                <div>
+                  <input 
+                    type="text" 
+                    id="query" 
+                    name="query" 
+                    class="w-full px-6 py-4 rounded-xl border-2 border-white/30 bg-white/15 text-white placeholder-white/70 focus:outline-none focus:ring-4 focus:ring-white/30 focus:border-transparent text-lg"
+                    placeholder="Type your question here..."
+                    required
+                  >
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                  <button 
+                    type="submit" 
+                    class="bg-white text-[#1e3740] font-bold px-6 py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center justify-center text-lg shadow-lg"
+                  >
+                    <i class="fas fa-search mr-3"></i>
+                    Search
+                  </button>
+                  <a 
+                    href="contactus.html" 
+                    class="bg-[#1e3740] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#46949d] transition-all duration-300 transform hover:scale-105 flex items-center justify-center text-lg shadow-lg"
+                  >
+                    <i class="fas fa-headset mr-3"></i>
+                    Contact
+                  </a>
+                </div>
+              </form>
+              
+              <div class="mt-12 space-y-6 text-base">
+                <h4 class="font-bold text-white mb-6 text-xl border-b border-white/30 pb-3">Contact Information</h4>
+                <div class="space-y-4">
+                  <p class="flex items-center justify-center text-lg">
+                    <i class="fas fa-phone-alt mr-4 text-white text-xl"></i>
+                    <span class="text-white font-medium">+91 8309113119</span>
+                  </p>
+                  <p class="flex items-center justify-center text-lg">
+                    <i class="fas fa-envelope mr-4 text-white text-xl"></i>
+                    <span class="text-white font-medium">parkproplus@gmail.com</span>
+                  </p>
+                  <p class="flex items-center justify-center text-lg">
+                    <i class="fab fa-whatsapp mr-4 text-white text-xl"></i>
+                    <span class="text-white font-medium">+91 8309113119 <span class="text-white/80 text-sm">(Recommended)</span></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer from register-spot.html -->
   <footer class="bg-[#46949d] text-white py-12">
@@ -561,6 +814,7 @@
       </div>
     </div>
   </footer>
+
 
   <!-- Font Awesome for footer icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

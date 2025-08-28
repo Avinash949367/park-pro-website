@@ -1,14 +1,23 @@
-# Facebook Authentication Removal Plan
+# TODO: Add App Download and Testimonials Sections to index.html
 
 ## Steps to Complete:
-- [x] Remove Facebook strategy from `backend/config/passport.js`
-- [x] Remove Facebook routes from `backend/routes/authRoutes.js`
-- [x] Remove Facebook callback from `backend/controllers/authController.js`
-- [ ] Verify server starts without errors
 
-## Files to Edit:
-1. backend/config/passport.js
-2. backend/routes/authRoutes.js
-3. backend/controllers/authController.js
+1. [ ] Add App Download Section with:
+   - "Get ParkPro+ App" heading
+   - Google Play and App Store download buttons
+   - Placeholder for app screenshots
+   - Gradient background matching existing theme
 
-## Current Status: In Progress
+2. [ ] Add Testimonials/Reviews Section with:
+   - 3-4 testimonial cards with user quotes
+   - "ParkPro+ saved me 15 mins every day!" testimonial
+   - Contact query CTA at the end
+   - Clean white background
+
+3. [ ] Ensure design consistency with existing:
+   - Color scheme (#46949d, #1e3740, black, white)
+   - Button styles (btn-teal, btn-black classes)
+   - Responsive design
+   - Typography and spacing
+
+4. [ ] Test responsiveness and functionality
