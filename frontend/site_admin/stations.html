@@ -463,6 +463,65 @@
       </div>
     </div>
 
+    <!-- Summary Cards Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div class="bg-white rounded-lg shadow-md p-6 flex items-center cursor-pointer hover:shadow-lg hover:transform hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-blue-200 summary-card" data-filter="all">
+        <div class="rounded-full bg-blue-100 p-3 mr-4">
+          <i class="material-icons text-blue-600">local_parking</i>
+        </div>
+        <div class="flex-1">
+          <p class="text-gray-500 text-sm flex items-center">
+            Total Stations
+            <span class="ml-2 text-green-500">📈</span>
+          </p>
+          <p class="text-2xl font-bold text-gray-800" id="totalStationsCount">0</p>
+          <p class="text-xs text-gray-400 mt-1">Click to view all stations</p>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 flex items-center cursor-pointer hover:shadow-lg hover:transform hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-green-200 summary-card" data-filter="active">
+        <div class="rounded-full bg-green-100 p-3 mr-4">
+          <i class="material-icons text-green-600">check_circle</i>
+        </div>
+        <div class="flex-1">
+          <p class="text-gray-500 text-sm flex items-center">
+            Active Stations
+            <span class="ml-2 text-green-500">📈</span>
+          </p>
+          <p class="text-2xl font-bold text-gray-800" id="activeStationsCount">0</p>
+          <p class="text-xs text-gray-400 mt-1">Click to filter active stations</p>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 flex items-center cursor-pointer hover:shadow-lg hover:transform hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-red-200 summary-card" data-filter="inactive">
+        <div class="rounded-full bg-red-100 p-3 mr-4">
+          <i class="material-icons text-red-600">cancel</i>
+        </div>
+        <div class="flex-1">
+          <p class="text-gray-500 text-sm flex items-center">
+            Inactive Stations
+            <span class="ml-2 text-red-500">📉</span>
+          </p>
+          <p class="text-2xl font-bold text-gray-800" id="inactiveStationsCount">0</p>
+          <p class="text-xs text-gray-400 mt-1">Click to filter inactive stations</p>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6 flex items-center cursor-pointer hover:shadow-lg hover:transform hover:scale-105 transition-all duration-300 border-2 border-transparent hover:border-purple-200 summary-card" data-filter="admin">
+        <div class="rounded-full bg-purple-100 p-3 mr-4">
+          <i class="material-icons text-purple-600">person</i>
+        </div>
+        <div class="flex-1">
+          <p class="text-gray-500 text-sm flex items-center">
+            Station Admins
+            <span class="ml-2 text-green-500">📈</span>
+          </p>
+          <p class="text-2xl font-bold text-gray-800" id="stationAdminsCount">0</p>
+          <p class="text-xs text-gray-400 mt-1">Click to view stations with admins</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Active Stations Section -->
     <section id="activeStationsContainer" class="mt-2">
       <h2 class="text-2xl font-semibold mb-4">Active Stations</h2>
@@ -483,10 +542,10 @@
         </div>
       </div>
 
-      <!-- Active Stations Grid -->
-      <div id="activeStationsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Active stations will be dynamically loaded here -->
-      </div>
+        <!-- Active Stations Grid -->
+        <div id="activeStationsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Active stations will be dynamically loaded here -->
+        </div>
 
       <!-- No Stations Message -->
       <div id="noActiveStations" class="text-center py-12 bg-white rounded-lg shadow-md hidden">
@@ -542,6 +601,43 @@
 
   <script src="../js/admin.js"></script>
   <script>
+    // Function to load station statistics
+    async function loadStationStats() {
+      try {
+        const response = await fetch('http://localhost:5000/api/stations/stats');
+        if (!response.ok) {
+          throw new Error('Failed to fetch station statistics');
+        }
+        
+        const stats = await response.json();
+        
+        // Initialize counts
+        let totalStations = 0;
+        let activeStations = 0;
+        let inactiveStations = 0;
+        let stationAdmins = 0; // This would need to be fetched from a user API
+        
+        // Process stats data
+        stats.forEach(stat => {
+          totalStations += stat.count;
+          if (stat._id === 'active') {
+            activeStations = stat.count;
+          } else if (stat._id === 'inactive') {
+            inactiveStations = stat.count;
+          }
+        });
+        
+        // Update the summary cards
+        document.getElementById('totalStationsCount').textContent = totalStations;
+        document.getElementById('activeStationsCount').textContent = activeStations;
+        document.getElementById('inactiveStationsCount').textContent = inactiveStations;
+        // For now, we'll set station admins to 0 as we don't have that data
+        document.getElementById('stationAdminsCount').textContent = stationAdmins;
+      } catch (error) {
+        console.error('Error loading station statistics:', error);
+      }
+    }
+
     // Function to load stations with doc-processing status (global scope)
     async function loadDocProcessingStations() {
       try {
@@ -602,12 +698,15 @@
     async function loadActiveStations() {
       try {
         // Show loading spinner
-        document.getElementById('activeStationsLoading').classList.remove('hidden');
-        document.getElementById('activeStationsGrid').innerHTML = '';
-        document.getElementById('noActiveStations').classList.add('hidden');
+        const loadingElem = document.getElementById('activeStationsLoading');
+        if (loadingElem) loadingElem.classList.remove('hidden');
+        const gridElem = document.getElementById('activeStationsGrid');
+        if (gridElem) gridElem.innerHTML = '';
+        const noStationsElem = document.getElementById('noActiveStations');
+        if (noStationsElem) noStationsElem.classList.add('hidden');
 
         // Fetch active stations from API
-        const response = await fetch('http://localhost:5000/api/registrations/status/active');
+        const response = await fetch('http://localhost:5000/api/stations/status/active');
         if (!response.ok) {
           throw new Error('Failed to fetch active stations');
         }
@@ -615,176 +714,165 @@
         const activeStations = await response.json();
         
         // Hide loading spinner
-        document.getElementById('activeStationsLoading').classList.add('hidden');
+        if (loadingElem) loadingElem.classList.add('hidden');
         
-        const stationsGrid = document.getElementById('activeStationsGrid');
-        const noStationsDiv = document.getElementById('noActiveStations');
-        
-        stationsGrid.innerHTML = '';
-        
-        if (activeStations.length === 0) {
-          noStationsDiv.classList.remove('hidden');
+        if (!gridElem || !noStationsElem) {
+          console.error('Required DOM elements missing');
           return;
         }
         
-        noStationsDiv.classList.add('hidden');
+        gridElem.innerHTML = '';
+        
+        if (activeStations.length === 0) {
+          noStationsElem.classList.remove('hidden');
+          return;
+        }
+        
+        noStationsElem.classList.add('hidden');
         
         // Display active stations in grid
         activeStations.forEach(station => {
           const stationCard = document.createElement('div');
-          stationCard.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300';
+          stationCard.className = 'bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 station-card';
+          
+          // Calculate available slots (for demo purposes - would come from API in real implementation)
+          const availableSlots = Math.floor(Math.random() * (station.slots || 10)) + 1;
+          const isLowAvailability = availableSlots <= 3;
+          
+          // Safely handle undefined values
+          const stationName = station.name || 'Unnamed Station';
+          const stationAddress = station.address || 'No address provided';
+          const stationCity = station.city || 'N/A';
+          const stationState = station.state || 'N/A';
+          const adminName = station.adminName || 'Unassigned';
+          const registrationId = station.registrationId || 'N/A';
+          const price = station.price || '0';
+          const phone = station.phone || 'N/A';
           
           stationCard.innerHTML = `
             <div class="p-6">
               <!-- Station Header -->
               <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-3">
-                  <div class="w-12 h-12 bg-[#46949d] rounded-full flex items-center justify-center">
-                    <i class="material-icons text-white">local_parking</i>
+                  <div class="w-12 h-12 bg-[#46949d] rounded-full flex items-center justify-center shadow-md">
+                    <i class="material-icons text-white text-xl">local_parking</i>
                   </div>
                   <div>
-                    <h3 class="text-lg font-semibold text-gray-800">${station.name || 'Unnamed Station'}</h3>
-                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                      Active
+                    <h3 class="text-lg font-semibold text-gray-800">${stationName}</h3>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                      <i class="material-icons text-xs">check_circle</i>
+                      <span>Active</span>
                     </span>
                   </div>
                 </div>
               </div>
               
               <!-- Station Details -->
-              <div class="space-y-3">
-                <div class="flex items-center text-sm text-gray-600">
-                  <i class="material-icons text-[#46949d] mr-2 text-sm">location_on</i>
-                  <span>${station.address || 'No address provided'}</span>
-                </div>
-                
-                <div class="flex items-center text-sm text-gray-600">
-                  <i class="material-icons text-[#46949d] mr-2 text-sm">business</i>
-                  <span>${station.city || 'N/A'}, ${station.state || 'N/A'}</span>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                  <div class="text-center">
-                    <div class="text-2xl font-bold text-[#46949d]">${station.slots || '0'}</div>
-                    <div class="text-xs text-gray-500">Total Slots</div>
+              <div class="space-y-4">
+                <!-- Location -->
+                <div class="flex items-start">
+                  <i class="material-icons text-[#46949d] mr-3 text-lg mt-0.5">location_on</i>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-700">${stationAddress}</p>
+                    <p class="text-xs text-gray-500 mt-1">${stationCity}, ${stationState}</p>
                   </div>
-                  <div class="text-center">
-                    <div class="text-2xl font-bold text-[#1e3740]">₹${station.price || '0'}</div>
-                    <div class="text-xs text-gray-500">Per Slot</div>
+                </div>
+                
+                <!-- Slots Information -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-medium text-gray-700 flex items-center">
+                      <i class="material-icons text-[#46949d] mr-2 text-base">directions_car</i>
+                      Parking Slots
+                    </span>
+                    <span class="text-sm font-medium ${isLowAvailability ? 'text-red-600' : 'text-green-600'}">
+                      ${availableSlots}/${station.slots || '0'} available
+                    </span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                    <div class="bg-${isLowAvailability ? 'red' : 'green'}-500 h-2 rounded-full" 
+                         style="width: ${(availableSlots / (station.slots || 1)) * 100}%"></div>
+                  </div>
+                  <p class="text-xs text-gray-500">${isLowAvailability ? 'Low availability' : 'Good availability'}</p>
+                </div>
+                
+                <!-- Admin Information -->
+                <div class="flex items-center">
+                  <i class="material-icons text-[#46949d] mr-3 text-lg">person</i>
+                  <div>
+                    <p class="text-sm font-medium text-gray-700">Station Admin</p>
+                    <p class="text-xs text-gray-600">${adminName}</p>
                   </div>
                 </div>
                 
                 <!-- Additional Info -->
                 <div class="mt-4 pt-4 border-t border-gray-200">
-                  <div class="text-xs text-gray-500">
-                    <div class="flex justify-between">
-                      <span>Registration ID:</span>
-                      <span class="font-mono">${station.registrationId || 'N/A'}</span>
+                  <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <span class="text-gray-500 block mb-1">Registration ID:</span>
+                      <span class="font-mono text-gray-700">${registrationId}</span>
                     </div>
-                    <div class="flex justify-between mt-1">
-                      <span>Contact:</span>
-                      <span>${station.phone || 'N/A'}</span>
+                    <div>
+                      <span class="text-gray-500 block mb-1">Price per Slot:</span>
+                      <span class="font-medium text-gray-700">₹${price}</span>
+                    </div>
+                    <div>
+                      <span class="text-gray-500 block mb-1">Contact:</span>
+                      <span class="text-gray-700">${phone}</span>
+                    </div>
+                    <div>
+                      <span class="text-gray-500 block mb-1">Status:</span>
+                      <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Active</span>
                     </div>
                   </div>
                 </div>
               </div>
               
-              <!-- Action Buttons -->
-              <div class="mt-6 flex space-x-2">
-                <button onclick="viewStationDetails('${station._id}')" 
-                        class="flex-1 bg-[#46949d] text-white py-2 px-4 rounded-lg hover:bg-[#3a7d85] transition-colors duration-200 flex items-center justify-center">
+              <!-- Quick Action Buttons -->
+              <div class="mt-6 grid grid-cols-2 gap-2">
+                <button onclick="viewDetails('${station._id}')" 
+                        class="bg-[#46949d] text-white py-2 px-3 rounded-lg hover:bg-[#3a7d85] transition-colors duration-200 flex items-center justify-center text-sm">
                   <i class="material-icons text-sm mr-1">visibility</i>
-                  View Details
+                  View
                 </button>
-                <button onclick="contactStation('${station._id}', '${station.email}', '${station.phone}')" 
-                        class="bg-[#1e3740] text-white py-2 px-4 rounded-lg hover:bg-[#162932] transition-colors duration-200 flex items-center justify-center">
-                  <i class="material-icons text-sm">mail</i>
+                <button onclick="editStation('${station._id}')" 
+                        class="bg-[#1e3740] text-white py-2 px-3 rounded-lg hover:bg-[#162932] transition-colors duration-200 flex items-center justify-center text-sm">
+                  <i class="material-icons text-sm mr-1">edit</i>
+                  Edit
+                </button>
+                <button onclick="suspendStation('${station._id}')" 
+                        class="bg-yellow-500 text-white py-2 px-3 rounded-lg hover:bg-yellow-600 transition-colors duration-200 flex items-center justify-center text-sm">
+                  <i class="material-icons text-sm mr-1">pause</i>
+                  Suspend
+                </button>
+                <button onclick="viewReports('${station._id}')" 
+                        class="bg-purple-500 text-white py-2 px-3 rounded-lg hover:bg-purple-600 transition-colors duration-200 flex items-center justify-center text-sm">
+                  <i class="material-icons text-sm mr-1">bar_chart</i>
+                  Reports
                 </button>
               </div>
             </div>
           `;
           
-          stationsGrid.appendChild(stationCard);
+          gridElem.appendChild(stationCard);
         });
         
       } catch (error) {
         console.error('Error loading active stations:', error);
-        document.getElementById('activeStationsLoading').classList.add('hidden');
-        const noStationsDiv = document.getElementById('noActiveStations');
-        noStationsDiv.innerHTML = `
-          <div class="text-red-400 mb-4">
-            <i class="material-icons text-6xl">error</i>
-          </div>
-          <h3 class="text-xl font-semibold text-red-600 mb-2">Error Loading Stations</h3>
-          <p class="text-red-500">Unable to load active stations. Please try again later.</p>
-        `;
-        noStationsDiv.classList.remove('hidden');
+        if (loadingElem) loadingElem.classList.add('hidden');
+        const noStationsElem = document.getElementById('noActiveStations');
+        if (noStationsElem) {
+          noStationsElem.innerHTML = `
+            <div class="text-red-400 mb-4">
+              <i class="material-icons text-6xl">error</i>
+            </div>
+            <h3 class="text-xl font-semibold text-red-600 mb-2">Error Loading Stations</h3>
+            <p class="text-red-500">Unable to load active stations. Please try again later.</p>
+          `;
+          noStationsElem.classList.remove('hidden');
+        }
       }
     }
-
-    // Function to view station details
-    window.viewStationDetails = async function(stationId) {
-      try {
-        const response = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch station details');
-        }
-        
-        const data = await response.json();
-        const station = data.registration;
-        
-        // Populate the existing view modal with station data
-        document.getElementById('viewRegistrationId').textContent = station.registrationId || 'N/A';
-        document.getElementById('viewName').textContent = station.name || 'N/A';
-        document.getElementById('viewEmail').textContent = station.email || 'N/A';
-        document.getElementById('viewPhone').textContent = station.phone || 'N/A';
-        document.getElementById('viewAddress').textContent = station.address || 'N/A';
-        document.getElementById('viewCity').textContent = station.city || 'N/A';
-        document.getElementById('viewState').textContent = station.state || 'N/A';
-        document.getElementById('viewZip').textContent = station.zip || 'N/A';
-        document.getElementById('viewCountry').textContent = station.country || 'N/A';
-        document.getElementById('viewSlots').textContent = station.slots || 'N/A';
-        document.getElementById('viewPrice').textContent = station.price ? `₹${station.price}` : 'N/A';
-        document.getElementById('viewReason').textContent = station.reason || 'N/A';
-        
-        // Set Google Maps link
-        const mapsLink = document.getElementById('viewMapsLink');
-        if (station.googleMapLocation) {
-          mapsLink.href = station.googleMapLocation;
-          mapsLink.textContent = 'View on Google Maps';
-          mapsLink.classList.add('text-blue-600', 'hover:text-blue-800', 'underline');
-          mapsLink.classList.remove('text-gray-500');
-        } else {
-          mapsLink.href = '#';
-          mapsLink.textContent = 'No location available';
-          mapsLink.classList.remove('text-blue-600', 'hover:text-blue-800', 'underline');
-          mapsLink.classList.add('text-gray-500');
-        }
-        
-        // Format dates
-        const createdAt = station.createdAt ? new Date(station.createdAt).toLocaleString() : 'N/A';
-        const updatedAt = station.updatedAt ? new Date(station.updatedAt).toLocaleString() : 'N/A';
-        document.getElementById('viewCreatedAt').textContent = createdAt;
-        document.getElementById('viewUpdatedAt').textContent = updatedAt;
-        
-        // Set status with appropriate styling
-        const statusElement = document.getElementById('viewStatus');
-        statusElement.textContent = station.status || 'N/A';
-        statusElement.className = 'ml-2 px-2 py-1 rounded-full text-xs font-medium';
-        statusElement.classList.add('bg-green-100', 'text-green-800');
-        
-        // Hide action buttons for active stations (since they're already active)
-        document.getElementById('approveBtn').classList.add('hidden');
-        document.getElementById('rejectBtn').classList.add('hidden');
-        
-        // Show the modal
-        document.getElementById('viewRegistrationModal').classList.remove('hidden');
-        
-      } catch (error) {
-        console.error('Error loading station details:', error);
-        alert('Error loading station details. Please try again.');
-      }
-    };
 
     // Function to contact station owner
     window.contactStation = function(stationId, email, phone) {
@@ -820,9 +908,88 @@
       const searchTerm = document.getElementById('activeStationsSearch').value.toLowerCase();
       const sortBy = document.getElementById('sortActiveStations').value;
       
-      // This would be implemented to filter and sort the stations
-      // For now, we'll just reload the stations
-      loadActiveStations();
+      // Get all station cards
+      const stationCards = document.querySelectorAll('#activeStationsGrid > div');
+      let visibleCount = 0;
+      
+      stationCards.forEach(card => {
+        const stationName = card.querySelector('h3').textContent.toLowerCase();
+        const stationLocation = card.querySelector('.flex-1').textContent.toLowerCase();
+        const registrationId = card.querySelector('.font-mono').textContent.toLowerCase();
+        
+        // Check if station matches search term
+        const matchesSearch = stationName.includes(searchTerm) || 
+                            stationLocation.includes(searchTerm) || 
+                            registrationId.includes(searchTerm);
+        
+        if (matchesSearch) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Show/hide no stations message
+      const noStationsDiv = document.getElementById('noActiveStations');
+      if (visibleCount === 0 && searchTerm) {
+        noStationsDiv.classList.remove('hidden');
+        noStationsDiv.innerHTML = `
+          <div class="text-gray-400 mb-4">
+            <i class="material-icons text-6xl">search</i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-600 mb-2">No Matching Stations Found</h3>
+          <p class="text-gray-500">No stations match your search criteria.</p>
+        `;
+      } else if (visibleCount === 0) {
+        noStationsDiv.classList.remove('hidden');
+        noStationsDiv.innerHTML = `
+          <div class="text-gray-400 mb-4">
+            <i class="material-icons text-6xl">local_parking</i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-600 mb-2">No Active Stations Found</h3>
+          <p class="text-gray-500">There are currently no active parking stations in the system.</p>
+        `;
+      } else {
+        noStationsDiv.classList.add('hidden');
+      }
+      
+      // Sort stations if needed
+      if (sortBy !== 'name') {
+        sortStations(sortBy);
+      }
+    }
+    
+    function sortStations(sortBy) {
+      const grid = document.getElementById('activeStationsGrid');
+      const cards = Array.from(grid.children);
+      
+      cards.sort((a, b) => {
+        let aValue, bValue;
+        
+        switch (sortBy) {
+          case 'location':
+            aValue = a.querySelector('.flex-1').textContent.toLowerCase();
+            bValue = b.querySelector('.flex-1').textContent.toLowerCase();
+            break;
+          case 'slots':
+            aValue = parseInt(a.querySelector('.text-xs.font-medium').textContent.split('/')[0]);
+            bValue = parseInt(b.querySelector('.text-xs.font-medium').textContent.split('/')[0]);
+            break;
+          case 'price':
+            aValue = parseFloat(a.querySelector('.font-medium').textContent.replace('₹', ''));
+            bValue = parseFloat(b.querySelector('.font-medium').textContent.replace('₹', ''));
+            break;
+          default: // name
+            aValue = a.querySelector('h3').textContent.toLowerCase();
+            bValue = b.querySelector('h3').textContent.toLowerCase();
+        }
+        
+        return aValue > bValue ? 1 : -1;
+      });
+      
+      // Reorder the grid
+      cards.forEach(card => grid.appendChild(card));
     }
 
     function debounce(func, wait) {
@@ -844,6 +1011,9 @@
       const activeStationsContainer = document.getElementById('activeStationsContainer');
       const registrationContainer = document.getElementById('registrationContainer');
 
+      // Load station statistics when page loads
+      loadStationStats();
+      
       // Load active stations when page loads
       loadActiveStations();
 
@@ -1055,14 +1225,12 @@
         }
       };
 
-      // Close modal functionality
-      document.getElementById('closeViewModal').addEventListener('click', () => {
+      // Close modal functionality - single event listener
+      const closeModal = () => {
         document.getElementById('viewRegistrationModal').classList.add('hidden');
-      });
-      
-      document.getElementById('closeViewModalBtn').addEventListener('click', () => {
-        document.getElementById('viewRegistrationModal').classList.add('hidden');
-      });
+      };
+      document.getElementById('closeViewModal').addEventListener('click', closeModal);
+      document.getElementById('closeViewModalBtn').addEventListener('click', closeModal);
       
       // Close modal when clicking outside
     });
