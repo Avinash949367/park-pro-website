@@ -29,7 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const errorElem = document.getElementById('loginError');
   const showSignUpBtn = document.getElementById('showSignUp');
+  const showLoginBtn = document.getElementById('showLogin');
   const signUpFormContainer = document.getElementById('signUpForm');
+  const loginToggle = document.getElementById('loginToggle');
+  const signUpToggle = document.getElementById('signUpToggle');
   const registerForm = document.getElementById('registerForm');
   const googleLoginBtn = document.getElementById('googleLogin');
   const otpVerificationForm = document.getElementById('otpVerificationForm');
@@ -94,18 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Toggle sign-up form visibility
   showSignUpBtn.addEventListener('click', () => {
-    if (signUpFormContainer.classList.contains('hidden')) {
-      signUpFormContainer.classList.remove('hidden');
-      loginForm.classList.add('hidden');
-      errorElem.classList.add('hidden');
-      otpVerificationForm.classList.add('hidden');
-      otpErrorElem.classList.add('hidden');
-    } else {
-      signUpFormContainer.classList.add('hidden');
-      loginForm.classList.remove('hidden');
-      otpVerificationForm.classList.add('hidden');
-      otpErrorElem.classList.add('hidden');
-    }
+    signUpFormContainer.classList.remove('hidden');
+    loginForm.classList.add('hidden');
+    loginToggle.classList.add('hidden');
+    signUpToggle.classList.remove('hidden');
+    errorElem.classList.add('hidden');
+    otpVerificationForm.classList.add('hidden');
+    otpErrorElem.classList.add('hidden');
+  });
+
+  // Toggle login form visibility
+  showLoginBtn.addEventListener('click', () => {
+    signUpFormContainer.classList.add('hidden');
+    loginForm.classList.remove('hidden');
+    loginToggle.classList.remove('hidden');
+    signUpToggle.classList.add('hidden');
+    errorElem.classList.add('hidden');
+    otpVerificationForm.classList.add('hidden');
+    otpErrorElem.classList.add('hidden');
   });
 
   // Handle sign-up form submission
@@ -114,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('emailSignUp').value.trim();
     const password = document.getElementById('passwordSignUp').value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
     // Email validation for @gmail.com
     if (!email.endsWith('@gmail.com')) {
@@ -124,6 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Name length validation
     if (name.length > 10) {
       alert('Name must not exceed 10 characters');
+      return;
+    }
+
+    // Confirm password validation
+    if (password !== confirmPassword) {
+      alert('Passwords do not match. Please make sure both password fields are identical.');
       return;
     }
 
@@ -180,6 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('OTP verified successfully! You can now log in.');
         otpVerificationForm.classList.add('hidden');
         loginForm.classList.remove('hidden');
+        loginToggle.classList.remove('hidden');
+        signUpToggle.classList.add('hidden');
         otpErrorElem.classList.add('hidden');
       }
     } catch (err) {
