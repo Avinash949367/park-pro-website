@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('emailSignUp').value.trim();
     const password = document.getElementById('passwordSignUp').value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
     // Email validation for @gmail.com
     if (!email.endsWith('@gmail.com')) {
@@ -133,6 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Name length validation
     if (name.length > 10) {
       alert('Name must not exceed 10 characters');
+      return;
+    }
+
+    // Confirm password validation
+    if (password !== confirmPassword) {
+      alert('Passwords do not match. Please make sure both password fields are identical.');
       return;
     }
 
