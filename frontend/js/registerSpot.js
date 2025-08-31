@@ -65,13 +65,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Additional validation for phone pattern
+    // Additional validation for phone pattern (only digits, max 10)
     if (currentStep === 3) {
       const phoneInput = document.getElementById('ownerPhone');
-      const phonePattern = /^\+?[0-9-\s]{7,15}$/;
+      const phonePattern = /^\d{10}$/;
       if (phoneInput.value.trim() && !phonePattern.test(phoneInput.value.trim())) {
         valid = false;
         showInvalidFeedback(phoneInput, true);
+      }
+    }
+
+    // Additional validation for email (only @gmail.com)
+    if (currentStep === 3) {
+      const emailInput = document.getElementById('ownerEmail');
+      const emailPattern = /^[^\s@]+@gmail\.com$/;
+      if (emailInput && emailInput.value.trim() && !emailPattern.test(emailInput.value.trim())) {
+        valid = false;
+        showInvalidFeedback(emailInput, true);
       }
     }
 

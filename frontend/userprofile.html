@@ -235,22 +235,22 @@
     });
 
     // Load user data from localStorage and display
-    const userNameDisplay = document.getElementById('userNameDisplay');
-    const userEmail = document.getElementById('userEmail');
-    const userPhone = document.getElementById('userPhone');
+    const userNameDisplays = document.querySelectorAll('#userNameDisplay');
+    const userEmailDisplays = document.querySelectorAll('#userEmail');
+    const userPhoneDisplays = document.querySelectorAll('#userPhone');
     const userVehicle = document.getElementById('userVehicle');
-    const storedUser  = localStorage.getItem('user');
-    if (storedUser ) {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
       try {
-        const userObj = JSON.parse(storedUser );
-        userNameDisplay.textContent = userObj.name || 'User  Name';
-        userEmail.textContent = userObj.email || 'user@example.com';
-        userPhone.textContent = userObj.phone || '+1234567890';
+        const userObj = JSON.parse(storedUser);
+        userNameDisplays.forEach(el => el.textContent = userObj.name || 'User Name');
+        userEmailDisplays.forEach(el => el.textContent = userObj.email || 'user@example.com');
+        userPhoneDisplays.forEach(el => el.textContent = userObj.phone || '+1234567890');
         userVehicle.textContent = userObj.vehicle || 'Vehicle not added';
       } catch {
-        userNameDisplay.textContent = 'User  Name';
-        userEmail.textContent = 'user@example.com';
-        userPhone.textContent = '+1234567890';
+        userNameDisplays.forEach(el => el.textContent = 'User Name');
+        userEmailDisplays.forEach(el => el.textContent = 'user@example.com');
+        userPhoneDisplays.forEach(el => el.textContent = '+1234567890');
         userVehicle.textContent = 'Vehicle not added';
       }
     }
@@ -259,9 +259,9 @@
     document.getElementById('editButton').addEventListener('click', () => {
       document.getElementById('editModal').classList.remove('hidden');
       // Populate the modal with current user data
-      document.getElementById('editName').value = userNameDisplay.textContent;
-      document.getElementById('editEmail').value = userEmail.textContent;
-      document.getElementById('editPhone').value = userPhone.textContent;
+      document.getElementById('editName').value = userNameDisplays[0].textContent;
+      document.getElementById('editEmail').value = userEmailDisplays[0].textContent;
+      document.getElementById('editPhone').value = userPhoneDisplays[0].textContent;
       document.getElementById('editVehicle').value = userVehicle.textContent;
     });
 
@@ -273,19 +273,24 @@
     // Save changes functionality
     document.getElementById('editForm').addEventListener('submit', (event) => {
       event.preventDefault();
+      // Get new values
+      const newName = document.getElementById('editName').value;
+      const newEmail = document.getElementById('editEmail').value;
+      const newPhone = document.getElementById('editPhone').value;
+      const newVehicle = document.getElementById('editVehicle').value;
       // Update user data
-      userNameDisplay.textContent = document.getElementById('editName').value;
-      userEmail.textContent = document.getElementById('editEmail').value;
-      userPhone.textContent = document.getElementById('editPhone').value;
-      userVehicle.textContent = document.getElementById('editVehicle').value;
-      // Optionally, save to localStorage
-      const updatedUser  = {
-        name: userNameDisplay.textContent,
-        email: userEmail.textContent,
-        phone: userPhone.textContent,
-        vehicle: userVehicle.textContent
+      userNameDisplays.forEach(el => el.textContent = newName);
+      userEmailDisplays.forEach(el => el.textContent = newEmail);
+      userPhoneDisplays.forEach(el => el.textContent = newPhone);
+      userVehicle.textContent = newVehicle;
+      // Save to localStorage
+      const updatedUser = {
+        name: newName,
+        email: newEmail,
+        phone: newPhone,
+        vehicle: newVehicle
       };
-      localStorage.setItem('user', JSON.stringify(updatedUser ));
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       // Close the modal
       document.getElementById('editModal').classList.add('hidden');
     });

@@ -28,7 +28,7 @@
       <button type="submit" class="w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-800 transition duration-300">Login</button>
     </form>
 
-    <div class="mt-4 text-center">
+    <div class="mt-4 text-center" id="loginToggle">
       <p>Don't have an account? <button id="showSignUp" class="text-blue-900 font-semibold hover:underline">Sign Up</button></p>
     </div>
 
@@ -47,8 +47,15 @@
           <label for="passwordSignUp" class="block text-gray-700">Password</label>
           <input type="password" id="passwordSignUp" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" />
         </div>
+        <div>
+          <label for="confirmPassword" class="block text-gray-700">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400" />
+        </div>
         <button type="submit" class="w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-800 transition duration-300">Sign Up</button>
       </form>
+      <div class="mt-4 text-center" id="signUpToggle">
+        <p>Already have an account? <button id="showLogin" class="text-blue-900 font-semibold hover:underline">Login</button></p>
+      </div>
     </div>
 
     <div class="mt-6">
