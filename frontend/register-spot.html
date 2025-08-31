@@ -230,7 +230,7 @@
   <!-- Mobile Navigation Menu -->
   <nav class="mobile-nav fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6 md:hidden" style="transform: translateX(-100%); transition: transform 0.3s ease;">
     <div class="flex flex-col space-y-6 mt-16">
-      <a href="index.html" class="option text-lg font-medium">About us</a>
+      <a href="aboutus.html" class="option text-lg font-medium">About us</a>
       <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
       <a href="products.html" class="option text-lg font-medium">Products</a>
       <a href="contactus.html" class="option text-lg font-medium">Contact</a>
@@ -842,27 +842,12 @@ function onsubmit_success() {
     alert("Our chat service will open in a new window. For now, you can contact us via phone or email.");
     // In a real implementation, this would open your chat widget
   }
-</script>
 
-<style>
-  .rotate-180 {
-    transform: rotate(180deg);
-  }
 
-  /* Hamburger animation */
-  .hamburger.open .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-  .hamburger.open .hamburger-line:nth-child(2) {
-    opacity: 0;
-  }
-  .hamburger.open .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-  }
-</style>
+
 
 <!-- Mobile Navigation JavaScript -->
-<script>
+
   document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
@@ -892,6 +877,23 @@ function onsubmit_success() {
     });
   });
 </script>
+
+<style>
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+
+  /* Hamburger animation */
+  .hamburger.open .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .hamburger.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.open .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+</style>
 
   </body>
 </html>

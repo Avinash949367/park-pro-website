@@ -1,4 +1,4 @@
-# TODO: Make register-process.html Responsive with Hamburger Menu
+# TODO: Make results.html Responsive with Hamburger Menu
 
 ## Steps to Complete:
 - [x] Update navbar to add hamburger button (visible on mobile, hidden on md+)
