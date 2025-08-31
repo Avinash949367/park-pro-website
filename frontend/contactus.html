@@ -91,6 +91,40 @@
             gap: 1rem;
             align-items: center;
         }
+
+        /* Mobile Menu Styles */
+        .hamburger {
+            transition: transform 0.3s ease;
+        }
+
+        .hamburger.open {
+            transform: rotate(90deg);
+        }
+
+        .hamburger-line {
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.open .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.open .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .mobile-menu.fixed.top-0 {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.fixed.top-0.open {
+            transform: translateX(0);
+        }
         
         /* Main content fixes */
         .main-content {
@@ -320,23 +354,108 @@
                 align-items: center;
                 gap: 1rem;
             }
+            
+            .contact-hero h2 {
+                font-size: 2rem;
+            }
+            
+            .contact-hero p {
+                font-size: 1.1rem;
+            }
+            
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 0.9rem;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .contact-icon {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+            
+            .map-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                margin-top: 80px;
+            }
+            
+            .contact-hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .contact-hero p {
+                font-size: 1rem;
+            }
+            
+            .contact-card {
+                padding: 1.2rem;
+            }
+            
+            .contact-card h2 {
+                font-size: 24px;
+            }
+            
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                padding: 0.8rem;
+            }
+            
+            button[type="submit"] {
+                padding: 0.9rem 1.2rem;
+                font-size: 1rem;
+            }
+            
+            .whatsapp-btn,
+            .map-btn {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .map-container {
+                height: 200px;
+            }
+            
+            .container {
+                margin: 0 20px;
+                max-width: none;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navbar (completely preserved as original) -->
-    <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+    <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200 relative">
         <a href="index.html"><div class="flex items-center space-x-4">
           <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
           <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
         </div></a>
         <nav class="space-x-6 hidden md:flex font-medium">
-          <a href="index.html" class="option">About us</a>
+          <a href="aboutus.html" class="option">About us</a>
           <a href="business.html" class="option">Park Pro For Business</a>
           <a href="products.html" class="option">Products</a>
           <a href="contactus.html" class="option">Contact</a>
         </nav>
-        <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+        <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
+          <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+          <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+          <span class="hamburger-line w-6 h-0.5 bg-gray-900"></span>
+        </button>
+        <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center hidden md:flex">
           <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
           <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
             Get the App
@@ -356,6 +475,24 @@
           </div>
       </div>
       </div>
+      <!-- Mobile Menu Overlay -->
+      <div class="mobile-menu fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
+      <!-- Mobile Navigation Menu -->
+      <nav class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6 md:hidden">
+        <div class="flex flex-col space-y-6 mt-16">
+          <a href="aboutus.html" class="option text-lg font-medium">About us</a>
+          <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
+          <a href="products.html" class="option text-lg font-medium">Products</a>
+          <a href="contactus.html" class="option text-lg font-medium">Contact</a>
+          <!-- Mobile Login/Get App Buttons -->
+          <div class="pt-6 border-t border-gray-200">
+            <a href="userlogin.html" class="bg-black font-bold text-white px-6 py-3 rounded-lg hover:opacity-90 transition block text-center mb-4">Login</a>
+            <a href="#" class="text-white rounded-lg px-6 py-3 cursor-pointer font-bold bg-black hover:bg-orange-600 transition block text-center">
+              Get the App
+            </a>
+          </div>
+        </div>
+      </nav>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -597,5 +734,45 @@
     <script src="js/index.js"></script>
     <script src="js/cardToggle.js"></script>
     <script src="js/registerSpot.js"></script>
+    <script>
+        // Mobile menu toggle functionality with hamburger X toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileOverlay = document.querySelector('.mobile-menu.fixed.inset-0');
+            const mobileMenu = document.querySelector('.mobile-menu.fixed.top-0.left-0');
+
+            if (hamburger && mobileMenu && mobileOverlay) {
+                hamburger.addEventListener('click', function() {
+                    const isOpen = hamburger.classList.contains('open');
+
+                    if (isOpen) {
+                        mobileMenu.classList.remove('open');
+                        mobileOverlay.style.display = 'none';
+                        hamburger.classList.remove('open');
+                    } else {
+                        mobileMenu.classList.add('open');
+                        mobileOverlay.style.display = 'block';
+                        hamburger.classList.add('open');
+                    }
+                });
+
+                mobileOverlay.addEventListener('click', function() {
+                    mobileMenu.classList.remove('open');
+                    mobileOverlay.style.display = 'none';
+                    hamburger.classList.remove('open');
+                });
+
+                // Close menu when clicking on links
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenu.classList.remove('open');
+                        mobileOverlay.style.display = 'none';
+                        hamburger.classList.remove('open');
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

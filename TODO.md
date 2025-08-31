@@ -1,61 +1,10 @@
-<<<<<<< HEAD
-# TODO: Add App Download and Testimonials Sections to index.html
+# TODO: Make register-process.html Responsive with Hamburger Menu
 
 ## Steps to Complete:
-
-1. [ ] Add App Download Section with:
-   - "Get ParkPro+ App" heading
-   - Google Play and App Store download buttons
-   - Placeholder for app screenshots
-   - Gradient background matching existing theme
-
-2. [ ] Add Testimonials/Reviews Section with:
-   - 3-4 testimonial cards with user quotes
-   - "ParkPro+ saved me 15 mins every day!" testimonial
-   - Contact query CTA at the end
-   - Clean white background
-
-3. [ ] Ensure design consistency with existing:
-   - Color scheme (#46949d, #1e3740, black, white)
-   - Button styles (btn-teal, btn-black classes)
-   - Responsive design
-   - Typography and spacing
-
-4. [ ] Test responsiveness and functionality
-# Password Validation Implementation Plan
-
-## Steps to Complete:
-
-1. [x] Backend: Add password validation function in authController.js
-   - Create a function to validate password complexity
-   - Check for uppercase, lowercase, number, and special character
-   - Return appropriate error message if validation fails
-
-2. [x] Backend: Integrate password validation in register function
-   - Call the validation function before hashing the password
-   - Return error response if password doesn't meet requirements
-
-3. [x] Frontend: Add client-side password validation in auth.js
-   - Implement validation function for password complexity
-   - Show error message if password doesn't meet requirements
-   - Prevent form submission if validation fails
-
-4. [ ] Testing: Verify both backend and frontend validation work correctly
-
-## Name Length Restriction:
-- [x] Backend: Add name length validation (max 10 characters)
-- [x] Frontend: Add client-side name length validation
-
-## Password Requirements:
-- At least one uppercase letter (A-Z)
-- At least one lowercase letter (a-z)
-- At least one number (0-9)
-- At least one special character (!@#$%^&*(),.?":{}|<>)
-
-## Error Message:
-"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-
-## Name Requirements:
-- Maximum 10 characters
-- Error message: "Name must not exceed 10 characters"
-- 7c82921efe82ebc2bb01b9efcd9cdc8e8769cdbf
+- [x] Update navbar to add hamburger button (visible on mobile, hidden on md+)
+- [x] Add mobile menu overlay (fixed inset, hidden by default)
+- [x] Add mobile navigation menu (slide-in from left)
+- [x] Adjust loginProfileContainer to be hidden on mobile (add "hidden md:flex")
+- [x] Add CSS styles for hamburger animation and mobile menu transitions
+- [x] Add JavaScript code for toggling the mobile menu (hamburger click, overlay click, link clicks close menu)
+- [x] Test mobile responsiveness and hamburger functionality
