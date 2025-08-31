@@ -408,12 +408,14 @@
                         
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required style="padding:5px" placeholder="Eg : johndoe@example.com">
+                            <input type="email" id="email" name="email" required style="padding:5px" placeholder="Eg : johndoe@gmail.com">
+                            <div id="emailError" class="error-message" style="color: red; font-size: 14px; margin-top: 5px; display: none;"></div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" style="padding:5px" placeholder="Eg : +91 9493675372">
+                            <input type="tel" id="phone" name="phone" style="padding:5px" placeholder="Eg : 9493675372">
+                            <div id="phoneError" class="error-message" style="color: red; font-size: 14px; margin-top: 5px; display: none;"></div>
                         </div>
                         
                         <div class="form-group">
@@ -597,5 +599,94 @@
     <script src="js/index.js"></script>
     <script src="js/cardToggle.js"></script>
     <script src="js/registerSpot.js"></script>
+
+    <!-- Contact Form Validation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.querySelector('#contact-form form');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const emailError = document.getElementById('emailError');
+            const phoneError = document.getElementById('phoneError');
+
+            // Email validation function
+            function validateEmail(email) {
+                const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+                return gmailRegex.test(email);
+            }
+
+            // Phone validation function
+            function validatePhone(phone) {
+                const phoneRegex = /^\d{10}$/;
+                return phoneRegex.test(phone.replace(/\s+/g, '')); // Remove spaces before validation
+            }
+
+            // Show error message
+            function showError(element, message) {
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+
+            // Hide error message
+            function hideError(element) {
+                element.style.display = 'none';
+            }
+
+            // Real-time validation for email
+            emailInput.addEventListener('input', function() {
+                if (this.value && !validateEmail(this.value)) {
+                    showError(emailError, 'Email must be a valid Gmail address (e.g., example@gmail.com)');
+                } else {
+                    hideError(emailError);
+                }
+            });
+
+            // Real-time validation for phone
+            phoneInput.addEventListener('input', function() {
+                const phoneValue = this.value.replace(/\s+/g, '');
+                if (this.value && (!/^\d+$/.test(phoneValue) || phoneValue.length !== 10)) {
+                    showError(phoneError, 'Phone number must be exactly 10 digits');
+                } else {
+                    hideError(phoneError);
+                }
+            });
+
+            // Form submission validation
+            contactForm.addEventListener('submit', function(e) {
+                let isValid = true;
+
+                // Validate email
+                if (!emailInput.value || !validateEmail(emailInput.value)) {
+                    showError(emailError, 'Email must be a valid Gmail address (e.g., example@gmail.com)');
+                    isValid = false;
+                } else {
+                    hideError(emailError);
+                }
+
+                // Validate phone (optional field, but if provided must be valid)
+                if (phoneInput.value) {
+                    const phoneValue = phoneInput.value.replace(/\s+/g, '');
+                    if (!/^\d+$/.test(phoneValue) || phoneValue.length !== 10) {
+                        showError(phoneError, 'Phone number must be exactly 10 digits');
+                        isValid = false;
+                    } else {
+                        hideError(phoneError);
+                    }
+                } else {
+                    hideError(phoneError);
+                }
+
+                // Prevent form submission if validation fails
+                if (!isValid) {
+                    e.preventDefault();
+                    // Scroll to the first error
+                    const firstError = document.querySelector('.error-message[style*="display: block"]');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

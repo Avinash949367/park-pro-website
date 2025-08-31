@@ -348,16 +348,16 @@
           return;
       }
   
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // Validate email format (only @gmail.com allowed)
+      const emailRegex = /^[^\s@]+@gmail\.com$/;
       if (!emailRegex.test(data.email)) {
-          alert('Please enter a valid email address');
+          alert('Please enter a valid Gmail address (e.g., example@gmail.com)');
           return;
       }
   
-      // Validate mobile number
-      if (!/^\d{10,15}$/.test(data.phone)) {
-          alert('Please enter a valid mobile number');
+      // Validate mobile number (only digits, max 10)
+      if (!/^\d{10}$/.test(data.phone)) {
+          alert('Please enter a valid 10-digit mobile number (digits only)');
           return;
       }
   
