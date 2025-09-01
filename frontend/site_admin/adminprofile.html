@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Profile - Park Pro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Modern and professional UI enhancements */
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    main {
+      background: white;
+      margin: 20px auto;
+      max-width: 1200px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .profile-header {
+      background: linear-gradient(135deg, #46949d 0%, #5ba3a9 100%);
+      color: white;
+      padding: 40px 32px;
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #46949d;
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      border: 4px solid white;
+    }
+    .profile-content {
+      padding: 40px;
+    }
+    .info-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    .info-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .info-label {
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .info-value {
+      color: #1f2937;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    .edit-btn {
+      background: linear-gradient(135deg, #46949d 0%, #5ba3a9 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .edit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(70, 148, 157, 0.3);
+    }
+    .save-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 12px;
+    }
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+    .cancel-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cancel-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #46949d;
+      box-shadow: 0 0 0 3px rgba(70, 148, 157, 0.1);
+    }
+    .loading-spinner {
+      border: 4px solid #f3f4f6;
+      border-top: 4px solid #46949d;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .success-message {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      color: #065f46;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #34d399;
+      display: none;
+    }
+    .error-message {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      color: #991b1b;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #f87171;
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- Main content -->
+  <main class="p-8 overflow-y-auto">
+    <div class="max-w-4xl mx-auto">
+      <!-- Profile Header -->
+      <div class="profile-header fade-in">
+        <img class="profile-avatar" id="profileAvatar" src="../assets/images/WhatsApp Image 2024-03-28 at 17.51.05_3d94f0ae.jpg" alt="Admin Profile" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iNjAiIGZpbGw9IiM0Njk0OWQiLz4KPHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDMTMuMSAyIDE0IDIuOSAxNCA0VjVDMTQgNS45IDEzLjEgNiAxMiA2QzEwLjkgNiAxMCA1LjkgMTAgNVY0QzEwIDIuOSAxMC45IDIgMTIgMlpNMTIgMTRDMTEuMSAxNCAxMC4yIDEzLjEgMTAuMiAxMkMxMC4yIDEwLjkgMTEuMSAxMCAxMiAxMEMxMi45IDEwIDEzLjggMTAuOSAxMy44IDEyQzEzLjggMTMuMSAxMi45IDE0IDEyIDE0Wk0xMiA4QzEwLjkgOCA5LjkgOC45IDkuOVYxMEM5LjkgMTEuMSAxMC45IDExLjEgMTIgMTEuMUMxMy4xIDExLjEgMTQuMSAxMSAxNC4xIDEwVjguOUMxNC4xIDguOSAxMy4xIDggMTIgOFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo8L3N2Zz4K'">
+        <h1 class="text-3xl font-bold mb-2" id="profileName">Admin User</h1>
+        <p class="text-lg opacity-90">Administrator</p>
+      </div>
+
+      <!-- Profile Content -->
+      <div class="profile-content">
+        <!-- Success/Error Messages -->
+        <div id="successMessage" class="success-message">
+          <i class="fas fa-check-circle mr-2"></i>
+          <span id="successText">Profile updated successfully!</span>
+        </div>
+        <div id="errorMessage" class="error-message">
+          <i class="fas fa-exclamation-circle mr-2"></i>
+          <span id="errorText">An error occurred while updating the profile.</span>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="info-card fade-in">
+          <h3 class="text-xl font-semibold mb-6 text-gray-800">
+            <i class="fas fa-user mr-2 text-[#46949d]"></i>
+            Personal Information
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="info-label">Full Name</label>
+              <div id="nameDisplay" class="info-value">Loading...</div>
+              <input type="text" id="nameInput" class="form-input hidden" placeholder="Enter your full name">
+            </div>
+
+            <div>
+              <label class="info-label">Email Address</label>
+              <div id="emailDisplay" class="info-value">Loading...</div>
+              <input type="email" id="emailInput" class="form-input hidden" placeholder="Enter your email">
+            </div>
+
+            <div>
+              <label class="info-label">Phone Number</label>
+              <div id="phoneDisplay" class="info-value">Loading...</div>
+              <input type="tel" id="phoneInput" class="form-input hidden" placeholder="Enter your phone number">
+            </div>
+
+            <div>
+              <label class="info-label">Role</label>
+              <div class="info-value">
+                <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">
+                  👑 Administrator
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex gap-4">
+            <button id="editBtn" class="edit-btn">
+              <i class="fas fa-edit"></i>
+              <span>Edit Profile</span>
+            </button>
+            <button id="saveBtn" class="save-btn hidden">
+              <i class="fas fa-save"></i>
+              <span>Save Changes</span>
+            </button>
+            <button id="cancelBtn" class="cancel-btn hidden">
+              <i class="fas fa-times"></i>
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Account Information -->
+        <div class="info-card fade-in">
+          <h3 class="text-xl font-semibold mb-6 text-gray-800">
+            <i class="fas fa-shield-alt mr-2 text-[#46949d]"></i>
+            Account Information
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="info-label">Account Status</label>
+              <div class="info-value">
+                <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">
+                  ✅ Active
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label class="info-label">Member Since</label>
+              <div id="memberSince" class="info-value">Loading...</div>
+            </div>
+
+            <div>
+              <label class="info-label">Last Login</label>
+              <div id="lastLogin" class="info-value">Loading...</div>
+            </div>
+
+            <div>
+              <label class="info-label">Account ID</label>
+              <div id="accountId" class="info-value">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // DOM Elements
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Display elements
+    const nameDisplay = document.getElementById('nameDisplay');
+    const emailDisplay = document.getElementById('emailDisplay');
+    const phoneDisplay = document.getElementById('phoneDisplay');
+    const profileName = document.getElementById('profileName');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const memberSince = document.getElementById('memberSince');
+    const lastLogin = document.getElementById('lastLogin');
+    const accountId = document.getElementById('accountId');
+
+    // Input elements
+    const nameInput = document.getElementById('nameInput');
+    const emailInput = document.getElementById('emailInput');
+    const phoneInput = document.getElementById('phoneInput');
+
+    let originalData = {};
+    let isEditing = false;
+
+    // Event listeners
+    editBtn.addEventListener('click', enableEditMode);
+    saveBtn.addEventListener('click', saveProfile);
+    cancelBtn.addEventListener('click', cancelEdit);
+
+    // Fetch admin profile data
+    async function fetchProfile() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No authentication token found. Please log in again.');
+        }
+
+        const response = await fetch('http://localhost:5000/api/user/profile', {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('Authentication failed. Please log in again.');
+          } else {
+            throw new Error('Failed to fetch profile data');
+          }
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.user) {
+          displayProfile(data.user);
+          originalData = { ...data.user };
+        } else {
+          throw new Error('Invalid profile data received');
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        showError('Failed to load profile data: ' + error.message);
+      }
+    }
+
+    // Display profile data
+    function displayProfile(user) {
+      const name = user.name || 'Admin User';
+      const email = user.email || 'admin@example.com';
+      const phone = user.phone || 'Not provided';
+
+      // Update display elements
+      nameDisplay.textContent = name;
+      emailDisplay.textContent = email;
+      phoneDisplay.textContent = phone;
+      profileName.textContent = name;
+
+      // Update input values
+      nameInput.value = name;
+      emailInput.value = email;
+      phoneInput.value = phone;
+
+      // Update account info
+      memberSince.textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }) : 'N/A';
+
+      lastLogin.textContent = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) : 'N/A';
+
+      accountId.textContent = user._id ? user._id.slice(-8).toUpperCase() : 'N/A';
+    }
+
+    // Enable edit mode
+    function enableEditMode() {
+      isEditing = true;
+
+      // Hide display elements and show inputs
+      nameDisplay.classList.add('hidden');
+      emailDisplay.classList.add('hidden');
+      phoneDisplay.classList.add('hidden');
+
+      nameInput.classList.remove('hidden');
+      emailInput.classList.remove('hidden');
+      phoneInput.classList.remove('hidden');
+
+      // Hide edit button, show save and cancel buttons
+      editBtn.classList.add('hidden');
+      saveBtn.classList.remove('hidden');
+      cancelBtn.classList.remove('hidden');
+    }
+
+    // Save profile changes
+    async function saveProfile() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No authentication token found. Please log in again.');
+        }
+
+        const updatedData = {
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          phone: phoneInput.value.trim()
+        };
+
+        // Basic validation
+        if (!updatedData.name) {
+          throw new Error('Name is required');
+        }
+        if (!updatedData.email) {
+          throw new Error('Email is required');
+        }
+
+        const response = await fetch('http://localhost:5000/api/user/profile', {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updatedData)
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('Authentication failed. Please log in again.');
+          } else {
+            throw new Error('Failed to update profile');
+          }
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+          displayProfile(data.user);
+          originalData = { ...data.user };
+          disableEditMode();
+          showSuccess('Profile updated successfully!');
+        } else {
+          throw new Error(data.message || 'Failed to update profile');
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        showError(error.message);
+      }
+    }
+
+    // Cancel edit mode
+    function cancelEdit() {
+      // Reset input values to original data
+      nameInput.value = originalData.name || '';
+      emailInput.value = originalData.email || '';
+      phoneInput.value = originalData.phone || '';
+
+      disableEditMode();
+    }
+
+    // Disable edit mode
+    function disableEditMode() {
+      isEditing = false;
+
+      // Show display elements and hide inputs
+      nameDisplay.classList.remove('hidden');
+      emailDisplay.classList.remove('hidden');
+      phoneDisplay.classList.remove('hidden');
+
+      nameInput.classList.add('hidden');
+      emailInput.classList.add('hidden');
+      phoneInput.classList.add('hidden');
+
+      // Show edit button, hide save and cancel buttons
+      editBtn.classList.remove('hidden');
+      saveBtn.classList.add('hidden');
+      cancelBtn.classList.add('hidden');
+    }
+
+    // Show success message
+    function showSuccess(message) {
+      successMessage.querySelector('#successText').textContent = message;
+      successMessage.style.display = 'block';
+      errorMessage.style.display = 'none';
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 5000);
+    }
+
+    // Show error message
+    function showError(message) {
+      errorMessage.querySelector('#errorText').textContent = message;
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 5000);
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      fetchProfile();
+    });
+  </script>
+
+</body>
+</html>

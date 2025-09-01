@@ -181,14 +181,269 @@
       <button id="messageIcon" aria-label="Received Stations" class="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#46949d]">
         <span class="material-icons text-[#46949d] text-3xl">message</span>
         <span id="messageBadge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full hidden">0</span>
+        <div id="newRegistersPopup" class="absolute top-12 right-0 bg-[#46949d] text-white px-3 py-2 rounded-lg shadow-lg opacity-0 transform translate-y-2 transition-all duration-300 pointer-events-none z-50">
+          <span class="text-sm font-medium">New Registers</span>
+        </div>
       </button>
+
+      <script>
+        // Function to load list of registers for message icon click
+        document.getElementById('messageIcon').addEventListener('click', async () => {
+          try {
+            const response = await fetch('http://localhost:5000/api/registrations/status/pending');
+            if (!response.ok) {
+              throw new Error('Failed to fetch pending registrations');
+            }
+            const pendingRegistrations = await response.json();
+            const receivedStationsList = document.getElementById('receivedStationsList');
+            receivedStationsList.innerHTML = '';
+
+            if (pendingRegistrations.length === 0) {
+              receivedStationsList.innerHTML = '<li class="text-center py-4 text-gray-500">No pending registrations found.</li>';
+            } else {
+              pendingRegistrations.forEach(registration => {
+                const li = document.createElement('li');
+                li.className = 'p-4 border-b border-gray-200 rounded-lg mb-2 bg-gray-50';
+
+                li.innerHTML = `
+                  <div class="flex flex-col space-y-3">
+                    <div class="font-medium text-gray-800">
+                      ${registration.name} (${registration.registrationId})
+                    </div>
+                    <div class="flex space-x-2">
+                      <button class="view-btn bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors"
+                              data-id="${registration._id}">
+                        View
+                      </button>
+                      <button class="approve-btn bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition-colors"
+                              data-id="${registration._id}">
+                        Approve
+                      </button>
+                      <button class="reject-btn bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition-colors"
+                              data-id="${registration._id}">
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                `;
+
+                // Add event listeners for the buttons
+                const viewBtn = li.querySelector('.view-btn');
+                const approveBtn = li.querySelector('.approve-btn');
+                const rejectBtn = li.querySelector('.reject-btn');
+
+                viewBtn.addEventListener('click', () => viewRegistrationDetails(registration));
+                approveBtn.addEventListener('click', () => approveRegistration(registration._id));
+                rejectBtn.addEventListener('click', () => rejectRegistration(registration._id));
+
+                receivedStationsList.appendChild(li);
+              });
+            }
+
+            // Show the popup
+            document.getElementById('receivedStationsPopup').classList.remove('hidden');
+          } catch (error) {
+            console.error('Error loading pending registrations:', error);
+            alert('Error loading pending registrations. Please try again.');
+          }
+        });
+
+        // Close popup functionality
+        document.getElementById('closePopup').addEventListener('click', () => {
+          document.getElementById('receivedStationsPopup').classList.add('hidden');
+        });
+
+        // Function to update message badge and show popup animation
+        async function updateMessageBadge() {
+          try {
+            const response = await fetch('http://localhost:5000/api/registrations/status/pending');
+            if (!response.ok) {
+              throw new Error('Failed to fetch pending registrations');
+            }
+            const pendingRegistrations = await response.json();
+            const badge = document.getElementById('messageBadge');
+            const popup = document.getElementById('newRegistersPopup');
+
+            if (pendingRegistrations.length > 0) {
+              badge.textContent = pendingRegistrations.length;
+              badge.classList.remove('hidden');
+
+              // Show popup animation every 3 seconds
+              if (!window.popupInterval) {
+                window.popupInterval = setInterval(() => {
+                  // Show popup with animation
+                  popup.classList.remove('opacity-0', 'transform', 'translate-y-2');
+                  popup.classList.add('opacity-100', 'transform', 'translate-y-0');
+
+                  // Hide popup after 2 seconds
+                  setTimeout(() => {
+                    popup.classList.remove('opacity-100', 'transform', 'translate-y-0');
+                    popup.classList.add('opacity-0', 'transform', 'translate-y-2');
+                  }, 2000);
+                }, 3000);
+              }
+            } else {
+              badge.classList.add('hidden');
+              if (window.popupInterval) {
+                clearInterval(window.popupInterval);
+                window.popupInterval = null;
+              }
+            }
+          } catch (error) {
+            console.error('Error updating message badge:', error);
+          }
+        }
+
+        // Update badge on page load and every 30 seconds
+        document.addEventListener('DOMContentLoaded', () => {
+          updateMessageBadge();
+          setInterval(updateMessageBadge, 30000); // Update every 30 seconds
+        });
+
+        // Function to view registration details (simple view)
+        async function viewRegistrationDetails(registration) {
+          try {
+            // Create a simple modal for basic details
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+              <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                  <h2 class="text-xl font-semibold text-gray-800">Registration Details</h2>
+                  <button id="closeSimpleModal" class="text-gray-500 hover:text-gray-700">
+                    <span class="material-icons text-2xl">close</span>
+                  </button>
+                </div>
+
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600">Name</label>
+                    <p class="text-sm text-gray-900 bg-gray-50 p-2 rounded">${registration.name || 'N/A'}</p>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600">Contact</label>
+                    <p class="text-sm text-gray-900 bg-gray-50 p-2 rounded">${registration.phone || 'N/A'}</p>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600">Email</label>
+                    <p class="text-sm text-gray-900 bg-gray-50 p-2 rounded">${registration.email || 'N/A'}</p>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-600">Reason</label>
+                    <p class="text-sm text-gray-900 bg-gray-50 p-2 rounded">${registration.reason || 'N/A'}</p>
+                  </div>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                  <button id="closeSimpleModalBtn" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200">
+                    Close
+                  </button>
+                </div>
+              </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Close modal functionality
+            const closeModal = () => {
+              document.body.removeChild(modal);
+            };
+
+            document.getElementById('closeSimpleModal').addEventListener('click', closeModal);
+            document.getElementById('closeSimpleModalBtn').addEventListener('click', closeModal);
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+              if (e.target === modal) {
+                closeModal();
+              }
+            });
+
+          } catch (error) {
+            console.error('Error showing registration details:', error);
+            alert('Error loading registration details. Please try again.');
+          }
+        }
+
+        // Function to approve registration
+        async function approveRegistration(registrationId) {
+          try {
+            const response = await fetch(`http://localhost:5000/api/registrations/approve/${registrationId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                approvedBy: 'admin'
+              })
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+              throw new Error(responseData.message || 'Failed to approve registration');
+            }
+
+            alert('Registration approved for documentation process!');
+            document.getElementById('receivedStationsPopup').classList.add('hidden');
+
+            // Refresh the badge and popup
+            updateMessageBadge();
+
+          } catch (error) {
+            console.error('Error approving registration:', error);
+            alert(`Error: ${error.message}`);
+          }
+        }
+
+        // Function to reject registration
+        async function rejectRegistration(registrationId) {
+          try {
+            const rejectionReason = prompt('Please provide a reason for rejection:');
+            if (!rejectionReason) {
+              alert('Rejection cancelled - reason is required.');
+              return;
+            }
+
+            const response = await fetch(`http://localhost:5000/api/registrations/reject/${registrationId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                rejectedBy: 'admin',
+                rejectionReason: rejectionReason
+              })
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+              throw new Error(responseData.message || 'Failed to reject registration');
+            }
+
+            alert('Registration rejected successfully!');
+            document.getElementById('receivedStationsPopup').classList.add('hidden');
+
+            // Refresh the badge and popup
+            updateMessageBadge();
+
+          } catch (error) {
+            console.error('Error rejecting registration:', error);
+            alert(`Error: ${error.message}`);
+          }
+        }
+      </script>
     </div>
 
     <!-- Navigation Bar -->
     <nav class="flex mb-6 border-b border-gray-200" style="justify-content: space-evenly;">
       <button id="activeStationsTab" class="py-2 px-4 font-medium text-[#46949d] border-b-2 border-[#46949d]">
         Active Stations
-      </button>      
+      </button>
     </nav>
 
     <!-- Pending Documentation Popup -->
@@ -519,7 +774,7 @@
     </div>
     
 <!-- Active Stations Section -->
-<!-- <section id="activeStationsContainer" class="mt-6"> -->
+<section class="mt-6">
     <section  class="mt-6">
       <div class="flex items-center justify-between mb-6">
         <div>

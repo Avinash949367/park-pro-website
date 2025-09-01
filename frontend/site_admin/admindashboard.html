@@ -8,13 +8,34 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans flex h-screen">
+<body class="bg-gray-100 font-sans flex flex-col h-screen">
 
-  <!-- Sidebar -->
-  <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+  <!-- Top Navbar -->
+  <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <h1 class="text-xl font-semibold text-gray-800">Park Pro Admin</h1>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="relative">
+        <button id="profileButton" type="button" class="flex items-center space-x-3 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+          <img src="..\assets\images\WhatsApp Image 2024-03-28 at 17.51.05_3d94f0ae.jpg" class="h-10 w-10 rounded-full border-2 border-gray-300" alt="Profile" />
+          
+        </button>
+        <div id="profileMenu" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50" role="menu" aria-orientation="vertical" aria-labelledby="profileButton">
+          <a href="adminprofile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#46949d] hover:text-white" role="menuitem">View Profile</a>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#46949d] hover:text-white" role="menuitem">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
     <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
       <a href="admindashboard.html"><div class="flex items-center space-x-4">
-        <img src="../assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+        <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+        <img src="../assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
       </div></a>
       <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
         <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
@@ -27,7 +48,7 @@
     <nav class="flex-1 overflow-y-auto">
       <ul class="p-4 space-y-2">
         <li>
-          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
             <i class="material-icons text-gray-900">dashboard</i>
             <span>Dashboard</span>
           </a>
@@ -51,14 +72,32 @@
           </a>
         </li> -->
         <li>
-          <a href="stations.html" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
-            <i class="material-icons text-gray-900">local_parking</i>
-            <span>Stations</span>
-          </a>
+          <details class="group">
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="material-icons text-gray-900">local_parking</i>
+                <span>Stations</span>
+              </span>
+              <span class="float-right transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <ul class="pl-4 mt-2 space-y-1">
+              <li>
+                <a href="stations.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">local_parking</i>
+                  <span>Manage Stations</span>
+                </a>
+              </li>
+              <li>
+                <a href="register_documents.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">description</i>
+                  <span>Register-Documents</span>
+                </a>
+              </li>
+          </details>
         </li>
         <li>
           <details class="group">
-            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-orange-500 hover:text-white list-none flex items-center justify-between">
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between">
               <span class="flex items-center space-x-2">
                 <i class="material-icons text-gray-900">settings</i>
                 <span>Management</span>
@@ -67,13 +106,13 @@
             </summary>
             <ul class="pl-4 mt-2 space-y-1">
               <li>
-                <a href="#" class="block py-1 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+                <a href="users_view.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
                   <i class="material-icons text-gray-900" style="font-size: 16px;">person</i>
                   <span>Users</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="block py-1 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+                <a href="#" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
                   <i class="material-icons text-gray-900" style="font-size: 16px;">settings</i>
                   <span>Settings</span>
                 </a>
@@ -83,22 +122,6 @@
         </li>
       </ul>
     </nav>
-    <!-- Profile section at bottom -->
-    <div class="p-4 border-t border-gray-300 mt-auto">
-      <div class="relative inline-block text-left w-full">
-        <button id="profileButton" type="button" class="flex items-center space-x-3 w-full focus:outline-none" aria-expanded="false" aria-haspopup="true">
-          <img class="h-10 w-10 rounded-full" src="images/profile-icon.png" alt="Profile" />
-          <span class="text-gray-900 font-medium">Admin</span>
-          <svg class="ml-auto h-5 w-5 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        <div id="profileMenu" class="origin-top-left absolute left-full bottom-full ml-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" role="menu" aria-orientation="vertical" aria-labelledby="profileButton">
-          <a href="userprofile.html" class="block px-4 py-2 text-gray-900 hover:bg-orange-500 hover:text-white" role="menuitem">View Profile</a>
-          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-900 hover:bg-orange-500 hover:text-white" role="menuitem">Logout</button>
-        </div>
-      </div>
-    </div>
   </aside>
 
   <!-- Main content -->
@@ -108,7 +131,7 @@
         Admin Dashboard
       </h1>
       <div class="flex items-center space-x-4">
-        <button id="messageButton" aria-label="Messages" class="relative text-gray-600 hover:text-orange-500 focus:outline-none">
+        <button id="messageButton" aria-label="Messages" class="relative text-gray-600 hover:text-[#46949d] focus:outline-none">
           <span class="material-icons text-3xl">message</span>
           <span class="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-500"></span>
         </button>
@@ -121,7 +144,34 @@
       <p class="mb-6">This is the admin dashboard where you can manage the application.</p>
     </section>
   </main>
+  </div>
 
-  <script src="js/admin.js"></script>
+  <script>
+    // Profile dropdown toggle
+    const profileButton = document.getElementById('profileButton');
+    const profileMenu = document.getElementById('profileMenu');
+
+    profileButton.addEventListener('click', () => {
+      profileMenu.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!profileButton.contains(event.target) && !profileMenu.contains(event.target)) {
+        profileMenu.classList.add('hidden');
+      }
+    });
+
+    // Logout functionality
+    const logoutButton = document.getElementById('logoutButton');
+    logoutButton.addEventListener('click', () => {
+      // Clear token from localStorage
+      localStorage.removeItem('token');
+      // Redirect to login page
+      window.location.href = '../login.html';
+    });
+
+
+  </script>
 </body>
 </html>

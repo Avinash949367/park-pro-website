@@ -92,7 +92,9 @@ app.use('/api', stationRoutes);
 const mediaRoutes = require('./routes/mediaRoutes');
 app.use('/api/media', mediaRoutes);
 const userProfileRoutes = require('./routes/userProfileRoutes');
+const userRoutes = require('./routes/userRoutes');
 app.use('/api/user', userProfileRoutes);
+app.use('/api', userRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

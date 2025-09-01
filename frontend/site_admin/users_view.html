@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Users View - Admin - Park Pro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans flex h-screen">
+
+  <!-- Sidebar (copied from admindashboard.html) -->
+  <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+    <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
+      <a href="admindashboard.html"><div class="flex items-center space-x-4">
+        <img src="../assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+      </div></a>
+      <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <nav class="flex-1 overflow-y-auto">
+      <ul class="p-4 space-y-2">
+        <li>
+          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">dashboard</i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <details class="group">
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="material-icons text-gray-900">local_parking</i>
+                <span>Stations</span>
+              </span>
+              <span class="float-right transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <ul class="pl-4 mt-2 space-y-1">
+              <li>
+                <a href="stations.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">local_parking</i>
+                  <span>Manage Stations</span>
+                </a>
+              </li>
+              <li>
+                <a href="register_documents.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">description</i>
+                  <span>Register-Documents</span>
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details class="group" open>
+            <summary class="cursor-pointer py-2 px-4 rounded bg-[#46949d] text-white list-none flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="material-icons text-white">person</i>
+                <span>Users</span>
+              </span>
+              <span class="float-right transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <ul class="pl-4 mt-2 space-y-1">
+              <li>
+                <a href="users_view.html" class="block py-1 px-4 rounded bg-[#46949d] text-white flex items-center space-x-2">
+                  <i class="material-icons text-white" style="font-size: 16px;">list</i>
+                  <span>User List</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">settings</i>
+                  <span>Settings</span>
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+    <!-- Profile section at bottom -->
+    <div class="p-4 border-t border-gray-300 mt-auto">
+      <div class="relative inline-block text-left w-full">
+        <button id="profileButton" type="button" class="flex items-center space-x-3 w-full focus:outline-none" aria-expanded="false" aria-haspopup="true">
+          <img class="h-10 w-10 rounded-full" src="images/profile-icon.png" alt="Profile" />
+          <span class="text-gray-900 font-medium">Admin</span>
+          <svg class="ml-auto h-5 w-5 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div id="profileMenu" class="origin-top-left absolute left-full bottom-full ml-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" role="menu" aria-orientation="vertical" aria-labelledby="profileButton">
+          <a href="userprofile.html" class="block px-4 py-2 text-gray-900 hover:bg-[#46949d] hover:text-white" role="menuitem">View Profile</a>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-900 hover:bg-[#46949d] hover:text-white" role="menuitem">Logout</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <header class="mb-6 flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-gray-800">
+        User Management
+      </h1>
+    </header>
+
+    <section class="mb-6">
+      <div class="flex flex-wrap gap-4 items-center">
+        <input id="searchInput" type="text" placeholder="Search by name or email" class="border border-gray-300 rounded px-4 py-2 flex-grow max-w-md" />
+        <select id="roleFilter" class="border border-gray-300 rounded px-4 py-2">
+          <option value="">All Roles</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+        <select id="membershipFilter" class="border border-gray-300 rounded px-4 py-2">
+          <option value="">All Memberships</option>
+          <option value="Basic">Basic</option>
+          <option value="Premium">Premium</option>
+          <option value="Gold">Gold</option>
+        </select>
+      </div>
+    </section>
+
+    <section>
+      <table class="min-w-full bg-white border border-gray-300 rounded shadow-sm">
+        <thead>
+          <tr class="bg-[#46949d] text-white">
+            <th class="py-2 px-4 text-left">Name</th>
+            <th class="py-2 px-4 text-left">Email</th>
+            <th class="py-2 px-4 text-left">Phone</th>
+            <th class="py-2 px-4 text-left">Role</th>
+            <th class="py-2 px-4 text-left">Membership</th>
+            <th class="py-2 px-4 text-left">Confirmed</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody">
+          <!-- User data will be loaded dynamically -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const roleFilter = document.getElementById('roleFilter');
+    const membershipFilter = document.getElementById('membershipFilter');
+    const userTableBody = document.getElementById('userTableBody');
+
+    function filterUsers() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const roleTerm = roleFilter.value;
+      const membershipTerm = membershipFilter.value;
+
+      for (const row of userTableBody.rows) {
+        const name = row.cells[0].textContent.toLowerCase();
+        const email = row.cells[1].textContent.toLowerCase();
+        const role = row.cells[3].textContent;
+        const membership = row.cells[4].textContent;
+
+        const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+        const matchesRole = roleTerm === '' || role === roleTerm;
+        const matchesMembership = membershipTerm === '' || membership === membershipTerm;
+
+        if (matchesSearch && matchesRole && matchesMembership) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    }
+
+    searchInput.addEventListener('input', filterUsers);
+    roleFilter.addEventListener('change', filterUsers);
+    membershipFilter.addEventListener('change', filterUsers);
+
+    // Fetch user data from backend API and populate table
+    async function fetchUsers() {
+      try {
+        const token = localStorage.getItem('token');
+        console.log('Token from localStorage:', token);
+
+        if (!token) {
+          throw new Error('No authentication token found. Please log in again.');
+        }
+
+        // Decode token to check if it's valid and user is admin
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          console.log('Token payload:', payload);
+
+          if (payload.role !== 'admin') {
+            throw new Error('Access denied. Admin privileges required.');
+          }
+        } catch (tokenError) {
+          console.error('Token decode error:', tokenError);
+          throw new Error('Invalid authentication token. Please log in again.');
+        }
+
+        const response = await fetch('http://localhost:5000/api/users', {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Response error text:', errorText);
+
+          if (response.status === 401) {
+            throw new Error('Authentication failed. Please log in again.');
+          } else if (response.status === 403) {
+            throw new Error('Access denied. Admin privileges required.');
+          } else {
+            throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}`);
+          }
+        }
+
+        const data = await response.json();
+        console.log('API Response data:', data);
+
+        if (!data.success) {
+          throw new Error(data.message || 'API returned success: false');
+        }
+
+        console.log('Users data:', data.users);
+
+        if (!data.users || data.users.length === 0) {
+          userTableBody.innerHTML = `
+            <tr>
+              <td colspan="6" class="border-t border-gray-300 py-4 px-4 text-center text-gray-500">
+                No users found in the database.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        populateUserTable(data.users);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        // Display error message in the table
+        userTableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="border-t border-gray-300 py-4 px-4 text-center text-red-500">
+              Error loading users: ${error.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // Populate user table with data
+    function populateUserTable(users) {
+      userTableBody.innerHTML = '';
+      users.forEach(user => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="border-t border-gray-300 py-2 px-4">${user.name}</td>
+          <td class="border-t border-gray-300 py-2 px-4">${user.email}</td>
+          <td class="border-t border-gray-300 py-2 px-4">${user.phone || ''}</td>
+          <td class="border-t border-gray-300 py-2 px-4">${user.role}</td>
+          <td class="border-t border-gray-300 py-2 px-4">${user.membershipStatus}</td>
+          <td class="border-t border-gray-300 py-2 px-4">${user.isConfirmed ? 'Yes' : 'No'}</td>
+        `;
+        userTableBody.appendChild(tr);
+      });
+    }
+
+    // Initial fetch
+    fetchUsers();
+  </script>
+
+</body>
+</html>
