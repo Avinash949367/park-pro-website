@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,24 +28,32 @@
   .hamburger {
     transition: transform 0.3s ease;
   }
-
+  
   .hamburger.open {
     transform: rotate(90deg);
   }
-
-  .hamburger-icon {
-    transition: transform 0.3s ease;
+  
+  .hamburger-line {
+    transition: all 0.3s ease;
   }
-
-  .hamburger.open .hamburger-icon {
-    transform: rotate(90deg);
+  
+  .hamburger.open .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
   }
-
+  
+  .hamburger.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger.open .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+  
   .mobile-menu.fixed.top-0 {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }
-
+  
   .mobile-menu.fixed.top-0.open {
     transform: translateX(0);
   }
@@ -95,7 +103,7 @@
     border-radius: 16px;
     padding: 30px 20px;
     text-align: center;
-    box-shadow: 0 8px 24px #46949d;
+    box-shadow: 0 2px 8px #46949d;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     height: 200px;
@@ -140,7 +148,7 @@
     border-radius: 16px;
     padding: 30px 20px;
     text-align: center;
-    box-shadow: 0 8px 24px #46949d;
+    box-shadow: 0 7px 8px #46949d;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     height: 200px;
@@ -152,7 +160,7 @@
 
   .partner-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px #46949d;
+    box-shadow: 0 2px 8px #46949d;
   }
 
   .partner-item img {
@@ -473,30 +481,6 @@
       grid-template-columns: 1fr;
     }
   }
-
-  /* Mobile Navbar Layout */
-  @media (max-width: 768px) {
-    /* Move hamburger menu to left and logo to right */
-    .bg-white.flex.justify-between.items-center > a {
-      order: 2;
-    }
-    .hamburger {
-      order: 1;
-    }
-
-    /* Reduce logo size in mobile view */
-    .bg-white.flex.justify-between.items-center > a img {
-      height: 3rem; /* h-12 */
-      width: auto;
-    }
-
-    /* Ensure mobile profile container is completely hidden initially */
-    #mobileProfileContainer {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-    }
-  }
 </style>
 </head>
 <body>
@@ -537,44 +521,37 @@
         </div>
       </div>
 
-  <!-- Mobile Hamburger Button -->
-  <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
-    <i class="fas fa-bars hamburger-icon"></i>
-  </button>
-</div>
+    <!-- Mobile Hamburger Button -->
+    <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900"></span>
+    </button>
 
-<!-- Mobile Menu Overlay -->
-<div class="mobile-menu fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
-
-<!-- Mobile Navigation Menu -->
-<nav class="mobile-menu fixed top-0 left-0 h-full w-72 bg-white shadow-lg z-50 p-6 md:hidden">
-  <!-- Logo Section -->
-  <div class="flex items-center space-x-4 mb-6">
-    <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-12 w-auto object-contain" loading="lazy" />
-    <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-12 w-auto object-contain" loading="lazy" />
   </div>
 
-  <div class="flex flex-col space-y-6">
-    <a href="aboutus.html" class="option text-lg font-medium">About us</a>
-    <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
-    <a href="products.html" class="option text-lg font-medium">Products</a>
-    <a href="contactus.html" class="option text-lg font-medium">Contact</a>
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
 
-    <!-- Mobile Login/Get App Buttons -->
-    <div class="pt-6 border-t border-gray-200">
-      <a href="userlogin.html" id="mobileLoginButton" class="bg-black font-bold text-white px-6 py-3 rounded-lg hover:opacity-90 transition block text-center mb-4">Login</a>
-      <a href="#" class="text-white rounded-lg px-6 py-3 cursor-pointer font-bold bg-black hover:bg-orange-600 transition block text-center">
-        Get the App
-      </a>
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6 md:hidden">
+    <div class="flex flex-col space-y-6 mt-16">
+      <a href="aboutus.html" class="option text-lg font-medium">About us</a>
+      <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
+      <a href="products.html" class="option text-lg font-medium">Products</a>
+      <a href="contactus.html" class="option text-lg font-medium">Contact</a>
+      
+      <!-- Mobile Login/Get App Buttons -->
+      <div class="pt-6 border-t border-gray-200">
+        <a href="userlogin.html" class="bg-black font-bold text-white px-6 py-3 rounded-lg hover:opacity-90 transition block text-center mb-4">Login</a>
+        <a href="#" class="text-white rounded-lg px-6 py-3 cursor-pointer font-bold bg-black hover:bg-orange-600 transition block text-center">
+          Get the App
+        </a>
+      </div>
     </div>
+  </nav>
 
-    <!-- Profile Icon Section -->
-    <div class="flex flex-col justify-center mt-4">
-      <a href="userprofile.html" id="mobileProfileContainer" class="hidden h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg cursor-pointer hover:bg-gray-400 transition-colors duration-200" title="User Profile" style="cursor: pointer !important;"></a>
-    </div>
-  </div>
-</nav>
-
+<script src="js/index.js"></script>
 <script src="js/cardToggle.js"></script>
 <script src="js/registerSpot.js"></script>
 <br>
@@ -847,120 +824,11 @@
     });
   });
 
-  // Login/Profile Management
-  document.addEventListener("DOMContentLoaded", function () {
-    const loginButton = document.getElementById("loginButton");
-    const profileContainer = document.getElementById("profileContainer");
-    const logoutButton = document.getElementById("logoutButton");
-    const profileAvatar = document.getElementById("profileAvatar");
-    const userName = document.getElementById("userName");
-    const userEmail = document.getElementById("userEmail");
-
-    const mobileLoginButton = document.getElementById("mobileLoginButton");
-    const mobileProfileContainer = document.getElementById("mobileProfileContainer");
-
-    // --- Helper to update UI based on login state ---
-    function updateUI() {
-        if (localStorage.getItem("loggedIn") === "true") {
-            // Desktop - Hide login button, show profile
-            if (loginButton) loginButton.style.display = "none";
-            if (profileContainer) profileContainer.classList.remove("hidden");
-
-            const name = localStorage.getItem("userName") || "User";
-            const email = localStorage.getItem("userEmail") || "user@example.com";
-
-            if (userName) userName.textContent = name;
-            if (userEmail) userEmail.textContent = email;
-            if (profileAvatar) profileAvatar.textContent = name.charAt(0).toUpperCase();
-
-            // Mobile - Hide login button, show profile
-            if (mobileLoginButton) mobileLoginButton.style.display = "none";
-            if (mobileProfileContainer) {
-                mobileProfileContainer.style.display = "flex";
-                mobileProfileContainer.style.visibility = "visible";
-                mobileProfileContainer.style.opacity = "1";
-                mobileProfileContainer.textContent = name.charAt(0).toUpperCase();
-            }
-        } else {
-            // Desktop - Show login button, hide profile
-            if (loginButton) loginButton.style.display = "inline-block";
-            if (profileContainer) profileContainer.classList.add("hidden");
-
-            // Mobile - Show login button, hide profile
-            if (mobileLoginButton) mobileLoginButton.style.display = "block";
-            if (mobileProfileContainer) {
-                mobileProfileContainer.style.display = "none";
-                mobileProfileContainer.style.visibility = "hidden";
-                mobileProfileContainer.style.opacity = "0";
-            }
-        }
-    }
-
-    // --- Login handlers ---
-    if (loginButton) {
-        loginButton.addEventListener("click", function () {
-            localStorage.setItem("loggedIn", "true");
-            localStorage.setItem("userName", "Madhu");
-            localStorage.setItem("userEmail", "madhu@example.com");
-            updateUI();
-        });
-    }
-
-    if (mobileLoginButton) {
-        mobileLoginButton.addEventListener("click", function () {
-            localStorage.setItem("loggedIn", "true");
-            localStorage.setItem("userName", "Madhu");
-            localStorage.setItem("userEmail", "madhu@example.com");
-            updateUI();
-        });
-    }
-
-    // --- Logout ---
-    if (logoutButton) {
-        logoutButton.addEventListener("click", function () {
-            localStorage.clear();
-            updateUI();
-        });
-    }
-
-    // --- Desktop profile avatar click ---
-    if (profileAvatar) {
-        profileAvatar.addEventListener("click", function () {
-            const dropdown = document.getElementById("profileDropdown");
-            if (dropdown) {
-                dropdown.classList.toggle("opacity-0");
-                dropdown.classList.toggle("invisible");
-                dropdown.classList.toggle("-translate-y-2");
-            }
-        });
-    }
-
-    // --- Mobile profile click goes to profile page ---
-    if (mobileProfileContainer) {
-        mobileProfileContainer.addEventListener("click", function () {
-            window.location.href = "userprofile.html";
-        });
-    }
-
-    // --- Desktop profile container click also goes to profile page ---
-    if (profileContainer) {
-        profileContainer.addEventListener("click", function () {
-            window.location.href = "userprofile.html";
-        });
-    }
-
-    // Initial check
-    updateUI();
-
-    // Periodic check in case login status changes
-    setInterval(updateUI, 1000);
-  });
-
   // Toggle FAQ items
   function toggleFAQ(id) {
     const content = document.getElementById(`faq-content-${id}`);
     const icon = document.getElementById(`faq-icon-${id}`);
-
+    
     content.classList.toggle('hidden');
     icon.classList.toggle('rotate-180');
   }
