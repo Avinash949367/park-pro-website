@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.removeItem('user');
           localStorage.removeItem('email');
         } else {
+          localStorage.setItem('isLoggedIn', 'true');
           window.location.href = 'index.html';
         }
       }

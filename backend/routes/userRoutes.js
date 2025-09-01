@@ -4,7 +4,9 @@ const {
   getAllUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  banUser,
+  disableUser
 } = require('../controllers/userController');
 const jwt = require('jsonwebtoken');
 
@@ -18,6 +20,20 @@ const ensureAuthenticated = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_jwt_secret_key');
     req.user = decoded;
+
+    // Check if user is banned
+    if (decoded.role === 'banned') {
+      return res.status(403).json({ message: 'Account is banned. Access denied.' });
+    }
+
+    // Check if user is temporarily disabled
+    if (decoded.disabledUntil && new Date(decoded.disabledUntil) > new Date()) {
+      return res.status(403).json({
+        message: 'Account is temporarily disabled. Please try again later.',
+        disabledUntil: decoded.disabledUntil
+      });
+    }
+
     next();
   } catch (error) {
     res.status(401).json({ message: 'Token is not valid' });
@@ -37,6 +53,8 @@ router.get('/admin/users', ensureAuthenticated, ensureAdmin, getAllUsers);
 router.get('/admin/users/:id', ensureAuthenticated, ensureAdmin, getUserById);
 router.put('/admin/users/:id', ensureAuthenticated, ensureAdmin, updateUser);
 router.delete('/admin/users/:id', ensureAuthenticated, ensureAdmin, deleteUser);
+router.post('/admin/users/:id/ban', ensureAuthenticated, ensureAdmin, banUser);
+router.post('/admin/users/:id/disable', ensureAuthenticated, ensureAdmin, disableUser);
 
 // General users route (admin only)
 router.get('/users', ensureAuthenticated, ensureAdmin, getAllUsers);

@@ -126,9 +126,89 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Ban user (admin only) - revoke all access
+const banUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const bannedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        isConfirmed: false,
+        role: 'banned'
+      },
+      { new: true }
+    );
+
+    if (!bannedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      success: true,
+      message: 'User banned successfully',
+      user: {
+        id: bannedUser._id,
+        name: bannedUser.name,
+        email: bannedUser.email,
+        role: bannedUser.role,
+        isConfirmed: bannedUser.isConfirmed
+      }
+    });
+  } catch (error) {
+    console.error('Error banning user:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Disable user temporarily (admin only)
+const disableUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { duration } = req.body; // duration in hours
+
+    if (!duration || ![24, 48].includes(duration)) {
+      return res.status(400).json({ message: 'Invalid duration. Must be 24 or 48 hours.' });
+    }
+
+    const disableUntil = new Date();
+    disableUntil.setHours(disableUntil.getHours() + duration);
+
+    const disabledUser = await User.findByIdAndUpdate(
+      id,
+      {
+        isConfirmed: false,
+        disabledUntil: disableUntil
+      },
+      { new: true }
+    );
+
+    if (!disabledUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      success: true,
+      message: `User disabled for ${duration} hours successfully`,
+      user: {
+        id: disabledUser._id,
+        name: disabledUser.name,
+        email: disabledUser.email,
+        isConfirmed: disabledUser.isConfirmed,
+        disabledUntil: disabledUser.disabledUntil
+      }
+    });
+  } catch (error) {
+    console.error('Error disabling user:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  banUser,
+  disableUser
 };

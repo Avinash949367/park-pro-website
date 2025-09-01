@@ -82,20 +82,20 @@
       transform: translateY(0);
     }
 
-    /* Updated option styling to match register-spot.html */
     .option {
-      text-decoration: none;
-      color: #1e3740;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
+      text-decoration: none;       /* Remove underline */
+      color: #1e3740;              /* Dark teal text color */
+      padding: 8px 12px;           /* Spacing around text */
+      border-radius: 8px;          /* Rounded corners */
+      transition: all 0.3s ease;   /* Smooth hover transition */
       font-weight: 500;
     }
 
+    /* Hover effect */
     .option:hover {
-      color: white;
-      background-color: #46949d;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      color: white;                /* Text turns white */
+      background-color: #46949d;   /* Medium teal background on hover */
+      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
     }
 
     /* Updated button colors */
@@ -150,12 +150,63 @@
     .mobile-menu.fixed.top-0.open {
       transform: translateX(0);
     }
+
+    /* Hero Card Button Styles */
+    .hero-btn {
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      padding: 8px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hero-btn.active {
+      background-color: #46949d;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(70, 148, 157, 0.3);
+    }
+
+    .hero-btn.active .material-icons {
+      color: white;
+    }
+
+    .hero-btn:hover:not(.active) {
+      background-color: rgba(70, 148, 157, 0.1);
+      transform: scale(1.02);
+    }
+
+    .hero-btn .material-icons {
+      font-size: 24px;
+      margin-bottom: 4px;
+      transition: color 0.3s ease;
+    }
+
+    .hero-btn span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Card Content Animation */
+    .card-content {
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .card-content.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body class="font-sans bg-white">
   
   <!-- Navbar -->
-  <div class="fixed top-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200 relative">
+  <div class="sticky top-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
     <a href="index.html"><div class="flex items-center space-x-4">
       <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
       <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
@@ -177,7 +228,7 @@
     </button>
     
     <!-- Login/Profile Container (Desktop) -->
-   <div id="loginProfileContainer" class="relative inline-block md:flex space-x-4 items-center hidden">
+   <div id="loginProfileContainer" class="relative inline-block md:flex space-x-2 items-center hidden">
   <a href="userlogin.html" 
      id="loginButton" 
      class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">
@@ -189,23 +240,23 @@
      class=" bg-black text-white rounded-lg px-6 py-2 cursor-pointer font-bold  transition transform hover:scale-110 duration-300">
     Get the App
   </a>
-</div>
-
-      <div id="profileContainer" class="hidden relative">
-        <a href="userprofile.html" id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg hover:bg-gray-400 transition-colors">
-          <i class="fas fa-user"></i>
-        </a>
-        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
-          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
-            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
-            <div>
-              <p class="font-semibold text-gray-900" id="userName">User</p>
-              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
-            </div>
-          </div>
-          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+  <hr><hr>
+  <div id="profileContainer" class="hidden relative">
+    <a href="userprofile.html" id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg hover:bg-gray-400 transition-colors">
+      <i class="fas fa-user"></i>
+    </a>
+    <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+      <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+        <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+        <div>
+          <p class="font-semibold text-gray-900" id="userName">User</p>
+          <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
         </div>
       </div>
+      <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+    </div>
+  </div>
+</div>
     </div>
   </div>
 
@@ -264,18 +315,14 @@
       <!-- Right Card -->
       <div class="bg-white bg-opacity-90 shadow-lg rounded-2xl p-6 w-full max-w-md mx-4 mt-8">
         <div class="flex justify-between mb-6">
-          <button id="findSpotBtn" class="text-blue-600 font-semibold text-lg flex flex-col items-center space-y-1">
-            <span class="material-icons" style="font-size: 24px;">directions_car</span>
+          <button id="findSpotBtn" class="hero-btn text-blue-600 active">
+            <span class="material-icons">directions_car</span>
             <span>Find spot</span>
           </button>
-          <a href="register-spot.html" 
-   id="registerSpotBtn" 
-   class="text-gray-500 font-semibold text-lg flex flex-col items-center space-y-1 hover:text-blue-500">
-  <span class="material-icons" style="font-size: 24px;">home</span>
-  <span>Register spot</span>
-</a>
-
-
+          <button id="registerSpotBtn" class="hero-btn text-gray-500">
+            <span class="material-icons">home</span>
+            <span>Register spot</span>
+          </button>
         </div>
         <div id="registerSpotContent" class="max-w-md mx-auto px-6 py-4">
           <div class="bg-white rounded-lg shadow-md p-6 min-h-[120px]">
@@ -616,25 +663,6 @@
     typeMessage();
   </script>
 
-  <!-- FAQ Search Form JavaScript -->
-  <script>
-    document.getElementById('faqSearchForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const query = document.getElementById('query').value.trim();
-      
-      if (query) {
-        // Encode the query for URL
-        const encodedQuery = encodeURIComponent(query);
-        
-        // Redirect to contact page with query parameter
-        window.location.href = `contactus.html?query=${encodedQuery}`;
-      } else {
-        // If no query, just go to contact page
-        window.location.href = 'contactus.html';
-      }
-    });
-  </script>
 
   <!-- FAQ and Contact Section -->
   <section class="py-16 bg-gradient-to-br from-gray-50 to-white">
@@ -699,72 +727,7 @@
             </div>
           </div>
 
-          <!-- FAQ Item 3 -->
-          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
-            <div class="flex items-start mb-6">
-              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
-                <i class="fas fa-cogs"></i>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
-                  Q3. How does the smart parking system work?
-                </h3>
-                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
-                  Our system uses IoT sensors to detect vehicle presence and update availability in real-time. Users can book slots through our app, and operators can manage multiple locations efficiently.
-                </p>
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span class="font-medium">Was this helpful?</span>
-                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
-                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 4 -->
-          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
-            <div class="flex items-start mb-6">
-              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
-                <i class="fas fa-headset"></i>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
-                  Q4. How can I contact customer support?
-                </h3>
-                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
-                  You can reach our 24/7 customer support through phone, email, WhatsApp, or live chat. Our team is always ready to assist you with any questions or issues.
-                </p>
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span class="font-medium">Was this helpful?</span>
-                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
-                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 5 -->
-          <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
-            <div class="flex items-start mb-6">
-              <div class="w-12 h-12 bg-gradient-to-r from-[#46949d] to-[#1e3740] rounded-2xl flex items-center justify-center text-white text-lg mr-6 flex-shrink-0 shadow-md">
-                <i class="fas fa-calendar-times"></i>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-2xl font-bold text-[#1e3740] mb-4">
-                  Q5. What happens if I cancel a booking?
-                </h3>
-                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
-                  Cancellations made more than 2 hours before the booking time receive a full refund. Late cancellations may incur a small processing fee as per our cancellation policy.
-                </p>
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span class="font-medium">Was this helpful?</span>
-                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👍 Yes</button>
-                  <button class="hover:text-[#46949d] transition-colors transform hover:scale-110">👎 No</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          
           <!-- View All FAQs CTA -->
           <div class="text-center mt-12">
             <a href="#" class="inline-flex items-center bg-gradient-to-r from-[#46949d] to-[#1e3740] text-white font-semibold px-8 py-4 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:scale-105">
@@ -785,35 +748,6 @@
               <p class="text-white/90 mb-8 leading-relaxed text-lg">
                 Can't find what you're looking for? Search our knowledge base or contact us directly.
               </p>
-              
-              <form id="faqSearchForm" class="space-y-6">
-                <div>
-                  <input 
-                    type="text" 
-                    id="query" 
-                    name="query" 
-                    class="w-full px-6 py-4 rounded-xl border-2 border-white/30 bg-white/15 text-white placeholder-white/70 focus:outline-none focus:ring-4 focus:ring-white/30 focus:border-transparent text-lg"
-                    placeholder="Type your question here..."
-                    required
-                  >
-                </div>
-                <div class="grid grid-cols-2 gap-6">
-                  <button 
-                    type="submit" 
-                    class="bg-white text-[#1e3740] font-bold px-6 py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center justify-center text-lg shadow-lg"
-                  >
-                    <i class="fas fa-search mr-3"></i>
-                    Search
-                  </button>
-                  <a 
-                    href="contactus.html" 
-                    class="bg-[#1e3740] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#46949d] transition-all duration-300 transform hover:scale-105 flex items-center justify-center text-lg shadow-lg"
-                  >
-                    <i class="fas fa-headset mr-3"></i>
-                    Contact
-                  </a>
-                </div>
-              </form>
               
               <div class="mt-12 space-y-6 text-base">
                 <h4 class="font-bold text-white mb-6 text-xl border-b border-white/30 pb-3">Contact Information</h4>
@@ -931,8 +865,39 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <script>
-    // Login/Profile Toggle Functionality
-    document.addEventListener('DOMContentLoaded'), function() {
+    // Hero Section Button Toggle Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const findSpotBtn = document.getElementById('findSpotBtn');
+      const registerSpotBtn = document.getElementById('registerSpotBtn');
+      const findSpotView = document.getElementById('findSpotView');
+      const registerSpotView = document.getElementById('registerSpotView');
+
+      function toggleContent(activeBtn, inactiveBtn, showView, hideView) {
+        // Update button states
+        activeBtn.classList.add('active');
+        inactiveBtn.classList.remove('active');
+
+        // Update content visibility with animation
+        showView.classList.remove('hidden');
+        showView.classList.add('card-content', 'active');
+        hideView.classList.add('hidden');
+        hideView.classList.remove('active');
+
+        setTimeout(() => {
+          showView.style.display = 'block';
+          hideView.style.display = 'none';
+        }, 150);
+      }
+
+      // Find Spot Button Click
+      findSpotBtn.addEventListener('click', function() {
+        toggleContent(findSpotBtn, registerSpotBtn, findSpotView, registerSpotView);
+      });
+
+      // Register Spot Button Click
+      registerSpotBtn.addEventListener('click', function() {
+        toggleContent(registerSpotBtn, findSpotBtn, registerSpotView, findSpotView);
+      });
       const loginButton = document.getElementById('loginButton');
       const profileContainer = document.getElementById('profileContainer');
       const mobileLoginButton = document.getElementById('mobileLoginButton');
@@ -1032,21 +997,8 @@
         }
       });
 
-      // Demo login functionality for testing (remove this in production)
-      const demoLoginButton = document.createElement('button');
-      demoLoginButton.textContent = 'Demo Login';
-      demoLoginButton.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #46949d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; z-index: 1000; font-size: 14px;';
-      demoLoginButton.addEventListener('click', function() {
-        // Simulate successful login
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('user', JSON.stringify({ name: 'Demo User', email: 'demo@example.com' }));
-        localStorage.setItem('email', 'demo@example.com');
-        checkLoginStatus();
-        alert('Demo login successful! You are now logged in.');
-      });
-      document.body.appendChild(demoLoginButton);
-    }
-    
+
+    });
   </script>
   </body>
 </html>

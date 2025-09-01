@@ -93,8 +93,12 @@ const mediaRoutes = require('./routes/mediaRoutes');
 app.use('/api/media', mediaRoutes);
 const userProfileRoutes = require('./routes/userProfileRoutes');
 const userRoutes = require('./routes/userRoutes');
+const contactRoutes = require('./routes/contactRoutes');
+
+
 app.use('/api/user', userProfileRoutes);
 app.use('/api', userRoutes);
+app.use('/api/contacts', contactRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

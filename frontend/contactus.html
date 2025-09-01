@@ -451,52 +451,33 @@
           <a href="contactus.html" class="option">Contact</a>
         </nav>
         <!-- Login/Profile Container (Desktop) -->
-<div id="loginProfileContainer" class="relative inline-block md:flex space-x-4 items-center hidden">
-    <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
-
-    <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
-      Get the App
-    </a>
-
-    <div id="profileContainer" class="hidden relative">
-      <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
-      <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
-        <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
-          <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
-          <div>
-            <p class="font-semibold text-gray-900" id="userName">User</p>
-            <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
-          </div>
+        <div id="loginProfileContainer" class="relative inline-block md:flex space-x-2 items-center hidden">
+            <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+            <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+              Get the App
+            </a>
+            <div id="profileContainer" class="hidden relative">
+              <a href="userprofile.html" id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg hover:bg-gray-400 transition-colors">
+                <i class="fas fa-user"></i>
+              </a>
+              <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+                <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+                  <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+                  <div>
+                    <p class="font-semibold text-gray-900" id="userName">User</p>
+                    <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+                  </div>
+                </div>
+                <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+              </div>
+            </div>
         </div>
-        <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
-      </div>
-    </div>
-</div>
 
         <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
           <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
           <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
           <span class="hamburger-line w-6 h-0.5 bg-gray-900"></span>
         </button>
-        <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center hidden md:flex">
-          <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
-          <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
-            Get the App
-          </a>
-          <div id="profileContainer" class="hidden relative">
-            <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
-            <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
-              <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
-                <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
-                <div>
-                  <p class="font-semibold text-gray-900" id="userName">User</p>
-                  <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
-                </div>
-              </div>
-              <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
-            </div>
-          </div>
-      </div>
       </div>
       <!-- Mobile Menu Overlay -->
       <div class="mobile-menu fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
@@ -796,12 +777,111 @@
                         hamburger.classList.remove('open');
                     });
                 });
-        }
-    });
+            }
 
-    // Contact Form Validation Script
-    document.addEventListener('DOMContentLoaded', function() {
-        const contactForm = document.querySelector('#contact-form form');
+            // Login/Profile Management
+            const loginButton = document.getElementById('loginButton');
+            const profileContainer = document.getElementById('profileContainer');
+            const mobileLoginButton = document.getElementById('mobileLoginButton');
+            const mobileProfileAvatar = document.getElementById('mobileProfileAvatar');
+            const logoutButton = document.getElementById('logoutButton');
+            const profileAvatar = document.getElementById('profileAvatar');
+            const loginProfileContainer = document.getElementById('loginProfileContainer');
+
+            function checkLoginStatus() {
+                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                if (isLoggedIn) {
+                    // Show loginProfileContainer and profile elements, hide login buttons
+                    if (loginProfileContainer) loginProfileContainer.classList.remove('hidden');
+                    if (loginButton) {
+                        loginButton.style.display = 'none';
+                    }
+                    if (profileContainer) profileContainer.classList.remove('hidden');
+
+                    // Set user details in profile dropdown
+                    const userData = localStorage.getItem('user');
+                    const user = userData ? JSON.parse(userData) : null;
+                    if (user) {
+                        document.getElementById('userName').textContent = user.name || 'User';
+                        document.getElementById('userEmail').textContent = localStorage.getItem('email') || 'user@example.com';
+                        const avatar = document.getElementById('dropdownAvatar');
+                        if (avatar) avatar.textContent = (user.name) ? user.name.charAt(0).toUpperCase() : 'U';
+                    }
+
+                    if (profileAvatar) {
+                        profileAvatar.style.display = 'flex';
+                        profileAvatar.innerHTML = (user && user.name) ? user.name.charAt(0).toUpperCase() : 'U';
+                    }
+                    if (mobileLoginButton) {
+                        mobileLoginButton.style.display = 'none';
+                    }
+                    if (mobileProfileAvatar) {
+                        mobileProfileAvatar.style.display = 'flex';
+                        mobileProfileAvatar.innerHTML = (user && user.name) ? user.name.charAt(0).toUpperCase() : 'U';
+                    }
+                } else {
+                    // Show loginProfileContainer and login buttons, hide profile elements
+                    if (loginProfileContainer) loginProfileContainer.classList.remove('hidden');
+                    if (loginButton) {
+                        loginButton.style.display = 'inline-block';
+                    }
+                    if (profileContainer) profileContainer.classList.add('hidden');
+                    if (profileAvatar) {
+                        profileAvatar.style.display = 'none';
+                        profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                    }
+                    if (mobileLoginButton) {
+                        mobileLoginButton.style.display = 'block';
+                    }
+                    if (mobileProfileAvatar) {
+                        mobileProfileAvatar.style.display = 'none';
+                        mobileProfileAvatar.innerHTML = '<i class="fas fa-user text-gray-700"></i>';
+                    }
+                }
+            }
+
+            // Initial check
+            checkLoginStatus();
+
+            // Logout functionality
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function() {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('email');
+                    // Hide profile elements
+                    if (profileContainer) profileContainer.classList.add('hidden');
+                    // Close dropdown if open
+                    const dropdown = document.getElementById('profileDropdown');
+                    if (dropdown) dropdown.classList.remove('visible');
+                    checkLoginStatus();
+                });
+            }
+
+            // Profile avatar click to show dropdown
+            if (profileAvatar) {
+                profileAvatar.addEventListener('click', function() {
+                    const dropdown = document.getElementById('profileDropdown');
+                    if (dropdown) {
+                        dropdown.classList.toggle('visible');
+                    }
+                });
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                const dropdown = document.getElementById('profileDropdown');
+                const profileContainer = document.getElementById('profileContainer');
+                if (dropdown && profileContainer && !profileContainer.contains(event.target)) {
+                    dropdown.classList.remove('visible');
+                }
+            });
+        });
+
+        // Contact Form Validation Script
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.querySelector('#contact-form form');
             const emailInput = document.getElementById('email');
             const phoneInput = document.getElementById('phone');
             const emailError = document.getElementById('emailError');
@@ -849,8 +929,10 @@
                 }
             });
 
-            // Form submission validation
-            contactForm.addEventListener('submit', function(e) {
+            // Form submission validation and API call
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault(); // Prevent default form submission
+
                 let isValid = true;
 
                 // Validate email
@@ -874,14 +956,59 @@
                     hideError(phoneError);
                 }
 
-                // Prevent form submission if validation fails
+                // If validation fails, scroll to the first error
                 if (!isValid) {
-                    e.preventDefault();
-                    // Scroll to the first error
                     const firstError = document.querySelector('.error-message[style*="display: block"]');
                     if (firstError) {
                         firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
+                    return;
+                }
+
+                // Show loading state
+                const submitButton = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
+                submitButton.textContent = 'Sending...';
+                submitButton.disabled = true;
+
+                // Prepare form data
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
+
+                try {
+                    // Send data to backend
+                    const response = await fetch('http://localhost:5000/api/contacts', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Success - show success message and reset form
+                        alert('Thank you for your message! We will get back to you soon.');
+                        contactForm.reset();
+                        hideError(emailError);
+                        hideError(phoneError);
+                    } else {
+                        // Error from backend
+                        alert('Error sending message: ' + (data.message || 'Please try again later.'));
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    alert('Error sending message. Please check your connection and try again.');
+                } finally {
+                    // Reset button state
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
                 }
             });
         });

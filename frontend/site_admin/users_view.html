@@ -137,6 +137,7 @@
             <th class="py-2 px-4 text-left">Role</th>
             <th class="py-2 px-4 text-left">Membership</th>
             <th class="py-2 px-4 text-left">Confirmed</th>
+            <th class="py-2 px-4 text-left">Actions</th>
           </tr>
         </thead>
         <tbody id="userTableBody">
@@ -237,7 +238,7 @@
         if (!data.users || data.users.length === 0) {
           userTableBody.innerHTML = `
             <tr>
-              <td colspan="6" class="border-t border-gray-300 py-4 px-4 text-center text-gray-500">
+              <td colspan="7" class="border-t border-gray-300 py-4 px-4 text-center text-gray-500">
                 No users found in the database.
               </td>
             </tr>
@@ -251,7 +252,7 @@
         // Display error message in the table
         userTableBody.innerHTML = `
           <tr>
-            <td colspan="6" class="border-t border-gray-300 py-4 px-4 text-center text-red-500">
+            <td colspan="7" class="border-t border-gray-300 py-4 px-4 text-center text-red-500">
               Error loading users: ${error.message}
             </td>
           </tr>
@@ -264,6 +265,12 @@
       userTableBody.innerHTML = '';
       users.forEach(user => {
         const tr = document.createElement('tr');
+        let actionsHtml = '';
+        if (user.role !== 'admin') {
+          actionsHtml = `
+            <button class="view-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2" data-user-id="${user.id}">View</button>
+          `;
+        }
         tr.innerHTML = `
           <td class="border-t border-gray-300 py-2 px-4">${user.name}</td>
           <td class="border-t border-gray-300 py-2 px-4">${user.email}</td>
@@ -271,9 +278,148 @@
           <td class="border-t border-gray-300 py-2 px-4">${user.role}</td>
           <td class="border-t border-gray-300 py-2 px-4">${user.membershipStatus}</td>
           <td class="border-t border-gray-300 py-2 px-4">${user.isConfirmed ? 'Yes' : 'No'}</td>
+          <td class="border-t border-gray-300 py-2 px-4">${actionsHtml}</td>
         `;
         userTableBody.appendChild(tr);
       });
+
+      // Add event listeners for view buttons
+      document.querySelectorAll('.view-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const userId = button.getAttribute('data-user-id');
+          openUserDetails(userId);
+        });
+      });
+    }
+
+    // Function to open user details modal
+    async function openUserDetails(userId) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch user details');
+        }
+        const data = await response.json();
+        if (!data.success) {
+          throw new Error('Failed to fetch user details');
+        }
+        showUserDetailsModal(data.user);
+      } catch (error) {
+        alert('Error loading user details: ' + error.message);
+      }
+    }
+
+    // Function to show user details modal with ban, disable, delete buttons
+    function showUserDetailsModal(user) {
+      // Create modal container if not exists
+      let modal = document.getElementById('userDetailsModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'userDetailsModal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="bg-white rounded-lg p-6 w-96 max-w-full relative">
+            <button id="closeModalBtn" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold text-xl">&times;</button>
+            <h2 class="text-xl font-bold mb-4">User Details</h2>
+            <div id="userDetailsContent"></div>
+            <div class="mt-4 flex space-x-2">
+              <button id="banUserBtn" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">Ban</button>
+              <button id="disableUserBtn" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Disable</button>
+              <button id="deleteUserBtn" class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded">Delete</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Close modal event
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+          modal.remove();
+        });
+      }
+
+      // Populate user details
+      const detailsDiv = document.getElementById('userDetailsContent');
+      detailsDiv.innerHTML = `
+        <p><strong>Name:</strong> ${user.name}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Phone:</strong> ${user.phone || ''}</p>
+        <p><strong>Role:</strong> ${user.role}</p>
+        <p><strong>Membership:</strong> ${user.membershipStatus}</p>
+        <p><strong>Confirmed:</strong> ${user.isConfirmed ? 'Yes' : 'No'}</p>
+      `;
+
+      // Ban user button click
+      document.getElementById('banUserBtn').onclick = async () => {
+        if (confirm('Are you sure you want to ban this user? This will revoke all access.')) {
+          await performUserAction(user.id, 'ban');
+          modal.remove();
+          fetchUsers();
+        }
+      };
+
+      // Disable user button click with options 24h or 48h
+      document.getElementById('disableUserBtn').onclick = () => {
+        const duration = prompt('Enter disable duration in hours (24 or 48):', '24');
+        if (duration === '24' || duration === '48') {
+          performUserAction(user.id, 'disable', duration).then(() => {
+            modal.remove();
+            fetchUsers();
+          });
+        } else {
+          alert('Invalid duration. Please enter 24 or 48.');
+        }
+      };
+
+      // Delete user button click
+      document.getElementById('deleteUserBtn').onclick = async () => {
+        if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+          await performUserAction(user.id, 'delete');
+          modal.remove();
+          fetchUsers();
+        }
+      };
+    }
+
+    // Function to perform user actions: ban, disable, delete
+    async function performUserAction(userId, action, duration) {
+      try {
+        const token = localStorage.getItem('token');
+        let url, method;
+        if (action === 'delete') {
+          url = `http://localhost:5000/api/admin/users/${userId}`;
+          method = 'DELETE';
+        } else {
+          url = `http://localhost:5000/api/admin/users/${userId}/${action}`;
+          method = 'POST';
+        }
+        let options = {
+          method: method,
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          }
+        };
+        if (action === 'disable' && duration) {
+          options.body = JSON.stringify({ duration: parseInt(duration) });
+        }
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error(`Failed to ${action} user`);
+        }
+        const data = await response.json();
+        if (!data.success) {
+          throw new Error(data.message || `Failed to ${action} user`);
+        }
+        alert(`User ${action}ed successfully.`);
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
     }
 
     // Initial fetch
