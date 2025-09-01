@@ -1,17 +1,7 @@
-# TODO: Remove FAQ Search Form and Related Code
+# TODO: Remove Form from FAQ Page and Add Contact Us Link
 
-## Frontend Changes
-- [ ] Remove FAQ search form from frontend/index.html while keeping contact info
-- [ ] Remove FAQ-related JavaScript from frontend/index.html
-- [ ] Remove FAQ management from frontend/site_admin/information.html
-
-## Backend Changes
-- [ ] Remove FAQ routes from backend/server.js
-- [ ] Delete backend/routes/faqRoutes.js
-- [ ] Delete backend/controllers/faqController.js
-- [ ] Delete backend/models/FAQ.js
-- [ ] Delete backend/models/PendingFAQ.js
-
-## Cleanup
-- [ ] Delete TODO_remove_faq.md
-- [ ] Test that index.html loads without errors
+## Steps to Complete:
+- [x] Remove the entire form-section from faq.html
+- [x] Replace with a new section containing a styled Contact Us link
+- [x] Ensure the new link has good UI and matches the page's design
+- [ ] Test the updated FAQ page to verify changes
