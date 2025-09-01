@@ -74,6 +74,8 @@ exports.finalApproveRegistration = async (req, res) => {
       state: registration.state,
       zip: registration.zip,
       country: registration.country,
+      googleMapLocation: registration.googleMapLocation,
+      stationName: registration.stationName,
       latitude: registration.latitude,
       longitude: registration.longitude,
       slots: registration.slots,
@@ -82,6 +84,7 @@ exports.finalApproveRegistration = async (req, res) => {
       status: 'active',
       registrationId: registration.registrationId,
       approvedBy,
+      adminName: approvedBy, // Set adminName to the same as approvedBy
       approvedAt: new Date()
     });
 
@@ -112,6 +115,16 @@ exports.finalApproveRegistration = async (req, res) => {
     registration.status = 'active';
     registration.approvedBy = approvedBy;
     registration.approvedAt = new Date();
+
+    // Handle field name migration: if adminName exists but stationName doesn't, migrate it
+    if (registration.adminName && !registration.stationName) {
+      registration.stationName = registration.adminName;
+      // Remove the old field if it exists
+      if (registration.adminName !== undefined) {
+        registration.adminName = undefined;
+      }
+    }
+
     await registration.save();
 
     // Send final approval email with credentials
@@ -183,6 +196,15 @@ exports.rejectRegistrationWithReason = async (req, res) => {
     registration.approvedBy = rejectedBy;
     registration.rejectedAt = new Date();
     registration.rejectionReason = rejectionReason;
+
+    // Handle field name migration: if adminName exists but stationName doesn't, migrate it
+    if (registration.adminName && !registration.stationName) {
+      registration.stationName = registration.adminName;
+      // Remove the old field if it exists
+      if (registration.adminName !== undefined) {
+        registration.adminName = undefined;
+      }
+    }
 
     await registration.save();
 

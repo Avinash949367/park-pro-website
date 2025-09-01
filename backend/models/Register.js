@@ -55,6 +55,10 @@ const RegisterSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    stationName: {
+        type: String,
+        required: true
+    },
     status: {
         type: String,
         enum: ['pending', 'approved', 'rejected', 'doc-processing', 'active'],

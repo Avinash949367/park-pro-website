@@ -46,6 +46,16 @@ const stationSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  googleMapLocation: {
+    type: String,
+    required: false,
+    default: null
+  },
+  stationName: {
+    type: String,
+    required: false,
+    default: null
+  },
   slots: {
     type: Number,
     required: true
@@ -68,6 +78,10 @@ const stationSchema = new mongoose.Schema({
     required: true
   },
   approvedBy: {
+    type: String,
+    default: null
+  },
+  adminName: {
     type: String,
     default: null
   },

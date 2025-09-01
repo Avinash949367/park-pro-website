@@ -85,8 +85,8 @@ exports.updateRegistrationStatus = async (req, res) => {
 // Update address and location details
 exports.updateAddress = async (req, res) => {
     try {
-        const { registrationId, address, city, state, zipCode, country, totalSlots, pricePerSlot, googleMapLocation } = req.body;
-        
+        const { registrationId, address, city, state, zipCode, country, totalSlots, pricePerSlot, stationName, googleMapLocation } = req.body;
+
         if (!registrationId) {
             return res.status(400).json({ error: "Missing registrationId in request body" });
         }
@@ -100,10 +100,11 @@ exports.updateAddress = async (req, res) => {
         if (!country || country.trim() === '') missingFields.push('country');
         if (!totalSlots || isNaN(parseInt(totalSlots))) missingFields.push('totalSlots');
         if (!pricePerSlot || isNaN(parseFloat(pricePerSlot))) missingFields.push('pricePerSlot');
+        if (!stationName || stationName.trim() === '') missingFields.push('stationName');
         if (!googleMapLocation || googleMapLocation.trim() === '') missingFields.push('googleMapLocation');
 
         if (missingFields.length > 0) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 error: `Missing or invalid required fields: ${missingFields.join(', ')}`
             });
         }
@@ -130,6 +131,7 @@ exports.updateAddress = async (req, res) => {
                 country: country,
                 slots: parseInt(totalSlots),
                 price: parseFloat(pricePerSlot),
+                stationName: stationName,
                 googleMapLocation: googleMapLocation,
                 status: 'doc-processing',
                 updatedAt: new Date()

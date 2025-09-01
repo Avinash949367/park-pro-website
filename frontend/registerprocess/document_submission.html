@@ -448,6 +448,11 @@
             </div>
 
             <div class="form-group">
+                <label for="stationName" class="required-field">Station Name</label>
+                <input type="text" id="stationName" name="stationName" placeholder="Enter the name of the parking station" required>
+            </div>
+
+            <div class="form-group">
                 <label for="googleMapLocation" class="required-field">Google Map Location</label>
                 <input type="text" id="googleMapLocation" name="googleMapLocation" placeholder="Paste Google Maps URL or search location" required>
                 <button type="button" onclick="extractLocation()" style="margin-top: 10px; padding: 8px 16px; font-size: 14px;">Extract Location</button>
@@ -592,6 +597,7 @@
           country: document.getElementById('country').value.trim(),
           totalSlots: parseInt(document.getElementById('totalSlots').value) || 1,
           pricePerSlot: parseFloat(document.getElementById('pricePerSlot').value) || 0,
+          stationName: document.getElementById('stationName').value.trim(),
           googleMapLocation: document.getElementById('googleMapLocation').value.trim(), // Add this required field
           latitude: 0, // Default values since we're using Google Maps location
           longitude: 0
