@@ -932,7 +932,7 @@
 
   <script>
     // Login/Profile Toggle Functionality
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded'), function() {
       const loginButton = document.getElementById('loginButton');
       const profileContainer = document.getElementById('profileContainer');
       const mobileLoginButton = document.getElementById('mobileLoginButton');
@@ -950,23 +950,46 @@
             loginButton.style.display = 'none';
           }
           if (profileContainer) profileContainer.classList.remove('hidden');
-          if (profileAvatar) profileAvatar.style.display = 'flex';
+
+          // Set user details in profile dropdown
+          const userData = localStorage.getItem('user');
+          const user = userData ? JSON.parse(userData) : null;
+          if (user) {
+            document.getElementById('userName').textContent = user.name || 'User';
+            document.getElementById('userEmail').textContent = localStorage.getItem('email') || 'user@example.com';
+            const avatar = document.getElementById('dropdownAvatar');
+            if (avatar) avatar.textContent = (user.name) ? user.name.charAt(0).toUpperCase() : 'U';
+          }
+
+          if (profileAvatar) {
+            profileAvatar.style.display = 'flex';
+            profileAvatar.innerHTML = (user && user.name) ? user.name.charAt(0).toUpperCase() : 'U';
+          }
           if (mobileLoginButton) {
             mobileLoginButton.style.display = 'none';
           }
-          if (mobileProfileAvatar) mobileProfileAvatar.style.display = 'flex';
+          if (mobileProfileAvatar) {
+            mobileProfileAvatar.style.display = 'flex';
+            mobileProfileAvatar.innerHTML = (user && user.name) ? user.name.charAt(0).toUpperCase() : 'U';
+          }
         } else {
-          // Hide loginProfileContainer and profile elements, show login buttons
-          if (loginProfileContainer) loginProfileContainer.classList.add('hidden');
+          // Show loginProfileContainer and login buttons, hide profile elements
+          if (loginProfileContainer) loginProfileContainer.classList.remove('hidden');
           if (loginButton) {
             loginButton.style.display = 'inline-block';
           }
           if (profileContainer) profileContainer.classList.add('hidden');
-          if (profileAvatar) profileAvatar.style.display = 'none';
+          if (profileAvatar) {
+            profileAvatar.style.display = 'none';
+            profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
+          }
           if (mobileLoginButton) {
             mobileLoginButton.style.display = 'block';
           }
-          if (mobileProfileAvatar) mobileProfileAvatar.style.display = 'none';
+          if (mobileProfileAvatar) {
+            mobileProfileAvatar.style.display = 'none';
+            mobileProfileAvatar.innerHTML = '<i class="fas fa-user text-gray-700"></i>';
+          }
         }
       }
 
@@ -1012,19 +1035,7 @@
       // Demo login functionality for testing (remove this in production)
       const demoLoginButton = document.createElement('button');
       demoLoginButton.textContent = 'Demo Login';
-      demoLoginButton.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #46949d;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 1000;
-        font-size: 14px;
-      `;
+      demoLoginButton.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #46949d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; z-index: 1000; font-size: 14px;';
       demoLoginButton.addEventListener('click', function() {
         // Simulate successful login
         localStorage.setItem('isLoggedIn', 'true');
@@ -1034,7 +1045,7 @@
         alert('Demo login successful! You are now logged in.');
       });
       document.body.appendChild(demoLoginButton);
-    };
+    }
     
   </script>
   </body>
