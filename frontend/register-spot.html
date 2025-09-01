@@ -195,7 +195,15 @@
       <a href="products.html" class="option">Products</a>
       <a href="contactus.html" class="option">Contact</a>
     </nav>
-    <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+    <!-- Mobile Hamburger Button -->
+    <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900"></span>
+    </button>
+
+    <!-- Login/Profile Container (Desktop) -->
+    <div id="loginProfileContainer" class="relative inline-block md:flex space-x-4 items-center hidden">
       <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
       <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
         Get the App
@@ -213,8 +221,29 @@
           <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
         </div>
       </div>
+    </div>
   </div>
-  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
+
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-nav fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6 md:hidden" style="transform: translateX(-100%); transition: transform 0.3s ease;">
+    <div class="flex flex-col space-y-6 mt-16">
+      <a href="aboutus.html" class="option text-lg font-medium">About us</a>
+      <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
+      <a href="products.html" class="option text-lg font-medium">Products</a>
+      <a href="contactus.html" class="option text-lg font-medium">Contact</a>
+
+      <!-- Mobile Login/Get App Buttons -->
+      <div class="pt-6 border-t border-gray-200">
+        <a href="userlogin.html" class="bg-black font-bold text-white px-6 py-3 rounded-lg hover:opacity-90 transition block text-center mb-4">Login</a>
+        <a href="#" class="text-white rounded-lg px-6 py-3 cursor-pointer font-bold bg-black hover:bg-orange-600 transition block text-center">
+          Get the App
+        </a>
+      </div>
+    </div>
+  </nav>
   <!-- Header -->
   <div class="py-8 text-center text-black" style="background-image: url('assets/images/welcome.png'); background-size: cover; background-position: center;">
     <h1 class="text-4xl font-bold">Welcome to ParkPro</h1>
@@ -222,7 +251,7 @@
   </div>
 
   <!-- Main Section -->
-  <div class="bg-white mx-auto my-10 px-20 flex flex-col lg:flex-row gap-8">
+  <div class="bg-white mx-auto my-10 px-6 sm:px-10 md:px-20 flex flex-col lg:flex-row gap-8">
 
     <!-- Left Column - Why Choose Us -->
     <div class="lg:w-1/2" style="font-weight: var(--semi-bold-font, 500);">
@@ -348,16 +377,16 @@
           return;
       }
   
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // Validate email format (only @gmail.com allowed)
+      const emailRegex = /^[^\s@]+@gmail\.com$/;
       if (!emailRegex.test(data.email)) {
-          alert('Please enter a valid email address');
+          alert('Please enter a valid Gmail address (e.g., example@gmail.com)');
           return;
       }
   
-      // Validate mobile number
-      if (!/^\d{10,15}$/.test(data.phone)) {
-          alert('Please enter a valid mobile number');
+      // Validate mobile number (only digits, max 10)
+      if (!/^\d{10}$/.test(data.phone)) {
+          alert('Please enter a valid 10-digit mobile number (digits only)');
           return;
       }
   
@@ -451,14 +480,9 @@ function onsubmit_success() {
 
 
   </script>
-  
-    
+
     </div>
   </div>
-
-  
-  
-
 
   <!-- What's Next Section -->
   <div class="bg-white py-12 text-center" id="next-pro">
@@ -818,12 +842,58 @@ function onsubmit_success() {
     alert("Our chat service will open in a new window. For now, you can contact us via phone or email.");
     // In a real implementation, this would open your chat widget
   }
+
+
+
+
+<!-- Mobile Navigation JavaScript -->
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+    const mobileNav = document.querySelector('.mobile-nav');
+
+    function toggleMenu() {
+      if (hamburger.classList.contains('open')) {
+        hamburger.classList.remove('open');
+        mobileNav.style.transform = 'translateX(-100%)';
+        mobileMenuOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+      } else {
+        hamburger.classList.add('open');
+        mobileNav.style.transform = 'translateX(0)';
+        mobileMenuOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    mobileMenuOverlay.addEventListener('click', toggleMenu);
+
+    // Close menu when clicking on links
+    const mobileLinks = mobileNav.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', toggleMenu);
+    });
+  });
 </script>
 
 <style>
   .rotate-180 {
     transform: rotate(180deg);
   }
+
+  /* Hamburger animation */
+  .hamburger.open .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .hamburger.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.open .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
 </style>
+
   </body>
 </html>

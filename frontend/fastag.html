@@ -26,6 +26,40 @@
       box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
     }
 
+    /* Mobile Menu Styles */
+    .hamburger {
+      transition: transform 0.3s ease;
+    }
+    
+    .hamburger.open {
+      transform: rotate(90deg);
+    }
+    
+    .hamburger-line {
+      transition: all 0.3s ease;
+    }
+    
+    .hamburger.open .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+    
+    .hamburger.open .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .hamburger.open .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+    
+    .mobile-menu.fixed.top-0 {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .mobile-menu.fixed.top-0.open {
+      transform: translateX(0);
+    }
+
      /* Custom animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -90,24 +124,219 @@
             color: rgb(255, 255, 255);
         }
        
-       
   </style>
-</head>
+  <style>
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .main-content {
+            margin-top: 90px;
+        }
+        
+        .hero-content h1 {
+            font-size: 2.5rem;
+        }
+        
+        .hero-content p {
+            font-size: 1.1rem;
+        }
+        
+        .services-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .service-card {
+            padding: 1.5rem;
+        }
+        
+        .transaction-table {
+            overflow-x: auto;
+            margin: 0 -1rem;
+            padding: 0 1rem;
+        }
+        
+        table {
+            font-size: 0.9rem;
+            min-width: 600px;
+        }
+        
+        .faq-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .faq-item {
+            padding: 1.5rem;
+        }
+        
+        .recharge-form {
+            padding: 1.5rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 0.9rem;
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+        
+        button[type="submit"] {
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+        }
+        
+        .modal-content {
+            margin: 1rem;
+            max-width: calc(100% - 2rem);
+        }
+        
+        .support-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .support-card {
+            padding: 1.5rem;
+        }
+        
+        .hero-style {
+            height: 400px;
+        }
+        
+        .container {
+            padding: 0 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-content {
+            margin-top: 80px;
+        }
+        
+        .hero-content h1 {
+            font-size: 2rem;
+        }
+        
+        .hero-content p {
+            font-size: 1rem;
+        }
+        
+        .service-card {
+            padding: 1.2rem;
+        }
+        
+        .service-card h3 {
+            font-size: 20px;
+        }
+        
+        .recharge-form {
+            padding: 1.2rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 0.8rem;
+        }
+        
+        button[type="submit"] {
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .faq-item {
+            padding: 1.2rem;
+        }
+        
+        .faq-question {
+            font-size: 16px;
+        }
+        
+        .support-card {
+            padding: 1.2rem;
+        }
+        
+        .support-card h3 {
+            font-size: 20px;
+        }
+        
+        .transaction-table {
+            margin: 0 -0.5rem;
+            padding: 0 0.5rem;
+        }
+        
+        table {
+            min-width: 500px;
+            font-size: 0.8rem;
+        }
+        
+        .modal-content {
+            margin: 0.5rem;
+            max-width: calc(100% - 1rem);
+            padding: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+        }
+        
+        .container {
+            margin: 0 20px;
+            max-width: none;
+        }
+        
+        .hero-style {
+            height: 350px;
+        }
+        
+        .bg-white {
+            padding: 1rem;
+        }
+        
+        .logo-container img {
+            height: 16px;
+            width: auto;
+        }
+    }
+      .option {
+            text-decoration: none;
+            color: #1e3740;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .option:hover {
+            color: white;
+            background-color: #46949d;
+            box-shadow: 0 2px 6px rgb(18, 105, 28);
+        }
+  </style>
 <body class="font-sans bg-gray-200">
 
     <!-- Navbar -->
-    <div class=" bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+    <div class="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
       <a href="index.html"><div class="flex items-center space-x-4">
         <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
         <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
       </div></a>
+      
+      <!-- Desktop Navigation -->
       <nav class="space-x-6 hidden md:flex font-medium">
-        <a href="index.html" class="option">About us</a>
-        <a href="#" class="option">Park Pro For Business</a>
-        <a href="#" class="option">Products</a>
-        <a href="#" class="option">Contact</a>
+        <a href="aboutus.html" class="option">About us</a>
+        <a href="business.html" class="option">Park Pro For Business</a>
+        <a href="products.html" class="option">Products</a>
+        <a href="contactus.html" class="option">Contact</a>
       </nav>
-      <div id="loginProfileContainer" class="relative inline-block flex space-x-4 items-center">
+      
+      <!-- Mobile Hamburger Button -->
+      <button id="hamburgerBtn" class="md:hidden hamburger flex flex-col justify-center items-center w-8 h-8 relative z-50">
+        <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5 transition-all duration-300"></span>
+        <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5 transition-all duration-300"></span>
+        <span class="hamburger-line w-6 h-0.5 bg-gray-900 transition-all duration-300"></span>
+      </button>
+      
+      <!-- Desktop Login/Profile Container -->
+      <div id="loginProfileContainer" class="relative hidden md:inline-block md:flex space-x-4 items-center">
         <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
         <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
           Get the App
@@ -125,8 +354,29 @@
             <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
           </div>
         </div>
+      </div>
     </div>
-    </div>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
+
+    <!-- Mobile Navigation Menu -->
+    <nav class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6 md:hidden">
+      <div class="flex flex-col space-y-6 mt-16">
+        <a href="aboutus.html" class="option text-lg font-medium">About us</a>
+        <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
+        <a href="products.html" class="option text-lg font-medium">Products</a>
+        <a href="contactus.html" class="option text-lg font-medium">Contact</a>
+
+        <!-- Mobile Login/Get App Buttons -->
+        <div class="pt-6 border-t border-gray-200">
+          <a href="userlogin.html" class="bg-black font-bold text-white px-6 py-3 rounded-lg hover:opacity-90 transition block text-center mb-4">Login</a>
+          <a href="#" class="text-white rounded-lg px-6 py-3 cursor-pointer font-bold bg-black hover:bg-orange-600 transition block text-center">
+            Get the App
+          </a>
+        </div>
+      </div>
+    </nav>
     <script src="js/index.js"></script>
     <script src="js/cardToggle.js"></script>
     <script src="js/registerSpot.js"></script>
@@ -220,7 +470,7 @@
                             <h3 class="text-xl font-semibold text-gray-800">Link Vehicle</h3>
                         </div>
                         <p class="text-gray-600 mb-4">Link your vehicle to FASTag or update vehicle details.</p>
-                        <button class="text-blue-600 font-medium hover:text-blue-800 transition">Link Now →</button>
+                        <button class="text-black-600 font-medium hover:text-blue-800 transition">Link Now →</button>
                     </div>
                 </div>
                 
@@ -234,7 +484,7 @@
                             <h3 class="text-xl font-semibold text-gray-800">Deactivate FASTag</h3>
                         </div>
                         <p class="text-gray-600 mb-4">Close your FASTag account and request for refund of remaining balance.</p>
-                        <button class="text-blue-600 font-medium hover:text-blue-800 transition">Deactivate →</button>
+                        <button class="text-black-600 font-medium hover:text-blue-800 transition">Deactivate →</button>
                     </div>
                 </div>
             </div>
@@ -642,12 +892,30 @@
         </div>
     </div>
 
+    <!-- Mobile Navigation JavaScript -->
     <script>
-        // Mobile menu toggle
-        document.querySelector('.md\\:hidden').addEventListener('click', function() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenuOverlay = document.querySelector('.mobile-menu.fixed.inset-0');
+            const mobileNav = document.querySelector('.mobile-menu.fixed.top-0');
+
+            function toggleMenu() {
+                hamburger.classList.toggle('open');
+                mobileNav.classList.toggle('open');
+                mobileMenuOverlay.style.display = mobileNav.classList.contains('open') ? 'block' : 'none';
+                document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+            }
+
+            hamburger.addEventListener('click', toggleMenu);
+            mobileMenuOverlay.addEventListener('click', toggleMenu);
+
+            // Close menu when clicking on links
+            const mobileLinks = mobileNav.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
         });
+    </script>
 
         // FAQ accordion
         document.querySelectorAll('.faq-toggle').forEach(button => {
