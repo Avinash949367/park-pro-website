@@ -82,9 +82,13 @@ router.post("/storeadmin/login", async (req, res, next) => {
   try {
     const credentials = await StoreAdminCredentials.findOne({ email });
     if (!credentials) {
+      console.log('StoreAdminCredentials not found for email:', email);
       return res.status(400).json({ message: "No user found" });
     }
+    console.log('Stored password hash:', credentials.password);
+    console.log('Password received:', password);
     const isMatch = await bcrypt.compare(password, credentials.password);
+    console.log('Password match result:', isMatch);
     if (!isMatch) {
       return res.status(403).json({ message: "Access denied: Invalid credentials" });
     }
@@ -95,7 +99,7 @@ router.post("/storeadmin/login", async (req, res, next) => {
     );
     res.json({
       token,
-      user: { email: credentials.email, role: 'store admin' },
+      user: { email: credentials.email, role: 'store admin', stationId: credentials.stationId },
       redirectUrl: "storeadmin_dashboard.html",
     });
   } catch (err) {
