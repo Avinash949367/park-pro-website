@@ -96,13 +96,34 @@
     }
   </style>
 </head>
-<body class="bg-gray-50 font-sans flex h-screen">
+<body class="bg-gray-100 font-sans flex flex-col h-screen">
 
-  <!-- Sidebar -->
-  <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+  <!-- Top Navbar -->
+  <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <h1 class="text-xl font-semibold text-gray-800">Park Pro Admin</h1>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="relative">
+        <button id="profileButton" type="button" class="flex items-center space-x-3 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+          <img src="..\assets\images\WhatsApp Image 2024-03-28 at 17.51.05_3d94f0ae.jpg" class="h-10 w-10 rounded-full border-2 border-gray-300" alt="Profile" />
+
+        </button>
+        <div id="profileMenu" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50" role="menu" aria-orientation="vertical" aria-labelledby="profileButton">
+          <a href="adminprofile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#46949d] hover:text-white" role="menuitem">View Profile</a>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#46949d] hover:text-white" role="menuitem">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
     <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
       <a href="admindashboard.html"><div class="flex items-center space-x-4">
-        <img src="../assets/images/logo-with-text-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-30 object-contain" loading="lazy" />
+        <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+        <img src="../assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
       </div></a>
       <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
         <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
@@ -115,38 +136,56 @@
     <nav class="flex-1 overflow-y-auto">
       <ul class="p-4 space-y-2">
         <li>
-          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2 transition-colors duration-200">
+          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
             <i class="material-icons text-gray-900">dashboard</i>
             <span>Dashboard</span>
           </a>
         </li>
-        <li>
-          <a href="#" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2 transition-colors duration-200">
+        <!-- <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
             <i class="material-icons text-gray-900">local_parking</i>
             <span>My Spots</span>
           </a>
-        </li>
-        <li>
-          <a href="#" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2 transition-colors duration-200">
+        </li> -->
+        <!-- <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
             <i class="material-icons text-gray-900">event</i>
             <span>Bookings</span>
           </a>
-        </li>
-        <li>
-          <a href="#" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2 transition-colors duration-200">
+        </li> -->
+        <!-- <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
             <i class="material-icons text-gray-900">credit_card</i>
             <span>Payments</span>
           </a>
-        </li>
+        </li> -->
         <li>
-          <a href="stations.html" class="block py-2 px-4 rounded bg-[#46949d] text-white flex items-center space-x-2">
-            <i class="material-icons">local_parking</i>
-            <span>Stations</span>
-          </a>
+          <details class="group" open>
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="material-icons text-gray-900">local_parking</i>
+                <span>Stations</span>
+              </span>
+              <span class="float-right transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <ul class="pl-4 mt-2 space-y-1">
+              <li>
+                <a href="stations.html" class="block py-1 px-4 rounded bg-[#46949d] text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">local_parking</i>
+                  <span>Manage Stations</span>
+                </a>
+              </li>
+              <li>
+                <a href="register_documents.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">description</i>
+                  <span>Register-Documents</span>
+                </a>
+              </li>
+          </details>
         </li>
         <li>
           <details class="group">
-            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between transition-colors duration-200">
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between">
               <span class="flex items-center space-x-2">
                 <i class="material-icons text-gray-900">settings</i>
                 <span>Management</span>
@@ -155,19 +194,27 @@
             </summary>
             <ul class="pl-4 mt-2 space-y-1">
               <li>
-                <a href="#" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2 transition-colors duration-200">
+                <a href="users_view.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
                   <i class="material-icons text-gray-900" style="font-size: 16px;">person</i>
                   <span>Users</span>
                 </a>
               </li>
+
               <li>
-                <a href="#" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2 transition-colors duration-200">
+                <a href="#" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
                   <i class="material-icons text-gray-900" style="font-size: 16px;">settings</i>
                   <span>Settings</span>
                 </a>
               </li>
             </ul>
           </details>
+
+        </li>
+        <li>
+          <a href="information.html" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900" style="font-size: 16px;">contact_support</i>
+            <span>Contact and FAQs</span>
+          </a>
         </li>
       </ul>
     </nav>
@@ -461,132 +508,178 @@
       </div>
     </div>
 
-    <!-- View Registration Details Modal -->
+    <!-- View Station Details Modal -->
     <div id="viewRegistrationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-6xl max-h-[90vh] overflow-y-auto">
-        <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h2 class="text-2xl font-bold text-gray-800">Registration Details</h2>
-          <button id="closeViewModal" class="text-gray-500 hover:text-gray-700">
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-7xl max-h-[95vh] overflow-y-auto">
+        <div class="sticky top-0 bg-gradient-to-r from-[#46949d] to-[#1e3740] text-white px-6 py-4 flex justify-between items-center rounded-t-xl">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+              <span class="material-icons">local_parking</span>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold">Station Details</h2>
+              <p class="text-sm opacity-90">Complete information about the parking station</p>
+            </div>
+          </div>
+          <button id="closeViewModal" class="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors">
             <span class="material-icons text-2xl">close</span>
           </button>
         </div>
-        
+
         <div class="p-6">
-          <!-- Registration Information Section -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <!-- Basic Information -->
-            <div class="bg-gray-50 rounded-lg p-4">
-              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-                <span class="material-icons mr-2">person</span>
-                Basic Information
-              </h3>
-              <div class="space-y-2">
-                <div>
-                  <span class="text-sm font-medium text-gray-600">Registration ID:</span>
-                  <span id="viewRegistrationId" class="ml-2 text-sm font-mono text-gray-900"></span>
+          <!-- Station Overview Section -->
+          <div class="bg-gradient-to-r from-[#46949d] to-[#1e3740] text-white rounded-xl p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <span class="material-icons">tag</span>
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-600">Name:</span>
-                  <span id="viewName" class="ml-2 text-sm text-gray-900"></span>
+                  <p class="text-sm opacity-80">Station ID</p>
+                  <p class="text-lg font-bold font-mono">N/A</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <span class="material-icons">confirmation_number</span>
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-600">Email:</span>
-                  <span id="viewEmail" class="ml-2 text-sm text-gray-900"></span>
+                  <p class="text-sm opacity-80">Registration ID</p>
+                  <p id="viewRegistrationId" class="text-lg font-bold font-mono"></p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <span class="material-icons">schedule</span>
                 </div>
                 <div>
-                  <span class="text-sm font-medium text-gray-600">Phone:</span>
-                  <span id="viewPhone" class="ml-2 text-sm text-gray-900"></span>
+                  <p class="text-sm opacity-80">Status</p>
+                  <span id="viewStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-white bg-opacity-20"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Information Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Personal Information -->
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+              <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4">
+                <div class="flex items-center space-x-3">
+                  <span class="material-icons">person</span>
+                  <h3 class="text-lg font-semibold">Personal Information</h3>
+                </div>
+              </div>
+              <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600">Full Name</span>
+                  <span id="viewName" class="text-sm font-semibold text-gray-900"></span>
+                </div>
+                <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600">Email Address</span>
+                  <span id="viewEmail" class="text-sm font-semibold text-gray-900"></span>
+                </div>
+                <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600">Phone Number</span>
+                  <span id="viewPhone" class="text-sm font-semibold text-gray-900"></span>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                  <span class="text-sm font-medium text-gray-600">Registration Reason</span>
+                  <span id="viewReason" class="text-sm font-semibold text-gray-900 text-right max-w-xs truncate" title=""></span>
                 </div>
               </div>
             </div>
 
             <!-- Location Information -->
-            <div class="bg-gray-50 rounded-lg p-4">
-              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-                <span class="material-icons mr-2">location_on</span>
-                Location Details
-              </h3>
-              <div class="space-y-2">
-                <div>
-                  <span class="text-sm font-medium text-gray-600">Address:</span>
-                  <span id="viewAddress" class="ml-2 text-sm text-gray-900 block"></span>
-                </div>
-                <div>
-                  <span class="text-sm font-medium text-gray-600">City:</span>
-                  <span id="viewCity" class="ml-2 text-sm text-gray-900"></span>
-                </div>
-                <div>
-                  <span class="text-sm font-medium text-gray-600">State:</span>
-                  <span id="viewState" class="ml-2 text-sm text-gray-900"></span>
-                </div>
-                <div>
-                  <span class="text-sm font-medium text-gray-600">ZIP Code:</span>
-                  <span id="viewZip" class="ml-2 text-sm text-gray-900"></span>
-                </div>
-                <div>
-                  <span class="text-sm font-medium text-gray-600">Country:</span>
-                  <span id="viewCountry" class="ml-2 text-sm text-gray-900"></span>
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+              <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4">
+                <div class="flex items-center space-x-3">
+                  <span class="material-icons">location_on</span>
+                  <h3 class="text-lg font-semibold">Location Details</h3>
                 </div>
               </div>
-            </div>
-
-            <!-- Maps Location -->
-            <div class="bg-gray-50 rounded-lg p-4">
-              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-                <span class="material-icons mr-2">map</span>
-                Maps Location
-              </h3>
-              <div class="space-y-2">
-                <div>
-                  <span class="text-sm font-medium text-gray-600">Location:</span>
-                  <a id="viewMapsLink" href="#" target="_blank" class="ml-2 text-sm text-blue-600 hover:text-blue-800 underline">
-                    View on Google Maps
+              <div class="p-6 space-y-4">
+                <div class="py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600 block mb-1">Full Address</span>
+                  <span id="viewAddress" class="text-sm text-gray-900"></span>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                    <span class="text-sm font-medium text-gray-600">City</span>
+                    <span id="viewCity" class="text-sm font-semibold text-gray-900"></span>
+                  </div>
+                  <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                    <span class="text-sm font-medium text-gray-600">State</span>
+                    <span id="viewState" class="text-sm font-semibold text-gray-900"></span>
+                  </div>
+                  <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                    <span class="text-sm font-medium text-gray-600">ZIP Code</span>
+                    <span id="viewZip" class="text-sm font-semibold text-gray-900"></span>
+                  </div>
+                  <div class="flex items-center justify-between py-2">
+                    <span class="text-sm font-medium text-gray-600">Country</span>
+                    <span id="viewCountry" class="text-sm font-semibold text-gray-900"></span>
+                  </div>
+                </div>
+                <div class="pt-2">
+                  <span class="text-sm font-medium text-gray-600 block mb-2">Maps Location</span>
+                  <a id="viewMapsLink" href="#" target="_blank" class="inline-flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-800 transition-colors">
+                    <span class="material-icons text-base">map</span>
+                    <span>View on Google Maps</span>
                   </a>
                 </div>
               </div>
             </div>
 
             <!-- Business Information -->
-            <div class="bg-gray-50 rounded-lg p-4">
-              <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-                <span class="material-icons mr-2">business</span>
-                Business Details
-              </h3>
-              <div class="space-y-2">
-                <div>
-                  <span class="text-sm font-medium text-gray-600">Total Slots:</span>
-                  <span id="viewSlots" class="ml-2 text-sm text-gray-900"></span>
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+              <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-4">
+                <div class="flex items-center space-x-3">
+                  <span class="material-icons">business</span>
+                  <h3 class="text-lg font-semibold">Business Details</h3>
                 </div>
-                <div>
-                  <span class="text-sm font-medium text-gray-600">Price per Slot:</span>
-                  <span id="viewPrice" class="ml-2 text-sm text-gray-900"></span>
+              </div>
+              <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600">Total Parking Slots</span>
+                  <span id="viewSlots" class="text-lg font-bold text-gray-900"></span>
                 </div>
-                <div>
-                  <span class="text-sm font-medium text-gray-600">Reason for Registration:</span>
-                  <span id="viewReason" class="ml-2 text-sm text-gray-900 block mt-1"></span>
+                <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600">Price per Slot</span>
+                  <span id="viewPrice" class="text-lg font-bold text-green-600"></span>
+                </div>
+                <div class="py-2">
+                  <span class="text-sm font-medium text-gray-600 block mb-2">Business Description</span>
+                  <span class="text-sm text-gray-900">N/A</span>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Status and Timeline -->
-          <div class="bg-gray-50 rounded-lg p-4 mb-6">
-            <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
-              <span class="material-icons mr-2">timeline</span>
-              Status & Timeline
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <span class="text-sm font-medium text-gray-600">Current Status:</span>
-                <span id="viewStatus" class="ml-2 px-2 py-1 rounded-full text-xs font-medium"></span>
+            <!-- Administrative Information -->
+            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+              <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-4">
+                <div class="flex items-center space-x-3">
+                  <span class="material-icons">admin_panel_settings</span>
+                  <h3 class="text-lg font-semibold">Administrative Details</h3>
+                </div>
               </div>
-              <div>
-                <span class="text-sm font-medium text-gray-600">Created At:</span>
-                <span id="viewCreatedAt" class="ml-2 text-sm text-gray-900"></span>
-              </div>
-              <div>
-                <span class="text-sm font-medium text-gray-600">Updated At:</span>
-                <span id="viewUpdatedAt" class="ml-2 text-sm text-gray-900"></span>
+              <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600">Approved By</span>
+                  <span class="text-sm font-semibold text-gray-900">N/A</span>
+                </div>
+                <div class="py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600 block mb-1">Approved At</span>
+                  <span class="text-sm text-gray-900">N/A</span>
+                </div>
+                <div class="py-2 border-b border-gray-100">
+                  <span class="text-sm font-medium text-gray-600 block mb-1">Created At</span>
+                  <span id="viewCreatedAt" class="text-sm text-gray-900"></span>
+                </div>
+                <div class="py-2">
+                  <span class="text-sm font-medium text-gray-600 block mb-1">Last Updated</span>
+                  <span id="viewUpdatedAt" class="text-sm text-gray-900"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -1091,7 +1184,7 @@
               
               <!-- Quick Action Buttons -->
               <div class="mt-6 grid grid-cols-3 gap-2">
-                <button onclick="viewDetails('${station._id}')" 
+                <button onclick="viewDetails('${station.registrationId}')"
                         class="bg-[#46949d] text-white py-2 px-3 rounded-lg hover:bg-[#3a7d85] transition-colors duration-200 flex items-center justify-center text-sm">
                   <i class="material-icons text-sm mr-1">visibility</i>
                   View

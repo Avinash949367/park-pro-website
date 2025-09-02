@@ -12,8 +12,7 @@
   <!-- Header -->
   <div class="flex items-center justify-between px-4 py-3 shadow-sm border-b bg-white">
     <div class="flex items-center space-x-2">
-      <a href="index.html" <span class="material-icons-outlined text-black cursor-pointer" id="backButton">arrow_back</span>
-      </a>
+      <a href="index.html"><span class="material-icons-outlined text-black cursor-pointer" id="backButton">arrow_back</span></a>
     </div>
     <div class="flex space-x-4">
       <button class="px-4 py-1.5 bg-purple-100 text-purple-600 rounded-md text-sm font-medium hover:bg-purple-200">Edit</button>
@@ -26,9 +25,9 @@
   <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
     <div class="flex flex-col items-center">
       <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" alt="Profile Avatar" class="w-24 h-24 rounded-full mb-4" />
-      <h2 class="text-xl font-semibold" id="userNameDisplay">User  Name</h2>
-      <p class="text-gray-600" id="userEmail">user@example.com</p>
-      <p class="text-gray-600" id="userPhone">+1234567890</p>
+      <h2 class="text-xl font-semibold userNameDisplay">User  Name</h2>
+      <p class="text-gray-600 userEmail">user@example.com</p>
+      <p class="text-gray-600 userPhone">+1234567890</p>
     </div>
 
     <div class="mt-6">
@@ -36,15 +35,15 @@
       <div class="space-y-2">
         <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
           <span>Name:</span>
-          <span id="userNameDisplay">User  Name</span>
+          <span class="userNameDisplay">User  Name</span>
         </div>
         <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
           <span>Email:</span>
-          <span id="userEmail">user@example.com</span>
+          <span class="userEmail">user@example.com</span>
         </div>
         <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
           <span>Phone:</span>
-          <span id="userPhone">+1234567890</span>
+          <span class="userPhone">+1234567890</span>
         </div>
         <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
           <span>Vehicle:</span>
@@ -127,7 +126,7 @@
       </div>
       <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
         <span>Membership Status:</span>
-        <span>Premium</span>
+        <span id="membershipStatus">Premium</span>
       </div>
     </div>
   </div>
@@ -161,7 +160,7 @@
       </div>
       <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
         <span>Parking Wallet:</span>
-        <span>₹500</span>
+        <span id="walletBalance">₹500</span>
       </div>
       <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
         <span>Transaction History:</span>
@@ -228,37 +227,80 @@
   </div>
 
   <script>
-    document.getElementById('logoutButton').addEventListener('click', () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = 'index.html';
-    });
+    const apiBaseUrl = 'http://localhost:5000/api/user';
 
-    // Load user data from localStorage and display
-    const userNameDisplays = document.querySelectorAll('#userNameDisplay');
-    const userEmailDisplays = document.querySelectorAll('#userEmail');
-    const userPhoneDisplays = document.querySelectorAll('#userPhone');
-    const userVehicle = document.getElementById('userVehicle');
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        const userObj = JSON.parse(storedUser);
-        userNameDisplays.forEach(el => el.textContent = userObj.name || 'User Name');
-        userEmailDisplays.forEach(el => el.textContent = userObj.email || 'user@example.com');
-        userPhoneDisplays.forEach(el => el.textContent = userObj.phone || '+1234567890');
-        userVehicle.textContent = userObj.vehicle || 'Vehicle not added';
-      } catch {
-        userNameDisplays.forEach(el => el.textContent = 'User Name');
-        userEmailDisplays.forEach(el => el.textContent = 'user@example.com');
-        userPhoneDisplays.forEach(el => el.textContent = '+1234567890');
-        userVehicle.textContent = 'Vehicle not added';
+    // Helper function to get auth token from localStorage
+    function getAuthToken() {
+      return localStorage.getItem('token');
+    }
+
+    // Helper function to set user data in UI
+    function setUserData(user) {
+      const userNameDisplays = document.querySelectorAll('.userNameDisplay');
+      const userEmailDisplays = document.querySelectorAll('.userEmail');
+      const userPhoneDisplays = document.querySelectorAll('.userPhone');
+      const userVehicle = document.getElementById('userVehicle');
+      const membershipStatus = document.getElementById('membershipStatus');
+      const walletBalance = document.getElementById('walletBalance');
+
+      userNameDisplays.forEach(el => el.textContent = user.name || 'User Name');
+      userEmailDisplays.forEach(el => el.textContent = user.email || 'user@example.com');
+      userPhoneDisplays.forEach(el => el.textContent = user.phone || '+1234567890');
+      userVehicle.textContent = user.vehicle || 'Vehicle not added';
+
+      if (membershipStatus) {
+        membershipStatus.textContent = user.membershipStatus || 'Basic';
+      }
+      if (walletBalance) {
+        walletBalance.textContent = `₹${user.walletBalance || 0}`;
       }
     }
+
+    // Fetch user profile from backend
+    async function fetchUserProfile() {
+      try {
+        const token = getAuthToken();
+        if (!token) {
+          window.location.href = 'userlogin.html';
+          return;
+        }
+        const response = await fetch(`${apiBaseUrl}/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch user profile');
+        }
+        const data = await response.json();
+        if (data.success) {
+          setUserData(data.user);
+        } else {
+          throw new Error(data.message || 'Failed to load user data');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error loading user profile. Please login again.');
+        localStorage.clear();
+        window.location.href = 'userlogin.html';
+      }
+    }
+
+    // Logout button handler
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    });
 
     // Edit button functionality
     document.getElementById('editButton').addEventListener('click', () => {
       document.getElementById('editModal').classList.remove('hidden');
       // Populate the modal with current user data
+      const userNameDisplays = document.querySelectorAll('.userNameDisplay');
+      const userEmailDisplays = document.querySelectorAll('.userEmail');
+      const userPhoneDisplays = document.querySelectorAll('.userPhone');
+      const userVehicle = document.getElementById('userVehicle');
+
       document.getElementById('editName').value = userNameDisplays[0].textContent;
       document.getElementById('editEmail').value = userEmailDisplays[0].textContent;
       document.getElementById('editPhone').value = userPhoneDisplays[0].textContent;
@@ -270,29 +312,46 @@
       document.getElementById('editModal').classList.add('hidden');
     });
 
-    // Save changes functionality
-    document.getElementById('editForm').addEventListener('submit', (event) => {
+    // Save changes functionality - update profile via API
+    document.getElementById('editForm').addEventListener('submit', async (event) => {
       event.preventDefault();
-      // Get new values
+      const token = getAuthToken();
+      if (!token) {
+        alert('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
       const newName = document.getElementById('editName').value;
       const newEmail = document.getElementById('editEmail').value;
       const newPhone = document.getElementById('editPhone').value;
       const newVehicle = document.getElementById('editVehicle').value;
-      // Update user data
-      userNameDisplays.forEach(el => el.textContent = newName);
-      userEmailDisplays.forEach(el => el.textContent = newEmail);
-      userPhoneDisplays.forEach(el => el.textContent = newPhone);
-      userVehicle.textContent = newVehicle;
-      // Save to localStorage
-      const updatedUser = {
-        name: newName,
-        email: newEmail,
-        phone: newPhone,
-        vehicle: newVehicle
-      };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      // Close the modal
-      document.getElementById('editModal').classList.add('hidden');
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/profile`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            name: newName,
+            email: newEmail,
+            phone: newPhone,
+            vehicle: newVehicle
+          })
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          setUserData(data.user);
+          alert('Profile updated successfully');
+          document.getElementById('editModal').classList.add('hidden');
+        } else {
+          alert(data.message || 'Failed to update profile');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error updating profile');
+      }
     });
 
     // Change Password button functionality
@@ -305,22 +364,55 @@
       document.getElementById('changePasswordModal').classList.add('hidden');
     });
 
-    // Change password functionality
-    document.getElementById('changePasswordForm').addEventListener('submit', (event) => {
+    // Change password functionality - call backend API
+    document.getElementById('changePasswordForm').addEventListener('submit', async (event) => {
       event.preventDefault();
+      const token = getAuthToken();
+      if (!token) {
+        alert('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
       const currentPassword = document.getElementById('currentPassword').value;
       const newPassword = document.getElementById('newPassword').value;
       const confirmNewPassword = document.getElementById('confirmNewPassword').value;
 
-      // Here you can add logic to validate the current password and update it
-      if (newPassword === confirmNewPassword) {
-        // Simulate password change success
-        alert('Password changed successfully!');
-        document.getElementById('changePasswordModal').classList.add('hidden');
-      } else {
+      if (newPassword !== confirmNewPassword) {
         alert('New passwords do not match!');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/profile/change-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            currentPassword,
+            newPassword
+          })
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          alert('Password changed successfully!');
+          document.getElementById('changePasswordModal').classList.add('hidden');
+          // Clear password fields
+          document.getElementById('currentPassword').value = '';
+          document.getElementById('newPassword').value = '';
+          document.getElementById('confirmNewPassword').value = '';
+        } else {
+          alert(data.message || 'Failed to change password');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error changing password');
       }
     });
+
+    // On page load, fetch user profile
+    window.addEventListener('DOMContentLoaded', fetchUserProfile);
   </script>
 
 </body>

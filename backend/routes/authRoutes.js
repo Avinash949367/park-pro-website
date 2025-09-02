@@ -118,4 +118,27 @@ router.get('/auth/google/callback',
 // New route for Flutter app Google sign-in
 router.post('/auth/google-signin', googleSignIn);
 
+router.post('/admin/users/:userId/unban', passport.authenticate('jwt', { session: false }), ensureAdmin, async (req, res) => {
+  console.log('Unban request received for userId:', req.params.userId);
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      console.log('User not found for unban:', userId);
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    if (user.role !== 'banned') {
+      console.log('User is not banned:', userId);
+      return res.status(400).json({ success: false, message: 'User is not banned' });
+    }
+    user.role = 'user'; // or set to default role as needed
+    await user.save();
+    console.log('User unbanned successfully:', userId);
+    res.json({ success: true, message: 'User unbanned successfully' });
+  } catch (error) {
+    console.error('Error unbanning user:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
 module.exports = router;

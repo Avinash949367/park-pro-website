@@ -181,10 +181,132 @@
     }
   </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-100 font-sans flex flex-col h-screen">
+
+  <!-- Top Navbar -->
+  <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <h1 class="text-xl font-semibold text-gray-800">Park Pro Admin</h1>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="relative">
+        <button id="profileButton" type="button" class="flex items-center space-x-3 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+          <img src="..\assets\images\WhatsApp Image 2024-03-28 at 17.51.05_3d94f0ae.jpg" class="h-10 w-10 rounded-full border-2 border-gray-300" alt="Profile" />
+
+        </button>
+        <div id="profileMenu" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50" role="menu" aria-orientation="vertical" aria-labelledby="profileButton">
+          <a href="adminprofile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#46949d] hover:text-white" role="menuitem">View Profile</a>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#46949d] hover:text-white" role="menuitem">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white text-gray-900 w-64 flex flex-col transition-width duration-300 ease-in-out">
+    <div class="p-6 text-2xl font-bold border-b border-gray-300 flex items-center justify-between">
+      <a href="admindashboard.html"><div class="flex items-center space-x-4">
+        <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+        <img src="../assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+      </div></a>
+      <button id="sidebarToggle" aria-label="Toggle sidebar" class="text-gray-900 focus:outline-none md:hidden">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <nav class="flex-1 overflow-y-auto">
+      <ul class="p-4 space-y-2">
+        <li>
+          <a href="admindashboard.html" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">dashboard</i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <!-- <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">local_parking</i>
+            <span>My Spots</span>
+          </a>
+        </li> -->
+        <!-- <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">event</i>
+            <span>Bookings</span>
+          </a>
+        </li> -->
+        <!-- <li>
+          <a href="#" class="block py-2 px-4 rounded hover:bg-orange-500 hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900">credit_card</i>
+            <span>Payments</span>
+          </a>
+        </li> -->
+        <li>
+          <details class="group">
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="material-icons text-gray-900">local_parking</i>
+                <span>Stations</span>
+              </span>
+              <span class="float-right transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <ul class="pl-4 mt-2 space-y-1">
+              <li>
+                <a href="stations.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">local_parking</i>
+                  <span>Manage Stations</span>
+                </a>
+              </li>
+              <li>
+                <a href="register_documents.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">description</i>
+                  <span>Register-Documents</span>
+                </a>
+              </li>
+          </details>
+        </li>
+        <li>
+          <details class="group">
+            <summary class="cursor-pointer py-2 px-4 rounded hover:bg-[#46949d] hover:text-white list-none flex items-center justify-between">
+              <span class="flex items-center space-x-2">
+                <i class="material-icons text-gray-900">settings</i>
+                <span>Management</span>
+              </span>
+              <span class="float-right transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <ul class="pl-4 mt-2 space-y-1">
+              <li>
+                <a href="users_view.html" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">person</i>
+                  <span>Users</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="#" class="block py-1 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+                  <i class="material-icons text-gray-900" style="font-size: 16px;">settings</i>
+                  <span>Settings</span>
+                </a>
+              </li>
+            </ul>
+          </details>
+
+        </li>
+        <li>
+          <a href="information.html" class="block py-2 px-4 rounded hover:bg-[#46949d] hover:text-white flex items-center space-x-2">
+            <i class="material-icons text-gray-900" style="font-size: 16px;">contact_support</i>
+            <span>Contact and FAQs</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
 
   <!-- Main content -->
-  <main class="p-8 overflow-y-auto">
+  <main class="flex-1 p-6 overflow-y-auto">
     <div class="max-w-4xl mx-auto">
       <!-- Profile Header -->
       <div class="profile-header fade-in">
