@@ -60,14 +60,35 @@ const opts = {
   secretOrKey: process.env.JWT_SECRET || 'default_jwt_secret_key',
 };
 
+const StoreAdminCredentials = require('../models/StoreAdminCredentials');
+
 passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   try {
-    const user = await User.findById(jwt_payload.id);
+    console.log('JWT payload received:', jwt_payload);
+    let user;
+    if (jwt_payload.role === 'store admin') {
+      // For store admins, find in StoreAdminCredentials
+      user = await StoreAdminCredentials.findById(jwt_payload.id).populate('stationId');
+      console.log('Store admin user found:', user);
+      if (user) {
+        console.log('User stationId before attach:', user.stationId);
+        // Attach stationId to the user object for easy access
+        user.stationId = user.stationId._id || user.stationId;
+        console.log('User stationId after attach:', user.stationId);
+      } else {
+        console.log('Store admin user not found for id:', jwt_payload.id);
+      }
+    } else {
+      // For regular users and admins, find in User
+      user = await User.findById(jwt_payload.id);
+      console.log('Regular user found:', user);
+    }
     if (user) {
       return done(null, user);
     }
     return done(null, false);
   } catch (err) {
+    console.error('Error in JWT strategy:', err);
     return done(err, false);
   }
 }));

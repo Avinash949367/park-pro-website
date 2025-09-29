@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPS Structure Approval - Park Pro Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .status-submitted { background: #fef3c7; color: #92400e; }
+    .status-approved { background: #d1fae5; color: #065f46; }
+    .status-rejected { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
+      <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
+      <nav class="flex flex-col space-y-4">
+        <a href="admindashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏠</span><span>Dashboard</span>
+        </a>
+        <a href="stations.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏢</span><span>Stations</span>
+        </a>
+        <a href="gps_approval.html" class="flex items-center space-x-2 text-yellow-400">
+          <span>🗺️</span><span>GPS Approval</span>
+        </a>
+        <a href="users_view.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>👥</span><span>Users</span>
+        </a>
+        <a href="information.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>ℹ️</span><span>Information</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
+          <span>🔓</span><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="text-2xl font-semibold">GPS Structure Approval</h1>
+          <p class="text-gray-600">Review and approve station GPS mappings</p>
+        </div>
+        <button id="refreshData" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          🔄 Refresh
+        </button>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-yellow-100 rounded-lg">
+              <span class="text-2xl">⏳</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Pending Review</p>
+              <p class="text-2xl font-bold text-yellow-600" id="pendingCount">0</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-green-100 rounded-lg">
+              <span class="text-2xl">✅</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Approved</p>
+              <p class="text-2xl font-bold text-green-600" id="approvedCount">0</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-red-100 rounded-lg">
+              <span class="text-2xl">❌</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Rejected</p>
+              <p class="text-2xl font-bold text-red-600" id="rejectedCount">0</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-blue-100 rounded-lg">
+              <span class="text-2xl">🌐</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Public Stations</p>
+              <p class="text-2xl font-bold text-blue-600" id="publicCount">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stations List -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b">
+          <h3 class="text-lg font-semibold">Stations Awaiting Review</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Station</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Admin</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">GPS Data</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Submitted</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="stationsTableBody" class="bg-white divide-y divide-gray-200">
+              <!-- Dynamic content will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Station Detail Modal -->
+  <div id="stationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-semibold" id="modalStationName">Station Details</h3>
+            <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+              <span class="text-2xl">&times;</span>
+            </button>
+          </div>
+        </div>
+        
+        <div class="p-6">
+          <!-- Station Info -->
+          <div class="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 class="font-semibold mb-2">Station Information</h4>
+              <div class="space-y-2 text-sm">
+                <p><strong>Station ID:</strong> <span id="modalStationId">-</span></p>
+                <p><strong>Admin:</strong> <span id="modalAdminName">-</span></p>
+                <p><strong>Email:</strong> <span id="modalAdminEmail">-</span></p>
+                <p><strong>Status:</strong> <span id="modalStatus">-</span></p>
+              </div>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold mb-2">GPS Structure Summary</h4>
+              <div class="space-y-2 text-sm">
+                <p><strong>Boundary Points:</strong> <span id="modalBoundaryCount">-</span></p>
+                <p><strong>Parking Slots:</strong> <span id="modalSlotsCount">-</span></p>
+                <p><strong>Walls:</strong> <span id="modalWallsCount">-</span></p>
+                <p><strong>Roads:</strong> <span id="modalRoadsCount">-</span></p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Map -->
+          <div class="mb-6">
+            <h4 class="font-semibold mb-2">Station Map</h4>
+            <div id="modalMap" class="border rounded-lg"></div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="flex space-x-4">
+            <button id="approveStation" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+              ✅ Approve Station
+            </button>
+            <button id="rejectStation" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+              ❌ Reject Station
+            </button>
+            <button id="toggleVisibility" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+              🌐 Toggle Public Visibility
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <script>
+    let authToken = null;
+    let currentStation = null;
+    let modalMap = null;
+
+    // Initialize authentication
+    function initializeAuth() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const token = localStorage.getItem('token');
+      
+      if (!user || !token || user.role !== 'admin') {
+        alert('Admin access required');
+        window.location.href = 'adminlogin.html';
+        return false;
+      }
+      
+      authToken = token;
+      return true;
+    }
+
+    // Load stations data
+    async function loadStations() {
+      try {
+        const response = await fetch('/api/stations/mapping-status/submitted_for_approval', {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          renderStationsTable(data.stations);
+          updateStats();
+        }
+      } catch (error) {
+        console.error('Error loading stations:', error);
+      }
+    }
+
+    // Render stations table
+    function renderStationsTable(stations) {
+      const tbody = document.getElementById('stationsTableBody');
+      tbody.innerHTML = '';
+      
+      if (stations.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+              No stations awaiting review
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      stations.forEach(station => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-medium text-gray-900">${station.name}</div>
+            <div class="text-sm text-gray-500">${station.stationId}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${station.email}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="status-badge status-submitted">${station.gpsMappingStatus}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            <button onclick="viewStationDetails('${station.stationId}')" class="text-blue-600 hover:text-blue-800">
+              View Details
+            </button>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            ${new Date(station.createdAt).toLocaleDateString()}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <button onclick="viewStationDetails('${station.stationId}')" class="text-indigo-600 hover:text-indigo-900 mr-3">
+              Review
+            </button>
+            <button onclick="approveStation('${station.stationId}')" class="text-green-600 hover:text-green-900 mr-3">
+              Approve
+            </button>
+            <button onclick="rejectStation('${station.stationId}')" class="text-red-600 hover:text-red-900">
+              Reject
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Update statistics
+    async function updateStats() {
+      try {
+        const [pendingRes, approvedRes, rejectedRes, publicRes] = await Promise.all([
+          fetch('/api/stations/mapping-status/submitted_for_approval', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+          }),
+          fetch('/api/stations/mapping-status/approved', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+          }),
+          fetch('/api/stations/mapping-status/rejected', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+          }),
+          fetch('/api/stations', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+          })
+        ]);
+        
+        const [pendingData, approvedData, rejectedData, publicData] = await Promise.all([
+          pendingRes.json(),
+          approvedRes.json(),
+          rejectedRes.json(),
+          publicRes.json()
+        ]);
+        
+        document.getElementById('pendingCount').textContent = pendingData.count || 0;
+        document.getElementById('approvedCount').textContent = approvedData.count || 0;
+        document.getElementById('rejectedCount').textContent = rejectedData.count || 0;
+        
+        const publicStations = publicData.filter(station => station.publicVisibility);
+        document.getElementById('publicCount').textContent = publicStations.length;
+      } catch (error) {
+        console.error('Error updating stats:', error);
+      }
+    }
+
+    // View station details
+    async function viewStationDetails(stationId) {
+      try {
+        const response = await fetch(`/api/stations/${stationId}/gps-structure`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          currentStation = data.station;
+          showStationModal(data.station);
+        }
+      } catch (error) {
+        console.error('Error loading station details:', error);
+      }
+    }
+
+    // Show station modal
+    function showStationModal(station) {
+      // Populate modal data
+      document.getElementById('modalStationName').textContent = station.name || 'Station Details';
+      document.getElementById('modalStationId').textContent = station.stationId;
+      document.getElementById('modalAdminName').textContent = station.name || 'N/A';
+      document.getElementById('modalAdminEmail').textContent = station.email || 'N/A';
+      document.getElementById('modalStatus').textContent = station.gpsMappingStatus;
+      
+      // GPS structure summary
+      const gps = station.gpsStructure || {};
+      document.getElementById('modalBoundaryCount').textContent = gps.boundary?.length || 0;
+      document.getElementById('modalSlotsCount').textContent = gps.slots?.length || 0;
+      document.getElementById('modalWallsCount').textContent = gps.walls?.length || 0;
+      document.getElementById('modalRoadsCount').textContent = gps.roads?.length || 0;
+      
+      // Initialize modal map
+      if (modalMap) {
+        modalMap.remove();
+      }
+      
+      modalMap = L.map('modalMap').setView([12.9716, 77.5946], 16);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(modalMap);
+      
+      // Render GPS structure on modal map
+      renderGPSStructureOnMap(modalMap, gps);
+      
+      // Show modal
+      document.getElementById('stationModal').classList.remove('hidden');
+    }
+
+    // Render GPS structure on map
+    function renderGPSStructureOnMap(map, gps) {
+      // Render boundary
+      if (gps.boundary && gps.boundary.length >= 3) {
+        const boundaryCoords = gps.boundary.map(point => [point.lat, point.lng]);
+        L.polygon(boundaryCoords, {
+          color: '#3b82f6',
+          weight: 2,
+          opacity: 0.8,
+          fillOpacity: 0.1,
+          dashArray: '5, 5'
+        }).addTo(map);
+      }
+      
+      // Render entry
+      if (gps.entry) {
+        L.marker([gps.entry.lat, gps.entry.lng], {
+          icon: L.divIcon({
+            className: 'entry-marker',
+            html: '<div style="background: #10b981; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold;">IN</div>',
+            iconSize: [30, 30]
+          })
+        }).addTo(map);
+      }
+      
+      // Render exit
+      if (gps.exit) {
+        L.marker([gps.exit.lat, gps.exit.lng], {
+          icon: L.divIcon({
+            className: 'exit-marker',
+            html: '<div style="background: #ef4444; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold;">OUT</div>',
+            iconSize: [30, 30]
+          })
+        }).addTo(map);
+      }
+      
+      // Render slots
+      if (gps.slots) {
+        gps.slots.forEach(slot => {
+          L.marker([slot.lat, slot.lng], {
+            icon: L.divIcon({
+              className: 'slot-marker',
+              html: `<div style="background: #3b82f6; color: white; border-radius: 4px; padding: 2px 6px; font-size: 12px; font-weight: bold;">${slot.id}</div>`,
+              iconSize: [60, 20]
+            })
+          }).addTo(map);
+        });
+      }
+      
+      // Render walls
+      if (gps.walls) {
+        gps.walls.forEach(wall => {
+          const wallCoords = wall.map(point => [point.lat, point.lng]);
+          L.polyline(wallCoords, {
+            color: '#1f2937',
+            weight: 3,
+            opacity: 0.8
+          }).addTo(map);
+        });
+      }
+      
+      // Render roads
+      if (gps.roads) {
+        gps.roads.forEach(road => {
+          const roadCoords = road.map(point => [point.lat, point.lng]);
+          L.polyline(roadCoords, {
+            color: '#6b7280',
+            weight: 4,
+            opacity: 0.8
+          }).addTo(map);
+        });
+      }
+    }
+
+    // Approve station
+    async function approveStation(stationId) {
+      if (confirm('Are you sure you want to approve this station?')) {
+        try {
+          const response = await fetch(`/api/stations/${stationId}/approve`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${authToken}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          const data = await response.json();
+          
+          if (response.ok && data.success) {
+            alert('Station approved successfully!');
+            loadStations();
+            updateStats();
+          } else {
+            alert(`Error approving station: ${data.message}`);
+          }
+        } catch (error) {
+          console.error('Error approving station:', error);
+          alert('Error approving station. Please try again.');
+        }
+      }
+    }
+
+    // Reject station
+    async function rejectStation(stationId) {
+      const reason = prompt('Please provide a reason for rejection:');
+      if (reason) {
+        try {
+          const response = await fetch(`/api/stations/${stationId}/reject`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${authToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ reason })
+          });
+          
+          const data = await response.json();
+          
+          if (response.ok && data.success) {
+            alert('Station rejected successfully!');
+            loadStations();
+            updateStats();
+          } else {
+            alert(`Error rejecting station: ${data.message}`);
+          }
+        } catch (error) {
+          console.error('Error rejecting station:', error);
+          alert('Error rejecting station. Please try again.');
+        }
+      }
+    }
+
+    // Toggle public visibility
+    async function toggleVisibility() {
+      if (!currentStation) return;
+      
+      const newVisibility = !currentStation.publicVisibility;
+      
+      try {
+        const response = await fetch(`/api/stations/${currentStation.stationId}/visibility`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ publicVisibility: newVisibility })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          alert(`Station ${newVisibility ? 'made public' : 'made private'} successfully!`);
+          currentStation.publicVisibility = newVisibility;
+          updateStats();
+        } else {
+          alert(`Error updating visibility: ${data.message}`);
+        }
+      } catch (error) {
+        console.error('Error updating visibility:', error);
+        alert('Error updating visibility. Please try again.');
+      }
+    }
+
+    // Event listeners
+    document.getElementById('refreshData').addEventListener('click', () => {
+      loadStations();
+      updateStats();
+    });
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('stationModal').classList.add('hidden');
+    });
+
+    document.getElementById('approveStation').addEventListener('click', () => {
+      if (currentStation) {
+        approveStation(currentStation.stationId);
+        document.getElementById('stationModal').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('rejectStation').addEventListener('click', () => {
+      if (currentStation) {
+        rejectStation(currentStation.stationId);
+        document.getElementById('stationModal').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('toggleVisibility').addEventListener('click', toggleVisibility);
+
+    // Initialize on page load
+    window.onload = () => {
+      if (initializeAuth()) {
+        loadStations();
+        updateStats();
+      }
+    };
+  </script>
+</body>
+</html>
+

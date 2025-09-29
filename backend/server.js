@@ -1,6 +1,7 @@
 require('dotenv').config();  // make sure dotenv is loaded
 
 const express = require('express');
+const path = require('path');
 const connectDB = require('./config/db');
 const passport = require('passport');
 const session = require('express-session');
@@ -8,6 +9,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const registerRoutes = require('./routes/registerRoutes');
 const stationRoutes = require('./routes/stationRoutes');
+const slotRoutes = require('./routes/slotRoutes');
 require('./config/passport'); // Passport config
 
 const bcrypt = require('bcryptjs');
@@ -16,7 +18,7 @@ const User = require('./models/User');
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+connectDB(); // Force restart
 
 // Create default admin user if not exists
 const createAdminUser = async () => {
@@ -83,7 +85,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Serve static files from the frontend directory
-app.use(express.static('../frontend'));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Routes
 app.use('/', authRoutes);
@@ -95,10 +97,16 @@ const userProfileRoutes = require('./routes/userProfileRoutes');
 const userRoutes = require('./routes/userRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 
+// Import cleanup function
+const cleanupExpiredReservations = require('./scripts/cleanupExpiredReservations');
+
+// Run cleanup every 5 minutes (300000 ms)
+setInterval(cleanupExpiredReservations, 5 * 60 * 1000);
 
 app.use('/api/user', userProfileRoutes);
 app.use('/api', userRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/slots', slotRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

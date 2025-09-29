@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Station Visualization - Park Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+    .slot-status-available { background: #10b981; }
+    .slot-status-booked { background: #ef4444; }
+    .slot-status-disabled { background: #6b7280; }
+    .slot-marker {
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      height: 20px;
+      padding: 2px 6px;
+    }
+    .entry-marker {
+      background: #3b82f6;
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .exit-marker {
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .road-polyline {
+      stroke: #6b7280;
+      stroke-width: 4;
+      stroke-opacity: 0.8;
+    }
+    .edge-polyline {
+      stroke: #f59e0b;
+      stroke-width: 3;
+      stroke-opacity: 0.8;
+      fill: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
+      <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
+      <nav class="flex flex-col space-y-4">
+        <a href="station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏠</span><span>Dashboard</span>
+        </a>
+        <a href="station_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏢</span><span>Manage Station</span>
+        </a>
+        <a href="gps_mapping.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🗺️</span><span>GPS Mapping</span>
+        </a>
+        <a href="station_visualization.html" class="flex items-center space-x-2 text-yellow-400">
+          <span>📊</span><span>Station View</span>
+        </a>
+        <a href="slot_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>📅</span><span>View Bookings</span>
+        </a>
+        <a href="slot_earning.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>💰</span><span>Earnings</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
+          <span>🔓</span><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="text-2xl font-semibold">Station Visualization</h1>
+          <p class="text-gray-600">Real-time view of your station structure and bookings</p>
+        </div>
+        <div class="flex space-x-2">
+          <button id="refreshData" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            🔄 Refresh
+          </button>
+          <button id="exportMap" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            📄 Export PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Station Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-green-100 rounded-lg">
+              <span class="text-2xl">🅿️</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Available Slots</p>
+              <p class="text-2xl font-bold text-green-600" id="availableSlots">0</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-red-100 rounded-lg">
+              <span class="text-2xl">🚗</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Booked Slots</p>
+              <p class="text-2xl font-bold text-red-600" id="bookedSlots">0</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-gray-100 rounded-lg">
+              <span class="text-2xl">🚫</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Disabled Slots</p>
+              <p class="text-2xl font-bold text-gray-600" id="disabledSlots">0</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex items-center">
+            <div class="p-2 bg-blue-100 rounded-lg">
+              <span class="text-2xl">📊</span>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm text-gray-600">Total Slots</p>
+              <p class="text-2xl font-bold text-blue-600" id="totalSlots">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map and Controls -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Map -->
+        <div class="lg:col-span-3">
+          <div class="bg-white rounded-lg p-4 shadow">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-semibold">Station Map</h3>
+              <div class="flex space-x-2">
+                <button id="toggleRoads" class="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600">
+                  🛣️ Toggle Roads
+                </button>
+            <button id="toggleWalls" class="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600">
+              🧱 Toggle Walls
+            </button>
+              </div>
+            </div>
+            <div id="map"></div>
+          </div>
+        </div>
+
+        <!-- Controls and Info -->
+        <div class="space-y-6">
+          <!-- Legend -->
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="font-semibold mb-3">Legend</h3>
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                <span class="text-sm">Entry Point</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                <span class="text-sm">Exit Point</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 bg-green-500 rounded"></div>
+                <span class="text-sm">Available Slot</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 bg-red-500 rounded"></div>
+                <span class="text-sm">Booked Slot</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 bg-gray-500 rounded"></div>
+                <span class="text-sm">Disabled Slot</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-1 bg-gray-500"></div>
+                <span class="text-sm">Road</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-1 bg-yellow-500"></div>
+                <span class="text-sm">Boundary</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slot Management -->
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="font-semibold mb-3">Quick Actions</h3>
+            <div class="space-y-2">
+              <button id="disableAllSlots" class="w-full px-3 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600">
+                🚫 Disable All Slots
+              </button>
+              <button id="enableAllSlots" class="w-full px-3 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600">
+                ✅ Enable All Slots
+              </button>
+              <button id="viewBookings" class="w-full px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
+                📅 View Bookings
+              </button>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="bg-white rounded-lg p-4 shadow">
+            <h3 class="font-semibold mb-3">Recent Activity</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span>Slot A1 booked</span>
+                <span class="text-gray-500">2 min ago</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Slot B3 released</span>
+                <span class="text-gray-500">5 min ago</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Slot C2 booked</span>
+                <span class="text-gray-500">8 min ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <script>
+    // Global variables
+    let map;
+    let authToken = null;
+    let currentStationId = null;
+    let stationStructure = {
+      entry: null,
+      exit: null,
+      slots: [],
+      walls: [],
+      roads: []
+    };
+    let slotStatuses = {}; // Track slot booking status
+    let markers = {};
+    let polylines = [];
+    let roadsVisible = true;
+    let wallsVisible = true;
+
+    // Initialize authentication
+    function initializeAuth() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const token = localStorage.getItem('token');
+      
+      if (!user || !token) {
+        alert('Please login first');
+        window.location.href = 'station_adminlogin.html';
+        return false;
+      }
+      
+      authToken = token;
+      currentStationId = user.stationId;
+      
+      return true;
+    }
+
+    // Load GPS structure from backend
+    async function loadGPSStructure() {
+      try {
+        const response = await fetch(`/api/stations/${currentStationId}/gps-structure`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.station.gpsStructure) {
+            const gps = data.station.gpsStructure;
+            stationStructure = {
+              entry: gps.entry ? [gps.entry.lat, gps.entry.lng] : null,
+              exit: gps.exit ? [gps.exit.lat, gps.exit.lng] : null,
+              slots: gps.slots || [],
+              walls: gps.walls || [],
+              roads: gps.roads || []
+            };
+            
+            // Convert slots to status format
+            slotStatuses = {};
+            stationStructure.slots.forEach(slot => {
+              slotStatuses[slot.id] = slot.status || 'available';
+            });
+            
+            renderStationMap();
+            updateSlotStats();
+          } else {
+            alert('No GPS structure found. Please complete GPS mapping first.');
+            window.location.href = 'gps_mapping.html';
+          }
+        } else {
+          alert('Error loading GPS structure. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error loading GPS structure:', error);
+        alert('Error loading GPS structure. Please try again.');
+      }
+    }
+
+    // Initialize map
+    function initMap() {
+      map = L.map('map').setView([12.9716, 77.5946], 18);
+        
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Load GPS structure from backend
+      await loadGPSStructure();
+    }
+
+    // Load station structure (legacy function for compatibility)
+    function loadStationStructure(data) {
+      stationStructure = data;
+      renderStationMap();
+    }
+
+    // Load slot statuses (legacy function for compatibility)
+    function loadSlotStatuses(statuses) {
+      slotStatuses = statuses;
+      updateSlotStats();
+      updateSlotMarkers();
+    }
+
+    // Render the complete station map
+    function renderStationMap() {
+      // Clear existing markers and polylines
+      Object.values(markers).forEach(marker => map.removeLayer(marker));
+      polylines.forEach(polyline => map.removeLayer(polyline));
+      markers = {};
+      polylines = [];
+
+      // Add entry marker
+      if (stationStructure.entry) {
+        const entryMarker = L.marker(stationStructure.entry, {
+          icon: L.divIcon({
+            className: 'entry-marker',
+            html: '<div class="entry-marker">IN</div>',
+            iconSize: [30, 30]
+          })
+        }).addTo(map);
+        markers.entry = entryMarker;
+      }
+
+      // Add exit marker
+      if (stationStructure.exit) {
+        const exitMarker = L.marker(stationStructure.exit, {
+          icon: L.divIcon({
+            className: 'exit-marker',
+            html: '<div class="exit-marker">OUT</div>',
+            iconSize: [30, 30]
+          })
+        }).addTo(map);
+        markers.exit = exitMarker;
+      }
+
+      // Add slot markers
+      stationStructure.slots.forEach(slot => {
+        const status = slotStatuses[slot.id] || 'available';
+        const statusClass = `slot-status-${status}`;
+        const coords = [slot.lat, slot.lng];
+        
+        const slotMarker = L.marker(coords, {
+          icon: L.divIcon({
+            className: 'slot-marker',
+            html: `<div class="slot-marker ${statusClass}">${slot.id}</div>`,
+            iconSize: [60, 20]
+          })
+        }).addTo(map);
+        
+        markers[`slot_${slot.id}`] = slotMarker;
+      });
+
+      // Add roads
+      if (roadsVisible && stationStructure.roads) {
+        stationStructure.roads.forEach(road => {
+          const roadCoords = road.map(point => [point.lat, point.lng]);
+          const polyline = L.polyline(roadCoords, {
+            color: '#6b7280',
+            weight: 4,
+            opacity: 0.8
+          }).addTo(map);
+          polylines.push(polyline);
+        });
+      }
+
+      // Add walls
+      if (wallsVisible && stationStructure.walls) {
+        stationStructure.walls.forEach(wall => {
+          const wallCoords = wall.map(point => [point.lat, point.lng]);
+          const polyline = L.polyline(wallCoords, {
+            color: '#1f2937',
+            weight: 3,
+            opacity: 0.8
+          }).addTo(map);
+          polylines.push(polyline);
+        });
+      }
+    }
+
+    // Update slot markers based on status
+    function updateSlotMarkers() {
+      stationStructure.slots.forEach(slot => {
+        const markerKey = `slot_${slot.id}`;
+        if (markers[markerKey]) {
+          map.removeLayer(markers[markerKey]);
+        }
+        
+        const status = slotStatuses[slot.id] || 'available';
+        const statusClass = `slot-status-${status}`;
+        const coords = [slot.lat, slot.lng];
+        
+        const slotMarker = L.marker(coords, {
+          icon: L.divIcon({
+            className: 'slot-marker',
+            html: `<div class="slot-marker ${statusClass}">${slot.id}</div>`,
+            iconSize: [60, 20]
+          })
+        }).addTo(map);
+        
+        markers[markerKey] = slotMarker;
+      });
+    }
+
+    // Update slot statistics
+    function updateSlotStats() {
+      const total = Object.keys(slotStatuses).length;
+      const available = Object.values(slotStatuses).filter(status => status === 'available').length;
+      const booked = Object.values(slotStatuses).filter(status => status === 'booked').length;
+      const disabled = Object.values(slotStatuses).filter(status => status === 'disabled').length;
+
+      document.getElementById('totalSlots').textContent = total;
+      document.getElementById('availableSlots').textContent = available;
+      document.getElementById('bookedSlots').textContent = booked;
+      document.getElementById('disabledSlots').textContent = disabled;
+    }
+
+    // Toggle roads visibility
+    function toggleRoads() {
+      roadsVisible = !roadsVisible;
+      renderStationMap();
+      updateSlotMarkers();
+      
+      const btn = document.getElementById('toggleRoads');
+      btn.textContent = roadsVisible ? '🛣️ Hide Roads' : '🛣️ Show Roads';
+    }
+
+    // Toggle walls visibility
+    function toggleWalls() {
+      wallsVisible = !wallsVisible;
+      renderStationMap();
+      updateSlotMarkers();
+      
+      const btn = document.getElementById('toggleWalls');
+      btn.textContent = wallsVisible ? '🧱 Hide Walls' : '🧱 Show Walls';
+    }
+
+    // Disable all slots
+    function disableAllSlots() {
+      if (confirm('Are you sure you want to disable all slots?')) {
+        Object.keys(slotStatuses).forEach(slotId => {
+          slotStatuses[slotId] = 'disabled';
+        });
+        updateSlotStats();
+        updateSlotMarkers();
+        alert('All slots have been disabled');
+      }
+    }
+
+    // Enable all slots
+    function enableAllSlots() {
+      if (confirm('Are you sure you want to enable all slots?')) {
+        Object.keys(slotStatuses).forEach(slotId => {
+          slotStatuses[slotId] = 'available';
+        });
+        updateSlotStats();
+        updateSlotMarkers();
+        alert('All slots have been enabled');
+      }
+    }
+
+    // Refresh data
+    function refreshData() {
+      // In a real application, this would fetch fresh data from the server
+      alert('Data refreshed!');
+    }
+
+    // Export map as PDF
+    function exportMap() {
+      // In a real application, this would generate and download a PDF
+      alert('PDF export feature would be implemented here');
+    }
+
+    // View bookings
+    function viewBookings() {
+      window.location.href = 'slot_management.html';
+    }
+
+    // Event listeners
+    document.getElementById('toggleRoads').addEventListener('click', toggleRoads);
+    document.getElementById('toggleWalls').addEventListener('click', toggleWalls);
+    document.getElementById('disableAllSlots').addEventListener('click', disableAllSlots);
+    document.getElementById('enableAllSlots').addEventListener('click', enableAllSlots);
+    document.getElementById('refreshData').addEventListener('click', refreshData);
+    document.getElementById('exportMap').addEventListener('click', exportMap);
+    document.getElementById('viewBookings').addEventListener('click', viewBookings);
+
+    // Initialize on page load
+    window.onload = async () => {
+      if (initializeAuth()) {
+        await initMap();
+      }
+    };
+  </script>
+</body>
+</html>

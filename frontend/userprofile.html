@@ -6,53 +6,306 @@
   <title>User Profile - Park Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .loading-spinner { border: 2px solid #f3f3f3; border-top: 2px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-white min-h-screen">
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-xl shadow-2xl flex flex-col items-center">
+      <div class="loading-spinner mb-4"></div>
+      <p class="text-gray-700 font-medium">Loading your profile...</p>
+    </div>
+  </div>
+
+  <!-- Success Notification -->
+  <div id="successNotification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden z-50 transform transition-all duration-300">
+    <div class="flex items-center">
+      <span class="material-icons-outlined mr-2 text-sm">check_circle</span>
+      <span id="successMessage">Success!</span>
+    </div>
+  </div>
+
+  <!-- Error Notification -->
+  <div id="errorNotification" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hidden z-50 transform transition-all duration-300">
+    <div class="flex items-center">
+      <span class="material-icons-outlined mr-2 text-sm">error</span>
+      <span id="errorMessage">Error!</span>
+    </div>
+  </div>
 
   <!-- Header -->
-  <div class="flex items-center justify-between px-4 py-3 shadow-sm border-b bg-white">
-    <div class="flex items-center space-x-2">
-      <a href="index.html"><span class="material-icons-outlined text-black cursor-pointer" id="backButton">arrow_back</span></a>
-    </div>
-    <div class="flex space-x-4">
-      <button class="px-4 py-1.5 bg-purple-100 text-purple-600 rounded-md text-sm font-medium hover:bg-purple-200">Edit</button>
-      <button id="logoutButton" class="px-4 py-1.5 bg-red-100 text-red-600 rounded-md text-sm font-medium hover:bg-red-200">Logout</button>
-    </div>
-  </div>
-
-
-  <!-- Profile Section -->
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
-    <div class="flex flex-col items-center">
-      <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" alt="Profile Avatar" class="w-24 h-24 rounded-full mb-4" />
-      <h2 class="text-xl font-semibold userNameDisplay">User  Name</h2>
-      <p class="text-gray-600 userEmail">user@example.com</p>
-      <p class="text-gray-600 userPhone">+1234567890</p>
-    </div>
-
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold mb-2">Basic Information</h3>
-      <div class="space-y-2">
-        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-          <span>Name:</span>
-          <span class="userNameDisplay">User  Name</span>
+  <header class="bg-white shadow-lg border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center space-x-4">
+          <button id="backButton" class="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200">
+            <span class="material-icons-outlined text-gray-600">arrow_back</span>
+          </button>
+          <h1 class="text-xl font-semibold text-gray-900">My Profile</h1>
         </div>
-        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-          <span>Email:</span>
-          <span class="userEmail">user@example.com</span>
-        </div>
-        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-          <span>Phone:</span>
-          <span class="userPhone">+1234567890</span>
-        </div>
-        <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-          <span>Vehicle:</span>
-          <span id="userVehicle">KA-09-AB-1234 (Car)</span>
+        <div class="flex items-center space-x-3">
+          <button id="editButton" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm">
+            <span class="material-icons-outlined mr-2 text-sm">edit</span>
+            Edit Profile
+          </button>
+          <button id="logoutButton" class="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-sm">
+            <span class="material-icons-outlined mr-2 text-sm">logout</span>
+            Logout
+          </button>
         </div>
       </div>
-      <button id="editButton" class="mt-4 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600">Edit</button>
     </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Profile Header Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+      <div class="bg-gradient-to-r from-[#46949d] to-[#1e3740] h-32"></div>
+      <div class="px-8 pb-8">
+        <div class="flex flex-col sm:flex-row items-center sm:items-end -mt-16 mb-6">
+          <div class="relative">
+            <img id="profileAvatar" src="https://cdn-icons-png.flaticon.com/512/706/706830.png" alt="Profile Avatar" class="w-32 h-32 rounded-full border-4 border-white shadow-lg" />
+            <button id="uploadImageButton" class="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors duration-200">
+              <span class="material-icons-outlined text-sm">camera_alt</span>
+            </button>
+            <input type="file" id="profileImageInput" accept="image/*" class="hidden" />
+          </div>
+          <div class="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left">
+            <h2 id="userNameDisplay" class="text-2xl font-bold text-gray-900">User Name</h2>
+            <p id="userEmail" class="text-gray-600 mt-1">user@example.com</p>
+            <p id="userPhone" class="text-gray-600">+1234567890</p>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+          <div class="text-center p-4 bg-gray-50 rounded-xl">
+            <div class="text-2xl font-bold text-blue-600" id="savedVehiclesCount">0</div>
+            <div class="text-sm text-gray-600">Vehicles</div>
+          </div>
+          <div class="text-center p-4 bg-gray-50 rounded-xl">
+            <div class="text-2xl font-bold text-green-600" id="favoritesCount">0</div>
+            <div class="text-sm text-gray-600">Favorites</div>
+          </div>
+          <div class="text-center p-4 bg-gray-50 rounded-xl">
+            <div class="text-2xl font-bold text-purple-600" id="bookingsCount">0</div>
+            <div class="text-sm text-gray-600">Bookings</div>
+          </div>
+          <div class="text-center p-4 bg-gray-50 rounded-xl">
+            <div class="text-2xl font-bold text-orange-600" id="walletBalance">₹0</div>
+            <div class="text-sm text-gray-600">Wallet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Sections -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Left Column - Basic Info & Settings -->
+      <div class="lg:col-span-2 space-y-8">
+
+        <!-- Basic Information -->
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+              <span class="material-icons-outlined mr-2 text-blue-600">person</span>
+              Basic Information
+            </h3>
+            <button id="editBasicInfoButton" class="text-blue-600 hover:text-blue-700 transition-colors duration-200">
+              <span class="material-icons-outlined">edit</span>
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">badge</span>
+                <span class="text-gray-600">Name</span>
+              </div>
+              <span id="basicName" class="font-medium text-gray-900">User Name</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">email</span>
+                <span class="text-gray-600">Email</span>
+              </div>
+              <span id="basicEmail" class="font-medium text-gray-900">user@example.com</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">phone</span>
+                <span class="text-gray-600">Phone</span>
+              </div>
+              <span id="basicPhone" class="font-medium text-gray-900">+1234567890</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">directions_car</span>
+                <span class="text-gray-600">Primary Vehicle</span>
+              </div>
+              <span id="basicVehicle" class="font-medium text-gray-900">Not set</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehicles Section -->
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+              <span class="material-icons-outlined mr-2 text-green-600">directions_car</span>
+              My Vehicles
+            </h3>
+            <button id="addVehicleButton" class="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+              <span class="material-icons-outlined mr-2 text-sm">add</span>
+              Add Vehicle
+            </button>
+          </div>
+          <div id="vehiclesList" class="space-y-4">
+            <!-- Vehicles will be populated here -->
+            <div class="text-center py-8 text-gray-500">
+              <span class="material-icons-outlined text-4xl mb-2">directions_car</span>
+              <p>No vehicles added yet</p>
+              <p class="text-sm">Add your vehicles to make parking easier</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Favorites Section -->
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+              <span class="material-icons-outlined mr-2 text-purple-600">favorite</span>
+              Favorite Stations
+            </h3>
+            <button id="addFavoriteButton" class="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200">
+              <span class="material-icons-outlined mr-2 text-sm">add</span>
+              Add Favorite
+            </button>
+          </div>
+          <div id="favoritesList" class="space-y-4">
+            <!-- Favorites will be populated here -->
+            <div class="text-center py-8 text-gray-500">
+              <span class="material-icons-outlined text-4xl mb-2">favorite_border</span>
+              <p>No favorite stations yet</p>
+              <p class="text-sm">Save your preferred parking locations</p>
+            </div>
+          </div>
+        </div>
+<!-- FastTag Section -->
+<div class="bg-white rounded-2xl shadow-xl p-6 mt-8">
+  <div class="flex items-center justify-between mb-6">
+    <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+      <span class="material-icons-outlined mr-2 text-yellow-600">credit_card</span>
+      FastTag
+    </h3>
   </div>
+  
+  <!-- FastTag Status Container -->
+  <div id="fastTagContainer">
+    <!-- Content will be dynamically populated based on FastTag status -->
+  </div>
+</div>
+
+      </div>
+
+      <!-- Right Column - Account Settings & Actions -->
+      <div class="space-y-8">
+
+        <!-- Account Settings -->
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <span class="material-icons-outlined mr-2 text-indigo-600">settings</span>
+            Account Settings
+          </h3>
+          <div class="space-y-4">
+            <button id="changePasswordButton" class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">lock</span>
+                <span class="text-gray-700">Change Password</span>
+              </div>
+              <span class="material-icons-outlined text-gray-400">chevron_right</span>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">notifications</span>
+                <span class="text-gray-700">Notifications</span>
+              </div>
+              <span class="material-icons-outlined text-gray-400">chevron_right</span>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">privacy_tip</span>
+                <span class="text-gray-700">Privacy Settings</span>
+              </div>
+              <span class="material-icons-outlined text-gray-400">chevron_right</span>
+            </button>
+            <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+              <div class="flex items-center">
+                <span class="material-icons-outlined mr-3 text-gray-500">help</span>
+                <span class="text-gray-700">Help & Support</span>
+              </div>
+              <span class="material-icons-outlined text-gray-400">chevron_right</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Membership Status -->
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <span class="material-icons-outlined mr-2 text-yellow-600">star</span>
+            Membership
+          </h3>
+          <div class="text-center">
+            <div id="membershipBadge" class="inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium mb-4">
+              <span class="material-icons-outlined mr-2 text-sm">crown</span>
+              Basic Member
+            </div>
+            <p class="text-gray-600 text-sm mb-4">Upgrade to Premium for exclusive benefits</p>
+            <button class="w-full px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200">
+              Upgrade to Premium
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+            <span class="material-icons-outlined mr-2 text-blue-600">history</span>
+            Recent Activity
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-center p-3 bg-gray-50 rounded-xl">
+              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                <span class="material-icons-outlined text-blue-600 text-sm">local_parking</span>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Parking booked at Station A</p>
+                <p class="text-xs text-gray-500">2 hours ago</p>
+              </div>
+            </div>
+            <div class="flex items-center p-3 bg-gray-50 rounded-xl">
+              <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                <span class="material-icons-outlined text-green-600 text-sm">payment</span>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Payment received</p>
+                <p class="text-xs text-gray-500">1 day ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
 
   <!-- Edit Modal -->
   <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
@@ -71,13 +324,20 @@
           <label class="block text-sm font-medium text-gray-700">Phone</label>
           <input type="tel" id="editPhone" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
         </div>
+        <!-- Update Photo Section -->
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Vehicle</label>
-          <input type="text" id="editVehicle" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">New Password</label>
-          <input type="password" id="editPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          <label class="block text-sm font-medium text-gray-700 mb-2">Update Profile Photo</label>
+          <div class="flex items-center space-x-4">
+            <img id="editProfilePreview" src="https://cdn-icons-png.flaticon.com/512/706/706830.png" alt="Current Profile" class="w-16 h-16 rounded-full border-2 border-gray-300" />
+            <div>
+              <input type="file" id="editProfileImageInput" accept="image/*" class="hidden" />
+              <button type="button" id="editUploadImageButton" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                <span class="material-icons-outlined mr-2 text-sm">camera_alt</span>
+                Choose Photo
+              </button>
+              <p class="text-xs text-gray-500 mt-1">Max 5MB, JPG/PNG only</p>
+            </div>
+          </div>
         </div>
         <div class="flex justify-end">
           <button type="button" id="closeModal" class="px-4 py-1.5 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
@@ -87,144 +347,159 @@
     </div>
   </div>
 
-  <!-- Change Password Modal -->
-  <div id="changePasswordModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-      <h3 class="text-lg font-semibold mb-4">Change Password</h3>
-      <form id="changePasswordForm">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Current Password</label>
-          <input type="password" id="currentPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" required />
+  <!-- Add Vehicle Modal -->
+  <div id="addVehicleModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+          <span class="material-icons-outlined mr-2 text-green-600">directions_car</span>
+          Add New Vehicle
+        </h3>
+        <button id="closeAddVehicleModal" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+          <span class="material-icons-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="addVehicleForm">
+        <div class="space-y-6">
+          <!-- Vehicle Type Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">Vehicle Type</label>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="relative">
+                <input type="radio" name="vehicleType" value="car" class="sr-only peer" required />
+                <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-green-300 peer-checked:border-green-500 peer-checked:bg-green-50 transition-all duration-200">
+                  <div class="text-center">
+                    <span class="material-icons-outlined text-2xl text-gray-600 mb-2">directions_car</span>
+                    <p class="text-sm font-medium text-gray-900">Car</p>
+                  </div>
+                </div>
+              </label>
+              <label class="relative">
+                <input type="radio" name="vehicleType" value="bike" class="sr-only peer" />
+                <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-green-300 peer-checked:border-green-500 peer-checked:bg-green-50 transition-all duration-200">
+                  <div class="text-center">
+                    <span class="material-icons-outlined text-2xl text-gray-600 mb-2">two_wheeler</span>
+                    <p class="text-sm font-medium text-gray-900">Bike</p>
+                  </div>
+                </div>
+              </label>
+              <label class="relative">
+                <input type="radio" name="vehicleType" value="ev" class="sr-only peer" />
+                <div class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-green-300 peer-checked:border-green-500 peer-checked:bg-green-50 transition-all duration-200">
+                  <div class="text-center">
+                    <span class="material-icons-outlined text-2xl text-gray-600 mb-2">electric_car</span>
+                    <p class="text-sm font-medium text-gray-900">EV</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Vehicle Number Input -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle Number Plate</label>
+            <div class="relative">
+              <input type="text" id="vehicleNumber" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200 text-center font-mono text-lg tracking-wider" placeholder="KA01AB1234" required />
+              <span class="absolute right-3 top-3 text-gray-400">
+                <span class="material-icons-outlined text-sm">edit</span>
+              </span>
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Enter your vehicle number as shown on your registration</p>
+          </div>
+
+          <!-- Primary Vehicle Checkbox -->
+          <div class="flex items-center">
+            <input type="checkbox" id="isPrimaryVehicle" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" />
+            <label for="isPrimaryVehicle" class="ml-2 text-sm font-medium text-gray-700">Set as primary vehicle</label>
+          </div>
+          <p class="text-xs text-gray-500">Primary vehicles are selected by default when booking parking</p>
         </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">New Password</label>
-          <input type="password" id="newPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" required />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-          <input type="password" id="confirmNewPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" required />
-        </div>
-        <div class="flex justify-end">
-          <button type="button" id="closeChangePasswordModal" class="px-4 py-1.5 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
-          <button type="submit" class="ml-2 px-4 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600">Change</button>
+
+        <div class="flex justify-end space-x-3 mt-8">
+          <button type="button" id="cancelAddVehicle" class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium">
+            Cancel
+          </button>
+          <button type="submit" id="addVehicleSubmitBtn" class="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium flex items-center">
+            <span class="material-icons-outlined mr-2 text-sm">add</span>
+            Add Vehicle
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Parking-related Details -->
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
-    <h3 class="text-lg font-semibold mb-2">Parking-related Details</h3>
-    <div class="space-y-2">
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Saved Vehicles:</span>
-        <span>2 Vehicles</span>
+  <!-- Change Password Modal -->
+  <div id="changePasswordModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+          <span class="material-icons-outlined mr-2 text-blue-600">lock</span>
+          Change Password
+        </h3>
+        <button id="closeChangePasswordModal" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+          <span class="material-icons-outlined">close</span>
+        </button>
       </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Preferred Parking Spots:</span>
-        <span>3 Locations</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Membership Status:</span>
-        <span id="membershipStatus">Premium</span>
-      </div>
+
+      <form id="changePasswordForm">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+            <div class="relative">
+              <input type="password" id="currentPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200" placeholder="Enter current password" required />
+              <button type="button" id="toggleCurrentPassword" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                <span class="material-icons-outlined text-sm">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+            <div class="relative">
+              <input type="password" id="newPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200" placeholder="Enter new password" required />
+              <button type="button" id="toggleNewPassword" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                <span class="material-icons-outlined text-sm">visibility</span>
+              </button>
+            </div>
+            <div id="passwordStrength" class="mt-2 hidden">
+              <div class="flex items-center space-x-2">
+                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                  <div id="passwordStrengthBar" class="bg-red-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <span id="passwordStrengthText" class="text-xs text-gray-500">Weak</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+            <div class="relative">
+              <input type="password" id="confirmNewPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200" placeholder="Confirm new password" required />
+              <button type="button" id="toggleConfirmPassword" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                <span class="material-icons-outlined text-sm">visibility</span>
+              </button>
+            </div>
+            <div id="passwordMatchError" class="mt-1 text-sm text-red-600 hidden">
+              Passwords do not match
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 mt-8">
+          <button type="button" id="cancelChangePassword" class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium">
+            Cancel
+          </button>
+          <button type="submit" id="changePasswordSubmitBtn" class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium flex items-center">
+            <span class="material-icons-outlined mr-2 text-sm">check</span>
+            Change Password
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <!-- Activity & History -->
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
-    <h3 class="text-lg font-semibold mb-2">Activity & History</h3>
-    <div class="space-y-2">
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Recent Bookings:</span>
-        <span>5 Bookings</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Upcoming Reservations:</span>
-        <span>2 Reservations</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Payment History:</span>
-        <span>View Invoices</span>
-      </div>
-    </div>
-  </div>
 
-  <!-- Payment & Wallet -->
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
-    <h3 class="text-lg font-semibold mb-2">Payment & Wallet</h3>
-    <div class="space-y-2">
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Saved Payment Methods:</span>
-        <span>2 Methods</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Parking Wallet:</span>
-        <span id="walletBalance">₹500</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Transaction History:</span>
-        <span>View Transactions</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Notifications & Alerts -->
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
-    <h3 class="text-lg font-semibold mb-2">Notifications & Alerts</h3>
-    <div class="space-y-2">
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Parking Reminders:</span>
-        <span>Enabled</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Offers & Discounts:</span>
-        <span>Enabled</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Lot Availability Alerts:</span>
-        <span>Subscribed</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Smart Features -->
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
-    <h3 class="text-lg font-semibold mb-2">Smart Features</h3>
-    <div class="space-y-2">
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>EV Charging History:</span>
-        <span>View History</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Nearest Charging Spots:</span>
-        <span>Find Spots</span>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>QR Code Check-in/Out:</span>
-        <span>Enabled</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Settings & Support -->
-  <div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
-    <h3 class="text-lg font-semibold mb-2">Settings & Support</h3>
-    <div class="space-y-2">
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Change Password:</span>
-        <button id="changePasswordButton" class="text-blue-500">Change</button>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Privacy Settings:</span>
-        <button class="text-blue-500">Manage</button>
-      </div>
-      <div class="flex justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
-        <span>Help & Support:</span>
-        <button class="text-blue-500">Contact Us</button>
-      </div>
-    </div>
-  </div>
 
   <script>
     const apiBaseUrl = 'http://localhost:5000/api/user';
@@ -234,55 +509,543 @@
       return localStorage.getItem('token');
     }
 
+    // Helper function to add cache-busting query parameter to image URLs
+    function addCacheBusting(imageUrl) {
+      if (!imageUrl) return imageUrl;
+      const separator = imageUrl.includes('?') ? '&' : '?';
+      return imageUrl + separator + 't=' + Date.now();
+    }
+
     // Helper function to set user data in UI
     function setUserData(user) {
-      const userNameDisplays = document.querySelectorAll('.userNameDisplay');
-      const userEmailDisplays = document.querySelectorAll('.userEmail');
-      const userPhoneDisplays = document.querySelectorAll('.userPhone');
-      const userVehicle = document.getElementById('userVehicle');
-      const membershipStatus = document.getElementById('membershipStatus');
-      const walletBalance = document.getElementById('walletBalance');
+      try {
+        // Get elements with null checks
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const userEmail = document.getElementById('userEmail');
+        const userPhone = document.getElementById('userPhone');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const basicName = document.getElementById('basicName');
+        const basicEmail = document.getElementById('basicEmail');
+        const basicPhone = document.getElementById('basicPhone');
+        const basicVehicle = document.getElementById('basicVehicle');
+        const savedVehiclesCount = document.getElementById('savedVehiclesCount');
+        const favoritesCount = document.getElementById('favoritesCount');
+        const bookingsCount = document.getElementById('bookingsCount');
+        const walletBalance = document.getElementById('walletBalance');
+        const membershipBadge = document.getElementById('membershipBadge');
 
-      userNameDisplays.forEach(el => el.textContent = user.name || 'User Name');
-      userEmailDisplays.forEach(el => el.textContent = user.email || 'user@example.com');
-      userPhoneDisplays.forEach(el => el.textContent = user.phone || '+1234567890');
-      userVehicle.textContent = user.vehicle || 'Vehicle not added';
+        // Set basic user information with fallback messages
+        const userName = user.name || 'Please update your name';
+        const userEmailValue = user.email || 'Please update your email';
+        const userPhoneValue = user.phone || 'Please add your phone number';
+        const userVehicleInfo = user.vehicle || 'Please add your vehicle';
 
-      if (membershipStatus) {
-        membershipStatus.textContent = user.membershipStatus || 'Basic';
-      }
-      if (walletBalance) {
-        walletBalance.textContent = `₹${user.walletBalance || 0}`;
+        // Update header display
+        if (userNameDisplay) {
+          userNameDisplay.textContent = userName;
+          userNameDisplay.classList.toggle('text-gray-500', !user.name);
+          userNameDisplay.classList.toggle('text-gray-900', !!user.name);
+        }
+
+        if (userEmail) {
+          userEmail.textContent = userEmailValue;
+          userEmail.classList.toggle('text-gray-500', !user.email);
+          userEmail.classList.toggle('text-gray-900', !!user.email);
+        }
+
+        if (userPhone) {
+          userPhone.textContent = userPhoneValue;
+          userPhone.classList.toggle('text-gray-500', !user.phone);
+          userPhone.classList.toggle('text-gray-900', !!user.phone);
+        }
+
+        // Update profile image with cache-busting
+        if (profileAvatar) {
+          if (user.profileImage && user.profileImage.trim() !== '') {
+            profileAvatar.src = addCacheBusting(user.profileImage);
+          } else {
+            // Use default image if no profile image is set
+            profileAvatar.src = 'https://cdn-icons-png.flaticon.com/512/706/706830.png';
+          }
+        }
+
+        // Update basic info display elements
+        if (basicName) {
+          basicName.textContent = userName;
+          basicName.classList.toggle('text-gray-500', !user.name);
+          basicName.classList.toggle('text-gray-900', !!user.name);
+        }
+
+        if (basicEmail) {
+          basicEmail.textContent = userEmailValue;
+          basicEmail.classList.toggle('text-gray-500', !user.email);
+          basicEmail.classList.toggle('text-gray-900', !!user.email);
+        }
+
+        if (basicPhone) {
+          basicPhone.textContent = userPhoneValue;
+          basicPhone.classList.toggle('text-gray-500', !user.phone);
+          basicPhone.classList.toggle('text-gray-900', !!user.phone);
+        }
+
+        // Update primary vehicle display - find primary vehicle from vehicles array
+        if (basicVehicle) {
+          const primaryVehicle = user.vehicles ? user.vehicles.find(vehicle => vehicle.isPrimary) : null;
+          const primaryVehicleInfo = primaryVehicle ? `${primaryVehicle.number} (${primaryVehicle.type})` : 'Not set';
+          basicVehicle.textContent = primaryVehicleInfo;
+          basicVehicle.classList.toggle('text-gray-500', !primaryVehicle);
+          basicVehicle.classList.toggle('text-gray-900', !!primaryVehicle);
+        }
+
+        // Update stats counters
+        if (savedVehiclesCount) {
+          savedVehiclesCount.textContent = user.vehicles ? user.vehicles.length : 0;
+        }
+        if (favoritesCount) {
+          favoritesCount.textContent = user.favorites ? user.favorites.length : 0;
+        }
+        if (bookingsCount) {
+          bookingsCount.textContent = '0'; // This would come from bookings data
+        }
+        if (walletBalance) {
+          walletBalance.textContent = `₹${user.walletBalance || 0}`;
+        }
+
+        // Handle user role specific data
+        if (user.role === 'user') {
+          // Populate vehicles
+          populateVehicles(user.vehicles || []);
+
+          // Populate favorites
+          populateFavorites(user.favorites || []);
+
+          // Attach event listeners for dynamically created buttons
+          addFirstVehicleButtonListener();
+
+          // Update membership badge
+          if (membershipBadge) {
+            const badgeText = user.membershipStatus || 'Basic';
+            membershipBadge.innerHTML = `
+              <span class="material-icons-outlined mr-2 text-sm">crown</span>
+              ${badgeText} Member
+            `;
+          }
+        }
+
+        console.log('setUserData: Successfully updated UI with user data');
+      } catch (error) {
+        console.error('setUserData: Error updating UI:', error);
+        // Don't throw error, just log it to prevent page crash
       }
     }
+
+    // Helper function to populate vehicles list
+    function populateVehicles(vehicles) {
+      const vehiclesList = document.getElementById('vehiclesList');
+      vehiclesList.innerHTML = '';
+
+      if (vehicles.length === 0) {
+        vehiclesList.innerHTML = `
+          <div class="text-center py-8">
+            <span class="material-icons-outlined text-4xl mb-2 text-gray-400">directions_car</span>
+            <p class="text-gray-500 font-medium mb-2">No vehicles added yet</p>
+            <p class="text-sm text-gray-400 mb-4">Add your vehicles to make parking easier and faster</p>
+            <button id="addFirstVehicleButton" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+              <span class="material-icons-outlined mr-2 text-sm">add</span>
+              Add Your First Vehicle
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      vehicles.forEach(vehicle => {
+        const vehicleDiv = document.createElement('div');
+        vehicleDiv.className = 'flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-colors duration-200';
+        vehicleDiv.innerHTML = `
+          <div class="flex items-center">
+            <input type="radio" name="primaryVehicle" value="${vehicle._id}" ${vehicle.isPrimary ? 'checked' : ''} class="mr-3 text-blue-600 focus:ring-blue-500" onchange="setPrimaryVehicle('${vehicle._id}')" title="Set as primary vehicle">
+            <span class="material-icons-outlined mr-3 text-green-600">directions_car</span>
+            <div>
+              <span class="font-medium text-gray-900">${vehicle.number}</span>
+              <span class="text-sm text-gray-500 ml-2">(${vehicle.type})</span>
+              ${vehicle.isPrimary ? '<span class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Primary</span>' : ''}
+            </div>
+          </div>
+          <button class="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors duration-200" onclick="removeVehicle('${vehicle._id}')" title="Remove vehicle">
+            <span class="material-icons-outlined text-sm">delete</span>
+          </button>
+        `;
+        vehiclesList.appendChild(vehicleDiv);
+      });
+    }
+
+    // Helper function to populate favorites list
+    function populateFavorites(favorites) {
+      const favoritesList = document.getElementById('favoritesList');
+      favoritesList.innerHTML = '';
+
+      if (favorites.length === 0) {
+        favoritesList.innerHTML = `
+          <div class="text-center py-8">
+            <span class="material-icons-outlined text-4xl mb-2 text-gray-400">favorite_border</span>
+            <p class="text-gray-500 font-medium mb-2">No favorite stations yet</p>
+            <p class="text-sm text-gray-400 mb-4">Save your preferred parking locations for quick access</p>
+            <button id="addFavoriteButton" class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200">
+              <span class="material-icons-outlined mr-2 text-sm">add</span>
+              Add Your First Favorite
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      favorites.forEach(favorite => {
+        const favoriteDiv = document.createElement('div');
+        favoriteDiv.className = 'flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-colors duration-200';
+        favoriteDiv.innerHTML = `
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-3 text-purple-600">favorite</span>
+            <div>
+              <span class="font-medium text-gray-900">Station ${favorite.stationId}</span>
+              <span class="text-sm text-gray-500 ml-2">Added ${new Date(favorite.addedAt).toLocaleDateString()}</span>
+            </div>
+          </div>
+          <button class="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors duration-200" onclick="removeFavorite('${favorite._id}')" title="Remove favorite">
+            <span class="material-icons-outlined text-sm">delete</span>
+          </button>
+        `;
+        favoritesList.appendChild(favoriteDiv);
+      });
+    }
+
+    // Remove vehicle API call
+    async function removeVehicle(vehicleId) {
+      const token = getAuthToken();
+      if (!token) {
+        alert('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+      try {
+        const response = await fetch(`${apiBaseUrl}/vehicles/${vehicleId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          alert('Vehicle removed successfully');
+          fetchUserProfile();
+        } else {
+          alert(data.message || 'Failed to remove vehicle');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error removing vehicle');
+      }
+    }
+
+    // Set primary vehicle API call
+    async function setPrimaryVehicle(vehicleId) {
+      const token = getAuthToken();
+      if (!token) {
+        showErrorNotification('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+      try {
+        const response = await fetch(`${apiBaseUrl}/vehicles/${vehicleId}/primary`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          showSuccessNotification('Primary vehicle updated successfully!');
+          fetchUserProfile();
+        } else {
+          showErrorNotification(data.message || 'Failed to set primary vehicle');
+        }
+      } catch (error) {
+        console.error('Error setting primary vehicle:', error);
+        showErrorNotification('Error setting primary vehicle. Please try again.');
+      }
+    }
+
+    // Remove favorite API call
+    async function removeFavorite(favoriteId) {
+      const token = getAuthToken();
+      if (!token) {
+        alert('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+      try {
+        const response = await fetch(`${apiBaseUrl}/favorites/${favoriteId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          alert('Favorite removed successfully');
+          fetchUserProfile();
+        } else {
+          alert(data.message || 'Failed to remove favorite');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error removing favorite');
+      }
+    }
+
+    // Add vehicle button functionality
+    const addVehicleButton = document.getElementById('addVehicleButton');
+    if (addVehicleButton) {
+      addVehicleButton.addEventListener('click', () => {
+        const modal = document.getElementById('addVehicleModal');
+        const form = document.getElementById('addVehicleForm');
+        if (modal) modal.classList.remove('hidden');
+        if (form) form.reset();
+        // Clear any previous selections
+        const radioButtons = document.querySelectorAll('input[name="vehicleType"]');
+        radioButtons.forEach(radio => radio.checked = false);
+      });
+    }
+
+    // Add first vehicle button functionality (for empty state) - will be added dynamically
+    function addFirstVehicleButtonListener() {
+      const addFirstVehicleButton = document.getElementById('addFirstVehicleButton');
+      if (addFirstVehicleButton) {
+        addFirstVehicleButton.addEventListener('click', () => {
+          const modal = document.getElementById('addVehicleModal');
+          const form = document.getElementById('addVehicleForm');
+          if (modal) modal.classList.remove('hidden');
+          if (form) form.reset();
+          // Clear any previous selections
+          const radioButtons = document.querySelectorAll('input[name="vehicleType"]');
+          radioButtons.forEach(radio => radio.checked = false);
+        });
+      }
+    }
+
+    // Close add vehicle modal functionality
+    const closeAddVehicleModal = document.getElementById('closeAddVehicleModal');
+    if (closeAddVehicleModal) {
+      closeAddVehicleModal.addEventListener('click', () => {
+        const modal = document.getElementById('addVehicleModal');
+        if (modal) modal.classList.add('hidden');
+      });
+    }
+
+    const cancelAddVehicle = document.getElementById('cancelAddVehicle');
+    if (cancelAddVehicle) {
+      cancelAddVehicle.addEventListener('click', () => {
+        const modal = document.getElementById('addVehicleModal');
+        if (modal) modal.classList.add('hidden');
+      });
+    }
+
+    // Close modal when clicking outside
+    const addVehicleModal = document.getElementById('addVehicleModal');
+    if (addVehicleModal) {
+      addVehicleModal.addEventListener('click', (e) => {
+        if (e.target.id === 'addVehicleModal') {
+          e.target.classList.add('hidden');
+        }
+      });
+    }
+
+    // Vehicle number formatting
+    const vehicleNumberInput = document.getElementById('vehicleNumber');
+    if (vehicleNumberInput) {
+      vehicleNumberInput.addEventListener('input', (e) => {
+        let value = e.target.value.toUpperCase();
+        // Remove any non-alphanumeric characters except space and hyphen
+        value = value.replace(/[^A-Z0-9 -]/g, '');
+        // Auto-format Indian license plate pattern: XX 00 XX 0000 or XX-00-XX-0000
+        // Insert spaces or hyphens for readability
+        value = value.replace(/^([A-Z]{2})(\d{1,2})([A-Z]{0,2})(\d{0,4})$/, (match, p1, p2, p3, p4) => {
+          let formatted = p1;
+          if (p2) formatted += ' ' + p2;
+          if (p3) formatted += ' ' + p3;
+          if (p4) formatted += ' ' + p4;
+          return formatted;
+        });
+        // Limit length to 13 characters including spaces
+        if (value.length > 13) {
+          value = value.slice(0, 13);
+        }
+        e.target.value = value;
+      });
+    }
+
+    // Add vehicle form submission
+    const addVehicleForm = document.getElementById('addVehicleForm');
+    if (addVehicleForm) {
+      addVehicleForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const vehicleType = document.querySelector('input[name="vehicleType"]:checked');
+        const vehicleNumberRaw = document.getElementById('vehicleNumber').value.trim();
+        const isPrimary = document.getElementById('isPrimaryVehicle').checked;
+        const submitBtn = document.getElementById('addVehicleSubmitBtn');
+        const originalText = submitBtn.innerHTML;
+
+        // Validation
+        if (!vehicleType) {
+          showErrorNotification('Please select a vehicle type');
+          return;
+        }
+
+        if (!vehicleNumberRaw) {
+          showErrorNotification('Please enter a vehicle number');
+          return;
+        }
+
+        // Normalize vehicle number by removing spaces and hyphens for validation
+        const vehicleNumber = vehicleNumberRaw.replace(/[\s-]/g, '');
+
+        // Basic vehicle number validation (Indian format)
+        const vehicleNumberPattern = /^[A-Z]{2}\d{2}[A-Z]{1,2}\d{4}$/;
+        if (!vehicleNumberPattern.test(vehicleNumber)) {
+          showErrorNotification('Please enter a valid vehicle number (e.g., KA 01 AB 1234)');
+          return;
+        }
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Adding...';
+
+        try {
+          const vehicleData = {
+            number: vehicleNumber,
+            type: vehicleType.value,
+            isPrimary: isPrimary
+          };
+
+          const response = await fetch(`${apiBaseUrl}/vehicles`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${getAuthToken()}`
+            },
+            body: JSON.stringify(vehicleData)
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.success) {
+            showSuccessNotification('Vehicle added successfully!');
+            document.getElementById('addVehicleModal').classList.add('hidden');
+            // Reset form
+            document.getElementById('addVehicleForm').reset();
+            // Clear radio button selections
+            const radioButtons = document.querySelectorAll('input[name="vehicleType"]');
+            radioButtons.forEach(radio => radio.checked = false);
+            // Refresh profile data
+            fetchUserProfile();
+          } else {
+            showErrorNotification(data.message || 'Failed to add vehicle');
+          }
+        } catch (error) {
+          console.error('Error adding vehicle:', error);
+          showErrorNotification('Error adding vehicle. Please try again.');
+        } finally {
+          // Reset button state
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      });
+    }
+
+
+
+    // Add favorite button functionality
+    document.getElementById('addFavoriteButton').addEventListener('click', () => {
+      const stationId = prompt('Enter station ID to add to favorites:');
+      if (!stationId) return;
+
+      addFavorite({ stationId });
+    });
+
+    // Add favorite API call
+    async function addFavorite(favorite) {
+      const token = getAuthToken();
+      if (!token) {
+        alert('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+      try {
+        const response = await fetch(`${apiBaseUrl}/favorites`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(favorite)
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          alert('Favorite added successfully');
+          fetchUserProfile();
+        } else {
+          alert(data.message || 'Failed to add favorite');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error adding favorite');
+      }
+    }
+
+    // Add back button functionality
+    document.getElementById('backButton').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
 
     // Fetch user profile from backend
     async function fetchUserProfile() {
       try {
+        console.log('fetchUserProfile: Starting profile fetch...');
         const token = getAuthToken();
+        console.log('fetchUserProfile: Token from localStorage:', token);
         if (!token) {
+          console.log('fetchUserProfile: No token found, redirecting to login');
           window.location.href = 'userlogin.html';
           return;
         }
+        console.log('fetchUserProfile: Making API call to:', `${apiBaseUrl}/profile`);
         const response = await fetch(`${apiBaseUrl}/profile`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
+        console.log('fetchUserProfile: Response status:', response.status);
+        console.log('fetchUserProfile: Response headers:', response.headers);
         if (!response.ok) {
+          console.log('fetchUserProfile: Response not ok, throwing error');
           throw new Error('Failed to fetch user profile');
         }
         const data = await response.json();
+        console.log('fetchUserProfile: Response data:', data);
         if (data.success) {
           setUserData(data.user);
         } else {
+          console.log('fetchUserProfile: API returned success=false, throwing error');
           throw new Error(data.message || 'Failed to load user data');
         }
       } catch (error) {
-        console.error(error);
-        alert('Error loading user profile. Please login again.');
-        localStorage.clear();
-        window.location.href = 'userlogin.html';
+        console.error('fetchUserProfile: Error occurred:', error);
+        // Temporarily disable alert to see console logs
+        // alert('Error loading user profile. Please login again.');
+        console.log('fetchUserProfile: Would show alert and redirect to login');
+        // localStorage.clear();
+        // window.location.href = 'userlogin.html';
       }
     }
 
@@ -296,20 +1059,80 @@
     document.getElementById('editButton').addEventListener('click', () => {
       document.getElementById('editModal').classList.remove('hidden');
       // Populate the modal with current user data
-      const userNameDisplays = document.querySelectorAll('.userNameDisplay');
-      const userEmailDisplays = document.querySelectorAll('.userEmail');
-      const userPhoneDisplays = document.querySelectorAll('.userPhone');
-      const userVehicle = document.getElementById('userVehicle');
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      const userEmail = document.getElementById('userEmail');
+      const userPhone = document.getElementById('userPhone');
+      const profileAvatar = document.getElementById('profileAvatar');
 
-      document.getElementById('editName').value = userNameDisplays[0].textContent;
-      document.getElementById('editEmail').value = userEmailDisplays[0].textContent;
-      document.getElementById('editPhone').value = userPhoneDisplays[0].textContent;
-      document.getElementById('editVehicle').value = userVehicle.textContent;
+      if (userNameDisplay) {
+        document.getElementById('editName').value = userNameDisplay.textContent;
+      }
+      if (userEmail) {
+        document.getElementById('editEmail').value = userEmail.textContent;
+      }
+      if (userPhone) {
+        document.getElementById('editPhone').value = userPhone.textContent;
+      }
+      if (profileAvatar) {
+        document.getElementById('editProfilePreview').src = profileAvatar.src;
+      }
+    });
+
+    // Edit Basic Info button functionality (pencil icon)
+    document.getElementById('editBasicInfoButton').addEventListener('click', () => {
+      document.getElementById('editModal').classList.remove('hidden');
+      // Populate the modal with current user data
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      const userEmail = document.getElementById('userEmail');
+      const userPhone = document.getElementById('userPhone');
+      const profileAvatar = document.getElementById('profileAvatar');
+
+      if (userNameDisplay) {
+        document.getElementById('editName').value = userNameDisplay.textContent;
+      }
+      if (userEmail) {
+        document.getElementById('editEmail').value = userEmail.textContent;
+      }
+      if (userPhone) {
+        document.getElementById('editPhone').value = userPhone.textContent;
+      }
+      if (profileAvatar) {
+        document.getElementById('editProfilePreview').src = profileAvatar.src;
+      }
     });
 
     // Close edit modal functionality
     document.getElementById('closeModal').addEventListener('click', () => {
       document.getElementById('editModal').classList.add('hidden');
+    });
+
+    // Edit modal photo upload functionality
+    document.getElementById('editUploadImageButton').addEventListener('click', () => {
+      document.getElementById('editProfileImageInput').click();
+    });
+
+    document.getElementById('editProfileImageInput').addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file');
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+
+      // Preview the selected image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('editProfilePreview').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     });
 
     // Save changes functionality - update profile via API
@@ -321,12 +1144,36 @@
         window.location.href = 'userlogin.html';
         return;
       }
+
       const newName = document.getElementById('editName').value;
       const newEmail = document.getElementById('editEmail').value;
       const newPhone = document.getElementById('editPhone').value;
-      const newVehicle = document.getElementById('editVehicle').value;
+      const profileImageFile = document.getElementById('editProfileImageInput').files[0];
+
+      // Show loading
+      document.getElementById('loadingOverlay').classList.remove('hidden');
 
       try {
+        // If there's a new profile image, upload it first
+        if (profileImageFile) {
+          const formData = new FormData();
+          formData.append('profileImage', profileImageFile);
+
+          const imageResponse = await fetch(`${apiBaseUrl}/profile/upload-image`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            body: formData
+          });
+
+          const imageData = await imageResponse.json();
+          if (!imageResponse.ok || !imageData.success) {
+            throw new Error(imageData.message || 'Failed to upload profile image');
+          }
+        }
+
+        // Update profile information
         const response = await fetch(`${apiBaseUrl}/profile`, {
           method: 'PUT',
           headers: {
@@ -336,21 +1183,26 @@
           body: JSON.stringify({
             name: newName,
             email: newEmail,
-            phone: newPhone,
-            vehicle: newVehicle
+            phone: newPhone
           })
         });
+
         const data = await response.json();
         if (response.ok && data.success) {
           setUserData(data.user);
-          alert('Profile updated successfully');
+          showSuccessNotification('Profile updated successfully!');
           document.getElementById('editModal').classList.add('hidden');
+          // Clear the file input
+          document.getElementById('editProfileImageInput').value = '';
         } else {
-          alert(data.message || 'Failed to update profile');
+          throw new Error(data.message || 'Failed to update profile');
         }
       } catch (error) {
         console.error(error);
-        alert('Error updating profile');
+        showErrorNotification(error.message || 'Error updating profile');
+      } finally {
+        // Hide loading
+        document.getElementById('loadingOverlay').classList.add('hidden');
       }
     });
 
@@ -364,23 +1216,148 @@
       document.getElementById('changePasswordModal').classList.add('hidden');
     });
 
-    // Change password functionality - call backend API
+    // Password visibility toggle functionality
+    function togglePasswordVisibility(inputId, buttonId) {
+      const input = document.getElementById(inputId);
+      const button = document.getElementById(buttonId);
+      const icon = button.querySelector('.material-icons-outlined');
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    // Password visibility toggle event listeners
+    document.getElementById('toggleCurrentPassword').addEventListener('click', () => {
+      togglePasswordVisibility('currentPassword', 'toggleCurrentPassword');
+    });
+
+    document.getElementById('toggleNewPassword').addEventListener('click', () => {
+      togglePasswordVisibility('newPassword', 'toggleNewPassword');
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', () => {
+      togglePasswordVisibility('confirmNewPassword', 'toggleConfirmPassword');
+    });
+
+    // Password strength checker
+    function checkPasswordStrength(password) {
+      let strength = 0;
+      let feedback = [];
+
+      if (password.length >= 8) strength++;
+      else feedback.push('At least 8 characters');
+
+      if (/[a-z]/.test(password)) strength++;
+      else feedback.push('Lowercase letter');
+
+      if (/[A-Z]/.test(password)) strength++;
+      else feedback.push('Uppercase letter');
+
+      if (/[0-9]/.test(password)) strength++;
+      else feedback.push('Number');
+
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      else feedback.push('Special character');
+
+      return { strength, feedback };
+    }
+
+    // Update password strength indicator
+    function updatePasswordStrength() {
+      const password = document.getElementById('newPassword').value;
+      const strengthContainer = document.getElementById('passwordStrength');
+      const strengthBar = document.getElementById('passwordStrengthBar');
+      const strengthText = document.getElementById('passwordStrengthText');
+
+      if (password.length === 0) {
+        strengthContainer.classList.add('hidden');
+        return;
+      }
+
+      strengthContainer.classList.remove('hidden');
+      const { strength } = checkPasswordStrength(password);
+
+      let percentage = (strength / 5) * 100;
+      let color = 'bg-red-500';
+      let text = 'Weak';
+
+      if (strength >= 4) {
+        color = 'bg-green-500';
+        text = 'Strong';
+      } else if (strength >= 3) {
+        color = 'bg-yellow-500';
+        text = 'Medium';
+      }
+
+      strengthBar.style.width = `${percentage}%`;
+      strengthBar.className = `h-2 rounded-full transition-all duration-300 ${color}`;
+      strengthText.textContent = text;
+      strengthText.className = `text-xs ${strength >= 4 ? 'text-green-600' : strength >= 3 ? 'text-yellow-600' : 'text-red-600'}`;
+    }
+
+    // Password input event listeners
+    document.getElementById('newPassword').addEventListener('input', updatePasswordStrength);
+
+    // Password confirmation validation
+    function validatePasswordConfirmation() {
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmNewPassword').value;
+      const errorElement = document.getElementById('passwordMatchError');
+
+      if (confirmPassword.length === 0) {
+        errorElement.classList.add('hidden');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        errorElement.classList.remove('hidden');
+      } else {
+        errorElement.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('confirmNewPassword').addEventListener('input', validatePasswordConfirmation);
+
+    // Enhanced change password functionality
     document.getElementById('changePasswordForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const token = getAuthToken();
       if (!token) {
-        alert('Not authenticated. Please login again.');
+        showErrorNotification('Not authenticated. Please login again.');
         window.location.href = 'userlogin.html';
         return;
       }
+
       const currentPassword = document.getElementById('currentPassword').value;
       const newPassword = document.getElementById('newPassword').value;
       const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+      const submitBtn = document.getElementById('changePasswordSubmitBtn');
+      const originalText = submitBtn.innerHTML;
 
-      if (newPassword !== confirmNewPassword) {
-        alert('New passwords do not match!');
+      // Validation
+      if (!currentPassword || !newPassword || !confirmNewPassword) {
+        showErrorNotification('Please fill in all fields');
         return;
       }
+
+      if (newPassword !== confirmNewPassword) {
+        showErrorNotification('New passwords do not match');
+        return;
+      }
+
+      if (newPassword.length < 8) {
+        showErrorNotification('New password must be at least 8 characters long');
+        return;
+      }
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>Changing...';
 
       try {
         const response = await fetch(`${apiBaseUrl}/profile/change-password`, {
@@ -394,27 +1371,415 @@
             newPassword
           })
         });
+
         const data = await response.json();
+
         if (response.ok && data.success) {
-          alert('Password changed successfully!');
+          showSuccessNotification('Password changed successfully!');
           document.getElementById('changePasswordModal').classList.add('hidden');
+
           // Clear password fields
           document.getElementById('currentPassword').value = '';
           document.getElementById('newPassword').value = '';
           document.getElementById('confirmNewPassword').value = '';
+
+          // Reset password strength indicator
+          document.getElementById('passwordStrength').classList.add('hidden');
+          document.getElementById('passwordMatchError').classList.add('hidden');
         } else {
-          alert(data.message || 'Failed to change password');
+          showErrorNotification(data.message || 'Failed to change password');
         }
       } catch (error) {
-        console.error(error);
-        alert('Error changing password');
+        console.error('Error changing password:', error);
+        showErrorNotification('Error changing password. Please try again.');
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
       }
     });
+
+    // Cancel change password functionality
+    document.getElementById('cancelChangePassword').addEventListener('click', () => {
+      document.getElementById('changePasswordModal').classList.add('hidden');
+      // Clear password fields
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmNewPassword').value = '';
+      // Reset indicators
+      document.getElementById('passwordStrength').classList.add('hidden');
+      document.getElementById('passwordMatchError').classList.add('hidden');
+    });
+
+    // Profile image upload functionality
+    document.getElementById('uploadImageButton').addEventListener('click', () => {
+      document.getElementById('profileImageInput').click();
+    });
+
+    document.getElementById('profileImageInput').addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file');
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+
+      const token = getAuthToken();
+      if (!token) {
+        alert('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+
+      // Show loading
+      document.getElementById('loadingOverlay').classList.remove('hidden');
+
+      try {
+        const formData = new FormData();
+        formData.append('profileImage', file);
+
+        const response = await fetch(`${apiBaseUrl}/profile/upload-image`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Update profile image in UI with cache-busting
+          document.getElementById('profileAvatar').src = addCacheBusting(data.user.profileImage);
+          showSuccessNotification('Profile image uploaded successfully!');
+          fetchUserProfile(); // Refresh profile data
+        } else {
+          showErrorNotification(data.message || 'Failed to upload image');
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        showErrorNotification('Error uploading image');
+      } finally {
+        // Hide loading
+        document.getElementById('loadingOverlay').classList.add('hidden');
+      }
+    });
+
+    // Helper function to show success notification
+    function showSuccessNotification(message) {
+      const notification = document.getElementById('successNotification');
+      document.getElementById('successMessage').textContent = message;
+      notification.classList.remove('hidden');
+      setTimeout(() => {
+        notification.classList.add('hidden');
+      }, 3000);
+    }
+
+    // Helper function to show error notification
+    function showErrorNotification(message) {
+      const notification = document.getElementById('errorNotification');
+      document.getElementById('errorMessage').textContent = message;
+      notification.classList.remove('hidden');
+      setTimeout(() => {
+        notification.classList.add('hidden');
+      }, 3000);
+    }
 
     // On page load, fetch user profile
     window.addEventListener('DOMContentLoaded', fetchUserProfile);
   </script>
 
+<script>
+  // ... existing code ...
+
+  // Function to update FastTag UI based on status
+  function updateFastTagUI(fastTagData) {
+    const fastTagContainer = document.getElementById('fastTagContainer');
+    
+    if (!fastTagData || !fastTagData.isActive) {
+      // No active FastTag - show get FastTag UI
+      fastTagContainer.innerHTML = `
+        <div class="text-center py-4">
+          <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-outlined text-yellow-600 text-2xl">credit_card</span>
+          </div>
+          <h4 class="text-lg font-medium text-gray-900 mb-2">Get FastTag Now</h4>
+          <p class="text-gray-600 mb-6">Activate seamless payments for your parking transactions</p>
+          <button id="getFastTagButton" class="px-6 py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 font-medium">
+            Get FastTag
+          </button>
+        </div>
+      `;
+      
+      // Add event listener to the Get FastTag button
+      document.getElementById('getFastTagButton').addEventListener('click', applyForFastTag);
+    } else {
+      // Active FastTag - show FastTag details
+      const vehicleInfo = fastTagData.linkedVehicle ? 
+        `${fastTagData.linkedVehicle.number} (${fastTagData.linkedVehicle.type})` : 
+        'Not linked to vehicle';
+        
+      fastTagContainer.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-3 text-yellow-600">check_circle</span>
+              <span class="text-gray-700">Status: <span class="font-medium text-green-600">Active</span></span>
+            </div>
+            <span class="text-sm text-gray-500">ID: ${fastTagData.tagId || 'N/A'}</span>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center mb-2">
+                <span class="material-icons-outlined mr-2 text-gray-500 text-sm">account_balance</span>
+                <span class="text-sm text-gray-600">Balance</span>
+              </div>
+              <div class="text-2xl font-bold text-gray-900">₹${fastTagData.balance || 0}</div>
+            </div>
+            
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center mb-2">
+                <span class="material-icons-outlined mr-2 text-gray-500 text-sm">directions_car</span>
+                <span class="text-sm text-gray-600">Linked Vehicle</span>
+              </div>
+              <div class="text-lg font-medium text-gray-900">${vehicleInfo}</div>
+            </div>
+          </div>
+          
+          <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+            <div class="flex items-center mb-2">
+              <span class="material-icons-outlined mr-2 text-blue-600 text-sm">info</span>
+              <span class="text-sm font-medium text-blue-800">Last Transaction</span>
+            </div>
+            <div class="text-gray-700">
+              ${fastTagData.lastTransaction ? 
+                `${fastTagData.lastTransaction.amount} at ${fastTagData.lastTransaction.location} on ${new Date(fastTagData.lastTransaction.date).toLocaleDateString()}` : 
+                'No recent transactions'}
+            </div>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-3 pt-4">
+            <button id="rechargeFastTagButton" class="flex-1 px-4 py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 font-medium flex items-center justify-center">
+              <span class="material-icons-outlined mr-2 text-sm">account_balance_wallet</span>
+              Recharge
+            </button>
+            <button id="deactivateFastTagButton" class="flex-1 px-4 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium flex items-center justify-center">
+              <span class="material-icons-outlined mr-2 text-sm">block</span>
+              Deactivate
+            </button>
+          </div>
+        </div>
+      `;
+      
+      // Add event listeners
+      document.getElementById('rechargeFastTagButton').addEventListener('click', rechargeFastTag);
+      document.getElementById('deactivateFastTagButton').addEventListener('click', deactivateFastTag);
+    }
+  }
+
+  // Function to fetch FastTag data from backend
+  async function fetchFastTagData() {
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        console.error('No authentication token found');
+        return null;
+      }
+      
+      const response = await fetch(`${apiBaseUrl}/fasttag`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          return data.fastTag;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error fetching FastTag data:', error);
+      return null;
+    }
+  }
+
+  // Function to apply for FastTag
+  async function applyForFastTag() {
+    try {
+      // Show loading
+      document.getElementById('loadingOverlay').classList.remove('hidden');
+      
+      const token = getAuthToken();
+      if (!token) {
+        showErrorNotification('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+      
+      // Get user vehicles to select one for FastTag linking
+      const userResponse = await fetch(`${apiBaseUrl}/profile`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      
+      const userData = await userResponse.json();
+      const vehicles = userData.user.vehicles || [];
+      
+      if (vehicles.length === 0) {
+        showErrorNotification('You need to add a vehicle first before applying for FastTag');
+        document.getElementById('addVehicleButton').click(); // Open add vehicle modal
+        return;
+      }
+      
+      // For simplicity, we'll use the first vehicle
+      // In a real implementation, you might want to let the user choose
+      const selectedVehicle = vehicles[0];
+      
+      const response = await fetch(`${apiBaseUrl}/fasttag/apply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          vehicleId: selectedVehicle._id
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        showSuccessNotification('FastTag application submitted successfully!');
+        // Refresh FastTag data
+        const fastTagData = await fetchFastTagData();
+        updateFastTagUI(fastTagData);
+      } else {
+        showErrorNotification(data.message || 'Failed to apply for FastTag');
+      }
+    } catch (error) {
+      console.error('Error applying for FastTag:', error);
+      showErrorNotification('Error applying for FastTag. Please try again.');
+    } finally {
+      document.getElementById('loadingOverlay').classList.add('hidden');
+    }
+  }
+
+  // Function to recharge FastTag
+  async function rechargeFastTag() {
+    const amount = prompt('Enter recharge amount (₹):');
+    if (!amount || isNaN(amount) || amount <= 0) {
+      showErrorNotification('Please enter a valid amount');
+      return;
+    }
+    
+    try {
+      document.getElementById('loadingOverlay').classList.remove('hidden');
+      
+      const token = getAuthToken();
+      if (!token) {
+        showErrorNotification('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+      
+      const response = await fetch(`${apiBaseUrl}/fasttag/recharge`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          amount: parseFloat(amount)
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        showSuccessNotification(`FastTag recharged successfully with ₹${amount}`);
+        // Refresh FastTag data
+        const fastTagData = await fetchFastTagData();
+        updateFastTagUI(fastTagData);
+      } else {
+        showErrorNotification(data.message || 'Failed to recharge FastTag');
+      }
+    } catch (error) {
+      console.error('Error recharging FastTag:', error);
+      showErrorNotification('Error recharging FastTag. Please try again.');
+    } finally {
+      document.getElementById('loadingOverlay').classList.add('hidden');
+    }
+  }
+
+  // Function to deactivate FastTag
+  async function deactivateFastTag() {
+    const confirmDeactivate = confirm('Are you sure you want to deactivate your FastTag?');
+    if (!confirmDeactivate) return;
+    
+    try {
+      document.getElementById('loadingOverlay').classList.remove('hidden');
+      
+      const token = getAuthToken();
+      if (!token) {
+        showErrorNotification('Not authenticated. Please login again.');
+        window.location.href = 'userlogin.html';
+        return;
+      }
+      
+      const response = await fetch(`${apiBaseUrl}/fasttag/deactivate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        showSuccessNotification('FastTag deactivated successfully');
+        // Refresh FastTag data
+        const fastTagData = await fetchFastTagData();
+        updateFastTagUI(fastTagData);
+      } else {
+        showErrorNotification(data.message || 'Failed to deactivate FastTag');
+      }
+    } catch (error) {
+      console.error('Error deactivating FastTag:', error);
+      showErrorNotification('Error deactivating FastTag. Please try again.');
+    } finally {
+      document.getElementById('loadingOverlay').classList.add('hidden');
+    }
+  }
+
+  // Update the fetchUserProfile function to also fetch FastTag data
+  const originalFetchUserProfile = fetchUserProfile;
+  fetchUserProfile = async function() {
+    await originalFetchUserProfile();
+    
+    // Fetch and display FastTag data
+    const fastTagData = await fetchFastTagData();
+    updateFastTagUI(fastTagData);
+  };
+
+  // ... rest of the existing code ...
+</script>
 </body>
 </html>
 

@@ -825,6 +825,40 @@
       }, 300);
     });
 
+    // Handle search form submission
+    document.getElementById('search-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const location = document.getElementById('location').value.trim();
+      if (!location) {
+        alert('Please enter a location');
+        return;
+      }
+
+      try {
+        // Search for stations by city
+        const response = await fetch(`http://localhost:5000/api/stations/search/${encodeURIComponent(location)}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        if (data.success && data.stations.length > 0) {
+          // Store search results in sessionStorage
+          sessionStorage.setItem('searchResults', JSON.stringify(data.stations));
+          sessionStorage.setItem('searchLocation', location);
+
+          // Redirect to results page
+          window.location.href = `results.html?location=${encodeURIComponent(location)}`;
+        } else {
+          alert('No parking stations found for this location. Please try a different city.');
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        alert('Error searching for parking stations. Please try again.');
+      }
+    });
+
     // Mobile Menu Toggle Functionality
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.querySelector('.hamburger');

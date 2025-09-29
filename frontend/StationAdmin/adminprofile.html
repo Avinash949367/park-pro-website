@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Station Admin Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
+      <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
+      <nav class="flex flex-col space-y-4">
+        <a href="station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏠</span><span>Dashboard</span>
+        </a>
+        <a href="station_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏢</span><span>Manage Station</span>
+        </a>
+        <a href="gps_mapping.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🗺️</span><span>GPS Mapping</span>
+        </a>
+        <a href="station_visualization.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>📊</span><span>Station View</span>
+        </a>
+        <a href="slot_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>📅</span><span>View Bookings</span>
+        </a>
+        <a href="slot_earning.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>💰</span><span>Earnings</span>
+        </a>
+        <a href="station_settings.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>⚙️</span><span>Settings</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>✉️</span><span>Messages</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
+          <span>🔓</span><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto">
+      <!-- Main Container -->
+      <div class="max-w-5xl mx-auto mt-10 bg-white shadow-sm border border-gray-200 rounded">
+        <div class="p-6 border-b border-gray-200">
+          <h1 class="text-2xl font-semibold">Edit Your Profile</h1>
+          <p class="text-sm text-gray-500 mt-1">Manage your profile details and login credentials.</p>
+        </div>
+
+        <form class="p-6 space-y-6">
+
+          <!-- Profile Picture -->
+          <div>
+            <h2 class="text-lg font-medium mb-2">Profile Picture</h2>
+            <div class="flex items-center space-x-4">
+              <img src="profile.png" alt="Profile Picture" class="w-20 h-20 rounded-full border border-gray-300 object-cover" />
+              <div>
+                <input type="file" class="text-sm text-gray-600" />
+                <p class="text-xs text-gray-500 mt-1">Recommended size: 150x150px</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Name -->
+          <div>
+            <label class="block text-sm font-medium mb-1" for="name">Full Name</label>
+            <input id="name" type="text" placeholder="John Doe" class="w-full px-4 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium mb-1" for="email">Email Address</label>
+            <input id="email" type="email" placeholder="admin@example.com" class="w-full px-4 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="block text-sm font-medium mb-1" for="phone">Phone Number</label>
+            <input id="phone" type="text" placeholder="+91 9876543210" class="w-full px-4 py-2 border border-gray-300 rounded bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+
+          <!-- Change Password -->
+          <div>
+            <h2 class="text-lg font-medium mb-2 mt-8">Account Security</h2>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Current Password</label>
+                <input type="password" class="w-full px-4 py-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">New Password</label>
+                <input type="password" class="w-full px-4 py-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Confirm New Password</label>
+                <input type="password" class="w-full px-4 py-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Leave password fields empty if you don't want to change it.</p>
+          </div>
+
+          <!-- Submit -->
+          <div class="flex justify-between items-center">
+            <button type="submit" class="bg-blue-600 text-white text-sm px-6 py-2 rounded hover:bg-blue-700 transition">
+              Update Profile
+            </button>
+            <button type="button" id="logoutBtn" class="bg-red-500 text-white text-sm px-6 py-2 rounded hover:bg-red-600 transition">
+              Logout
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is logged in on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (!token || !user || user.role !== 'store admin') {
+        // Redirect to login if not authenticated or not store admin
+        window.location.href = 'station_adminlogin.html';
+        return;
+      }
+
+      // Logout functionality
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('email');
+        window.location.href = 'station_adminlogin.html';
+      });
+    });
+  </script>
+</body>
+</html>

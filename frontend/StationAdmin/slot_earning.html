@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Station Earnings Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
+      <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
+      <nav class="flex flex-col space-y-4">
+        <a href="station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏠</span><span>Dashboard</span>
+        </a>
+        <a href="station_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏢</span><span>Manage Station</span>
+        </a>
+        <a href="gps_mapping.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🗺️</span><span>GPS Mapping</span>
+        </a>
+        <a href="station_visualization.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>📊</span><span>Station View</span>
+        </a>
+        <a href="slot_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>📅</span><span>View Bookings</span>
+        </a>
+        <a href="slot_earning.html" class="flex items-center space-x-2 text-yellow-400">
+          <span>💰</span><span>Earnings</span>
+        </a>
+        <a href="station_settings.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>⚙️</span><span>Settings</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>✉️</span><span>Messages</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
+          <span>🔓</span><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 p-6">
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">📊 Earnings Overview</h1>
+        <div class="flex items-center space-x-4">
+          <span class="font-semibold">Admin</span>
+          <img src="https://via.placeholder.com/30" class="w-8 h-8 rounded-full" alt="Profile" />
+          <button class="text-red-500">Logout</button>
+        </div>
+      </div>
+
+      <!-- Station Header -->
+      <div class="bg-white p-4 rounded-xl shadow mb-4">
+        <h2 class="text-xl font-semibold">🏢 Parking Zone A – MG Road</h2>
+        <p>ID: STN-0435 | Location: MG Road, Bangalore</p>
+        <div class="mt-2">
+          <label class="text-sm font-medium">📆 Date Range:</label>
+          <select class="ml-2 p-1 border rounded">
+            <option>Today</option>
+            <option>This Week</option>
+            <option>Custom</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+        <div class="bg-white shadow-md rounded-xl p-4 hover:shadow-lg">
+          <p class="text-sm text-gray-500">💸 Today’s Earnings</p>
+          <h3 class="text-lg font-bold">₹ 3,200</h3>
+        </div>
+        <div class="bg-white shadow-md rounded-xl p-4 hover:shadow-lg">
+          <p class="text-sm text-gray-500">📅 Weekly Earnings</p>
+          <h3 class="text-lg font-bold">₹ 18,700</h3>
+        </div>
+        <div class="bg-white shadow-md rounded-xl p-4 hover:shadow-lg">
+          <p class="text-sm text-gray-500">📊 Monthly Earnings</p>
+          <h3 class="text-lg font-bold">₹ 78,250</h3>
+        </div>
+        <div class="bg-white shadow-md rounded-xl p-4 hover:shadow-lg">
+          <p class="text-sm text-gray-500">🚗 Total Bookings</p>
+          <h3 class="text-lg font-bold">1,120</h3>
+        </div>
+        <div class="bg-white shadow-md rounded-xl p-4 hover:shadow-lg">
+          <p class="text-sm text-gray-500">🕒 Avg. Slot Usage Time</p>
+          <h3 class="text-lg font-bold">2.5 hrs</h3>
+        </div>
+      </div>
+
+      <!-- Revenue Chart -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <div class="flex justify-between mb-4">
+          <h2 class="text-lg font-bold">📈 Earnings Trend (Last 30 Days)</h2>
+          <select class="border p-1 rounded">
+            <option>Daily</option>
+            <option>Weekly</option>
+            <option>Monthly</option>
+          </select>
+        </div>
+        <canvas id="revenueChart"></canvas>
+      </div>
+
+      <!-- Peak Hour Analytics -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <h2 class="text-lg font-bold mb-4">🔥 Peak Hour Analytics</h2>
+        <canvas id="peakHourChart"></canvas>
+      </div>
+
+      <!-- Recent Transactions Table -->
+      <div class="bg-white p-4 rounded-xl shadow mb-6 overflow-auto">
+        <h2 class="text-lg font-bold mb-4">🧾 Recent Transactions</h2>
+        <table class="w-full min-w-[600px] text-left">
+          <thead class="bg-gray-100 sticky top-0">
+            <tr>
+              <th class="p-2">Booking ID</th>
+              <th class="p-2">Date</th>
+              <th class="p-2">Vehicle No</th>
+              <th class="p-2">Time In</th>
+              <th class="p-2">Time Out</th>
+              <th class="p-2">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t">
+              <td class="p-2">BK1234</td>
+              <td class="p-2">27-Jul-25</td>
+              <td class="p-2">KA03MK1111</td>
+              <td class="p-2">08:00AM</td>
+              <td class="p-2">10:15AM</td>
+              <td class="p-2">₹100</td>
+            </tr>
+            <tr class="border-t">
+              <td class="p-2">BK1235</td>
+              <td class="p-2">27-Jul-25</td>
+              <td class="p-2">KA01CC3333</td>
+              <td class="p-2">09:00AM</td>
+              <td class="p-2">11:00AM</td>
+              <td class="p-2">₹120</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Occupancy Chart & Export Options -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h2 class="text-lg font-bold mb-4">📍 Station Occupancy Rate</h2>
+          <canvas id="occupancyChart"></canvas>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow flex flex-col justify-center items-start">
+          <h2 class="text-lg font-bold mb-4">📤 Export Options</h2>
+          <button class="bg-blue-500 text-white px-4 py-2 rounded mb-2 hover:bg-blue-600">Export CSV</button>
+          <button class="bg-green-500 text-white px-4 py-2 rounded mb-2 hover:bg-green-600">Export PDF</button>
+          <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Print</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const revenueChart = new Chart(document.getElementById('revenueChart'), {
+      type: 'line',
+      data: {
+        labels: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
+        datasets: [{
+          label: 'Earnings ₹',
+          data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 5000)),
+          borderColor: '#4F46E5',
+          backgroundColor: 'rgba(79, 70, 229, 0.1)',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    const peakHourChart = new Chart(document.getElementById('peakHourChart'), {
+      type: 'bar',
+      data: {
+        labels: ['6 AM', '9 AM', '12 PM', '3 PM', '6 PM', '9 PM'],
+        datasets: [{
+          label: 'Bookings',
+          data: [50, 100, 200, 80, 60, 30],
+          backgroundColor: '#F97316'
+        }]
+      }
+    });
+
+    const occupancyChart = new Chart(document.getElementById('occupancyChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Occupied', 'Available'],
+        datasets: [{
+          data: [82, 18],
+          backgroundColor: ['#10B981', '#E5E7EB']
+        }]
+      },
+      options: {
+        cutout: '70%'
+      }
+    });
+  </script>
+  <script>
+    // Check if user is logged in on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (!token || !user || user.role !== 'store admin') {
+        // Redirect to login if not authenticated or not store admin
+        window.location.href = 'station_adminlogin.html';
+        return;
+      }
+    });
+  </script>
+</body>
+
+</html>

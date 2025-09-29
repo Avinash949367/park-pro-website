@@ -100,7 +100,7 @@ router.post("/storeadmin/login", async (req, res, next) => {
     res.json({
       token,
       user: { email: credentials.email, role: 'store admin', stationId: credentials.stationId },
-      redirectUrl: "storeadmin_dashboard.html",
+      redirectUrl: "station_admin_dashboard.html",
     });
   } catch (err) {
     next(err);

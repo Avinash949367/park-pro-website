@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const storeAdminCredentialsSchema = new mongoose.Schema({
   stationId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Stations",
+    ref: "Station",
     required: true,
   },
   email: {

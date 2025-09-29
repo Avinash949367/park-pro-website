@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const UserRole = require("../models/UserRole");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
@@ -172,10 +173,19 @@ exports.login = async (req, res) => {
     }
 
     console.log('Login successful for user:', user.email);
+
+    // Create or update UserRole
+    let userRole = await UserRole.findOne({ userId: user._id });
+    if (!userRole) {
+      userRole = new UserRole({ userId: user._id });
+    }
+    userRole.lastLogin = new Date();
+    await userRole.save();
+
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET || 'default_jwt_secret_key',
-      { expiresIn: "1d" }
+      { expiresIn: "7d" }
     );
 
     res.json({
@@ -269,6 +279,14 @@ exports.googleSignIn = async (req, res) => {
         password: '', // no password for OAuth users
       });
     }
+
+    // Create or update UserRole
+    let userRole = await UserRole.findOne({ userId: user._id });
+    if (!userRole) {
+      userRole = new UserRole({ userId: user._id });
+    }
+    userRole.lastLogin = new Date();
+    await userRole.save();
 
     // Issue JWT token
     const token = jwt.sign(

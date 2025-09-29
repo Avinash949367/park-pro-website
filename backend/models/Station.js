@@ -97,6 +97,46 @@ const stationSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  // GPS Structure Data
+  gpsStructure: {
+    boundary: [{
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true }
+    }],
+    entry: {
+      lat: { type: Number },
+      lng: { type: Number }
+    },
+    exit: {
+      lat: { type: Number },
+      lng: { type: Number }
+    },
+    slots: [{
+      id: { type: String, required: true },
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
+      status: { type: String, enum: ['enabled', 'disabled'], default: 'enabled' },
+      reason: { type: String, default: null }
+    }],
+    walls: [[{
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true }
+    }]],
+    roads: [[{
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true }
+    }]]
+  },
+  // Station Status
+  gpsMappingStatus: {
+    type: String,
+    enum: ['not_started', 'in_progress', 'completed', 'submitted_for_approval', 'approved', 'rejected'],
+    default: 'not_started'
+  },
+  publicVisibility: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -104,6 +144,14 @@ const stationSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now
+  },
+  openAt: {
+    type: String,
+    default: '00:00'
+  },
+  closeAt: {
+    type: String,
+    default: '23:59'
   }
 });
 

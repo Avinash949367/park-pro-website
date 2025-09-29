@@ -1,15 +1,21 @@
-# TODO: Update users_view.html for Banned User Actions
+# TODO: Implement Booking, Payment, and Slot Generation Features
 
-## Completed Tasks
-- [x] Analyze users_view.html to understand modal structure and button rendering
-- [x] Modify showUserDetailsModal function to conditionally show buttons based on user.banned status
-- [x] Add Unban button with click handler for unbanning users
-- [x] Ensure Delete button is always shown with full functionality
-- [x] Update performUserAction function to handle 'unban' action
-- [x] Test the changes (assuming backend supports unban endpoint)
+## Database Changes
+- [x] Update SlotBooking model to include status (reserved, confirmed, cancelled, expired) and reservation_expires_at
+- [x] Create new Payment model with id, booking_id, amount, method, txn_id, status, timestamp
 
-## Notes
-- Assumed user object has `banned` property (boolean)
-- Unban action uses POST to `/api/admin/users/{userId}/unban`
-- Modal now dynamically renders buttons based on user status
-- All existing functionality for Ban, Disable, and Delete preserved for non-banned users
+## API Additions
+- [x] Admin API: POST /admin/stations/{id}/hours to update station working hours (openAt, closeAt)
+- [x] User API: GET /stations/{id}/availability?date=YYYY-MM-DD to generate 1-hour slots with availability status
+- [x] POST /bookings/reserve to create booking with status reserved, reservation_expires_at = now + 10m, return reservation_id and payment_payload
+- [x] POST /payments/verify to verify payment and mark booking as confirmed
+
+## Slot Generation Logic
+- [x] Implement slot generation in availability API based on station openAt/closeAt and existing bookings
+
+## Payment Integration
+- [x] Generate UPI string for payment payload in booking reservation
+- [x] Implement payment verification in payments/verify API
+
+## Reservation Expiry
+- [x] Implement background job to clear expired reservations and free slots

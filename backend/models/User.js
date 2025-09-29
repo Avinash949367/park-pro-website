@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  profileImage: {
+    type: String,
+    trim: true,
+    default: ''  // URL or path to profile image
+  },
   membershipStatus: {
     type: String,
     enum: ['Basic', 'Premium', 'Gold'],

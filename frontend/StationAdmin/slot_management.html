@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Station Management - Parking Slots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex text-gray-800 bg-gray-100">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
+    <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
+    <nav class="flex flex-col space-y-4">
+      <a href="station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
+        <span>🏠</span><span>Dashboard</span>
+      </a>
+      <a href="station_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+        <span>🏢</span><span>Manage Station</span>
+      </a>
+      <a href="gps_mapping.html" class="flex items-center space-x-2 hover:text-yellow-400">
+        <span>🗺️</span><span>GPS Mapping</span>
+      </a>
+      <a href="station_visualization.html" class="flex items-center space-x-2 hover:text-yellow-400">
+        <span>📊</span><span>Station View</span>
+      </a>
+      <a href="slot_management.html" class="flex items-center space-x-2 text-yellow-400">
+        <span>📅</span><span>View Bookings</span>
+      </a>
+      <a href="slot_earning.html" class="flex items-center space-x-2 hover:text-yellow-400">
+        <span>💰</span><span>Earnings</span>
+      </a>
+      <a href="station_settings.html" class="flex items-center space-x-2 hover:text-yellow-400">
+        <span>⚙️</span><span>Settings</span>
+      </a>
+      <a href="#" class="flex items-center space-x-2 hover:text-yellow-400">
+        <span>✉️</span><span>Messages</span>
+      </a>
+      <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
+        <span>🔓</span><span>Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Top Bar -->
+    <header class="bg-white shadow flex justify-between items-center p-4">
+      <h1 class="text-2xl font-semibold">Slot Management</h1>
+      <div class="flex items-center gap-4">
+        <span class="text-gray-600">Welcome, Admin</span>
+        <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">Logout</button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="p-6 space-y-6">
+
+      <!-- Station Info -->
+      <section class="bg-white shadow p-4 rounded">
+        <h2 class="text-xl font-semibold mb-2">Station: <span id="station-name">Loading...</span></h2>
+        <p><strong>Location:</strong> <span id="station-location">Loading...</span></p>
+        <p><strong>ID:</strong> <span id="station-id">Loading...</span></p>
+        <p><strong>Total Slots:</strong> <span id="total-slots">0</span></p>
+      </section>
+
+
+
+      <!-- Search & Filters -->
+      <section class="bg-white shadow p-4 rounded">
+        <div class="flex flex-wrap gap-4 items-center">
+          <input type="text" id="search" placeholder="Search by Slot ID or keyword" class="p-2 border rounded flex-1 min-w-64">
+          <select id="type-filter" class="p-2 border rounded">
+            <option value="All">All Types</option>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Van">Van</option>
+          </select>
+          <select id="price-sort" class="p-2 border rounded">
+            <option value="None">Sort by Price</option>
+            <option value="Low-High">Low to High</option>
+            <option value="High-Low">High to Low</option>
+          </select>
+          <select id="status-filter" class="p-2 border rounded">
+            <option value="All">All Status</option>
+            <option value="Enabled">Enabled</option>
+            <option value="Disabled">Disabled</option>
+          </select>
+          <select id="availability-filter" class="p-2 border rounded">
+            <option value="All">All Availability</option>
+            <option value="Free">Free</option>
+            <option value="Booked">Booked</option>
+          </select>
+          <button onclick="addSlot()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Add Slot</button>
+        </div>
+      </section>
+
+      <!-- Slot Grid -->
+      <section>
+        <div id="slot-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <!-- Slots will be rendered here -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <!-- Add Slot Modal -->
+  <div id="add-slot-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h3 class="text-lg font-semibold mb-4">Add New Slot</h3>
+      <form onsubmit="saveSlot(); return false;">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Type</label>
+          <select id="slot-type" class="w-full p-2 border rounded" required>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Van">Van</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Price (₹ per hour)</label>
+          <input type="number" id="slot-price" class="w-full p-2 border rounded" min="0" step="0.01" required>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('add-slot-modal')" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Add Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Slot Modal -->
+  <div id="edit-slot-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h3 class="text-lg font-semibold mb-4">Edit Slot</h3>
+      <form onsubmit="saveEdit(); return false;">
+        <input type="hidden" id="edit-id">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Type</label>
+          <select id="edit-slot-type" class="w-full p-2 border rounded" required>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Van">Van</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Price (₹ per hour)</label>
+          <input type="number" id="edit-slot-price" class="w-full p-2 border rounded" min="0" step="0.01" required>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('edit-slot-modal')" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Book Slot Modal -->
+  <div id="book-slot-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h3 class="text-lg font-semibold mb-4">Admin Book Slot</h3>
+      <form onsubmit="saveBooking(); return false;">
+        <input type="hidden" id="book-id">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">User Email</label>
+          <input type="email" id="book-user-email" class="w-full p-2 border rounded" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Vehicle Number</label>
+          <input type="text" id="book-vehicle-number" class="w-full p-2 border rounded" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Start Time</label>
+          <input type="datetime-local" id="book-start" class="w-full p-2 border rounded" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Duration (hours)</label>
+          <input type="number" id="book-duration" class="w-full p-2 border rounded" min="1" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Payment Method</label>
+          <select id="book-payment" class="w-full p-2 border rounded" required>
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Online">Online</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('book-slot-modal')" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Book Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Bookings Modal -->
+  <div id="view-bookings-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded shadow-lg w-96 max-h-96 overflow-y-auto">
+      <h3 class="text-lg font-semibold mb-4">Slot Bookings</h3>
+      <div id="bookings-sections">
+        <!-- Bookings will be listed here in sections -->
+      </div>
+      <div class="flex justify-end mt-4">
+        <button onclick="closeModal('view-bookings-modal')" class="px-4 py-2 bg-gray-300 rounded">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is logged in on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (!token || !user || user.role !== 'store admin') {
+        // Redirect to login if not authenticated or not store admin
+        window.location.href = 'station_adminlogin.html';
+        return;
+      }
+
+      // Logout functionality
+      const logoutBtn = document.querySelector('button.bg-red-500');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          // Clear localStorage
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          localStorage.removeItem('email');
+          // Redirect to login
+          window.location.href = 'station_adminlogin.html';
+        });
+      }
+    });
+
+    // Add sidebar and profile dropdown for consistency
+    const sidebarHtml = `
+    <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4 fixed inset-y-0 left-0 z-20">
+      <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
+      <nav class="flex flex-col space-y-4">
+        <a href="station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏠</span><span>Dashboard</span>
+        </a>
+        <a href="station_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🏢</span><span>Manage Station</span>
+        </a>
+        <a href="gps_mapping.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>🗺️</span><span>GPS Mapping</span>
+        </a>
+        <a href="station_visualization.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>📊</span><span>Station View</span>
+        </a>
+        <a href="slot_management.html" class="flex items-center space-x-2 text-yellow-400">
+          <span>📅</span><span>View Bookings</span>
+        </a>
+        <a href="slot_earning.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>💰</span><span>Earnings</span>
+        </a>
+        <a href="station_settings.html" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>⚙️</span><span>Settings</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 hover:text-yellow-400">
+          <span>✉️</span><span>Messages</span>
+        </a>
+        <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
+          <span>🔓</span><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+    `;
+
+    const mainContent = document.querySelector('body > div.flex-1');
+    if (mainContent) {
+      mainContent.style.marginLeft = '16rem'; // 64 width sidebar
+      mainContent.insertAdjacentHTML('beforebegin', sidebarHtml);
+    }
+  </script>
+  <script src="js/slot_management.js"></script>
+</body>
+</html>

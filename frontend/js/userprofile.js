@@ -1,3 +1,6 @@
+// Global variables
+const apiBaseUrl = 'http://localhost:5000/api/user';
+
 // User Profile API Integration
 class UserProfileAPI {
     constructor() {
@@ -151,7 +154,7 @@ class UserProfileAPI {
             }
 
             const data = await response.json();
-            
+
             if (data.success) {
                 return data.dashboard;
             } else {
@@ -160,6 +163,99 @@ class UserProfileAPI {
         } catch (error) {
             console.error('Error fetching dashboard:', error);
             this.showError('Failed to load dashboard data');
+            return null;
+        }
+    }
+
+    // Get FastTag data
+    async getFastTagData() {
+        if (!this.checkAuth()) return null;
+
+        try {
+            const response = await fetch(`${this.baseURL}/fasttag`, {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            });
+
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'userlogin.html';
+                return null;
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                return data.fastTag;
+            } else {
+                throw new Error(data.message || 'Failed to fetch FastTag data');
+            }
+        } catch (error) {
+            console.error('Error fetching FastTag data:', error);
+            return null; // Return null instead of showing error for FastTag
+        }
+    }
+
+    // Apply for FastTag
+    async applyForFastTag() {
+        if (!this.checkAuth()) return null;
+
+        try {
+            const response = await fetch(`${this.baseURL}/fasttag/apply`, {
+                method: 'POST',
+                headers: this.getAuthHeaders()
+            });
+
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'userlogin.html';
+                return null;
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                return data;
+            } else {
+                throw new Error(data.message || 'Failed to apply for FastTag');
+            }
+        } catch (error) {
+            console.error('Error applying for FastTag:', error);
+            this.showError('Failed to apply for FastTag');
+            return null;
+        }
+    }
+
+    // Recharge FastTag
+    async rechargeFastTag(amount) {
+        if (!this.checkAuth()) return null;
+
+        try {
+            const response = await fetch(`${this.baseURL}/fasttag/recharge`, {
+                method: 'POST',
+                headers: this.getAuthHeaders(),
+                body: JSON.stringify({ amount })
+            });
+
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'userlogin.html';
+                return null;
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                return data;
+            } else {
+                throw new Error(data.message || 'Failed to recharge FastTag');
+            }
+        } catch (error) {
+            console.error('Error recharging FastTag:', error);
+            this.showError('Failed to recharge FastTag');
             return null;
         }
     }
@@ -209,7 +305,7 @@ class UserProfileAPI {
 // Initialize user profile functionality
 document.addEventListener('DOMContentLoaded', function() {
     const userProfileAPI = new UserProfileAPI();
-    
+
     // Check authentication
     if (!userProfileAPI.isAuthenticated()) {
         window.location.href = 'userlogin.html';
@@ -220,27 +316,31 @@ document.addEventListener('DOMContentLoaded', function() {
     loadUserProfile();
 
     // Set up event listeners
-    function setupEventListeners() {
-    console.log("Setting up event listeners"); // Add this line
-    document.getElementById('editButton').addEventListener('click', openEditModal);
-    document.getElementById('closeModal').addEventListener('click', closeEditModal);
-    document.getElementById('editForm').addEventListener('submit', handleProfileUpdate);
-}
+    setupEventListeners();
+
+    // Initialize FastTag functionality
+    initializeFastTag();
 
     async function loadUserProfile() {
         showLoading(true);
-        
+
         const user = await userProfileAPI.getUserProfile();
         if (user) {
             populateProfileData(user);
-            
+
             // Load dashboard data for statistics
             const dashboard = await userProfileAPI.getDashboardData();
             if (dashboard) {
                 populateDashboardStats(dashboard.stats);
             }
+
+            // Load FastTag data
+            const fastTag = await userProfileAPI.getFastTagData();
+            if (fastTag) {
+                populateFastTagData(fastTag);
+            }
         }
-        
+
         showLoading(false);
     }
 
@@ -283,6 +383,313 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    async function fetchAndDisplayFastagTransactions(vehicleId) {
+        const transactionsContainer = document.getElementById('fastagTransactionsContainer');
+        transactionsContainer.innerHTML = '<p>Loading transactions...</p>';
+
+        try {
+            const response = await fetch(`/api/user/fastag/transactions/${vehicleId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch transactions');
+            }
+
+            const data = await response.json();
+            if (data.success && data.transactions.length > 0) {
+                let html = '<table class="min-w-full divide-y divide-gray-200"><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody>';
+                data.transactions.forEach(txn => {
+                    html += `<tr>
+                        <td>${new Date(txn.date).toLocaleString()}</td>
+                        <td>${txn.type}</td>
+                        <td>₹${txn.amount}</td>
+                        <td>${txn.method}</td>
+                        <td>${txn.status}</td>
+                    </tr>`;
+                });
+                html += '</tbody></table>';
+                transactionsContainer.innerHTML = html;
+            } else {
+                transactionsContainer.innerHTML = '<p>No transactions found.</p>';
+            }
+        } catch (error) {
+            transactionsContainer.innerHTML = `<p class="text-red-500">Error loading transactions: ${error.message}</p>`;
+        }
+    }
+
+    // Function to update FastTag UI based on status
+    function updateFastTagUI(fastTagData) {
+        const fastTagContainer = document.getElementById('fastTagContainer');
+
+        if (!fastTagData || !fastTagData.isActive) {
+            // No active FastTag - show get FastTag UI
+            fastTagContainer.innerHTML = `
+                <div class="text-center py-4">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-icons-outlined text-yellow-600 text-2xl">credit_card</span>
+                    </div>
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Get FastTag Now</h4>
+                    <p class="text-gray-600 mb-6">Activate seamless payments for your parking transactions</p>
+                    <button id="getFastTagButton" class="px-6 py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 font-medium">
+                        Get FastTag
+                    </button>
+                </div>
+            `;
+
+            // Add event listener to the Get FastTag button
+            document.getElementById('getFastTagButton').addEventListener('click', applyForFastTag);
+        } else {
+            // Active FastTag - show FastTag details
+            const vehicleInfo = fastTagData.linkedVehicle ?
+                `${fastTagData.linkedVehicle.number} (${fastTagData.linkedVehicle.type})` :
+                'Not linked to vehicle';
+
+            fastTagContainer.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                        <div class="flex items-center">
+                            <span class="material-icons-outlined mr-3 text-yellow-600">check_circle</span>
+                            <span class="text-gray-700">Status: <span class="font-medium text-green-600">Active</span></span>
+                        </div>
+                        <span class="text-sm text-gray-500">ID: ${fastTagData.tagId || 'N/A'}</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="flex items-center mb-2">
+                                <span class="material-icons-outlined mr-2 text-gray-500 text-sm">account_balance</span>
+                                <span class="text-sm text-gray-600">Balance</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-900">₹${fastTagData.balance || 0}</div>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="flex items-center mb-2">
+                                <span class="material-icons-outlined mr-2 text-gray-500 text-sm">directions_car</span>
+                                <span class="text-sm text-gray-600">Linked Vehicle</span>
+                            </div>
+                            <div class="text-lg font-medium text-gray-900">${vehicleInfo}</div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                        <div class="flex items-center mb-2">
+                            <span class="material-icons-outlined mr-2 text-blue-600 text-sm">info</span>
+                            <span class="text-sm font-medium text-blue-800">Last Transaction</span>
+                        </div>
+                        <div class="text-gray-700">
+                            ${fastTagData.lastTransaction ?
+                                `${fastTagData.lastTransaction.amount} at ${fastTagData.lastTransaction.location} on ${new Date(fastTagData.lastTransaction.date).toLocaleDateString()}` :
+                                'No recent transactions'}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                        <button id="rechargeFastTagButton" class="flex-1 px-4 py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 font-medium flex items-center justify-center">
+                            <span class="material-icons-outlined mr-2 text-sm">account_balance_wallet</span>
+                            Recharge
+                        </button>
+                        <button id="deactivateFastTagButton" class="flex-1 px-4 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium flex items-center justify-center">
+                            <span class="material-icons-outlined mr-2 text-sm">block</span>
+                            Deactivate
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners
+            document.getElementById('rechargeFastTagButton').addEventListener('click', rechargeFastTag);
+            document.getElementById('deactivateFastTagButton').addEventListener('click', deactivateFastTag);
+        }
+    }
+
+    // Function to fetch FastTag data from backend
+    async function fetchFastTagData() {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No authentication token found');
+                return null;
+            }
+
+            const response = await fetch(`${apiBaseUrl}/fasttag`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    return data.fastTag;
+                }
+            }
+
+            return null;
+        } catch (error) {
+            console.error('Error fetching FastTag data:', error);
+            return null;
+        }
+    }
+
+    // Function to apply for FastTag
+    async function applyForFastTag() {
+        try {
+            // Show loading
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showErrorNotification('Not authenticated. Please login again.');
+                window.location.href = 'userlogin.html';
+                return;
+            }
+
+            // Get user vehicles to select one for FastTag linking
+            const userResponse = await fetch(`${apiBaseUrl}/profile`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!userResponse.ok) {
+                throw new Error('Failed to fetch user data');
+            }
+
+            const userData = await userResponse.json();
+            const vehicles = userData.user.vehicles || [];
+
+            if (vehicles.length === 0) {
+                showErrorNotification('You need to add a vehicle first before applying for FastTag');
+                document.getElementById('addVehicleButton').click(); // Open add vehicle modal
+                return;
+            }
+
+            // For simplicity, we'll use the first vehicle
+            // In a real implementation, you might want to let the user choose
+            const selectedVehicle = vehicles[0];
+
+            const response = await fetch(`${apiBaseUrl}/fasttag/apply`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    vehicleId: selectedVehicle._id
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                showSuccessNotification('FastTag application submitted successfully!');
+                // Refresh FastTag data
+                const fastTagData = await fetchFastTagData();
+                updateFastTagUI(fastTagData);
+            } else {
+                showErrorNotification(data.message || 'Failed to apply for FastTag');
+            }
+        } catch (error) {
+            console.error('Error applying for FastTag:', error);
+            showErrorNotification('Error applying for FastTag. Please try again.');
+        } finally {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+    }
+
+    // Function to recharge FastTag
+    async function rechargeFastTag() {
+        const amount = prompt('Enter recharge amount (₹):');
+        if (!amount || isNaN(amount) || amount <= 0) {
+            showErrorNotification('Please enter a valid amount');
+            return;
+        }
+
+        try {
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showErrorNotification('Not authenticated. Please login again.');
+                window.location.href = 'userlogin.html';
+                return;
+            }
+
+            const response = await fetch(`${apiBaseUrl}/fasttag/recharge`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    amount: parseFloat(amount)
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                showSuccessNotification(`FastTag recharged successfully with ₹${amount}`);
+                // Refresh FastTag data
+                const fastTagData = await fetchFastTagData();
+                updateFastTagUI(fastTagData);
+            } else {
+                showErrorNotification(data.message || 'Failed to recharge FastTag');
+            }
+        } catch (error) {
+            console.error('Error recharging FastTag:', error);
+            showErrorNotification('Error recharging FastTag. Please try again.');
+        } finally {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+    }
+
+    // Function to deactivate FastTag
+    async function deactivateFastTag() {
+        const confirmDeactivate = confirm('Are you sure you want to deactivate your FastTag?');
+        if (!confirmDeactivate) return;
+
+        try {
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showErrorNotification('Not authenticated. Please login again.');
+                window.location.href = 'userlogin.html';
+                return;
+            }
+
+            const response = await fetch(`${apiBaseUrl}/fasttag/deactivate`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                showSuccessNotification('FastTag deactivated successfully');
+                // Refresh FastTag data
+                const fastTagData = await fetchFastTagData();
+                updateFastTagUI(fastTagData);
+            } else {
+                showErrorNotification(data.message || 'Failed to deactivate FastTag');
+            }
+        } catch (error) {
+            console.error('Error deactivating FastTag:', error);
+            showErrorNotification('Error deactivating FastTag. Please try again.');
+        } finally {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+    }
+
     function setupEventListeners() {
         // Edit profile modal
         document.getElementById('editButton').addEventListener('click', openEditModal);
@@ -293,6 +700,30 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('changePasswordButton').addEventListener('click', openChangePasswordModal);
         document.getElementById('closeChangePasswordModal').addEventListener('click', closeChangePasswordModal);
         document.getElementById('changePasswordForm').addEventListener('submit', handlePasswordChange);
+
+        // FastTag functionality
+        const applyFastTagBtn = document.getElementById('applyFastTagBtn');
+        const rechargeFastTagBtn = document.getElementById('rechargeFastTagBtn');
+
+        if (applyFastTagBtn) {
+            applyFastTagBtn.addEventListener('click', handleApplyForFastTag);
+        }
+
+        if (rechargeFastTagBtn) {
+            rechargeFastTagBtn.addEventListener('click', openRechargeModal);
+        }
+
+        // Recharge modal
+        const rechargeForm = document.getElementById('rechargeForm');
+        const closeRechargeModalBtn = document.getElementById('closeRechargeModal');
+
+        if (rechargeForm) {
+            rechargeForm.addEventListener('submit', handleRechargeFastTag);
+        }
+
+        if (closeRechargeModalBtn) {
+            closeRechargeModalBtn.addEventListener('click', closeRechargeModal);
+        }
 
         // Back button
         document.getElementById('backButton').addEventListener('click', () => {
@@ -375,6 +806,55 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    async function handleApplyForFastTag() {
+        const result = await userProfileAPI.applyForFastTag();
+        if (result) {
+            userProfileAPI.showSuccess('FastTag application submitted successfully!');
+            // Reload FastTag data to reflect changes
+            const fastTag = await userProfileAPI.getFastTagData();
+            if (fastTag) {
+                populateFastTagData(fastTag);
+            }
+        }
+    }
+
+    function openRechargeModal() {
+        document.getElementById('rechargeModal').classList.remove('hidden');
+        // Clear recharge amount field
+        document.getElementById('rechargeAmount').value = '';
+    }
+
+    function closeRechargeModal() {
+        document.getElementById('rechargeModal').classList.add('hidden');
+    }
+
+    async function handleRechargeFastTag(event) {
+        event.preventDefault();
+
+        const amount = parseFloat(document.getElementById('rechargeAmount').value);
+
+        if (isNaN(amount) || amount <= 0) {
+            userProfileAPI.showError('Please enter a valid recharge amount!');
+            return;
+        }
+
+        if (amount < 100) {
+            userProfileAPI.showError('Minimum recharge amount is ₹100!');
+            return;
+        }
+
+        const result = await userProfileAPI.rechargeFastTag(amount);
+        if (result) {
+            userProfileAPI.showSuccess('FastTag recharged successfully!');
+            closeRechargeModal();
+            // Reload FastTag data to reflect changes
+            const fastTag = await userProfileAPI.getFastTagData();
+            if (fastTag) {
+                populateFastTagData(fastTag);
+            }
+        }
+    }
+
     function handleLogout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -398,5 +878,63 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         document.body.appendChild(loadingDiv);
         return loadingDiv;
+    }
+
+    // Function to populate FastTag data in the UI
+    function populateFastTagData(fastTagData) {
+        updateFastTagUI(fastTagData);
+    }
+
+    // Function to initialize FastTag functionality
+    async function initializeFastTag() {
+        try {
+            const fastTagData = await userProfileAPI.getFastTagData();
+            if (fastTagData) {
+                populateFastTagData(fastTagData);
+            } else {
+                // Show default FastTag UI if no data
+                updateFastTagUI(null);
+            }
+        } catch (error) {
+            console.error('Error initializing FastTag:', error);
+            updateFastTagUI(null);
+        }
+    }
+
+    // Notification functions
+    function showErrorNotification(message) {
+        const errorDiv = document.getElementById('errorNotification') || createErrorNotification();
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+
+        setTimeout(() => {
+            errorDiv.classList.add('hidden');
+        }, 5000);
+    }
+
+    function showSuccessNotification(message) {
+        const successDiv = document.getElementById('successNotification') || createSuccessNotification();
+        successDiv.textContent = message;
+        successDiv.classList.remove('hidden');
+
+        setTimeout(() => {
+            successDiv.classList.add('hidden');
+        }, 3000);
+    }
+
+    function createErrorNotification() {
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'errorNotification';
+        errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg hidden z-50';
+        document.body.appendChild(errorDiv);
+        return errorDiv;
+    }
+
+    function createSuccessNotification() {
+        const successDiv = document.createElement('div');
+        successDiv.id = 'successNotification';
+        successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg hidden z-50';
+        document.body.appendChild(successDiv);
+        return successDiv;
     }
 });
