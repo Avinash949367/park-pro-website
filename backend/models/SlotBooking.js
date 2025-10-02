@@ -33,6 +33,11 @@ const slotBookingSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  paymentMethod: {
+    type: String,
+    enum: ['upi', 'coupon'],
+    required: true
+  },
   paymentStatus: {
     type: String,
     enum: ['success', 'failed', 'pending'],
@@ -40,7 +45,7 @@ const slotBookingSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['reserved', 'confirmed', 'cancelled', 'expired'],
+    enum: ['reserved', 'active', 'confirmed', 'cancelled', 'expired'],
     default: 'reserved'
   },
   reservationExpiresAt: {

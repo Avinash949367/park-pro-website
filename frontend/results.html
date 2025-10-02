@@ -303,21 +303,20 @@
           <p class="mb-0">Showing 12 available parking stations within 2km radius</p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-          <button class="btn btn-light me-2"><i class="fas fa-sliders-h me-1"></i> Filters</button>
-          <button class="btn btn-outline-light"><i class="fas fa-map-marked-alt me-1"></i> Map View</button>
+          <button class="btn btn-light me-2" id="filtersButton"><i class="fas fa-sliders-h me-1"></i> Filters</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container py-4">
-    <div class="row">
-      <!-- Filters Column -->
-      <div class="col-lg-3">
-        <div class="filters-card">
-          <h4 class="mb-4">Filter Results</h4>
-          
-          <!-- Price Filter -->
+  <!-- Collapsible Filters Panel -->
+  <div class="container py-4" id="filtersPanel" style="display: none;">
+    <div class="filters-card">
+      <h4 class="mb-4">Filter Results</h4>
+
+      <div class="row">
+        <!-- Price Filter -->
+        <div class="col-lg-3 col-md-6 mb-4">
           <div class="filter-group">
             <h5>Price Range</h5>
             <div class="d-flex justify-content-between mb-2">
@@ -330,8 +329,10 @@
               <small class="text-muted">$<span id="maxPrice">30</span></small>
             </div>
           </div>
-          
-          <!-- Distance Filter -->
+        </div>
+
+        <!-- Distance Filter -->
+        <div class="col-lg-3 col-md-6 mb-4">
           <div class="filter-group">
             <h5>Distance</h5>
             <div class="form-check mb-2">
@@ -347,8 +348,10 @@
               <label class="form-check-label" for="distance3">Within 5km</label>
             </div>
           </div>
-          
-          <!-- Amenities Filter -->
+        </div>
+
+        <!-- Amenities Filter -->
+        <div class="col-lg-3 col-md-6 mb-4">
           <div class="filter-group">
             <h5>Amenities</h5>
             <div class="form-check mb-2">
@@ -368,8 +371,10 @@
               <label class="form-check-label" for="disabled">Disabled Access</label>
             </div>
           </div>
-          
-          <!-- Parking Type -->
+        </div>
+
+        <!-- Parking Type -->
+        <div class="col-lg-3 col-md-6 mb-4">
           <div class="filter-group">
             <h5>Parking Type</h5>
             <div class="form-check mb-2">
@@ -385,19 +390,19 @@
               <label class="form-check-label" for="street">Street Parking</label>
             </div>
           </div>
-          
-          <button class="btn btn-dark w-100 mt-2">Apply Filters</button>
         </div>
-<!--         
-        Map Preview
-        <div class="map-container d-none d-lg-block">
-          <img src="https://maps.googleapis.com/maps/api/staticmap?center=Downtown+Center&zoom=14&size=300x300&markers=color:red%7CDowntown+Center&key=YOUR_API_KEY" 
-               alt="Map" class="img-fluid" height="10px">;
-        </div> -->
       </div>
-      
+
+      <div class="text-center">
+        <button class="btn btn-dark px-4">Apply Filters</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container py-4">
+    <div class="row">
       <!-- Results Column -->
-      <div class="col-lg-9">
+      <div class="col-12">
         <div class="results-container">
           <!-- Sort Options -->
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -579,6 +584,18 @@
         maxPrice.textContent = parseInt(this.value) + 20;
       });
 
+      // Filters toggle
+      const filtersButton = document.getElementById('filtersButton');
+      const filtersPanel = document.getElementById('filtersPanel');
+
+      filtersButton.addEventListener('click', function() {
+        if (filtersPanel.style.display === 'none' || filtersPanel.style.display === '') {
+          filtersPanel.style.display = 'block';
+        } else {
+          filtersPanel.style.display = 'none';
+        }
+      });
+
       // Fetch and display stations based on location
       async function loadStations() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -631,7 +648,7 @@
                       <i class="fas fa-star"></i> 4.5
                     </div>
                   </div>
-                  <p class="parking-location">
+                  <p class="parking-location" style="cursor:pointer; color:#46949d;" onclick="getDirections('${encodeURIComponent(station.address + ', ' + station.city)}')">
                     <i class="fas fa-map-marker-alt"></i> ${station.address}, ${station.city}
                   </p>
                   <div class="parking-features">
@@ -681,8 +698,36 @@
         window.location.href = `station-details.html?stationId=${stationId}`;
       }
       
-      // Expose bookStation globally to fix ReferenceError
+      function getDirections(destination) {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            function(position) {
+              const currentLocation = `${position.coords.latitude},${position.coords.longitude}`;
+              const mapsUrl = `https://www.google.com/maps/dir/${currentLocation}/${destination}`;
+              window.open(mapsUrl, '_blank');
+            },
+            function(error) {
+              console.error('Error getting location:', error);
+              // Fallback: Open Google Maps with just the destination
+              const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${destination}`;
+              window.open(mapsUrl, '_blank');
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 300000
+            }
+          );
+        } else {
+          // Fallback for browsers without geolocation
+          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${destination}`;
+          window.open(mapsUrl, '_blank');
+        }
+      }
+
+      // Expose functions globally to fix ReferenceError
       window.bookStation = bookStation;
+      window.getDirections = getDirections;
 
       // Load stations on page load
       loadStations();

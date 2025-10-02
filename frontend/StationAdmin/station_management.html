@@ -3,236 +3,870 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Station</title>
+  <title>Manage Station - Park Pro</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <style>
+    /* Custom teal theme matching other admin pages */
+    .sidebar-bg {
+      background: linear-gradient(135deg, #f0fdfd 0%, #e0f2f1 100%);
+      border-right: 1px solid #b2dfdb;
+    }
+    .sidebar-link {
+      color: #1e3740;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-bottom: 0.25rem;
+    }
+    .sidebar-link:hover {
+      background-color: #46949d;
+      color: white;
+      transform: translateX(5px);
+      box-shadow: 0 2px 8px rgba(70, 148, 157, 0.3);
+    }
+    .sidebar-link.active {
+      background-color: #46949d;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(70, 148, 157, 0.4);
+    }
+    .sidebar-section-title {
+      color: #46949d;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-dropdown-menu {
+      display: none;
+      transition: all 0.3s ease;
+      padding-left: 1rem;
+    }
+    .sidebar-dropdown-menu.show {
+      display: block;
+    }
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .tab-button.active {
+      color: #46949d;
+      border-bottom-color: #46949d;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e2e8f0;
+    }
+    .slot-card {
+      background: white;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    .slot-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .btn-primary {
+      background-color: #46949d;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background-color: #2e7d7d;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background-color: #6b7280;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background-color: #4b5563;
+      transform: translateY(-1px);
+    }
+    .btn-success {
+      background-color: #10b981;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-success:hover {
+      background-color: #059669;
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background-color: #ef4444;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-1px);
+    }
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .status-enabled {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    .status-disabled {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .availability-free {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    .availability-booked {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
     #map {
       height: 300px;
     }
   </style>
 </head>
-<body class="bg-gray-100">
-
-<div class="flex">
-  <!-- Sidebar -->
-  <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
-    <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
-    <nav class="flex flex-col space-y-4">
-      <a href="station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>🏠</span><span>Dashboard</span>
-      </a>
-      <a href="station_management.html" class="flex items-center space-x-2 text-yellow-400">
-        <span>🏢</span><span>Manage Station</span>
-      </a>
-      <a href="gps_mapping.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>🗺️</span><span>GPS Mapping</span>
-      </a>
-      <a href="station_visualization.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>📊</span><span>Station View</span>
-      </a>
-      <a href="slot_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>📅</span><span>View Bookings</span>
-      </a>
-      <a href="slot_earning.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>💰</span><span>Earnings</span>
-      </a>
-      <a href="station_settings.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>⚙️</span><span>Settings</span>
-      </a>
-      <a href="#" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>✉️</span><span>Messages</span>
-      </a>
-      <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
-        <span>🔓</span><span>Logout</span>
-      </a>
-    </nav>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="flex-1 p-6">
-    <h1 class="text-2xl font-bold mb-6">Manage Station</h1>
-    <form id="stationForm" class="space-y-4">
-
-      <!-- Station Details -->
-      <div>
-        <label class="block text-gray-700 font-medium">Station Name</label>
-        <input id="stationName" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded" disabled />
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 sidebar-bg flex flex-col py-6 px-4 shadow-lg fixed inset-y-0 left-0 z-20">
+      <div class="text-center mb-8">
+        <a href="station_admin_dashboard.html" class="flex items-center justify-center gap-2">
+          <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+          <img src="../assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+        </a>
+        <p class="text-sm text-gray-600 mt-1">Station Admin</p>
       </div>
 
-      <div>
-        <label class="block text-gray-700 font-medium">Address</label>
-        <input id="address" type="text" class="w-full mt-1 p-2 border border-gray-300 rounded" disabled />
+      <!-- Dashboard - Direct Link -->
+      <a href="station_admin_dashboard.html" class="sidebar-link">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Parking Management -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('parkingDropdown')">
+        <span>Parking Management</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="parkingIcon"></i>
+      </div>
+      <div id="parkingDropdown" class="sidebar-dropdown-menu">
+        <a href="station_management.html" class="sidebar-link active">
+          <i class="fas fa-building"></i>
+          <span>Manage Station</span>
+        </a>
+        <a href="slot_management.html" class="sidebar-link">
+          <i class="fas fa-calendar-check"></i>
+          <span>Manage Slots & Bookings</span>
+        </a>
+        <a href="station_visualization.html" class="sidebar-link">
+          <i class="fas fa-map-marked-alt"></i>
+          <span>Live Parking Map</span>
+        </a>
+        <a href="station_view_slots.html" class="sidebar-link">
+          <i class="fas fa-chart-bar"></i>
+          <span>Occupancy History</span>
+        </a>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-gray-700 font-medium">Open Time</label>
-          <input id="openTime" type="time" class="w-full mt-1 p-2 border border-gray-300 rounded" disabled />
+      <!-- Payments & Billing -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('paymentsDropdown')">
+        <span>Payments & Billing</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="paymentsIcon"></i>
+      </div>
+      <div id="paymentsDropdown" class="sidebar-dropdown-menu">
+        <a href="slot_earning.html" class="sidebar-link">
+          <i class="fas fa-money-bill-wave"></i>
+          <span>Payment Dashboard</span>
+        </a>
+      </div>
+
+      <!-- Settings -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('settingsDropdown')">
+        <span>Settings</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="settingsIcon"></i>
+      </div>
+      <div id="settingsDropdown" class="sidebar-dropdown-menu">
+        <a href="station_settings.html" class="sidebar-link">
+          <i class="fas fa-cog"></i>
+          <span>Station Settings</span>
+        </a>
+      </div>
+
+      <!-- Help & Support -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('helpDropdown')">
+        <span>Help & Support</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="helpIcon"></i>
+      </div>
+      <div id="helpDropdown" class="sidebar-dropdown-menu">
+        <a href="faq.html" class="sidebar-link">
+          <i class="fas fa-question-circle"></i>
+          <span>FAQ / Guides</span>
+        </a>
+        <a href="contactus.html" class="sidebar-link">
+          <i class="fas fa-phone"></i>
+          <span>Contact Support</span>
+        </a>
+      </div>
+
+      <!-- Logout -->
+      <a href="station_adminlogin.html" class="sidebar-link mt-8 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-6">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-[#1e3740]">Manage Station</h1>
+        <p class="text-gray-600 mt-1">Comprehensive station management and monitoring</p>
+      </div>
+
+      <!-- Station Header Info -->
+      <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-xl font-semibold" id="station-name">Loading...</h2>
+            <p class="text-gray-600" id="station-location">Loading...</p>
+            <p class="text-sm text-gray-500">ID: <span id="station-id">Loading...</span></p>
+          </div>
+          <div class="flex gap-4">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-[#46949d]" id="total-slots">0</div>
+              <div class="text-sm text-gray-600">Total Slots</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-green-600" id="occupied-slots">0</div>
+              <div class="text-sm text-gray-600">Occupied</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-blue-600" id="free-slots">0</div>
+              <div class="text-sm text-gray-600">Free</div>
+            </div>
+          </div>
         </div>
-        <div>
-          <label class="block text-gray-700 font-medium">Close Time</label>
-          <input id="closeTime" type="time" class="w-full mt-1 p-2 border border-gray-300 rounded" disabled />
+      </div>
+
+      <!-- Tabs -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="border-b border-gray-200">
+          <nav class="flex">
+            <button class="tab-button active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-button" onclick="showTab('slots')">Slots</button>
+            <button class="tab-button" onclick="showTab('bookings')">Bookings</button>
+            <button class="tab-button" onclick="showTab('earnings')">Earnings</button>
+            <button class="tab-button" onclick="showTab('settings')">Settings</button>
+          </nav>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <div class="stat-card">
+              <h3 class="text-lg font-semibold mb-2">Today's Bookings</h3>
+              <div class="text-3xl font-bold text-[#46949d]" id="today-bookings">0</div>
+              <p class="text-sm text-gray-600">Active reservations</p>
+            </div>
+            <div class="stat-card">
+              <h3 class="text-lg font-semibold mb-2">Occupancy Rate</h3>
+              <div class="text-3xl font-bold text-[#46949d]" id="occupancy-rate">0%</div>
+              <p class="text-sm text-gray-600">Current utilization</p>
+            </div>
+            <div class="stat-card">
+              <h3 class="text-lg font-semibold mb-2">Revenue Today</h3>
+              <div class="text-3xl font-bold text-[#46949d]" id="revenue-today">₹0</div>
+              <p class="text-sm text-gray-600">Total earnings</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="stat-card">
+              <h3 class="text-lg font-semibold mb-4">Station Information</h3>
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <span>Name:</span>
+                  <span id="station-info-name">Loading...</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Location:</span>
+                  <span id="station-info-location">Loading...</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Operating Hours:</span>
+                  <span id="station-info-hours">Loading...</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Capacity:</span>
+                  <span id="station-info-capacity">Loading...</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+              <div class="space-y-2">
+                <button class="btn-primary w-full" onclick="showTab('slots')">Manage Slots</button>
+                <button class="btn-secondary w-full" onclick="showTab('bookings')">View Bookings</button>
+                <button class="btn-success w-full" onclick="showTab('earnings')">Check Earnings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slots Tab -->
+        <div id="slots" class="tab-content p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold">Slot Management</h3>
+            <button class="btn-primary" onclick="showAddSlotModal()">+ Add Slot</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="slots-grid">
+            <!-- Slots will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Bookings Tab -->
+        <div id="bookings" class="tab-content p-6">
+          <h3 class="text-xl font-semibold mb-6">Current & Upcoming Bookings</h3>
+
+          <div class="space-y-4" id="bookings-list">
+            <!-- Bookings will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Earnings Tab -->
+        <div id="earnings" class="tab-content p-6">
+          <h3 class="text-xl font-semibold mb-6">Revenue Summary</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="stat-card">
+              <h4 class="text-lg font-semibold mb-2">Daily Revenue</h4>
+              <div class="text-2xl font-bold text-[#46949d]" id="daily-revenue">₹0</div>
+              <p class="text-sm text-gray-600">Today's earnings</p>
+            </div>
+            <div class="stat-card">
+              <h4 class="text-lg font-semibold mb-2">Monthly Revenue</h4>
+              <div class="text-2xl font-bold text-[#46949d]" id="monthly-revenue">₹0</div>
+              <p class="text-sm text-gray-600">This month's earnings</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <h4 class="text-lg font-semibold mb-4">Payment Method Breakdown</h4>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="payment-breakdown">
+              <!-- Payment breakdown will be loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content p-6">
+          <h3 class="text-xl font-semibold mb-6">Advanced Settings</h3>
+
+          <div class="space-y-6">
+            <div class="stat-card">
+              <h4 class="text-lg font-semibold mb-4">Station Details</h4>
+              <form id="station-details-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Station Name</label>
+                    <input type="text" id="settings-station-name" class="w-full p-2 border rounded">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Address</label>
+                    <input type="text" id="settings-station-address" class="w-full p-2 border rounded">
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Open Time</label>
+                    <input type="time" id="settings-open-time" class="w-full p-2 border rounded">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Close Time</label>
+                    <input type="time" id="settings-close-time" class="w-full p-2 border rounded">
+                  </div>
+                </div>
+                <button type="submit" class="btn-primary">Save Changes</button>
+              </form>
+            </div>
+
+            <div class="stat-card">
+              <h4 class="text-lg font-semibold mb-4">Pricing Rules</h4>
+              <form id="pricing-form" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium mb-1">Base Price per Hour (₹)</label>
+                  <input type="number" id="base-price" class="w-full p-2 border rounded" min="0" step="0.01">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Peak Hours Start</label>
+                    <input type="time" id="peak-start" class="w-full p-2 border rounded">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Peak Hours End</label>
+                    <input type="time" id="peak-end" class="w-full p-2 border rounded">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Peak Hour Multiplier</label>
+                  <input type="number" id="peak-multiplier" class="w-full p-2 border rounded" min="1" step="0.1">
+                </div>
+                <button type="submit" class="btn-primary">Update Pricing</button>
+              </form>
+            </div>
+
+            <div class="stat-card">
+              <h4 class="text-lg font-semibold mb-4">Policies</h4>
+              <form id="policies-form" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium mb-1">Grace Period (minutes)</label>
+                  <input type="number" id="grace-period" class="w-full p-2 border rounded" min="0">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Maximum Booking Duration (hours)</label>
+                  <input type="number" id="max-duration" class="w-full p-2 border rounded" min="1">
+                </div>
+                <div class="flex items-center">
+                  <input type="checkbox" id="allow-overbooking" class="mr-2">
+                  <label for="allow-overbooking" class="text-sm font-medium">Allow overbooking</label>
+                </div>
+                <button type="submit" class="btn-primary">Save Policies</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
+    </main>
+  </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-gray-700 font-medium">Price Per Hour (₹)</label>
-          <input id="pricePerHour" type="number" class="w-full mt-1 p-2 border border-gray-300 rounded" disabled />
+  <!-- Modals -->
+  <!-- Add Slot Modal -->
+  <div id="add-slot-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h3 class="text-lg font-semibold mb-4">Add New Slot</h3>
+      <form onsubmit="addSlot(event)">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Type</label>
+          <select id="slot-type" class="w-full p-2 border rounded" required>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Van">Van</option>
+          </select>
         </div>
-        <div>
-          <label class="block text-gray-700 font-medium">Total Slots</label>
-          <input id="totalSlots" type="number" class="w-full mt-1 p-2 border border-gray-300 rounded" disabled />
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Price per Hour (₹)</label>
+          <input type="number" id="slot-price" class="w-full p-2 border rounded" min="0" step="0.01" required>
         </div>
-      </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('add-slot-modal')" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-[#46949d] text-white rounded">Add Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-      <!-- Location Section -->
-      <div>
-        <label class="block text-gray-700 font-medium">Location</label>
-        <div id="locationDisplay" class="mt-1 text-gray-600">Latitude: <span id="lat">-</span>, Longitude: <span id="lng">-</span></div>
-        <button type="button" id="relocateBtn" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hidden">📍 Relocate</button>
-      </div>
+  <!-- Edit Slot Modal -->
+  <div id="edit-slot-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg w-96">
+      <h3 class="text-lg font-semibold mb-4">Edit Slot</h3>
+      <form onsubmit="editSlot(event)">
+        <input type="hidden" id="edit-slot-id">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Type</label>
+          <select id="edit-slot-type" class="w-full p-2 border rounded" required>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Van">Van</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Price per Hour (₹)</label>
+          <input type="number" id="edit-slot-price" class="w-full p-2 border rounded" min="0" step="0.01" required>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeModal('edit-slot-modal')" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-[#46949d] text-white rounded">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-      <!-- Map Section -->
-      <div id="mapSection" class="space-y-2 mt-2">
-        <input type="text" id="searchInput" placeholder="Search location..." class="w-full p-2 border border-gray-300 rounded" />
-        <div id="map" class="w-full rounded shadow-md"></div>
-      </div>
-
-      <!-- Upload Image -->
-      <div>
-        <label class="block text-gray-700 font-medium">Upload Station Image</label>
-        <input type="file" accept="image/*" class="w-full mt-1 p-2 border border-gray-300 rounded" />
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex space-x-4 mt-6">
-        <button type="button" onclick="toggleEdit(true)" class="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold px-4 py-2 rounded">✏️ Edit Details</button>
-        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded">✅ Save Changes</button>
-        <button type="button" onclick="resetForm()" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded">🔁 Reset Form</button>
-      </div>
-
-    </form>
-  </main>
-</div>
-
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-<script>
-  const formFields = ["stationName", "address", "openTime", "closeTime", "pricePerHour", "totalSlots"];
-  const savedData = {
-    stationName: "Station A",
-    address: "123 Main Street, City",
-    openTime: "08:00",
-    closeTime: "20:00",
-    pricePerHour: 50,
-    totalSlots: 30,
-  };
-
-  function populateForm(data) {
-    formFields.forEach((field) => {
-      document.getElementById(field).value = data[field];
-    });
-  }
-
-  function toggleEdit(enable) {
-    formFields.forEach((field) => {
-      document.getElementById(field).disabled = !enable;
-    });
-  }
-
-  function resetForm() {
-    populateForm(savedData);
-    toggleEdit(false);
-  }
-
-  document.getElementById("stationForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const updatedData = {};
-    formFields.forEach((field) => {
-      updatedData[field] = document.getElementById(field).value;
-    });
-    console.log("Updated Data:", updatedData);
-    toggleEdit(false);
-    alert("Changes saved successfully!");
-  });
-
-  // Map logic
-  let map;
-  let marker;
-
-  function initMap() {
-    map = L.map('map').setView([12.9716, 77.5946], 13); // Default to Bangalore
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    map.on('click', function(e) {
-      const { lat, lng } = e.latlng;
-      if (marker) map.removeLayer(marker);
-      marker = L.marker([lat, lng]).addTo(map);
-      document.getElementById('lat').textContent = lat.toFixed(6);
-      document.getElementById('lng').textContent = lng.toFixed(6);
-
-      // Lock the map after selection
-      map.off('click');
-      document.getElementById('mapSection').classList.add('pointer-events-none', 'opacity-50');
-      document.getElementById('relocateBtn').classList.remove('hidden');
-    });
-  }
-
-  // Search functionality
-  document.getElementById('searchInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const query = this.value;
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.length > 0) {
-            const { lat, lon } = data[0];
-            map.setView([lat, lon], 16);
-          } else {
-            alert("Location not found");
-          }
-        });
-    }
-  });
-
-  // Relocate function
-  document.getElementById('relocateBtn').addEventListener('click', () => {
-    document.getElementById('mapSection').classList.remove('pointer-events-none', 'opacity-50');
-    map.on('click', function(e) {
-      const { lat, lng } = e.latlng;
-      if (marker) map.removeLayer(marker);
-      marker = L.marker([lat, lng]).addTo(map);
-      document.getElementById('lat').textContent = lat.toFixed(6);
-      document.getElementById('lng').textContent = lng.toFixed(6);
-      map.off('click');
-      document.getElementById('mapSection').classList.add('pointer-events-none', 'opacity-50');
-    });
-  });
-
-  window.onload = () => {
-    populateForm(savedData);
-    initMap();
-  };
-</script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
   <script>
-    // Check if user is logged in on page load
-    document.addEventListener('DOMContentLoaded', () => {
+    // Global variables
+    let currentStation = null;
+    let currentSlots = [];
+    let currentBookings = [];
+
+    // Check authentication
+    document.addEventListener('DOMContentLoaded', function() {
       const token = localStorage.getItem('token');
       const user = JSON.parse(localStorage.getItem('user'));
 
       if (!token || !user || user.role !== 'store admin') {
-        // Redirect to login if not authenticated or not store admin
         window.location.href = 'station_adminlogin.html';
         return;
       }
+
+      // Initialize page
+      loadStationData();
+      loadOverviewData();
     });
-  </script>
-</body>
-</html>
+
+    // Tab switching
+    function showTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+
+      // Load tab-specific data
+      switch(tabName) {
+        case 'slots':
+          loadSlotsData();
+          break;
+        case 'bookings':
+          loadBookingsData();
+          break;
+        case 'earnings':
+          loadEarningsData();
+          break;
+        case 'settings':
+          loadSettingsData();
+          break;
+      }
+    }
+
+    // Sidebar dropdown toggle
+    function toggleDropdown(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      const icon = document.getElementById(dropdownId.replace('Dropdown', 'Icon'));
+      dropdown.classList.toggle('show');
+      icon.classList.toggle('rotate-180');
+    }
+
+    // Modal functions
+    function showAddSlotModal() {
+      document.getElementById('add-slot-modal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // API calls
+    async function loadStationData() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/stations/me', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        if (response.ok) {
+          currentStation = await response.json();
+          updateStationHeader(currentStation);
+        }
+      } catch (error) {
+        console.error('Error loading station data:', error);
+      }
+    }
+
+    async function loadOverviewData() {
+      try {
+        const token = localStorage.getItem('token');
+        const [slotsRes, bookingsRes, earningsRes] = await Promise.all([
+          fetch('http://localhost:5000/api/slots/station', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          }),
+          fetch('http://localhost:5000/api/bookings/station/current', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          }),
+          fetch('http://localhost:5000/api/payments/station/today', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          })
+        ]);
+
+        if (slotsRes.ok) {
+          const slots = await slotsRes.json();
+          updateSlotStats(slots);
+        }
+
+        if (bookingsRes.ok) {
+          const bookings = await bookingsRes.json();
+          document.getElementById('today-bookings').textContent = bookings.length;
+        }
+
+        if (earningsRes.ok) {
+          const earnings = await earningsRes.json();
+          document.getElementById('revenue-today').textContent = '₹' + earnings.total;
+        }
+
+        // Calculate occupancy rate
+        const totalSlots = parseInt(document.getElementById('total-slots').textContent);
+        const occupiedSlots = parseInt(document.getElementById('occupied-slots').textContent);
+        const occupancyRate = totalSlots > 0 ? Math.round((occupiedSlots / totalSlots) * 100) : 0;
+        document.getElementById('occupancy-rate').textContent = occupancyRate + '%';
+
+      } catch (error) {
+        console.error('Error loading overview data:', error);
+      }
+    }
+
+    async function loadSlotsData() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/slots/station', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (response.ok) {
+          currentSlots = await response.json();
+          renderSlots(currentSlots);
+        }
+      } catch (error) {
+        console.error('Error loading slots data:', error);
+      }
+    }
+
+    async function loadBookingsData() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/bookings/station/all', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (response.ok) {
+          currentBookings = await response.json();
+          renderBookings(currentBookings);
+        }
+      } catch (error) {
+        console.error('Error loading bookings data:', error);
+      }
+    }
+
+    async function loadEarningsData() {
+      try {
+        const token = localStorage.getItem('token');
+        const [dailyRes, monthlyRes, breakdownRes] = await Promise.all([
+          fetch('http://localhost:5000/api/payments/station/daily', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          }),
+          fetch('http://localhost:5000/api/payments/station/monthly', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          }),
+          fetch('http://localhost:5000/api/payments/station/breakdown', {
+            headers: { 'Authorization': 'Bearer ' + token }
+          })
+        ]);
+
+        if (dailyRes.ok) {
+          const daily = await dailyRes.json();
+          document.getElementById('daily-revenue').textContent = '₹' + daily.total;
+        }
+
+        if (monthlyRes.ok) {
+          const monthly = await monthlyRes.json();
+          document.getElementById('monthly-revenue').textContent = '₹' + monthly.total;
+        }
+
+        if (breakdownRes.ok) {
+          const breakdown = await breakdownRes.json();
+          renderPaymentBreakdown(breakdown);
+        }
+      } catch (error) {
+        console.error('Error loading earnings data:', error);
+      }
+    }
+
+    async function loadSettingsData() {
+      if (currentStation) {
+        document.getElementById('settings-station-name').value = currentStation.name || '';
+        document.getElementById('settings-station-address').value = currentStation.address || '';
+        document.getElementById('settings-open-time').value = currentStation.openAt || '';
+        document.getElementById('settings-close-time').value = currentStation.closeAt || '';
+        // Load other settings as needed
+      }
+    }
+
+    // Form handlers
+    async function addSlot(event) {
+      event.preventDefault();
+      const type = document.getElementById('slot-type').value;
+      const price = document.getElementById('slot-price').value;
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/slots', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ type, pricePerHour: price })
+        });
+
+        if (response.ok) {
+          closeModal('add-slot-modal');
+          loadSlotsData();
+          loadOverviewData();
+          alert('Slot added successfully!');
+        } else {
+          alert('Error adding slot');
+        }
+      } catch (error) {
+        console.error('Error adding slot:', error);
+        alert('Error adding slot');
+      }
+    }
+
+    async function editSlot(event) {
+      event.preventDefault();
+      const id = document.getElementById('edit-slot-id').value;
+      const type = document.getElementById('edit-slot-type').value;
+      const price = document.getElementById('edit-slot-price').value;
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:5000/api/slots/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ type, pricePerHour: price })
+        });
+
+        if (response.ok) {
+          closeModal('edit-slot-modal');
+          loadSlotsData();
+          alert('Slot updated successfully!');
+        } else {
+          alert('Error updating slot');
+        }
+      } catch (error) {
+        console.error('Error updating slot:', error);
+        alert('Error updating slot');
+      }
+    }
+
+    // Render functions
+    function updateStationHeader(station) {
+      document.getElementById('station-name').textContent = station.name || 'Station Name';
+      document.getElementById('station-location').textContent = station.address || 'Station Address';
+      document.getElementById('station-id').textContent = station._id || 'Station ID';
+      document.getElementById('station-info-name').textContent = station.name || 'N/A';
+      document.getElementById('station-info-location').textContent = station.address || 'N/A';
+      document.getElementById('station-info-hours').textContent = `${station.openAt || '00:00'} - ${station.closeAt || '23:59'}`;
+      document.getElementById('station-info-capacity').textContent = station.slots ? station.slots.length : 0;
+    }
+
+    function updateSlotStats(slots) {
+      const total = slots.length;
+      const occupied = slots.filter(slot => slot.status === 'booked').length;
+      const free = total - occupied;
+
+      document.getElementById('total-slots').textContent = total;
+      document.getElementById('occupied-slots').textContent = occupied;
+      document.getElementById('free-slots').textContent = free;
+    }
+
+    function renderSlots(slots) {
+      const grid = document.getElementById('slots-grid');
+      grid.innerHTML = '';
+
+      slots.forEach(slot => {
+        const slotCard = document.createElement('div');
+        slotCard.className = 'slot-card';
+        slotCard.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="font-semibold">Slot ${slot.slotId || slot._id}</h4>
+            <span class="status-badge ${slot.status === 'enabled' ? 'status-enabled' : 'status-disabled'}">
+              ${slot.status || 'enabled'}
+            </span>
+          </div>
+          <p class="text-sm text-gray-600 mb-1">Type: ${slot.type || 'Car'}</p>
+          <p class="text-sm text-gray-600 mb-1">Price: ₹${slot.pricePerHour || 0}/hr</p>
+          <p class="text-sm text-gray-600 mb-3">Status: ${slot.availability || 'free'}</p>
+          <div class="flex gap-1">
+            <button class="btn-primary flex-1 text-xs" onclick="editSlotModal('${slot._id}', '${slot.type}', '${slot.pricePerHour}')">Edit</button>
+            <button class="btn-secondary flex-1 text-xs" onclick="toggleSlotStatus('${slot._id}')">${slot.status === 'enabled' ? 'Disable' : 'Enable'}</button>
+          </div>
+        `;
+        grid.appendChild(slotCard);
+      });
+    }
+
+    function renderBookings(bookings) {
+      const list =

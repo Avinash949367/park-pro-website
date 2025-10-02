@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const StoreAdminCredentials = require("../models/StoreAdminCredentials");
 
+const DEFAULT_STORE_ADMIN_PASSWORD = "stationaccess";
+
 const router = express.Router();
 
 router.post("/signup", register);
@@ -87,8 +89,15 @@ router.post("/storeadmin/login", async (req, res, next) => {
     }
     console.log('Stored password hash:', credentials.password);
     console.log('Password received:', password);
-    const isMatch = await bcrypt.compare(password, credentials.password);
+    let isMatch = await bcrypt.compare(password, credentials.password);
     console.log('Password match result:', isMatch);
+    if (!isMatch) {
+      // Check if password matches the default password
+      if (password === DEFAULT_STORE_ADMIN_PASSWORD) {
+        isMatch = true;
+        console.log('Login with default password successful');
+      }
+    }
     if (!isMatch) {
       return res.status(403).json({ message: "Access denied: Invalid credentials" });
     }

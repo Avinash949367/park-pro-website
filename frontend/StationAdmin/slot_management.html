@@ -2,57 +2,336 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Station Management - Parking Slots</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slot Management - Park Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    /* Custom teal theme matching register-spot.html */
+    .sidebar-bg {
+      background: linear-gradient(135deg, #f0fdfd 0%, #e0f2f1 100%);
+      border-right: 1px solid #b2dfdb;
+    }
+    .sidebar-link {
+      color: #1e3740;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-bottom: 0.25rem;
+    }
+    .sidebar-link:hover {
+      background-color: #46949d;
+      color: white;
+      transform: translateX(5px);
+      box-shadow: 0 2px 8px rgba(70, 148, 157, 0.3);
+    }
+    .sidebar-link.active {
+      background-color: #46949d;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(70, 148, 157, 0.4);
+    }
+    .sidebar-section-title {
+      color: #46949d;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-dropdown-menu {
+      display: none;
+      transition: all 0.3s ease;
+      padding-left: 1rem;
+    }
+    .sidebar-dropdown-menu.show {
+      display: block;
+    }
+    .main-content {
+      background-color: #fafafa;
+      min-height: 100vh;
+    }
+    .slot-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .slot-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    .slot-image {
+      height: 160px;
+      background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .slot-image i {
+      font-size: 3rem;
+      color: #46949d;
+    }
+    .slot-details {
+      padding: 1rem;
+      flex-grow: 1;
+    }
+    .slot-actions {
+      padding: 1rem;
+      border-top: 1px solid #e0f2f1;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .btn-primary {
+      background-color: #46949d;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background-color: #2e7d7d;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background-color: #6b7280;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background-color: #4b5563;
+      transform: translateY(-1px);
+    }
+    .btn-success {
+      background-color: #10b981;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-success:hover {
+      background-color: #059669;
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background-color: #ef4444;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-1px);
+    }
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .status-enabled {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    .status-disabled {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .availability-free {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    .availability-booked {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    .profile-dropdown {
+      position: relative;
+    }
+    .profile-dropdown .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+    .profile-dropdown .dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex text-gray-800 bg-gray-100">
-
-  <!-- Sidebar -->
-  <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4">
-    <h2 class="text-2xl font-bold mb-10 text-center">🚗 PARK PRO ADMIN</h2>
-    <nav class="flex flex-col space-y-4">
-      <a href="station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>🏠</span><span>Dashboard</span>
-      </a>
-      <a href="station_management.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>🏢</span><span>Manage Station</span>
-      </a>
-      <a href="gps_mapping.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>🗺️</span><span>GPS Mapping</span>
-      </a>
-      <a href="station_visualization.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>📊</span><span>Station View</span>
-      </a>
-      <a href="slot_management.html" class="flex items-center space-x-2 text-yellow-400">
-        <span>📅</span><span>View Bookings</span>
-      </a>
-      <a href="slot_earning.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>💰</span><span>Earnings</span>
-      </a>
-      <a href="station_settings.html" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>⚙️</span><span>Settings</span>
-      </a>
-      <a href="#" class="flex items-center space-x-2 hover:text-yellow-400">
-        <span>✉️</span><span>Messages</span>
-      </a>
-      <a href="#" class="flex items-center space-x-2 mt-10 hover:text-red-400">
-        <span>🔓</span><span>Logout</span>
-      </a>
-    </nav>
-  </aside>
-
-  <!-- Main Content -->
-  <div class="flex-1 flex flex-col">
-
-    <!-- Top Bar -->
-    <header class="bg-white shadow flex justify-between items-center p-4">
-      <h1 class="text-2xl font-semibold">Slot Management</h1>
-      <div class="flex items-center gap-4">
-        <span class="text-gray-600">Welcome, Admin</span>
-        <button class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600">Logout</button>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 sidebar-bg flex flex-col py-6 px-4 shadow-lg fixed inset-y-0 left-0 z-20">
+      <div class="text-center mb-8">
+        <a href="station_admin_dashboard.html" class="flex items-center justify-center gap-2">
+          <img src="../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+          <img src="../assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+        </a>
+        <p class="text-sm text-gray-600 mt-1">Station Admin</p>
       </div>
-    </header>
+
+      <!-- Dashboard - Direct Link -->
+      <a href="station_admin_dashboard.html" class="sidebar-link">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Parking Management -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('parkingDropdown')">
+        <span>Parking Management</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="parkingIcon"></i>
+      </div>
+      <div id="parkingDropdown" class="sidebar-dropdown-menu">
+        <a href="station_management.html" class="sidebar-link">
+          <i class="fas fa-building"></i>
+          <span>Manage Station</span>
+        </a>
+        <a href="slot_management.html" class="sidebar-link active">
+          <i class="fas fa-calendar-check"></i>
+          <span>Manage Slots & Bookings</span>
+        </a>
+        <a href="station_visualization.html" class="sidebar-link">
+          <i class="fas fa-map-marked-alt"></i>
+          <span>Live Parking Map</span>
+        </a>
+        <a href="station_view_slots.html" class="sidebar-link">
+          <i class="fas fa-chart-bar"></i>
+          <span>Occupancy History</span>
+        </a>
+      </div>
+
+      <!-- Payments & Billing -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('paymentsDropdown')">
+        <span>Payments & Billing</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="paymentsIcon"></i>
+      </div>
+      <div id="paymentsDropdown" class="sidebar-dropdown-menu">
+        <a href="slot_earning.html" class="sidebar-link">
+          <i class="fas fa-money-bill-wave"></i>
+          <span>Payment Dashboard</span>
+        </a>
+      </div>
+
+      <!-- Settings -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('settingsDropdown')">
+        <span>Settings</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="settingsIcon"></i>
+      </div>
+      <div id="settingsDropdown" class="sidebar-dropdown-menu">
+        <a href="station_settings.html" class="sidebar-link">
+          <i class="fas fa-cog"></i>
+          <span>Station Settings</span>
+        </a>
+      </div>
+
+      <!-- Help & Support -->
+      <div class="sidebar-section-title" onclick="toggleDropdown('helpDropdown')">
+        <span>Help & Support</span>
+        <i class="fas fa-chevron-down transition-transform duration-300" id="helpIcon"></i>
+      </div>
+      <div id="helpDropdown" class="sidebar-dropdown-menu">
+        <a href="faq.html" class="sidebar-link">
+          <i class="fas fa-question-circle"></i>
+          <span>FAQ / Guides</span>
+        </a>
+        <a href="contactus.html" class="sidebar-link">
+          <i class="fas fa-phone"></i>
+          <span>Contact Support</span>
+        </a>
+      </div>
+
+      <!-- Logout -->
+      <a href="station_adminlogin.html" class="sidebar-link mt-8 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 main-content ml-64 p-6">
+      <!-- Top bar -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h1 class="text-3xl font-bold text-[#1e3740]">Slot Management</h1>
+          <p class="text-gray-600 mt-1">Manage parking slots and bookings for your station</p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <i class="fas fa-bell text-[#46949d] text-xl cursor-pointer"></i>
+            <span class="notification-badge">3</span>
+          </div>
+          <div class="profile-dropdown">
+            <img id="profileImage" src="https://via.placeholder.com/40" alt="Profile" class="rounded-full w-10 h-10 cursor-pointer border-2 border-[#46949d]" />
+            <div id="dropdownMenu" class="dropdown-menu">
+              <div class="p-4 border-b border-gray-200">
+                <p id="profileName" class="font-semibold text-gray-800">Admin User</p>
+                <p id="profileEmail" class="text-sm text-gray-600">admin@parkpro.com</p>
+              </div>
+              <ul class="text-sm text-gray-700">
+                <li>
+                  <a href="adminprofile.html" class="flex items-center px-4 py-3 hover:bg-[#46949d] hover:text-white rounded transition-colors duration-150">
+                    <i class="fas fa-user mr-3"></i>
+                    Profile
+                  </a>
+                </li>
+                <li>
+                  <a href="station_adminlogin.html" id="signOutLink" class="flex items-center px-4 py-3 hover:bg-[#46949d] hover:text-white rounded transition-colors duration-150">
+                    <i class="fas fa-sign-out-alt mr-3"></i>
+                    Sign Out
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <!-- Content Area -->
     <main class="p-6 space-y-6">

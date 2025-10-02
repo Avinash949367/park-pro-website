@@ -1,7 +1,10 @@
-  const User = require('../models/User');
+const User = require('../models/User');
 const UserRole = require('../models/UserRole');
 const Vehicle = require('../models/Vehicle');
 const FastagTransaction = require('../models/FastagTransaction');
+const SlotBooking = require('../models/SlotBooking');
+const ParkingHistory = require('../models/ParkingHistory');
+const Station = require('../models/Station');
 const bcrypt = require('bcryptjs');
 
 // Get user vehicles
@@ -812,6 +815,116 @@ const deactivateUserFastTag = async (req, res) => {
   }
 };
 
+// Get user activities (recent bookings and parking history)
+const getUserActivities = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Check if user exists and has role 'user'
+    const user = await User.findById(userId);
+    if (!user || user.role !== 'user') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    // Get recent bookings (last 10)
+    const recentBookings = await SlotBooking.find({ userId })
+      .populate('stationId', 'name location')
+      .populate('vehicleId', 'number type')
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    // Get recent parking history (last 10)
+    const recentParking = await ParkingHistory.find({ userId })
+      .populate('stationId', 'name location')
+      .populate('vehicleId', 'number type')
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    // Combine and sort by date
+    const activities = [
+      ...recentBookings.map(booking => ({
+        id: booking._id,
+        type: 'booking',
+        action: `Booked parking at ${booking.stationId?.name || 'Station'}`,
+        location: booking.stationId?.location || '',
+        vehicle: booking.vehicleId ? `${booking.vehicleId.number} (${booking.vehicleId.type})` : 'Unknown vehicle',
+        amount: booking.amountPaid,
+        status: booking.status,
+        date: booking.createdAt,
+        bookingStartTime: booking.bookingStartTime,
+        bookingEndTime: booking.bookingEndTime
+      })),
+      ...recentParking.map(parking => ({
+        id: parking._id,
+        type: 'parking',
+        action: `Completed parking at ${parking.stationId?.name || 'Station'}`,
+        location: parking.location || parking.stationId?.location || '',
+        vehicle: parking.vehicleId ? `${parking.vehicleId.number} (${parking.vehicleId.type})` : 'Unknown vehicle',
+        amount: parking.amountPaid,
+        status: parking.status,
+        date: parking.createdAt,
+        startTime: parking.startTime,
+        endTime: parking.endTime
+      }))
+    ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 20); // Get top 20 most recent
+
+    res.json({
+      success: true,
+      activities
+    });
+  } catch (error) {
+    console.error('Error fetching user activities:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Get user bookings (current and future bookings)
+const getUserBookings = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Check if user exists and has role 'user'
+    const user = await User.findById(userId);
+    if (!user || user.role !== 'user') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    // Get current and future bookings (not cancelled or expired)
+    const bookings = await SlotBooking.find({
+      userId,
+      status: { $in: ['reserved', 'active', 'confirmed'] },
+      bookingEndTime: { $gte: new Date() } // Future or current bookings
+    })
+      .populate('stationId', 'name location address')
+      .populate('vehicleId', 'number type')
+      .sort({ bookingStartTime: 1 }); // Sort by start time ascending
+
+    const formattedBookings = bookings.map(booking => ({
+      id: booking._id,
+      stationName: booking.stationId?.name || 'Unknown Station',
+      stationLocation: booking.stationId?.location || '',
+      stationAddress: booking.stationId?.address || '',
+      vehicle: booking.vehicleId ? `${booking.vehicleId.number} (${booking.vehicleId.type})` : 'Unknown vehicle',
+      startTime: booking.bookingStartTime,
+      endTime: booking.bookingEndTime,
+      amountPaid: booking.amountPaid,
+      paymentMethod: booking.paymentMethod,
+      paymentStatus: booking.paymentStatus,
+      status: booking.status,
+      reservationExpiresAt: booking.reservationExpiresAt,
+      createdAt: booking.createdAt
+    }));
+
+    res.json({
+      success: true,
+      bookings: formattedBookings
+    });
+  } catch (error) {
+    console.error('Error fetching user bookings:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
@@ -830,5 +943,7 @@ module.exports = {
   deactivateUserFastTag,
   getFastagTransactions,
   rechargeFastag,
-  applyForFastag
+  applyForFastag,
+  getUserActivities,
+  getUserBookings
 };

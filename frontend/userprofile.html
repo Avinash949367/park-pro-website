@@ -11,6 +11,49 @@
     body { font-family: 'Inter', sans-serif; }
     .loading-spinner { border: 2px solid #f3f3f3; border-top: 2px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* Section Switcher Styles */
+    .section-switcher {
+      display: flex;
+      background-color: #f8fafc;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-switcher button {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .section-switcher button.active {
+      background-color: #3b82f6;
+      color: white;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    }
+
+    .section-switcher button:hover:not(.active) {
+      background-color: #e2e8f0;
+      color: #475569;
+    }
+
+    .section-content {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body class="bg-white min-h-screen">
@@ -275,29 +318,27 @@
           </div>
         </div>
 
-        <!-- Recent Activity -->
+        <!-- Activities and Bookings -->
         <div class="bg-white rounded-2xl shadow-xl p-6">
-          <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-            <span class="material-icons-outlined mr-2 text-blue-600">history</span>
-            Recent Activity
-          </h3>
-          <div class="space-y-4">
-            <div class="flex items-center p-3 bg-gray-50 rounded-xl">
-              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                <span class="material-icons-outlined text-blue-600 text-sm">local_parking</span>
-              </div>
-              <div class="flex-1">
-                <p class="text-sm font-medium text-gray-900">Parking booked at Station A</p>
-                <p class="text-xs text-gray-500">2 hours ago</p>
+          <div class="section-switcher mb-6">
+            <button id="btn-activities" class="active">Recent Activity</button>
+            <button id="btn-bookings">Bookings</button>
+          </div>
+          <div id="section-activities" class="section-content">
+            <div class="recent-activity-list" id="recent-activity-list">
+              <!-- Dynamic recent activities will be rendered here -->
+              <div class="text-center py-8 text-gray-500">
+                <span class="material-icons-outlined text-4xl mb-2">history</span>
+                <p>Loading activities...</p>
               </div>
             </div>
-            <div class="flex items-center p-3 bg-gray-50 rounded-xl">
-              <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                <span class="material-icons-outlined text-green-600 text-sm">payment</span>
-              </div>
-              <div class="flex-1">
-                <p class="text-sm font-medium text-gray-900">Payment received</p>
-                <p class="text-xs text-gray-500">1 day ago</p>
+          </div>
+          <div id="section-bookings" class="section-content" style="display:none;">
+            <div class="booking-list" id="booking-list">
+              <!-- Dynamic bookings will be rendered here -->
+              <div class="text-center py-8 text-gray-500">
+                <span class="material-icons-outlined text-4xl mb-2">event_note</span>
+                <p>Loading bookings...</p>
               </div>
             </div>
           </div>
@@ -1492,6 +1533,30 @@
         notification.classList.add('hidden');
       }, 3000);
     }
+
+    // Section switcher functionality
+    function switchSection(section) {
+      // Remove active class from all buttons
+      document.getElementById('btn-activities').classList.remove('active');
+      document.getElementById('btn-bookings').classList.remove('active');
+
+      // Hide all sections
+      document.getElementById('section-activities').style.display = 'none';
+      document.getElementById('section-bookings').style.display = 'none';
+
+      // Show selected section and activate button
+      if (section === 'activities') {
+        document.getElementById('btn-activities').classList.add('active');
+        document.getElementById('section-activities').style.display = 'block';
+      } else if (section === 'bookings') {
+        document.getElementById('btn-bookings').classList.add('active');
+        document.getElementById('section-bookings').style.display = 'block';
+      }
+    }
+
+    // Add event listeners for section switcher buttons
+    document.getElementById('btn-activities').addEventListener('click', () => switchSection('activities'));
+    document.getElementById('btn-bookings').addEventListener('click', () => switchSection('bookings'));
 
     // On page load, fetch user profile
     window.addEventListener('DOMContentLoaded', fetchUserProfile);

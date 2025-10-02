@@ -21,7 +21,9 @@ const {
   deactivateUserFastTag,
   getFastagTransactions,
   rechargeFastag,
-  applyForFastag
+  applyForFastag,
+  getUserActivities,
+  getUserBookings
 } = require('../controllers/userProfileController');
 const jwt = require('jsonwebtoken');
 
@@ -104,5 +106,9 @@ router.post('/fasttag/deactivate', ensureAuthenticated, deactivateUserFastTag);
 router.get('/vehicles/:vehicleId/fastag/transactions', ensureAuthenticated, getFastagTransactions);
 router.post('/vehicles/:vehicleId/fastag/recharge', ensureAuthenticated, rechargeFastag);
 router.post('/vehicles/:vehicleId/fastag/apply', ensureAuthenticated, applyForFastag);
+
+// Activity and booking routes
+router.get('/activities', ensureAuthenticated, getUserActivities);
+router.get('/bookings', ensureAuthenticated, getUserBookings);
 
 module.exports = router;

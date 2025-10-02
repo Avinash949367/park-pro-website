@@ -28,6 +28,7 @@ exports.createSlot = async (req, res) => {
         // Generate unique slotId with retry to avoid duplicates
         let slotId;
         let retryCount = 0;
+        
         const maxRetries = 5;
         while (retryCount < maxRetries) {
             const slotCount = await Slot.countDocuments({ stationId });
@@ -114,11 +115,37 @@ exports.getSlotBookings = async (req, res) => {
 // Create a new booking for a slot
 exports.createBooking = async (req, res) => {
     try {
-        const { id } = req.params; // slot id
-        const { userEmail, vehicleNumber, bookingStartTime, durationHours, amountPaid, paymentMethod } = req.body;
+        const { id } = req.params; // slot id from URL
+        const { slotId, bookingStartTime, durationHours, vehicleId, paymentMethod, amountPaid } = req.body;
 
-        if (!userEmail || !vehicleNumber || !bookingStartTime || !durationHours || !amountPaid || !paymentMethod) {
+        console.log('Create booking request:', {
+            paramsId: id,
+            bodySlotId: slotId,
+            bookingStartTime,
+            durationHours,
+            vehicleId,
+            paymentMethod,
+            amountPaid,
+            user: req.user ? req.user.id : 'No user'
+        });
+
+        if (!slotId || !bookingStartTime || !durationHours || !vehicleId || !paymentMethod) {
             return res.status(400).json({ message: 'Missing required booking fields' });
+        }
+
+        // Validate payment method
+        if (!['upi', 'coupon'].includes(paymentMethod)) {
+            return res.status(400).json({ message: 'Invalid payment method' });
+        }
+
+        // For coupon payments, validate that amount is 0 and payment method is coupon
+        if (paymentMethod === 'coupon' && amountPaid !== 0) {
+            return res.status(400).json({ message: 'Coupon bookings must have amountPaid of 0' });
+        }
+
+        // For UPI payments, amount must be greater than 0
+        if (paymentMethod === 'upi' && amountPaid <= 0) {
+            return res.status(400).json({ message: 'UPI payments must have amountPaid greater than 0' });
         }
 
         const User = require('../models/User');
@@ -127,21 +154,35 @@ exports.createBooking = async (req, res) => {
         const Station = require('../models/Station');
         const SlotBooking = require('../models/SlotBooking');
 
-        // Find user by email
-        const user = await User.findOne({ email: userEmail });
+        // Get user from JWT token (assuming authentication middleware sets req.user)
+        if (!req.user || !req.user.id) {
+            console.log('Authentication failed: No req.user or req.user.id');
+            return res.status(401).json({ message: 'Authentication required' });
+        }
+
+        const user = await User.findById(req.user.id);
         if (!user) {
+            console.log('User not found for id:', req.user.id);
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Find vehicle by vehicleNumber and userId
-        const vehicle = await Vehicle.findOne({ number: vehicleNumber, userId: user._id });
+        // Find vehicle by vehicleId
+        const vehicle = await Vehicle.findById(vehicleId);
         if (!vehicle) {
-            return res.status(404).json({ message: 'Vehicle not found for user' });
+            console.log('Vehicle not found for id:', vehicleId);
+            return res.status(404).json({ message: 'Vehicle not found' });
+        }
+
+        // Verify vehicle belongs to user
+        if (vehicle.userId.toString() !== user._id.toString()) {
+            console.log('Vehicle does not belong to user:', vehicle.userId, 'vs', user._id);
+            return res.status(403).json({ message: 'Vehicle does not belong to user' });
         }
 
         // Find slot by id
-        const slot = await Slot.findById(id);
+        const slot = await Slot.findById(slotId);
         if (!slot) {
+            console.log('Slot not found for id:', slotId);
             return res.status(404).json({ message: 'Slot not found' });
         }
 
@@ -162,6 +203,38 @@ exports.createBooking = async (req, res) => {
         const startTime = new Date(bookingStartTime);
         const endTime = new Date(startTime.getTime() + durationHours * 60 * 60 * 1000);
 
+        // Validate booking times are within operating hours (10:00 to 23:00)
+        const bookingDate = startTime.toISOString().split('T')[0]; // YYYY-MM-DD
+        const operatingStart = new Date(`${bookingDate}T10:00:00`);
+        const operatingEnd = new Date(`${bookingDate}T23:00:00`);
+
+        if (startTime < operatingStart || endTime > operatingEnd) {
+            return res.status(400).json({ message: 'Bookings are only allowed between 10:00 AM and 11:00 PM' });
+        }
+
+        // Check for overlapping bookings
+        const overlappingBookings = await SlotBooking.find({
+            slotId: slot._id,
+            status: { $in: ['active', 'confirmed'] },
+            bookingStartTime: { $lt: endTime },
+            bookingEndTime: { $gt: startTime }
+        });
+
+        if (overlappingBookings.length > 0) {
+            return res.status(409).json({ message: 'Slot is not available for the selected time' });
+        }
+
+        console.log('Creating booking with:', {
+            slotId: slot._id,
+            userId: user._id,
+            vehicleId: vehicle._id,
+            stationId: station._id,
+            startTime,
+            endTime,
+            amountPaid,
+            paymentMethod
+        });
+
         // Create new booking
         const newBooking = new SlotBooking({
             slotId: slot._id,
@@ -171,19 +244,20 @@ exports.createBooking = async (req, res) => {
             bookingStartTime: startTime,
             bookingEndTime: endTime,
             amountPaid,
-            paymentStatus: 'paid',
+            paymentMethod,
+            paymentStatus: paymentMethod === 'coupon' ? 'success' : 'paid',
             status: 'active',
             cancelReason: null
         });
 
         await newBooking.save();
 
-        // Update slot availability to Booked
-        slot.availability = 'Booked';
-        await slot.save();
+        console.log('Booking created successfully:', newBooking._id);
 
-        res.status(201).json(newBooking);
+        // Slot remains available for other bookings, only specific hours are booked
+        res.status(201).json({ booking: newBooking, message: 'Booking created successfully' });
     } catch (error) {
+        console.error('Error creating booking:', error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -210,6 +284,86 @@ exports.deleteImage = async (req, res) => {
     }
 };
 
+// Get slot availability for a date
+exports.getSlotAvailability = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { date } = req.query;
+
+        if (!date) {
+            return res.status(400).json({ message: 'Date parameter is required (YYYY-MM-DD)' });
+        }
+
+        const Station = require('../models/Station');
+        const SlotBooking = require('../models/SlotBooking');
+
+        const slot = await Slot.findById(id);
+        if (!slot) {
+            return res.status(404).json({ message: 'Slot not found' });
+        }
+
+        // Find station by slot.stationId
+        const station = await Station.findById(slot.stationId);
+        if (!station) {
+            return res.status(404).json({ message: 'Station not found for slot' });
+        }
+
+        // Fixed opening hours to 10:00 to 23:00
+        const openAt = '10:00';
+        const closeAt = '23:00';
+
+        // Parse opening and closing times
+        const [openHour, openMin] = openAt.split(':').map(Number);
+        const [closeHour, closeMin] = closeAt.split(':').map(Number);
+
+        // Generate 1-hour slots
+        const slots = [];
+        let currentHour = openHour;
+        let currentMin = openMin;
+
+        while (currentHour < closeHour || (currentHour === closeHour && currentMin < closeMin)) {
+            const startTime = `${currentHour.toString().padStart(2, '0')}:${currentMin.toString().padStart(2, '0')}`;
+            const endHour = currentHour + 1;
+            const endMin = currentMin;
+            const endTime = `${endHour.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}`;
+
+            slots.push({
+                time: startTime,
+                available: true
+            });
+
+            currentHour = endHour;
+            currentMin = endMin;
+        }
+
+        // Check existing bookings for the date and slot
+        const startOfDay = new Date(`${date}T00:00:00`);
+        const endOfDay = new Date(`${date}T23:59:59`);
+
+        const bookings = await SlotBooking.find({
+            slotId: id,
+            status: { $in: ['active', 'confirmed'] },
+            bookingStartTime: { $gte: startOfDay, $lt: endOfDay }
+        });
+
+        // Mark slots as booked if they overlap with existing bookings
+        slots.forEach(slotItem => {
+            const slotStart = new Date(`${date}T${slotItem.time}:00`);
+            const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000); // 1 hour later
+
+            bookings.forEach(booking => {
+                if (booking.bookingStartTime < slotEnd && booking.bookingEndTime > slotStart) {
+                    slotItem.available = false;
+                }
+            });
+        });
+
+        res.status(200).json({ hourlySlots: slots });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Get station availability for a date
 exports.getStationAvailability = async (req, res) => {
     try {
@@ -228,8 +382,9 @@ exports.getStationAvailability = async (req, res) => {
             return res.status(404).json({ message: 'Station not found' });
         }
 
-        const openAt = station.openAt || '00:00';
-        const closeAt = station.closeAt || '23:59';
+        // Default opening hours to 10:00 to 23:00 if not set
+        const openAt = station.openAt || '10:00';
+        const closeAt = station.closeAt || '23:00';
 
         // Parse opening and closing times
         const [openHour, openMin] = openAt.split(':').map(Number);
@@ -257,8 +412,8 @@ exports.getStationAvailability = async (req, res) => {
         }
 
         // Check existing bookings for the date
-        const startOfDay = new Date(`${date}T00:00:00.000Z`);
-        const endOfDay = new Date(`${date}T23:59:59.999Z`);
+        const startOfDay = new Date(`${date}T00:00:00`);
+        const endOfDay = new Date(`${date}T23:59:59`);
 
         const bookings = await SlotBooking.find({
             stationId: id,
@@ -268,8 +423,8 @@ exports.getStationAvailability = async (req, res) => {
 
         // Mark slots as booked if they overlap with existing bookings
         slots.forEach(slot => {
-            const slotStart = new Date(`${date}T${slot.start_time}:00.000Z`);
-            const slotEnd = new Date(`${date}T${slot.end_time}:00.000Z`);
+            const slotStart = new Date(`${date}T${slot.start_time}:00`);
+            const slotEnd = new Date(`${date}T${slot.end_time}:00`);
 
             bookings.forEach(booking => {
                 if (booking.bookingStartTime < slotEnd && booking.bookingEndTime > slotStart) {
@@ -402,6 +557,136 @@ exports.verifyPayment = async (req, res) => {
 
         res.status(200).json({ message: 'Payment verified and booking updated' });
     } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get dashboard stats for station admin
+exports.getDashboardStats = async (req, res) => {
+    try {
+        const { stationId } = req.params;
+
+        if (!stationId) {
+            return res.status(400).json({ message: 'Station ID is required' });
+        }
+
+        const mongoose = require('mongoose');
+        const SlotBooking = require('../models/SlotBooking');
+
+        // Convert stationId to ObjectId for aggregation
+        let stationObjectId;
+        try {
+            stationObjectId = new mongoose.Types.ObjectId(stationId);
+        } catch (error) {
+            return res.status(400).json({ message: 'Invalid station ID format' });
+        }
+
+        // Get total slots for the station
+        const totalSlots = await Slot.countDocuments({ stationId: stationObjectId });
+
+        // Get today's date range
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+        // Get slots booked today (active/confirmed bookings)
+        const slotsBookedToday = await SlotBooking.countDocuments({
+            stationId: stationObjectId,
+            status: { $in: ['active', 'confirmed'] },
+            bookingStartTime: { $gte: startOfDay, $lt: endOfDay }
+        });
+
+        // Get revenue today (sum of amountPaid for today's bookings)
+        const revenueTodayResult = await SlotBooking.aggregate([
+            {
+                $match: {
+                    stationId: stationObjectId,
+                    status: { $in: ['active', 'confirmed'] },
+                    bookingStartTime: { $gte: startOfDay, $lt: endOfDay }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: '$amountPaid' }
+                }
+            }
+        ]);
+
+        const revenueToday = revenueTodayResult.length > 0 ? revenueTodayResult[0].total : 0;
+
+        // Get total earnings (sum of all amountPaid for the station)
+        const totalEarningsResult = await SlotBooking.aggregate([
+            {
+                $match: {
+                    stationId: stationObjectId,
+                    status: { $in: ['active', 'confirmed'] }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: '$amountPaid' }
+                }
+            }
+        ]);
+
+        const totalEarnings = totalEarningsResult.length > 0 ? totalEarningsResult[0].total : 0;
+
+        res.status(200).json({
+            totalSlots,
+            slotsBookedToday,
+            revenueToday,
+            totalEarnings
+        });
+    } catch (error) {
+        console.error('Error in getDashboardStats:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get recent bookings for station admin
+exports.getRecentBookings = async (req, res) => {
+    try {
+        const { stationId } = req.params;
+        const { limit = 10 } = req.query;
+
+        if (!stationId) {
+            return res.status(400).json({ message: 'Station ID is required' });
+        }
+
+        const SlotBooking = require('../models/SlotBooking');
+
+        // Get recent bookings with populated user and vehicle data
+        const recentBookings = await SlotBooking.find({
+            stationId,
+            status: { $in: ['active', 'confirmed'] }
+        })
+        .populate('userId', 'name email')
+        .populate('vehicleId', 'number')
+        .populate('slotId', 'slotId')
+        .sort({ createdAt: -1 })
+        .limit(parseInt(limit));
+
+        // Format the response
+        const formattedBookings = recentBookings.map(booking => ({
+            bookingId: booking._id,
+            userName: booking.userId ? booking.userId.name : 'Unknown',
+            vehicleNumber: booking.vehicleId ? booking.vehicleId.number : 'Unknown',
+            slotNo: booking.slotId ? booking.slotId.slotId : 'Unknown',
+            time: booking.bookingStartTime.toLocaleTimeString('en-IN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            }),
+            duration: `${Math.ceil((booking.bookingEndTime - booking.bookingStartTime) / (1000 * 60 * 60))} hours`,
+            amount: booking.amountPaid,
+            status: booking.status
+        }));
+
+        res.status(200).json(formattedBookings);
+    } catch (error) {
+        console.error('Error in getRecentBookings:', error);
         res.status(500).json({ message: error.message });
     }
 };

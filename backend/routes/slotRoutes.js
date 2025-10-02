@@ -19,10 +19,13 @@ router.delete('/:id', slotController.deleteSlot);
 router.get('/:id/bookings', slotController.getSlotBookings);
 
 // Create a new booking for a slot
-router.post('/:id/bookings', slotController.createBooking);
+router.post('/:id/bookings', passport.authenticate('jwt', { session: false }), slotController.createBooking);
 
 // Delete image from Cloudinary
 router.delete('/delete-image', slotController.deleteImage);
+
+// Get slot availability for a date
+router.get('/:id/availability', slotController.getSlotAvailability);
 
 // Get station availability for a date
 router.get('/stations/:id/availability', slotController.getStationAvailability);
@@ -32,5 +35,11 @@ router.post('/bookings/reserve', passport.authenticate('jwt', { session: false }
 
 // Verify payment
 router.post('/payments/verify', slotController.verifyPayment);
+
+// Get dashboard stats for station admin
+router.get('/dashboard-stats/:stationId', passport.authenticate('jwt', { session: false }), slotController.getDashboardStats);
+
+// Get recent bookings for station admin
+router.get('/recent-bookings/:stationId', passport.authenticate('jwt', { session: false }), slotController.getRecentBookings);
 
 module.exports = router;
