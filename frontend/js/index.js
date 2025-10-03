@@ -1,4 +1,4 @@
-// Removed card toggle related code from index.js as it is now handled by cardToggle.js
+vir// Removed card toggle related code from index.js as it is now handled by cardToggle.js
 
 document.addEventListener('DOMContentLoaded', () => {
   const profileContainer = document.getElementById('profileContainer');
@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to decode JWT token payload
   function parseJwt(token) {
     try {
+      if (!token) return null;
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {

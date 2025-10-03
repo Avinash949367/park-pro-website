@@ -36,10 +36,13 @@ router.post('/bookings/reserve', passport.authenticate('jwt', { session: false }
 // Verify payment
 router.post('/payments/verify', slotController.verifyPayment);
 
+// Test route
+router.get('/test', (req, res) => res.send('slot routes working'));
+
 // Get dashboard stats for station admin
-router.get('/dashboard-stats/:stationId', passport.authenticate('jwt', { session: false }), slotController.getDashboardStats);
+router.get('/dashboard-stats/:stationId', slotController.getDashboardStats);
 
 // Get recent bookings for station admin
-router.get('/recent-bookings/:stationId', passport.authenticate('jwt', { session: false }), slotController.getRecentBookings);
+router.get('/recent-bookings/:stationId', slotController.getRecentBookings);
 
 module.exports = router;

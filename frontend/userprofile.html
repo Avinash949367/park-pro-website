@@ -163,38 +163,49 @@
               <span class="material-icons-outlined mr-2 text-blue-600">person</span>
               Basic Information
             </h3>
-            <button id="editBasicInfoButton" class="text-blue-600 hover:text-blue-700 transition-colors duration-200">
-              <span class="material-icons-outlined">edit</span>
+            <div id="editActions" class="hidden space-x-2">
+              <button id="saveBasicInfoButton" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center">
+                <span class="material-icons-outlined mr-2 text-sm">save</span>
+                Save
+              </button>
+              <button id="cancelBasicInfoButton" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200 flex items-center">
+                <span class="material-icons-outlined mr-2 text-sm">cancel</span>
+                Cancel
+              </button>
+            </div>
+            <button id="editBasicInfoButton" class="text-blue-600 hover:text-blue-700 transition-colors duration-200 flex items-center">
+              <span class="material-icons-outlined mr-2">edit</span>
+              Edit
             </button>
           </div>
           <div class="space-y-4">
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-              <div class="flex items-center">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center mb-2">
                 <span class="material-icons-outlined mr-3 text-gray-500">badge</span>
-                <span class="text-gray-600">Name</span>
+                <label class="text-gray-600 font-medium">Name</label>
               </div>
-              <span id="basicName" class="font-medium text-gray-900">User Name</span>
+              <input type="text" id="basicNameInput" class="w-full bg-transparent border-none outline-none text-gray-900 font-medium" readonly />
             </div>
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-              <div class="flex items-center">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center mb-2">
                 <span class="material-icons-outlined mr-3 text-gray-500">email</span>
-                <span class="text-gray-600">Email</span>
+                <label class="text-gray-600 font-medium">Email</label>
               </div>
-              <span id="basicEmail" class="font-medium text-gray-900">user@example.com</span>
+              <input type="email" id="basicEmailInput" class="w-full bg-transparent border-none outline-none text-gray-900 font-medium" readonly />
             </div>
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-              <div class="flex items-center">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center mb-2">
                 <span class="material-icons-outlined mr-3 text-gray-500">phone</span>
-                <span class="text-gray-600">Phone</span>
+                <label class="text-gray-600 font-medium">Phone</label>
               </div>
-              <span id="basicPhone" class="font-medium text-gray-900">+1234567890</span>
+              <input type="tel" id="basicPhoneInput" class="w-full bg-transparent border-none outline-none text-gray-900 font-medium" readonly />
             </div>
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-              <div class="flex items-center">
+            <div class="p-4 bg-gray-50 rounded-xl">
+              <div class="flex items-center mb-2">
                 <span class="material-icons-outlined mr-3 text-gray-500">directions_car</span>
-                <span class="text-gray-600">Primary Vehicle</span>
+                <label class="text-gray-600 font-medium">Primary Vehicle</label>
               </div>
-              <span id="basicVehicle" class="font-medium text-gray-900">Not set</span>
+              <span id="basicVehicle" class="text-gray-900 font-medium">Not set</span>
             </div>
           </div>
         </div>
@@ -565,9 +576,9 @@
         const userEmail = document.getElementById('userEmail');
         const userPhone = document.getElementById('userPhone');
         const profileAvatar = document.getElementById('profileAvatar');
-        const basicName = document.getElementById('basicName');
-        const basicEmail = document.getElementById('basicEmail');
-        const basicPhone = document.getElementById('basicPhone');
+        const basicNameInput = document.getElementById('basicNameInput');
+        const basicEmailInput = document.getElementById('basicEmailInput');
+        const basicPhoneInput = document.getElementById('basicPhoneInput');
         const basicVehicle = document.getElementById('basicVehicle');
         const savedVehiclesCount = document.getElementById('savedVehiclesCount');
         const favoritesCount = document.getElementById('favoritesCount');
@@ -610,23 +621,23 @@
           }
         }
 
-        // Update basic info display elements
-        if (basicName) {
-          basicName.textContent = userName;
-          basicName.classList.toggle('text-gray-500', !user.name);
-          basicName.classList.toggle('text-gray-900', !!user.name);
+        // Update basic info input elements
+        if (basicNameInput) {
+          basicNameInput.value = userName;
+          basicNameInput.classList.toggle('text-gray-500', !user.name);
+          basicNameInput.classList.toggle('text-gray-900', !!user.name);
         }
 
-        if (basicEmail) {
-          basicEmail.textContent = userEmailValue;
-          basicEmail.classList.toggle('text-gray-500', !user.email);
-          basicEmail.classList.toggle('text-gray-900', !!user.email);
+        if (basicEmailInput) {
+          basicEmailInput.value = userEmailValue;
+          basicEmailInput.classList.toggle('text-gray-500', !user.email);
+          basicEmailInput.classList.toggle('text-gray-900', !!user.email);
         }
 
-        if (basicPhone) {
-          basicPhone.textContent = userPhoneValue;
-          basicPhone.classList.toggle('text-gray-500', !user.phone);
-          basicPhone.classList.toggle('text-gray-900', !!user.phone);
+        if (basicPhoneInput) {
+          basicPhoneInput.value = userPhoneValue;
+          basicPhoneInput.classList.toggle('text-gray-500', !user.phone);
+          basicPhoneInput.classList.toggle('text-gray-900', !!user.phone);
         }
 
         // Update primary vehicle display - find primary vehicle from vehicles array
@@ -1563,8 +1574,6 @@
   </script>
 
 <script>
-  // ... existing code ...
-
   // Function to update FastTag UI based on status
   function updateFastTagUI(fastTagData) {
     const fastTagContainer = document.getElementById('fastTagContainer');
@@ -1837,13 +1846,10 @@
   const originalFetchUserProfile = fetchUserProfile;
   fetchUserProfile = async function() {
     await originalFetchUserProfile();
-    
+
     // Fetch and display FastTag data
     const fastTagData = await fetchFastTagData();
     updateFastTagUI(fastTagData);
-  };
-
-  // ... rest of the existing code ...
 </script>
 </body>
 </html>

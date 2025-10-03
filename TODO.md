@@ -1,17 +1,16 @@
-# TODO: Move Filters to Filters Button Click in results.html
+# TODO List
 
-## Steps to Complete:
-1. **Make Filters Button Functional**: Add JavaScript to the existing "Filters" button in the search header to toggle the visibility of the filters.
-2. **Move Filters Below Search Header**: Relocate the filters-card div from the sidebar column (col-lg-3) to immediately after the search header section, and hide it by default.
-3. **Style Filters as Collapsible Panel**: Update the filters-card to appear as a collapsible panel or dropdown below the search header when the Filters button is clicked.
-4. **Remove Sidebar Column**: Eliminate the col-lg-3 div and adjust the results column (col-lg-9) to take full width (col-12).
-5. **Ensure Responsiveness**: Add mobile-friendly styles for the collapsible filters panel.
-6. **Test Layout and Functionality**: Verify the filters appear on button click instead of sidebar, and all controls work.
+## Completed Tasks
+- [x] Create auth middleware in backend/middleware/auth.js
+- [x] Update sortStations function in frontend/results.html to sort by rating
+- [x] Replace custom auth middleware with passport JWT strategy for consistency
+- [x] Update reviewRoutes.js to use passport JWT authentication
+- [x] Remove unused custom auth middleware file
+- [x] Add "View Reviews" button next to ratings in station cards
+- [x] Create reviews.html page with review display and add review functionality
+- [x] Add language dropdown menu in desktop navigation with Google Translate integration
 
-## Progress:
-- [ ] Step 1: Make Filters button functional
-- [ ] Step 2: Move filters below search header and hide by default
-- [ ] Step 3: Style as collapsible panel
-- [ ] Step 4: Remove sidebar column
-- [ ] Step 5: Ensure responsiveness
-- [ ] Step 6: Test layout and functionality
+## Pending Tasks
+- [ ] Test the passport JWT authentication implementation
+- [ ] Test the rating sort functionality
+- [ ] Verify JWT token handling in protected routes

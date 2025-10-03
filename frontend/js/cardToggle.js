@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const findSpotView = document.getElementById('findSpotView');
     const registerSpotView = document.getElementById('registerSpotView');
     const heroSection = document.getElementById('heroSection');
+
+    if (!findSpotBtn || !registerSpotBtn || !findSpotView || !registerSpotView || !heroSection) {
+        // Elements not found, do not attach event listeners to avoid errors
+        return;
+    }
     
     findSpotBtn.addEventListener('click', function() {
         // Switch to Find Spot view

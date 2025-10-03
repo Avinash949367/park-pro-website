@@ -596,6 +596,9 @@
         }
       });
 
+      let currentStations = [];
+      let currentSort = 'distance';
+
       // Fetch and display stations based on location
       async function loadStations() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -607,7 +610,8 @@
           const data = await response.json();
 
           if (data.success && data.stations.length > 0) {
-            displayStations(data.stations);
+            currentStations = data.stations;
+            sortAndDisplayStations();
             updateResultsCount(data.count);
           } else {
             displayNoResults();
@@ -616,6 +620,36 @@
           console.error('Error fetching stations:', error);
           displayNoResults();
         }
+      }
+
+      function sortAndDisplayStations() {
+        const sortedStations = sortStations([...currentStations]);
+        displayStations(sortedStations);
+      }
+
+      function sortStations(stations) {
+        return stations.sort((a, b) => {
+          switch (currentSort) {
+            case 'distance':
+              // Assuming distance is not provided, sort by name as fallback
+              return a.name.localeCompare(b.name);
+            case 'price-low':
+              return a.price - b.price;
+            case 'price-high':
+              return b.price - a.price;
+            case 'rating':
+              // Sort by rating descending (highest first)
+              const ratingA = a.rating || 0;
+              const ratingB = b.rating || 0;
+              if (ratingA !== ratingB) {
+                return ratingB - ratingA;
+              }
+              // If ratings are equal, sort by review count
+              return (b.reviewCount || 0) - (a.reviewCount || 0);
+            default:
+              return 0;
+          }
+        });
       }
 
       function displayStations(stations) {
@@ -642,10 +676,11 @@
               </div>
               <div class="col-md-8">
                 <div class="parking-details">
-                  <div class="d-flex justify-content-between">
+                  <div class="d-flex justify-content-between align-items-center">
                     <h3 class="parking-title">${station.name}</h3>
-                    <div class="text-warning">
-                      <i class="fas fa-star"></i> 4.5
+                    <div class="d-flex align-items-center gap-2">
+                      ${station.rating > 0 || station.reviewCount > 0 ? `<div class="text-warning d-flex align-items-center"><i class="fas fa-star"></i> ${station.rating || 0} ${station.reviewCount ? `(${station.reviewCount})` : ''}</div>` : ''}
+                      <button class="btn btn-sm btn-outline-info" onclick="window.location.href='reviews.html?stationId=${station._id}'">View Reviews</button>
                     </div>
                   </div>
                   <p class="parking-location" style="cursor:pointer; color:#46949d;" onclick="getDirections('${encodeURIComponent(station.address + ', ' + station.city)}')">
@@ -660,7 +695,12 @@
                       <div class="parking-price">$${station.price} <span>/hour</span></div>
                       <small class="text-success"><i class="fas fa-check-circle"></i> ${availableSlots} spots available</small>
                     </div>
-                    <button class="btn-book" onclick="bookStation('${station._id}')">Book Now</button>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-outline-primary btn-sm" onclick="viewInMap('${station.googleMapLocation}')">
+                        <i class="fas fa-map-marked-alt"></i> View in Map
+                      </button>
+                      <button class="btn-book" onclick="bookStation('${station._id}')">Book Now</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -725,9 +765,52 @@
         }
       }
 
+      function viewInMap(googleMapLocation) {
+        if (googleMapLocation) {
+          window.open(googleMapLocation, '_blank');
+        } else {
+          console.error('Google Map location not available for this station');
+        }
+      }
+
+      // Sort dropdown event listeners
+      const sortDropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+      sortDropdownItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          const sortText = this.textContent.trim();
+          const sortButton = document.getElementById('sortDropdown');
+          sortButton.innerHTML = `Sort by: <strong>${sortText}</strong>`;
+
+          // Update current sort
+          switch (sortText) {
+            case 'Distance':
+              currentSort = 'distance';
+              break;
+            case 'Price (Low to High)':
+              currentSort = 'price-high';
+              break;
+            case 'Price (High to Low)':
+              currentSort = 'price-low';
+              break;
+            case 'Rating':
+              currentSort = 'rating';
+              break;
+            default:
+              currentSort = 'distance';
+          }
+
+          // Re-sort and display if stations are loaded
+          if (currentStations.length > 0) {
+            sortAndDisplayStations();
+          }
+        });
+      });
+
       // Expose functions globally to fix ReferenceError
       window.bookStation = bookStation;
       window.getDirections = getDirections;
+      window.viewInMap = viewInMap;
 
       // Load stations on page load
       loadStations();

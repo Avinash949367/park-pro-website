@@ -6,6 +6,24 @@
   <title>Park Pro</title>
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,te,ta,fr,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+
+    (function(){
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      s.async = true;
+      document.head.appendChild(s);
+    })();
+  </script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <style>
@@ -201,6 +219,51 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* Custom style to modernize Google Translate element */
+    #google_translate_element {
+      min-height: 40px !important;
+      min-width: 120px !important;
+      background: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      padding: 4px !important;
+      transition: box-shadow 0.3s ease !important;
+    }
+
+    #google_translate_element:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .goog-te-combo {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb) !important;
+      border: 1px solid #2196f3 !important;
+      border-radius: 6px !important;
+      color: #0d47a1 !important;
+      font-weight: 500 !important;
+      padding: 8px 12px !important;
+      transition: all 0.3s ease !important;
+      min-height: 32px !important;
+    }
+
+    .goog-te-combo:hover {
+      background: linear-gradient(135deg, #bbdefb, #90caf9) !important;
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3) !important;
+    }
+
+    .goog-te-combo:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.5) !important;
+    }
+
+    /* Hide Google logo and down arrow */
+    .goog-te-gadget-icon {
+      display: none !important;
+    }
+
+    .goog-te-gadget-simple img {
+      display: none !important;
+    }
   </style>
 </head>
 <body class="font-sans bg-white">
@@ -219,7 +282,10 @@
       <a href="products.html" class="option">Products</a>
       <a href="contactus.html" class="option">Contact</a>
     </nav>
-    
+
+    <!-- Language Dropdown -->
+    <div id="google_translate_element" class="hidden md:block"></div>
+
     <!-- Mobile Hamburger Button -->
     <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
       <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
@@ -326,8 +392,6 @@
         </div>
         <div id="registerSpotContent" class="max-w-md mx-auto px-6 py-4">
           <div class="bg-white rounded-lg shadow-md p-6 min-h-[120px]">
-            <div class="flex justify-between mb-6">
-            </div>
             <div id="findSpotView">
               <h2 class="text-xl font-bold mb-4">Search parking spot in seconds</h2>
               <!--<div class="mb-4">

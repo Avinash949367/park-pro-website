@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Park Pro - Station Reviews</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary: #2C3E50;
+      --secondary: #F5F5F5;
+      --accent: #46949d;
+      --light: #FFFFFF;
+      --dark: #1A1A1A;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      color: var(--dark);
+    }
+
+    .review-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .reviewer-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .rating-stars {
+      color: #ffc107;
+      margin-bottom: 0.5rem;
+    }
+
+    .add-review-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(70, 148, 157, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .add-review-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(70, 148, 157, 0.4);
+    }
+
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+    }
+
+    .star-rating {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .star-rating i {
+      font-size: 1.5rem;
+      color: #ddd;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .star-rating i.active {
+      color: #ffc107;
+    }
+
+    .no-reviews {
+      text-align: center;
+      padding: 3rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .no-reviews i {
+      font-size: 4rem;
+      color: #ddd;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200">
+    <a href="index.html">
+      <div class="flex items-center space-x-4">
+        <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+        <img src="assets/images/parkproText-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+      </div>
+    </a>
+    <nav class="space-x-6 hidden md:flex font-medium">
+      <a href="aboutus.html" class="option">About us</a>
+      <a href="business.html" class="option">Park Pro For Business</a>
+      <a href="products.html" class="option">Products</a>
+      <a href="contactus.html" class="option">Contact</a>
+    </nav>
+    <!-- Mobile Hamburger Button -->
+    <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900"></span>
+    </button>
+
+    <div id="loginProfileContainer" class="relative inline-block hidden md:flex space-x-4 items-center">
+      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300 cursor-pointer">Login</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+        Get the App
+      </a>
+      <div id="profileContainer" class="hidden relative">
+        <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+            <div>
+              <p class="font-semibold text-gray-900" id="userName">User</p>
+              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+            </div>
+          </div>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
+
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6 md:hidden">
+    <div class="flex flex-col space-y-6 mt-16">
+      <a href="aboutus.html" class="option text-lg font-medium">About us</a>
+      <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
+      <a href="products.html" class="option text-lg font-medium">Products</a>
+      <a href="contactus.html" class="option text-lg font-medium">Contact</a>
+
+      <!-- Mobile Login/Get App Buttons -->
+      <div class="pt-6 border-t border-gray-200">
+        <a href="userlogin.html" class="bg-black font-bold text-white px-6 py-3 rounded-lg hover:opacity-90 transition block text-center mb-4">Login</a>
+        <a href="#" class="text-white rounded-lg px-6 py-3 cursor-pointer font-bold bg-black hover:bg-orange-600 transition block text-center">
+          Get the App
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Station Header -->
+  <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-4">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h2 id="stationName">Station Reviews</h2>
+          <p id="stationAddress" class="mb-0">Loading station information...</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <button onclick="goBack()" class="btn btn-light">
+            <i class="fas fa-arrow-left me-2"></i>Back to Results
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews Section -->
+  <div class="container py-4">
+    <div id="reviewsContainer">
+      <!-- Reviews will be loaded here -->
+    </div>
+  </div>
+
+  <!-- Add Review Button (only show if user is logged in) -->
+  <button id="addReviewBtn" class="add-review-btn d-none" data-bs-toggle="modal" data-bs-target="#reviewModal">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- Add Review Modal -->
+  <div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Write a Review</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="reviewForm">
+            <div class="mb-3">
+              <label class="form-label">Rating</label>
+              <div class="star-rating" id="starRating">
+                <i class="fas fa-star" data-rating="1"></i>
+                <i class="fas fa-star" data-rating="2"></i>
+                <i class="fas fa-star" data-rating="3"></i>
+                <i class="fas fa-star" data-rating="4"></i>
+                <i class="fas fa-star" data-rating="5"></i>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="reviewText" class="form-label">Your Review</label>
+              <textarea class="form-control" id="reviewText" rows="4" placeholder="Share your experience with this parking station..." required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="submitReview">Submit Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/navbarAuth.js"></script>
+  <script>
+    let currentStationId = null;
+    let currentUser = null;
+    let selectedRating = 0;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get station ID from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      currentStationId = urlParams.get('stationId');
+
+      if (!currentStationId) {
+        alert('Station ID is required');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Check if user is logged in
+      checkUserLogin();
+
+      // Load station information and reviews
+      loadStationInfo();
+      loadReviews();
+
+      // Star rating functionality
+      setupStarRating();
+    });
+
+    function checkUserLogin() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        // Decode token to get user info (simple decode, not secure)
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          currentUser = payload;
+          document.getElementById('addReviewBtn').classList.remove('d-none');
+        } catch (e) {
+          console.error('Error decoding token:', e);
+        }
+      }
+    }
+
+    async function loadStationInfo() {
+      try {
+        const response = await fetch(`http://localhost:5000/api/stations/${currentStationId}`);
+        const data = await response.json();
+
+    if (data && data.name) {
+      // Direct station object response
+      document.getElementById('stationName').textContent = `${data.name} - Reviews`;
+      document.getElementById('stationAddress').textContent = `${data.address}, ${data.city}`;
+    } else if (data.success && data.station) {
+      // Wrapped response structure
+      const station = data.station;
+      document.getElementById('stationName').textContent = `${station.name} - Reviews`;
+      document.getElementById('stationAddress').textContent = `${station.address}, ${station.city}`;
+    }
+      } catch (error) {
+        console.error('Error loading station info:', error);
+      }
+    }
+
+    async function loadReviews() {
+      try {
+        const response = await fetch(`http://localhost:5000/api/reviews/station/${currentStationId}`);
+        const data = await response.json();
+
+        if (data.success && data.reviews) {
+          displayReviews(data.reviews);
+        } else {
+          displayNoReviews();
+        }
+      } catch (error) {
+        console.error('Error loading reviews:', error);
+        displayNoReviews();
+      }
+    }
+
+    function displayReviews(reviews) {
+      const container = document.getElementById('reviewsContainer');
+
+      if (reviews.length === 0) {
+        displayNoReviews();
+        return;
+      }
+
+      let html = `<h4 class="mb-4">${reviews.length} Review${reviews.length > 1 ? 's' : ''}</h4>`;
+
+      reviews.forEach(review => {
+        const stars = generateStars(review.rating);
+        const date = new Date(review.date).toLocaleDateString();
+
+        html += `
+          <div class="review-card">
+            <div class="review-header">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">
+                  ${review.userId && review.userId.name ? review.userId.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <div>
+                  <h6 class="mb-0">${review.userId && review.userId.name ? review.userId.name : 'Anonymous'}</h6>
+                  <small class="text-muted">${date}</small>
+                </div>
+              </div>
+              <div class="rating-stars">
+                ${stars}
+              </div>
+            </div>
+            <p class="mb-0">${review.comment}</p>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function displayNoReviews() {
+      const container = document.getElementById('reviewsContainer');
+      container.innerHTML = `
+        <div class="no-reviews">
+          <i class="fas fa-comments"></i>
+          <h4>No reviews found</h4>
+        </div>
+      `;
+    }
+
+    function generateStars(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        stars += `<i class="fas fa-star${i <= rating ? ' text-warning' : ''}"></i>`;
+      }
+      return stars;
+    }
+
+    function setupStarRating() {
+      const stars = document.querySelectorAll('#starRating i');
+
+      stars.forEach(star => {
+        star.addEventListener('click', function() {
+          const rating = parseInt(this.getAttribute('data-rating'));
+          selectedRating = rating;
+
+          // Update star display
+          stars.forEach((s, index) => {
+            if (index < rating) {
+              s.classList.add('active');
+            } else {
+              s.classList.remove('active');
+            }
+          });
+        });
+      });
+    }
+
+    document.getElementById('submitReview').addEventListener('click', async function() {
+      if (!currentUser) {
+        alert('Please login to submit a review');
+        return;
+      }
+
+      if (selectedRating === 0) {
+        alert('Please select a rating');
+        return;
+      }
+
+      const reviewText = document.getElementById('reviewText').value.trim();
+      if (!reviewText) {
+        alert('Please write a review');
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/reviews', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            stationId: currentStationId,
+            rating: selectedRating,
+            comment: reviewText
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Close modal and reset form
+          const modal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
+          modal.hide();
+
+          document.getElementById('reviewText').value = '';
+          selectedRating = 0;
+          document.querySelectorAll('#starRating i').forEach(star => star.classList.remove('active'));
+
+          // Reload reviews
+          loadReviews();
+          alert('Review submitted successfully!');
+        } else {
+          alert(data.message || 'Error submitting review');
+        }
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        alert('Error submitting review. Please try again.');
+      }
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    .option {
+      text-decoration: none;       /* Remove underline */
+      color: #1e3740;              /* Dark teal text color */
+      padding: 8px 12px;           /* Spacing around text */
+      border-radius: 8px;          /* Rounded corners */
+      transition: all 0.3s ease;   /* Smooth hover transition */
+      font-weight: 500;
+    }
+
+    /* Hover effect */
+    .option:hover {
+      color: white;                /* Text turns white */
+      background-color: #46949d;   /* Medium teal background on hover */
+      box-shadow: 0 2px 6px rgb(18, 105, 28); /* Subtle shadow */
+    }
+
+    /* Mobile menu styles */
+    .mobile-menu {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    .hamburger-line {
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.open .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger.open .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.open .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Custom style to modernize Google Translate element */
+    #google_translate_element {
+      min-height: 40px !important;
+      min-width: 120px !important;
+      background: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      padding: 4px !important;
+      transition: box-shadow 0.3s ease !important;
+    }
+
+    #google_translate_element:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .goog-te-combo {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb) !important;
+      border: 1px solid #2196f3 !important;
+      border-radius: 6px !important;
+      color: #0d47a1 !important;
+      font-weight: 500 !important;
+      padding: 8px 12px !important;
+      transition: all 0.3s ease !important;
+      min-height: 32px !important;
+    }
+
+    .goog-te-combo:hover {
+      background: linear-gradient(135deg, #bbdefb, #90caf9) !important;
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3) !important;
+    }
+
+    .goog-te-combo:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.5) !important;
+    }
+
+    /* Hide Google logo and down arrow */
+    .goog-te-gadget-icon {
+      display: none !important;
+    }
+
+    .goog-te-gadget-simple img {
+      display: none !important;
+    }
+  </style>
+
+  <div class="bg-white bg-opacity-90 backdrop-blur-md text-gray-900 p-4 flex justify-between items-center z-50 border-b border-gray-200 relative">
+    <a href="index.html"><div class="flex items-center space-x-4">
+      <img src="assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+      <img src="assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-20 w-15 object-contain" loading="lazy" />
+    </div></a>
+
+    <!-- Desktop Navigation -->
+    <nav class="space-x-6 hidden md:flex font-medium">
+      <a href="aboutus.html" class="option">About us</a>
+      <a href="business.html" class="option">Park Pro For Business</a>
+      <a href="products.html" class="option">Products</a>
+      <a href="contactus.html" class="option">Contact</a>
+    </nav>
+
+    <!-- Language Dropdown -->
+    <div id="google_translate_element" class="hidden md:block"></div>
+
+    <!-- Mobile Hamburger Button -->
+    <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-900"></span>
+    </button>
+
+    <!-- Login/Profile Container (Desktop) -->
+    <div id="loginProfileContainer" class="relative inline-block md:flex space-x-4 items-center hidden">
+      <a href="userlogin.html" id="loginButton" class="bg-black font-bold text-white px-6 py-2 rounded-lg hover:opacity-90 transition transform hover:scale-110 duration-300">Login</a>
+      <a href="#" id="getAppButton" class="text-white rounded-lg px-6 py-2 cursor-pointer font-bold bg-black hover:bg-orange-600 transition transform hover:scale-110 duration-300">
+        Get the App
+      </a>
+      <div id="profileContainer" class="hidden relative">
+        <div id="profileAvatar" class="h-8 w-8 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-lg"></div>
+        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 z-20 opacity-0 invisible transform -translate-y-2 transition-all duration-300">
+          <div class="px-4 flex items-center space-x-4 border-b border-gray-200 pb-4">
+            <div id="dropdownAvatar" class="h-12 w-12 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center font-semibold text-xl"></div>
+            <div>
+              <p class="font-semibold text-gray-900" id="userName">User</p>
+              <p class="text-sm text-gray-600" id="userEmail">user@example.com</p>
+            </div>
+          </div>
+          <button id="logoutButton" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 mt-4">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" style="display: none;"></div>
+
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6 md:hidden">
+    <div class="flex flex-col space-y-6 mt-16">
+      <a href="index.html" class="option text-lg font-medium">About us</a>
+      <a href="business.html" class="option text-lg font-medium">Park Pro For Business</a>
+      <a href="products.html" class="option text-lg font-medium">Products</a>
+      <a href="contactus.html" class="option text-lg font-medium">Contact</a>
+
+      <!-- Mobile Login/Get App Buttons -->
+      <div class="pt-6 border-t border-gray-200">
+        <a href="userlogin.html" class="bg-black font-bold text-white px-6 py-3 rounded-lg hover:opacity-90 transition block text-center mb-4">Login</a>
+        <a href="#" class="text-white rounded-lg px-6 py-3 cursor-pointer font-bold bg-black hover:bg-orange-600 transition block text-center">
+          Get the App
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <script src="../js/navbarAuth.js"></script>
+
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,te,ta,fr,es',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+
+    (function(){
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      s.async = true;
+      document.head.appendChild(s);
+    })();
+  </script>
+
+  <script>
+    // Hamburger menu functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const mobileMenu = document.querySelector('.mobile-menu');
+      const mobileMenuOverlay = document.querySelector('.mobile-menu.fixed.inset-0');
+      const mobileNav = document.querySelector('.mobile-menu.fixed.top-0');
+
+      function toggleMenu() {
+        hamburger.classList.toggle('open');
+        mobileNav.classList.toggle('open');
+        mobileMenuOverlay.style.display = mobileNav.classList.contains('open') ? 'block' : 'none';
+        document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+      }
+
+      hamburger.addEventListener('click', toggleMenu);
+      mobileMenuOverlay.addEventListener('click', toggleMenu);
+
+      // Close menu when clicking on links
+      const mobileLinks = mobileNav.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', toggleMenu);
+      });
+    });
+  </script>

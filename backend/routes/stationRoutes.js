@@ -25,6 +25,11 @@ router.get('/stations/mapping-status/:status', stationController.getStationsByMa
 router.get('/stations/settings', passport.authenticate('jwt', { session: false }), stationController.getStationSettings);
 router.post('/stations/settings', passport.authenticate('jwt', { session: false }), stationController.saveStationSettings);
 
+// Station Admin Profile routes
+router.get('/stations/admin/profile', passport.authenticate('jwt', { session: false }), stationController.getStationAdminProfile);
+router.put('/stations/admin/profile', passport.authenticate('jwt', { session: false }), stationController.updateStationAdminProfile);
+router.put('/stations/admin/change-password', passport.authenticate('jwt', { session: false }), stationController.changeStationAdminPassword);
+
 // Admin API to set station working hours
 router.post('/admin/stations/:id/hours', passport.authenticate('jwt', { session: false }), stationController.setStationHours);
 

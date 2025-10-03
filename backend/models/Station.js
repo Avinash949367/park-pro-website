@@ -152,6 +152,16 @@ const stationSchema = new mongoose.Schema({
   closeAt: {
     type: String,
     default: '23:59'
+  },
+  rating: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5
+  },
+  reviewCount: {
+    type: Number,
+    default: 0
   }
 });
 

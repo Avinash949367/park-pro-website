@@ -1,599 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ParkPro FASTag Information</title>
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --success-color: #27ae60;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px;
-            border-radius: 5px 5px 0 0;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-        
-        h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 5px;
-            margin-top: 30px;
-        }
-        
-        h3 {
-            color: var(--secondary-color);
-        }
-        
-        .container {
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .highlight-box {
-            background-color: var(--light-color);
-            border-left: 4px solid var(--secondary-color);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .step-box {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            counter-increment: step-counter;
-            position: relative;
-        }
-        
-        .step-box::before {
-            content: counter(step-counter);
-            background-color: var(--secondary-color);
-            color: white;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 50%;
-            position: absolute;
-            left: -15px;
-            top: -15px;
-        }
-        
-        .icon {
-            font-size: 24px;
-            margin-right: 10px;
-            vertical-align: middle;
-            color: var(--secondary-color);
-        }
-        
-        .button {
-            display: inline-block;
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin: 10px 5px;
-            transition: background-color 0.3s;
-        }
-        
-        .button:hover {
-            background-color: var(--primary-color);
-        }
-        
-        .button-group {
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 20px 0;
-        }
-        
-        .feature {
-            flex-basis: 48%;
-            background-color: var(--light-color);
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .tag {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-left: 5px;
-            vertical-align: middle;
-        }
-        
-      @media (max-width: 480px) {
-    .container, .flow-container {
-        padding: 15px;
+  <meta charset="UTF-8">
+  <title>Parking Path Map</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
     }
-}
 
-
-
-        .flow-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin: 30px 0;
-        }
-        
-        .flow-title {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 28px;
-        }
-        
-        .flow-steps {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        
-        .flow-step {
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .step-header {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 15px 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .step-header:hover {
-            background-color: var(--light-color);
-        }
-        
-        .step-header.active {
-            background-color: var(--light-color);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-        }
-        
-        .step-number {
-            background-color: var(--secondary-color);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-        
-        .step-title {
-            color: var(--primary-color);
-            margin: 0;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-        }
-        
-        .step-icon {
-            margin-right: 10px;
-            font-size: 20px;
-            color: var(--secondary-color);
-        }
-        
-        .step-arrow {
-            margin-left: auto;
-            transition: transform 0.3s ease;
-        }
-        
-        .step-header.active .step-arrow {
-            transform: rotate(90deg);
-        }
-        
-        .step-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background-color: #f8fafc;
-            border-radius: 0 0 8px 8px;
-        }
-        
-        .step-content-inner {
-            padding: 0 20px;
-        }
-        
-        .step-details {
-            padding: 20px 0;
-            margin: 0;
-        }
-        
-        .step-details ul {
-            padding-left: 20px;
-            margin: 10px 0 0 0;
-        }
-        
-        .step-details li {
-            margin-bottom: 5px;
-        }
-        
-        .connector-line {
-            position: absolute;
-            left: 31px;
-            top: 42px;
-            bottom: 0;
-            width: 2px;
-            background-color: var(--secondary-color);
-            z-index: 0;
-        }
-        
-       @media (max-width: 480px) {
-    .container, .flow-container {
-        padding: 15px;
+    h1 {
+      color: #333;
     }
-}
 
-            
-            .step-number {
-                width: 28px;
-                height: 28px;
-                font-size: 14px;
-                margin-right: 12px;
-            }
-            
-            .step-title {
-                font-size: 16px;
-            }
-            
-            .step-icon {
-                font-size: 18px;
-            }
-            
-            .connector-line {
-                left: 29px;
-            }
-        
+    .button-group {
+      margin: 20px auto;
+    }
 
-    </style>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    .button-group button {
+      padding: 10px 18px;
+      margin: 6px;
+      font-size: 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1976d2;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-group button:hover {
+      background-color: #1565c0;
+    }
+
+    .map-wrapper {
+      position: relative;
+      width: 900px;
+      margin: 0 auto;
+    }
+
+    .map-img {
+      width: 100%;
+      display: block;
+    }
+
+    #mapCanvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 10;
+    }
+  </style>
 </head>
 <body>
-    
-    
-  <div class="container">
-    <h2><span class="icon">🏷️</span> What is FASTag?</h2>
-    <p>FASTag is a Radio Frequency Identification (RFID) passive tag used for automatic toll payments directly from your linked prepaid, savings, or current bank account. It is affixed to the windscreen of your vehicle, allowing you to drive through toll plazas without stopping, saving time and fuel.</p>
-    
-    <div class="highlight-box">
-        <p><strong>Important:</strong> FASTag is vehicle-specific and once installed, it cannot be transferred to another vehicle. If linked to a prepaid account, it requires timely recharges to remain active.</p>
-    </div>
-    
-    <h2><span class="icon">🧭</span> How to Use FASTag</h2>
-    <p>Using FASTag is simple:</p>
-    <ol>
-        <li>Affix the FASTag on your vehicle's front windscreen (from inside).</li>
-        <li>Link it to ParkPro wallet (QR provided by us after registration with linked account)</li>
-        <li>As you pass through any ParkPro-enabled toll plaza, the system will:
-            <ul>
-                <li>Automatically detect your FASTag</li>
-                <li>Deduct the applicable toll amount and detect amount and give access to the entry</li>
-                <li>Send you an SMS confirmation of the transaction</li>
-            </ul>
-        </li>
-    </ol>
-    <p>You don't need to stop or handle cash. Just drive through the FASTag lane!</p>
-    
-    <center><h2><span class="icon">🛒</span> How to Get FASTag</h2></center>
-    <p>You can buy FASTag from the <a href="#" class="button">ParkPro website</a>. The process includes:</p>
-    <ul>
-        <li>Provide your vehicle registration details and KYC documents</li>
-        <li>The new wallet will be created</li>
-        <li>Once issued, your tag will be activated and ready for use</li>
-    </ul>
-    
-    <div class="highlight-box">
-        <p><span class="icon">💡</span> You can recharge your FASTag online via UPI, Net Banking, Credit/Debit Card, NEFT or RTGS.</p>
-    </div>
 
-    
-    
+  <h1>Interactive Parking Path Map</h1>
 
-    
-      <h1 class="flow-title">🚀 How It Works: ParkPro FASTag Transaction Flow</h1>
-      
-      <div class="flow-steps">
-          <div class="connector-line"></div>
-          
-          <!-- Step 1 -->
-          <div class="flow-step">
-              <div class="step-header" onclick="toggleStep(this)">
-                  <div class="step-number">1</div>
-                  <h3 class="step-title">
-                      <i class="fas fa-car step-icon"></i>
-                      Vehicle Approaches Entry Gate
-                  </h3>
-                  <div class="step-arrow">
-                      <i class="fas fa-chevron-right"></i>
-                  </div>
-              </div>
-              <div class="step-content">
-                  <div class="step-content-inner">
-                      <div class="step-details">
-                          <p>The vehicle enters the <strong>ParkPro Smart Parking Zone</strong>.</p>
-                          <p>The <strong>QR scanner camera</strong> is installed at the entry gate.</p>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Step 2 -->
-          <div class="flow-step">
-              <div class="step-header" onclick="toggleStep(this)">
-                  <div class="step-number">2</div>
-                  <h3 class="step-title">
-                      <i class="fas fa-qrcode step-icon"></i>
-                      QR Code Presented
-                  </h3>
-                  <div class="step-arrow">
-                      <i class="fas fa-chevron-right"></i>
-                  </div>
-              </div>
-              <div class="step-content">
-                  <div class="step-content-inner">
-                      <div class="step-details">
-                          <p>The driver presents a QR code from:</p>
-                          <ul>
-                              <li>The <strong>ParkPro mobile app</strong>, or</li>
-                              <li>A <strong>pre-booked pass</strong>, or</li>
-                              <li>The <strong>Fastag QR</strong></li>
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Step 3 -->
-          <div class="flow-step">
-              <div class="step-header" onclick="toggleStep(this)">
-                  <div class="step-number">3</div>
-                  <h3 class="step-title">
-                      <i class="fas fa-check-circle step-icon"></i>
-                      QR Code Scanning & Validation
-                  </h3>
-                  <div class="step-arrow">
-                      <i class="fas fa-chevron-right"></i>
-                  </div>
-              </div>
-              <div class="step-content">
-                  <div class="step-content-inner">
-                      <div class="step-details">
-                          <p>The system scans the QR code and instantly sends the data to the <strong>ParkPro Cloud Server</strong>.</p>
-                          <p>ParkPro validates:</p>
-                          <ul>
-                              <li>QR Code authenticity (not expired, not reused)</li>
-                              <li>Booking or subscription status</li>
-                              <li>Linked vehicle number (if required)</li>
-                              <li>Parking zone match (is the QR valid at this entry point?)</li>
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Step 4 -->
-          <div class="flow-step">
-              <div class="step-header" onclick="toggleStep(this)">
-                  <div class="step-number">4</div>
-                  <h3 class="step-title">
-                      <i class="fas fa-car-alt step-icon"></i>
-                      Vehicle Identity Mapping
-                  </h3>
-                  <div class="step-arrow">
-                      <i class="fas fa-chevron-right"></i>
-                  </div>
-              </div>
-              <div class="step-content">
-                  <div class="step-content-inner">
-                      <div class="step-details">
-                          <p>If QR is linked with vehicle registration:</p>
-                          <ul>
-                              <li>The system fetches <strong>vehicle class</strong> (2-wheeler, 4-wheeler, etc.)</li>
-                              <li>Verifies against the parking rules or assigned slot type</li>
-                          </ul>
-                          <p><em>(Optional step for enhanced verification)</em></p>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Step 5 -->
-          <div class="flow-step">
-              <div class="step-header" onclick="toggleStep(this)">
-                  <div class="step-number">5</div>
-                  <h3 class="step-title">
-                      <i class="fas fa-key step-icon"></i>
-                      Entry Authorization
-                  </h3>
-                  <div class="step-arrow">
-                      <i class="fas fa-chevron-right"></i>
-                  </div>
-              </div>
-              <div class="step-content">
-                  <div class="step-content-inner">
-                      <div class="step-details">
-                          <p>If validation is successful:</p>
-                          <ul>
-                              <li>ParkPro records <strong>entry time</strong>, <strong>QR code ID</strong>, and <strong>vehicle details</strong></li>
-                              <li>A <strong>temporary entry token</strong> is generated and stored in the database</li>
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Step 6 -->
-          <div class="flow-step">
-              <div class="step-header" onclick="toggleStep(this)">
-                  <div class="step-number">6</div>
-                  <h3 class="step-title">
-                      <i class="fas fa-traffic-light step-icon"></i>
-                      Barrier Control
-                  </h3>
-                  <div class="step-arrow">
-                      <i class="fas fa-chevron-right"></i>
-                  </div>
-              </div>
-              <div class="step-content">
-                  <div class="step-content-inner">
-                      <div class="step-details">
-                          <p>The <strong>entry gate barrier lifts automatically</strong>.</p>
-                          <p>LED display or audio prompts can show:</p>
-                          <ul>
-                              <li>"Welcome [User/Vehicle]"</li>
-                              <li>"Slot assigned: A12" (if auto slot allocation is enabled)</li>
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Step 7 -->
-          <div class="flow-step">
-              <div class="step-header" onclick="toggleStep(this)">
-                  <div class="step-number">7</div>
-                  <h3 class="step-title">
-                      <i class="fas fa-map-marker-alt step-icon"></i>
-                      Slot Allocation (AI + IoT)
-                  </h3>
-                  <div class="step-arrow">
-                      <i class="fas fa-chevron-right"></i>
-                  </div>
-              </div>
-              <div class="step-content">
-                  <div class="step-content-inner">
-                      <div class="step-details">
-                          <p><strong>Smart parking sensors</strong> detect available slots.</p>
-                          <p><strong>AI-based system</strong> guides the driver:</p>
-                          <ul>
-                              <li>LED arrows or app navigation direct to the allotted or booked parking station slot</li>
-                              <li>Slot sensor changes status to "Occupied" once the car is parked</li>
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  
+  <div class="button-group">
+    <strong>Start to Slots:</strong><br>
+    <button onclick="drawPath('start', 's1')">Start → S1</button>
+    <button onclick="drawPath('start', 's2')">Start → S2</button>
+    <button onclick="drawPath('start', 's3')">Start → S3</button>
+    <button onclick="drawPath('start', 's4')">Start → S4</button>
+  </div>
+
+  <div class="button-group">
+    <strong>Slots to Exit:</strong><br>
+    <button onclick="drawPath('s1', 'exit')">S1 → Exit</button>
+    <button onclick="drawPath('s2', 'exit')">S2 → Exit</button>
+    <button onclick="drawPath('s3', 'exit')">S3 → Exit</button>
+    <button onclick="drawPath('s4', 'exit')">S4 → Exit</button>
+  </div>
+
+  <div class="map-wrapper">
+    <img src="P2.png" class="map-img" id="mapImage">
+    <canvas id="mapCanvas" width="900" height="600"></canvas>
+  </div>
 
   <script>
-      function toggleStep(header) {
-          // Toggle active class on header
-          header.classList.toggle('active');
-          
-          // Get the content element
-          const content = header.nextElementSibling;
-          
-          // Toggle the content
-          if (content.style.maxHeight) {
-              content.style.maxHeight = null;
-          } else {
-              content.style.maxHeight = content.scrollHeight + "px";
-          }
+    const canvas = document.getElementById("mapCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Approximate coordinates of points based on your image
+    const positions = {
+      start: { x: 100, y: 70 },
+      exit: { x: 825, y: 540 },
+      p1: { x: 100, y: 540 },
+      p2: { x: 450, y: 540 },
+      p3: { x: 450, y: 405 },
+      p4: { x: 450, y: 160 },
+      s1: { x: 320, y: 160 },
+      s2: { x: 320, y: 405 },
+      s3: { x: 580, y: 405 },
+      s4: { x: 580, y: 160 }
+    };
+
+    const paths = {
+      "start-s1": ["start", "p1", "p2", "p3", "p4", "s1"],
+      "start-s2": ["start", "p1", "p2", "p3", "s2"],
+      "start-s3": ["start", "p1", "p2", "p3", "s3"],
+      "start-s4": ["start", "p1", "p2", "p3", "p4", "s4"],
+
+      "s1-exit": ["s1", "p4", "p3", "p2", "exit"],
+      "s2-exit": ["s2", "p3", "p2", "exit"],
+      "s3-exit": ["s3", "p3", "p2", "exit"],
+      "s4-exit": ["s4", "p4", "p3", "p2", "exit"]
+    };
+
+    // Camera offset to simulate camera movement
+    let cameraOffset = { x: 0, y: 0 };
+
+    // Current user position key
+    let currentPositionKey = "start";
+
+    // Center the camera on a given point
+    function centerCameraOn(point) {
+      // Center the canvas view on the point
+      // Canvas size is 900x600
+      cameraOffset.x = point.x - canvas.width / 2;
+      cameraOffset.y = point.y - canvas.height / 2;
+    }
+
+    // Draw the user position indicator (circle with arrow)
+    function drawUserPosition() {
+      const pos = positions[currentPositionKey];
+      if (!pos) return;
+
+      const x = pos.x - cameraOffset.x;
+      const y = pos.y - cameraOffset.y;
+
+      // Draw circle
+      ctx.beginPath();
+      ctx.arc(x, y, 10, 0, 2 * Math.PI);
+      ctx.fillStyle = "#ff5722";
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+
+      // Draw arrow pointing forward (upwards)
+      ctx.beginPath();
+      ctx.moveTo(x, y - 10);
+      ctx.lineTo(x - 6, y + 6);
+      ctx.lineTo(x + 6, y + 6);
+      ctx.closePath();
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+    }
+
+    function drawPath(from, to) {
+      const key = `${from}-${to}`;
+      const path = paths[key];
+
+      if (!path) {
+        alert("No path found!");
+        return;
       }
-      
-      // Optional: Open first step by default
-      document.addEventListener('DOMContentLoaded', function() {
-          const firstHeader = document.querySelector('.step-header');
-          if (firstHeader) {
-              firstHeader.classList.add('active');
-              const firstContent = firstHeader.nextElementSibling;
-              firstContent.style.maxHeight = firstContent.scrollHeight + "px";
-          }
-      });
+
+      // Update current position to the start of the path
+      currentPositionKey = from;
+
+      // Center camera on initial point
+      centerCameraOn(positions[from]);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "#00c853";
+      ctx.lineWidth = 5;
+
+      for (let i = 0; i < path.length - 1; i++) {
+        const a = positions[path[i]];
+        const b = positions[path[i + 1]];
+        ctx.beginPath();
+        ctx.moveTo(a.x - cameraOffset.x, a.y - cameraOffset.y);
+        ctx.lineTo(b.x - cameraOffset.x, b.y - cameraOffset.y);
+        ctx.stroke();
+      }
+
+      // Draw arrows
+      for (let i = 0; i < path.length - 1; i++) {
+        drawArrow(
+          { x: positions[path[i]].x - cameraOffset.x, y: positions[path[i]].y - cameraOffset.y },
+          { x: positions[path[i + 1]].x - cameraOffset.x, y: positions[path[i + 1]].y - cameraOffset.y }
+        );
+      }
+
+      // Draw user position indicator
+      drawUserPosition();
+    }
+
+    function drawArrow(from, to) {
+      const headlen = 10;
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const angle = Math.atan2(dy, dx);
+
+      const x = to.x;
+      const y = to.y;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - headlen * Math.cos(angle - Math.PI / 6),
+                 y - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x - headlen * Math.cos(angle + Math.PI / 6),
+                 y - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.lineTo(x, y);
+      ctx.fillStyle = "#00c853";
+      ctx.fill();
+    }
+
+    // Initialize by drawing path from start to s1
+    drawPath("start", "s1");
   </script>
-
-    
-    
-
-    
-    <h2><span class="icon">🎯</span> Objectives of ParkPro FASTag System</h2>
-    <ul>
-        <li>Enable an interoperable, secure Entry Exit system</li>
-        <li>Promote cashless retail payments in Parking system</li>
-        <li>Reduce:
-            <ul>
-                <li>Traffic congestion</li>
-                <li>Fuel consumption</li>
-                <li>Cash handling at tolls</li>
-            </ul>
-        </li>
-        <li>Improve transparency, audit control, and transaction efficiency</li>
-    </ul>
-</div>
-
-<div class="container">
-    <h2><span class="icon">📞</span> Need Help?</h2>
-    <p>For FASTag-related issues, please contact your issuing bank's customer care.</p>
-    
-    <h3>Useful Links:</h3>
-    <div class="button-group">
-        <a href="#" class="button">✅ Check Your FASTag Status</a>
-        <a href="#" class="button">🏦 View Live Bank List</a>
-        <a href="#" class="button">🔁 Recharge with UPI</a>
-        <a href="#" class="button">📄 Know Your UPI Handle</a>
-        <a href="#" class="button">📍 View Active Toll Plazas List</a>
-    </div>
-  </div>
 </body>
 </html>

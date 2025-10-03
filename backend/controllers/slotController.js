@@ -565,6 +565,7 @@ exports.verifyPayment = async (req, res) => {
 exports.getDashboardStats = async (req, res) => {
     try {
         const { stationId } = req.params;
+        console.log('getDashboardStats called with stationId:', stationId);
 
         if (!stationId) {
             return res.status(400).json({ message: 'Station ID is required' });
@@ -572,8 +573,9 @@ exports.getDashboardStats = async (req, res) => {
 
         const mongoose = require('mongoose');
         const SlotBooking = require('../models/SlotBooking');
+        const Station = require('../models/Station');
 
-        // Convert stationId to ObjectId for aggregation
+        // Convert stationId to ObjectId
         let stationObjectId;
         try {
             stationObjectId = new mongoose.Types.ObjectId(stationId);
@@ -581,8 +583,17 @@ exports.getDashboardStats = async (req, res) => {
             return res.status(400).json({ message: 'Invalid station ID format' });
         }
 
+        // Find the station to get the stationId string
+        const station = await Station.findById(stationObjectId);
+        if (!station) {
+            return res.status(404).json({ message: 'Station not found' });
+        }
+        const stationIdString = station.stationId;
+        console.log('Station found, stationIdString:', stationIdString);
+
         // Get total slots for the station
-        const totalSlots = await Slot.countDocuments({ stationId: stationObjectId });
+        const totalSlots = await Slot.countDocuments({ stationId: stationIdString });
+        console.log('Total slots:', totalSlots);
 
         // Get today's date range
         const today = new Date();
@@ -595,6 +606,7 @@ exports.getDashboardStats = async (req, res) => {
             status: { $in: ['active', 'confirmed'] },
             bookingStartTime: { $gte: startOfDay, $lt: endOfDay }
         });
+        console.log('Slots booked today:', slotsBookedToday);
 
         // Get revenue today (sum of amountPaid for today's bookings)
         const revenueTodayResult = await SlotBooking.aggregate([
@@ -614,6 +626,7 @@ exports.getDashboardStats = async (req, res) => {
         ]);
 
         const revenueToday = revenueTodayResult.length > 0 ? revenueTodayResult[0].total : 0;
+        console.log('Revenue today:', revenueToday);
 
         // Get total earnings (sum of all amountPaid for the station)
         const totalEarningsResult = await SlotBooking.aggregate([
@@ -632,6 +645,7 @@ exports.getDashboardStats = async (req, res) => {
         ]);
 
         const totalEarnings = totalEarningsResult.length > 0 ? totalEarningsResult[0].total : 0;
+        console.log('Total earnings:', totalEarnings);
 
         res.status(200).json({
             totalSlots,
@@ -650,16 +664,26 @@ exports.getRecentBookings = async (req, res) => {
     try {
         const { stationId } = req.params;
         const { limit = 10 } = req.query;
+        console.log('getRecentBookings called with stationId:', stationId);
 
         if (!stationId) {
             return res.status(400).json({ message: 'Station ID is required' });
         }
 
+        const mongoose = require('mongoose');
         const SlotBooking = require('../models/SlotBooking');
+
+        // Convert stationId to ObjectId
+        let stationObjectId;
+        try {
+            stationObjectId = new mongoose.Types.ObjectId(stationId);
+        } catch (error) {
+            return res.status(400).json({ message: 'Invalid station ID format' });
+        }
 
         // Get recent bookings with populated user and vehicle data
         const recentBookings = await SlotBooking.find({
-            stationId,
+            stationId: stationObjectId,
             status: { $in: ['active', 'confirmed'] }
         })
         .populate('userId', 'name email')
@@ -667,6 +691,8 @@ exports.getRecentBookings = async (req, res) => {
         .populate('slotId', 'slotId')
         .sort({ createdAt: -1 })
         .limit(parseInt(limit));
+
+        console.log('Recent bookings found:', recentBookings.length);
 
         // Format the response
         const formattedBookings = recentBookings.map(booking => ({

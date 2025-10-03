@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parking Path Map</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .button-group {
+      margin: 20px auto;
+    }
+
+    .button-group button {
+      padding: 10px 18px;
+      margin: 6px;
+      font-size: 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1976d2;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-group button:hover {
+      background-color: #1565c0;
+    }
+
+    .map-wrapper {
+      position: relative;
+      width: 900px;
+      margin: 0 auto;
+    }
+
+    .map-img {
+      width: 100%;
+      display: block;
+    }
+
+    #mapCanvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Interactive Parking Path Map</h1>
+
+  <div class="button-group">
+    <strong>Start to Slots:</strong><br>
+    <button onclick="drawPath('start', 's1')">Start → S1</button>
+    <button onclick="drawPath('start', 's2')">Start → S2</button>
+    <button onclick="drawPath('start', 's3')">Start → S3</button>
+    <button onclick="drawPath('start', 's4')">Start → S4</button>
+  </div>
+
+  <div class="button-group">
+    <strong>Slots to Exit:</strong><br>
+    <button onclick="drawPath('s1', 'exit')">S1 → Exit</button>
+    <button onclick="drawPath('s2', 'exit')">S2 → Exit</button>
+    <button onclick="drawPath('s3', 'exit')">S3 → Exit</button>
+    <button onclick="drawPath('s4', 'exit')">S4 → Exit</button>
+  </div>
+
+  <div class="map-wrapper">
+    <img src="P2.png" class="map-img" id="mapImage">
+    <canvas id="mapCanvas" width="900" height="600"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById("mapCanvas").getContext("2d");
+
+    // Approximate coordinates of points based on your image
+    const positions = {
+      start: { x: 100, y: 70 },
+      exit: { x: 825, y: 540 },
+      p1: { x: 100, y: 540 },
+      p2: { x: 450, y: 540 },
+      p3: { x: 450, y: 405 },
+      p4: { x: 450, y: 160 },
+      s1: { x: 320, y: 160 },
+      s2: { x: 320, y: 405 },
+      s3: { x: 580, y: 405 },
+      s4: { x: 580, y: 160 }
+    };
+
+    const paths = {
+      "start-s1": ["start", "p1", "p2", "p3", "p4", "s1"],
+      "start-s2": ["start", "p1", "p2", "p3", "s2"],
+      "start-s3": ["start", "p1", "p2", "p3", "s3"],
+      "start-s4": ["start", "p1", "p2", "p3", "p4", "s4"],
+
+      "s1-exit": ["s1", "p4", "p3", "p2", "exit"],
+      "s2-exit": ["s2", "p3", "p2", "exit"],
+      "s3-exit": ["s3", "p3", "p2", "exit"],
+      "s4-exit": ["s4", "p4", "p3", "p2", "exit"]
+    };
+
+    function drawPath(from, to) {
+      const key = `${from}-${to}`;
+      const path = paths[key];
+
+      if (!path) {
+        alert("No path found!");
+        return;
+      }
+
+      ctx.clearRect(0, 0, 900, 600);
+      ctx.strokeStyle = "#00c853";
+      ctx.lineWidth = 5;
+
+      for (let i = 0; i < path.length - 1; i++) {
+        const a = positions[path[i]];
+        const b = positions[path[i + 1]];
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+
+      // Draw arrows
+      for (let i = 0; i < path.length - 1; i++) {
+        drawArrow(positions[path[i]], positions[path[i + 1]]);
+      }
+    }
+
+    function drawArrow(from, to) {
+      const headlen = 10;
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const angle = Math.atan2(dy, dx);
+
+      const x = to.x;
+      const y = to.y;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - headlen * Math.cos(angle - Math.PI / 6),
+                 y - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x - headlen * Math.cos(angle + Math.PI / 6),
+                 y - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.lineTo(x, y);
+      ctx.fillStyle = "#00c853";
+      ctx.fill();
+    }
+  </script>
+</body>
+</html>

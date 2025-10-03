@@ -6,10 +6,12 @@ const connectDB = require('./config/db');
 const passport = require('passport');
 const session = require('express-session');
 const cors = require('cors');
+
 const authRoutes = require('./routes/authRoutes');
 const registerRoutes = require('./routes/registerRoutes');
 const stationRoutes = require('./routes/stationRoutes');
 const slotRoutes = require('./routes/slotRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 require('./config/passport'); // Passport config
 
 const bcrypt = require('bcryptjs');
@@ -107,6 +109,7 @@ app.use('/api/user', userProfileRoutes);
 app.use('/api', userRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/slots', slotRoutes);
+app.use('/api/reviews', reviewRoutes);  // Added review routes
 
 // Start the server
 const PORT = process.env.PORT || 5000;

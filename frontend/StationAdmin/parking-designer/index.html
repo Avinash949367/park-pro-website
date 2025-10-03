@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking CMS Designer - Park Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <style>
+    /* Google Maps-like styling */
+    .map-container {
+      background: #f5f5f5;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .leaflet-container {
+      background: #e5e3df;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    /* Custom grid overlay */
+    .grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Element palette */
+    .palette-item {
+      cursor: grab;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .palette-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .palette-item.dragging {
+      opacity: 0.5;
+      transform: rotate(5deg);
+    }
+
+    /* Mini map */
+    .mini-map {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 200px;
+      height: 150px;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      background: white;
+    }
+
+    /* Layer controls */
+    .layer-control {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 12px;
+    }
+
+    .layer-toggle {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .layer-toggle:hover {
+      background-color: #f8f9fa;
+    }
+
+    .layer-toggle input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tool-btn {
+      padding: 8px 12px;
+      border: 1px solid #e1e5e9;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tool-btn:hover {
+      background: #f8f9fa;
+      border-color: #007bff;
+    }
+
+    .tool-btn.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+
+    /* Element styles */
+    .parking-element {
+      cursor: move;
+      transition: all 0.2s ease;
+    }
+
+    .parking-element:hover {
+      filter: brightness(1.1);
+    }
+
+    .parking-element.selected {
+      box-shadow: 0 0 0 3px #007bff;
+      border-radius: 4px;
+    }
+
+    .slot-element {
+      width: 40px;
+      height: 20px;
+      background: #10b981;
+      border: 1px solid #059669;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      position: relative;
+    }
+
+    .slot-element.ev {
+      background: #3b82f6;
+      border-color: #2563eb;
+    }
+
+    .slot-element.bike {
+      width: 30px;
+      height: 15px;
+      font-size: 8px;
+    }
+
+    .slot-element.van {
+      width: 50px;
+      height: 25px;
+    }
+
+    .wall-element {
+      background: #6b7280;
+      border: 2px solid #4b5563;
+      height: 4px;
+      min-width: 20px;
+    }
+
+    .road-element {
+      background: #374151;
+      border: 2px solid #1f2937;
+      height: 8px;
+      min-width: 20px;
+    }
+
+    .entry-element, .exit-element {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .entry-element {
+      background: #10b981;
+      border: 2px solid #059669;
+    }
+
+    .exit-element {
+      background: #ef4444;
+      border: 2px solid #dc2626;
+    }
+
+    /* Route visualization */
+    .route-path {
+      stroke: #007bff;
+      stroke-width: 4;
+      stroke-dasharray: 10, 5;
+      fill: none;
+      animation: dash 2s linear infinite;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -15;
+      }
+    }
+
+    /* Dark mode */
+    .dark-mode {
+      background: #1f2937;
+      color: #f9fafb;
+    }
+
+    .dark-mode .leaflet-container {
+      background: #374151;
+    }
+
+    .dark-mode .palette-item,
+    .dark-mode .layer-control,
+    .dark-mode .toolbar {
+      background: #374151;
+      color: #f9fafb;
+      border-color: #4b5563;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .palette {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 120px;
+        z-index: 1000;
+        background: white;
+        border-top: 1px solid #e1e5e9;
+        overflow-x: auto;
+        padding: 12px;
+      }
+
+      .mini-map {
+        width: 120px;
+        height: 90px;
+        bottom: 140px;
+      }
+
+      .toolbar {
+        position: fixed;
+        top: 60px;
+        left: 12px;
+        right: 12px;
+        z-index: 999;
+      }
+    }
+
+    /* Loading animation */
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .tooltip.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col py-6 px-4 fixed inset-y-0 left-0 z-20">
+      <div class="text-center mb-8">
+        <a href="../station_admin_dashboard.html" class="flex items-center justify-center gap-2">
+          <img src="../../assets/images/logo_edited-removebg-preview.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+          <img src="../../assets/images/+-Photoroom.png" alt="Park Pro Logo" class="h-10 w-35 object-contain" loading="lazy" />
+        </a>
+        <p class="text-sm text-gray-400 mt-1">Station Admin</p>
+      </div>
+
+      <!-- Dashboard -->
+      <a href="../station_admin_dashboard.html" class="flex items-center space-x-2 hover:text-yellow-400 mb-2 px-4 py-2 rounded">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Parking Management -->
+      <div class="mb-2">
+        <div class="text-xs text-gray-400 uppercase tracking-wide px-4 py-2">Parking Management</div>
+        <a href="../station_management.html" class="flex items-center space-x-2 hover:text-yellow-400 mb-1 px-4 py-2 rounded">
+          <i class="fas fa-building"></i>
+          <span>Manage Station</span>
+        </a>
+        <a href="../slot_management.html" class="flex items-center space-x-2 hover:text-yellow-400 mb-1 px-4 py-2 rounded">
+          <i class="fas fa-calendar-check"></i>
+          <span>Manage Slots</span>
+        </a>
+        <a href="index.html" class="flex items-center space-x-2 text-yellow-400 bg-gray-700 mb-1 px-4 py-2 rounded">
+          <i class="fas fa-draw-polygon"></i>
+          <span>Parking Designer</span>
+        </a>
+        <a href="../station_visualization.html" class="flex items-center space-x-2 hover:text-yellow-400 mb-1 px-4 py-2 rounded">
+          <i class="fas fa-map-marked-alt"></i>
+          <span>Live Parking Map</span>
+        </a>
+      </div>
+
+      <!-- Logout -->
+      <a href="../station_adminlogin.html" class="flex items-center space-x-2 hover:text-red-400 mt-auto px-4 py-2 rounded">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-6">
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Parking CMS Designer</h1>
+          <p class="text-gray-600">Design your parking layout with Google Maps-like interface</p>
+        </div>
+        <div class="flex space-x-2">
+          <button id="saveLayout" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2">
+            <i class="fas fa-save"></i>
+            Save Layout
+          </button>
+          <button id="exportLayout" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-2">
+            <i class="fas fa-download"></i>
+            Export
+          </button>
+          <button id="toggleDarkMode" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar mb-4">
+        <button id="undoBtn" class="tool-btn" title="Undo">
+          <i class="fas fa-undo"></i>
+          Undo
+        </button>
+        <button id="redoBtn" class="tool-btn" title="Redo">
+          <i class="fas fa-redo"></i>
+          Redo
+        </button>
+        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+        <button id="selectTool" class="tool-btn active" title="Select Tool">
+          <i class="fas fa-mouse-pointer"></i>
+          Select
+        </button>
+        <button id="drawRoadTool" class="tool-btn" title="Draw Road">
+          <i class="fas fa-road"></i>
+          Road
+        </button>
+        <button id="drawWallTool" class="tool-btn" title="Draw Wall">
+          <i class="fas fa-grip-lines"></i>
+          Wall
+        </button>
+        <button id="autoRouteBtn" class="tool-btn" title="Auto Route">
+          <i class="fas fa-route"></i>
+          Auto Route
+        </button>
+        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+        <button id="gridToggle" class="tool-btn" title="Toggle Grid">
+          <i class="fas fa-th"></i>
+          Grid
+        </button>
+        <button id="snapToggle" class="tool-btn active" title="Toggle Snap to Grid">
+          <i class="fas fa-magnet"></i>
+          Snap
+        </button>
+      </div>
+
+      <div class="grid grid-cols-12 gap-6">
+        <!-- Element Palette -->
+        <div class="col-span-3">
+          <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-semibold mb-4 flex items-center gap-2">
+              <i class="fas fa-palette"></i>
+              Element Palette
+            </h3>
+            <div class="space-y-4">
+              <!-- Entry/Exit Points -->
+              <div>
+                <h4 class="text-sm font-medium text-gray-700 mb-2">Access Points</h4>
+                <div class="grid grid-cols-2 gap-2">
+                  <div class="palette-item p-3 text-center border-2 border-dashed border-green-300 hover:border-green-500" data-type="entry">
+                    <div class="entry-element mx-auto mb-2">IN</div>
+                    <span class="text-xs font-medium">Entry</span>
+                  </div>
+                  <div class="palette-item p-3 text-center border-2 border-dashed border-red-300 hover:border-red-500" data-type="exit">
+                    <div class="exit-element mx-auto mb-2">OUT</div>
+                    <span class="text-xs font-medium">Exit</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Parking Slots -->
+              <div>
+                <h4 class="text-sm font-medium text-gray-700 mb-2">Parking Slots</h4>
+                <div class="grid grid-cols-1 gap-2">
+                  <div class="palette-item p-3 border-2 border-dashed border-gray-300 hover:border-gray-500" data-type="slot-car">
+                    <div class="slot-element mx-auto mb-2">C1</div>
+                    <span class="text-xs font-medium">Car Slot</span>
+                  </div>
+                  <div class="palette-item p-3 border-2 border-dashed border-blue-300 hover:border-blue-500" data-type="slot-car-ev">
+                    <div class="slot-element ev mx-auto mb-2">CE1</div>
+                    <span class="text-xs font-medium">Car EV Slot</span>
+                  </div>
+                  <div class="palette-item p-3 border-2 border-dashed border-gray-300 hover:border-gray-500" data-type="slot-bike">
+                    <div class="slot-element bike mx-auto mb-2">B1</div>
+                    <span class="text-xs font-medium">Bike Slot</span>
+                  </div>
+                  <div class="palette-item p-3 border-2 border-dashed border-blue-300 hover:border-blue-500" data-type="slot-bike-ev">
+                    <div class="slot-element bike ev mx-auto mb-2">BE1</div>
+                    <span class="text-xs font-medium">Bike EV Slot</span>
+                  </div>
+                  <div class="palette-item p-3 border-2 border-dashed border-gray-300 hover:border-gray-500" data-type="slot-van">
+                    <div class="slot-element van mx-auto mb-2">V1</div>
+                    <span class="text-xs font-medium">Van Slot</span>
+                  </div>
+                  <div class="palette-item p-3 border-2 border-dashed border-blue-300 hover:border-blue-500" data-type="slot-van-ev">
+                    <div class="slot-element van ev mx-auto mb-2">VE1</div>
+                    <span class="text-xs font-medium">Van EV Slot</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Infrastructure -->
+              <div>
+                <h4 class="text-sm font-medium text-gray-700 mb-2">Infrastructure</h4>
+                <div class="grid grid-cols-1 gap-2">
+                  <div class="palette-item p-3 border-2 border-dashed border-gray-300 hover:border-gray-500" data-type="road">
+                    <div class="road-element mx-auto mb-2" style="width: 60px;"></div>
+                    <span class="text-xs font-medium">Road</span>
+                  </div>
+                  <div class="palette-item p-3 border-2 border-dashed border-gray-300 hover:border-gray-500" data-type="wall">
+                    <div class="wall-element mx-auto mb-2" style="width: 60px;"></div>
+                    <span class="text-xs font-medium">Wall</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Layer Controls -->
+          <div class="layer-control mt-4">
+            <h3 class="font-semibold mb-3 flex items-center gap-2">
+              <i class="fas fa-layer-group"></i>
+              Layers
+            </h3>
+            <div class="space-y-1">
+              <label class="layer-toggle">
+                <input type="checkbox" id="slotsLayer" checked>
+                <i class="fas fa-square text-green-500 mr-2"></i>
+                <span class="text-sm">Parking Slots</span>
+              </label>
+              <label class="layer-toggle">
+                <input type="checkbox" id="roadsLayer" checked>
+                <i class="fas fa-square text-gray-700 mr-2"></i>
+                <span class="text-sm">Roads</span>
+              </label>
+              <label class="layer-toggle">
+                <input type="checkbox" id="wallsLayer" checked>
+                <i class="fas fa-square text-gray-500 mr-2"></i>
+                <span class="text-sm">Walls</span>
+              </label>
+              <label class="layer-toggle">
+                <input type="checkbox" id="accessLayer" checked>
+                <i class="fas fa-square text-blue-500 mr-2"></i>
+                <span class="text-sm">Entry/Exit</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Canvas -->
+        <div class="col-span-9">
+          <div class="bg-white rounded-lg shadow p-4">
+            <div class="map-container relative">
+              <div id="map" class="w-full" style="height: 600px;"></div>
+
+              <!-- Mini Map -->
+              <div class="mini-map hidden" id="miniMap">
+                <div id="miniMapContent" class="w-full h-full bg-gray-200 relative overflow-hidden">
+                  <!-- Mini map content will be rendered here -->
+                </div>
+              </div>
+
+              <!-- Grid Overlay -->
+              <canvas id="gridOverlay" class="grid-overlay"></canvas>
+
+              <!-- Tooltip -->
+              <div id="tooltip" class="tooltip"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <!-- Export Modal -->
+  <div id="exportModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h3 class="text-lg font-semibold mb-4">Export Parking Layout</h3>
+      <div class="space-y-3">
+        <button id="exportJSON" class="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-2">
+          <i class="fas fa-code"></i>
+          Export as JSON
+        </button>
+        <button id="exportImage" class="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2">
+          <i class="fas fa-image"></i>
+          Export as Image (PNG)
+        </button>
+        <button id="exportPDF" class="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 flex items-center gap-2">
+          <i class="fas fa-file-pdf"></i>
+          Export as PDF
+        </button>
+      </div>
+      <div class="flex justify-end mt-4">
+        <button onclick="closeModal('exportModal')" class="px-4 py-2 bg-gray-300 rounded">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Element Properties Modal -->
+  <div id="propertiesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h3 class="text-lg font-semibold mb-4">Element Properties</h3>
+      <div id="propertiesContent">
+        <!-- Properties will be loaded here -->
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button onclick="closeModal('propertiesModal')" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+        <button id="saveProperties" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pathfinding.js/0.4.18/pathfinding-browser.min.js"></script>
+  <script src="js/parking-designer.js"></script>
+</body>
+</html>

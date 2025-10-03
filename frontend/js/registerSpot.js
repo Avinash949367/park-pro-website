@@ -1,7 +1,16 @@
 
 // JavaScript for register-spot.html multi-step form with map and validation
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+  const someElement = document.getElementById('someElementId'); // Replace with actual element IDs used in this script
+
+  if (!someElement) {
+    // Elements not found, do not attach event listeners to avoid errors
+    return;
+  }
+
+  // Existing event listener and logic here
+});
   const form = document.getElementById('registrationForm');
   const steps = Array.from(document.querySelectorAll('.step'));
   const progressbarItems = Array.from(document.querySelectorAll('#progressbar li'));

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>3D Interactive Parking Path Map</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+    #info {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(255,255,255,0.8);
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 10;
+    }
+    button {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="info">
+    <div><strong>Start to Slots:</strong></div>
+    <button onclick="startPath('start-s1')">Start → S1</button>
+    <button onclick="startPath('start-s2')">Start → S2</button>
+    <button onclick="startPath('start-s3')">Start → S3</button>
+    <button onclick="startPath('start-s4')">Start → S4</button>
+    <div><strong>Slots to Exit:</strong></div>
+    <button onclick="startPath('s1-exit')">S1 → Exit</button>
+    <button onclick="startPath('s2-exit')">S2 → Exit</button>
+    <button onclick="startPath('s3-exit')">S3 → Exit</button>
+    <button onclick="startPath('s4-exit')">S4 → Exit</button>
+  </div>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
+
+    let scene, camera, renderer, controls;
+    let pathLine, pathPoints = [];
+    let animationProgress = 0;
+    let animationSpeed = 0.002;
+    let animating = false;
+
+    // Define 3D positions corresponding to 2D points (x,z plane, y up)
+    const positions = {
+      start: new THREE.Vector3(0, 0, 0),
+      exit: new THREE.Vector3(750, 0, -450),
+      p1: new THREE.Vector3(0, 0, -450),
+      p2: new THREE.Vector3(350, 0, -450),
+      p3: new THREE.Vector3(350, 0, -300),
+      p4: new THREE.Vector3(350, 0, -100),
+      s1: new THREE.Vector3(200, 0, -100),
+      s2: new THREE.Vector3(200, 0, -300),
+      s3: new THREE.Vector3(500, 0, -300),
+      s4: new THREE.Vector3(500, 0, -100)
+    };
+
+    const paths = {
+      "start-s1": ["start", "p1", "p2", "p3", "p4", "s1"],
+      "start-s2": ["start", "p1", "p2", "p3", "s2"],
+      "start-s3": ["start", "p1", "p2", "p3", "s3"],
+      "start-s4": ["start", "p1", "p2", "p3", "p4", "s4"],
+      "s1-exit": ["s1", "p4", "p3", "p2", "exit"],
+      "s2-exit": ["s2", "p3", "p2", "exit"],
+      "s3-exit": ["s3", "p3", "p2", "exit"],
+      "s4-exit": ["s4", "p4", "p3", "p2", "exit"]
+    };
+
+    init();
+    animate();
+
+    function init() {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf0f0f0);
+
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 2000);
+      camera.position.set(400, 400, 400);
+
+      renderer = new THREE.WebGLRenderer({antialias: true});
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.target.set(350, 0, -225);
+      controls.update();
+
+      // Add ambient light
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+      scene.add(ambientLight);
+
+      // Add directional light
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      dirLight.position.set(100, 200, 100);
+      scene.add(dirLight);
+
+      // Add floor with P2.png texture
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load('P2.png', function(texture) {
+        const floorGeometry = new THREE.PlaneGeometry(800, 600);
+        const floorMaterial = new THREE.MeshBasicMaterial({map: texture});
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.set(350, 0, -225);
+        scene.add(floor);
+      });
+
+      window.addEventListener('resize', onWindowResize, false);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function startPath(key) {
+      if (!paths[key]) {
+        alert('Path not found!');
+        return;
+      }
+      pathPoints = paths[key].map(p => positions[p]);
+      if (pathLine) {
+        scene.remove(pathLine);
+        pathLine.geometry.dispose();
+        pathLine.material.dispose();
+        pathLine = null;
+      }
+      const geometry = new THREE.BufferGeometry().setFromPoints(pathPoints);
+      const material = new THREE.LineBasicMaterial({color: 0x00c853, linewidth: 5});
+      pathLine = new THREE.Line(geometry, material);
+      scene.add(pathLine);
+
+      animationProgress = 0;
+      animating = true;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+
+      if (animating && pathPoints.length > 1) {
+        animationProgress += animationSpeed;
+        if (animationProgress > 1) {
+          animationProgress = 1;
+          animating = false;
+        }
+        // Calculate camera position along path
+        const point = getPointOnPath(pathPoints, animationProgress);
+        camera.position.lerp(point.clone().add(new THREE.Vector3(0, 50, 100)), 0.1);
+        controls.target.lerp(point, 0.1);
+        controls.update();
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Linear interpolation along path points
+    function getPointOnPath(points, t) {
+      if (t <= 0) return points[0];
+      if (t >= 1) return points[points.length - 1];
+      const totalSegments = points.length - 1;
+      const segment = Math.floor(t * totalSegments);
+      const segmentT = (t * totalSegments) - segment;
+      const start = points[segment];
+      const end = points[segment + 1];
+      return start.clone().lerp(end, segmentT);
+    }
+  </script>
+</body>
+</html>
