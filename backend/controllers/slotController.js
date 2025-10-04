@@ -1,5 +1,6 @@
 const Slot = require('../models/Slot');
 const cloudinary = require('cloudinary').v2;
+const { sendBookingConfirmationEmail } = require('../services/emailService');
 
 cloudinary.config({
   cloud_name: 'dwgwtx0jz',
@@ -11,7 +12,16 @@ cloudinary.config({
 exports.getSlotsByStation = async (req, res) => {
     try {
         const { stationId } = req.params;
-        const slots = await Slot.find({ stationId }).sort({ createdAt: -1 });
+        const Station = require('../models/Station');
+
+        // Find station by stationId string field
+        const station = await Station.findOne({ stationId: stationId });
+        if (!station) {
+            return res.status(404).json({ message: 'Station not found' });
+        }
+
+        // Query slots by station._id
+        const slots = await Slot.find({ stationId: station._id.toString() }).sort({ createdAt: -1 });
         res.status(200).json(slots);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -253,6 +263,30 @@ exports.createBooking = async (req, res) => {
         await newBooking.save();
 
         console.log('Booking created successfully:', newBooking._id);
+
+        // Send booking confirmation email with map link
+        try {
+            let destination = 's1'; // default
+            if (slot.slotId === 'SLOT68c03af1ce3e59677c77fd97-3') destination = 's1';
+            else if (slot.slotId === 'SLOT68c03af1ce3e59677c77fd97-2') destination = 's2';
+            else if (slot.slotId === 'SLOT68c03af1ce3e59677c77fd97-4') destination = 's3';
+            else if (slot.slotId === 'sl004') destination = 's4';
+
+            const mapUrl = `http://localhost:3000/StationAdmin/cursor_ai_map/map.html?source=start&destination=${destination}`;
+
+            const bookingDetails = {
+                slotId: slot.slotId,
+                startTime: startTime.toLocaleString(),
+                endTime: endTime.toLocaleString(),
+                amountPaid: amountPaid,
+                vehicleNumber: vehicle.number
+            };
+
+            await sendBookingConfirmationEmail(user.email, user.name, bookingDetails, mapUrl);
+        } catch (emailError) {
+            console.error('Error sending booking confirmation email:', emailError);
+            // Don't fail the booking if email fails
+        }
 
         // Slot remains available for other bookings, only specific hours are booked
         res.status(201).json({ booking: newBooking, message: 'Booking created successfully' });
@@ -571,28 +605,19 @@ exports.getDashboardStats = async (req, res) => {
             return res.status(400).json({ message: 'Station ID is required' });
         }
 
-        const mongoose = require('mongoose');
         const SlotBooking = require('../models/SlotBooking');
         const Station = require('../models/Station');
 
-        // Convert stationId to ObjectId
-        let stationObjectId;
-        try {
-            stationObjectId = new mongoose.Types.ObjectId(stationId);
-        } catch (error) {
-            return res.status(400).json({ message: 'Invalid station ID format' });
-        }
-
-        // Find the station to get the stationId string
-        const station = await Station.findById(stationObjectId);
+        // Find the station by stationId string field
+        const station = await Station.findOne({ stationId: stationId });
         if (!station) {
             return res.status(404).json({ message: 'Station not found' });
         }
-        const stationIdString = station.stationId;
-        console.log('Station found, stationIdString:', stationIdString);
+        const stationObjectId = station._id;
+        console.log('Station found, ObjectId:', stationObjectId);
 
         // Get total slots for the station
-        const totalSlots = await Slot.countDocuments({ stationId: stationIdString });
+        const totalSlots = await Slot.countDocuments({ stationId: stationObjectId.toString() });
         console.log('Total slots:', totalSlots);
 
         // Get today's date range
@@ -670,16 +695,16 @@ exports.getRecentBookings = async (req, res) => {
             return res.status(400).json({ message: 'Station ID is required' });
         }
 
-        const mongoose = require('mongoose');
         const SlotBooking = require('../models/SlotBooking');
+        const Station = require('../models/Station');
 
-        // Convert stationId to ObjectId
-        let stationObjectId;
-        try {
-            stationObjectId = new mongoose.Types.ObjectId(stationId);
-        } catch (error) {
-            return res.status(400).json({ message: 'Invalid station ID format' });
+        // Find the station by stationId string field
+        const station = await Station.findOne({ stationId: stationId });
+        if (!station) {
+            return res.status(404).json({ message: 'Station not found' });
         }
+        const stationObjectId = station._id;
+        console.log('Station found, ObjectId:', stationObjectId);
 
         // Get recent bookings with populated user and vehicle data
         const recentBookings = await SlotBooking.find({

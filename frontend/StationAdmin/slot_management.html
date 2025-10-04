@@ -342,6 +342,12 @@
         <p><strong>Location:</strong> <span id="station-location">Loading...</span></p>
         <p><strong>ID:</strong> <span id="station-id">Loading...</span></p>
         <p><strong>Total Slots:</strong> <span id="total-slots">0</span></p>
+        <!-- Temporary stationId input for debugging -->
+        <div class="mt-4">
+          <label class="block text-sm font-medium mb-1">Debug: Station ID (leave empty to use from user)</label>
+          <input type="text" id="debug-station-id" class="p-2 border rounded" placeholder="Enter stationId to test">
+          <button onclick="loadSlotsWithDebugId()" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Load Slots</button>
+        </div>
       </section>
 
 
@@ -557,6 +563,6 @@
       mainContent.insertAdjacentHTML('beforebegin', sidebarHtml);
     }
   </script>
-  <script src="js/slot_management.js"></script>
+  <script src="js/slot_management_new.js"></script>
 </body>
 </html>

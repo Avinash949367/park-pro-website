@@ -159,24 +159,7 @@ const navbarHTML = `
   </nav>
 
   <script src="../js/navbarAuth.js"></script>
-
-  <script>
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,hi,te,ta,fr,es',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-    }
-
-    (function(){
-      var s = document.createElement('script');
-      s.type = 'text/javascript';
-      s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-      s.async = true;
-      document.head.appendChild(s);
-    })();
-  </script>
+  <script src="../js/languageTranslation.js"></script>
 
   <script>
     // Hamburger menu functionality

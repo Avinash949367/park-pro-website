@@ -443,8 +443,10 @@
           selectedRating = 0;
           document.querySelectorAll('#starRating i').forEach(star => star.classList.remove('active'));
 
-          // Reload reviews
-          loadReviews();
+          // Reload reviews after a short delay to ensure backend processing
+          setTimeout(() => {
+            loadReviews();
+          }, 500);
           alert('Review submitted successfully!');
         } else {
           alert(data.message || 'Error submitting review');

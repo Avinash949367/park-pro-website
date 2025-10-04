@@ -50,6 +50,51 @@
     .hamburger.open .hamburger-line:nth-child(3) {
       transform: rotate(-45deg) translate(6px, -6px);
     }
+
+    /* Custom style to modernize Google Translate element */
+    #google_translate_element {
+      min-height: 40px !important;
+      min-width: 120px !important;
+      background: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      padding: 4px !important;
+      transition: box-shadow 0.3s ease !important;
+    }
+
+    #google_translate_element:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .goog-te-combo {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb) !important;
+      border: 1px solid #2196f3 !important;
+      border-radius: 6px !important;
+      color: #0d47a1 !important;
+      font-weight: 500 !important;
+      padding: 8px 12px !important;
+      transition: all 0.3s ease !important;
+      min-height: 32px !important;
+    }
+
+    .goog-te-combo:hover {
+      background: linear-gradient(135deg, #bbdefb, #90caf9) !important;
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3) !important;
+    }
+
+    .goog-te-combo:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.5) !important;
+    }
+
+    /* Hide Google logo and down arrow */
+    .goog-te-gadget-icon {
+      display: none !important;
+    }
+
+    .goog-te-gadget-simple img {
+      display: none !important;
+    }
   </style>
 </head>
 <body class="font-sans bg-gray-200">
@@ -67,7 +112,10 @@
       <a href="products.html" class="option">Products</a>
       <a href="contactus.html" class="option">Contact</a>
     </nav>
-    
+
+    <!-- Language Dropdown -->
+    <div id="google_translate_element" class="hidden md:block"></div>
+
     <!-- Mobile Hamburger Button -->
     <button class="hamburger md:hidden flex flex-col justify-center items-center w-8 h-8 relative z-50" aria-label="Toggle menu">
       <span class="hamburger-line w-6 h-0.5 bg-gray-900 mb-1.5"></span>
@@ -119,6 +167,7 @@
   </nav>
 
   <script src="../js/navbarAuth.js"></script>
+  <script src="js/languageTranslation.js"></script>
 
   <script>
     // Hamburger menu functionality

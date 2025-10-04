@@ -43,10 +43,12 @@ async function fetchSlots(stationId) {
         return;
     }
     currentStationId = stationId;
+    console.log('Fetching slots for stationId:', stationId);
     try {
         const response = await fetch(`${API_BASE}/station/${stationId}`);
         if (response.ok) {
             slots = await response.json();
+            console.log('Slots fetched:', slots);
         } else {
             console.error('Failed to fetch slots');
             slots = [];
@@ -56,6 +58,19 @@ async function fetchSlots(stationId) {
         slots = [];
     }
     renderSlots();
+}
+
+// Function to load slots with debug stationId from input or fallback to currentUser.stationId
+async function loadSlotsWithDebugId() {
+    const debugStationId = document.getElementById('debug-station-id').value.trim();
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    const stationId = debugStationId || (currentUser && currentUser.stationId);
+    console.log('loadSlotsWithDebugId: Using stationId:', stationId);
+    if (!stationId) {
+        alert('Please enter a stationId or ensure user has stationId.');
+        return;
+    }
+    await fetchSlots(stationId);
 }
 
 function renderSlots() {
@@ -534,7 +549,7 @@ async function loadStations() {
 
             // Display logged-in admin's station info and fetch slots
             if (currentUser && currentUser.stationId) {
-                const station = stations.find(s => s._id === currentUser.stationId);
+                const station = stations.find(s => s.stationId === currentUser.stationId);
                 if (station) {
                     updateStationInfo(station);
                     fetchSlots(currentUser.stationId);

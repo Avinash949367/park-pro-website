@@ -52,17 +52,19 @@ exports.getStationReviews = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const reviews = await Review.find({ stationId: new mongoose.Types.ObjectId(stationId) })
+    const stationIdObj = new mongoose.Types.ObjectId(stationId);
+
+    const reviews = await Review.find({ stationId: stationIdObj })
       .populate('userId', 'name email')
       .sort({ date: -1 })
       .skip(skip)
       .limit(limit);
 
-    const totalReviews = await Review.countDocuments({ stationId: new mongoose.Types.ObjectId(stationId) });
+    const totalReviews = await Review.countDocuments({ stationId: stationIdObj });
 
     // Calculate average rating
     const ratingStats = await Review.aggregate([
-      { $match: { stationId: mongoose.Types.ObjectId(stationId) } },
+      { $match: { stationId: stationIdObj } },
       {
         $group: {
           _id: null,
@@ -162,8 +164,10 @@ exports.deleteReview = async (req, res) => {
 // Helper function to update station rating
 async function updateStationRating(stationId) {
   try {
+    const stationIdObj = new mongoose.Types.ObjectId(stationId);
+
     const ratingStats = await Review.aggregate([
-      { $match: { stationId: mongoose.Types.ObjectId(stationId) } },
+      { $match: { stationId: stationIdObj } },
       {
         $group: {
           _id: null,

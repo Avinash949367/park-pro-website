@@ -320,13 +320,13 @@
           <div class="filter-group">
             <h5>Price Range</h5>
             <div class="d-flex justify-content-between mb-2">
-              <span>$0</span>
-              <span>$50+</span>
+              <span>₹0</span>
+              <span>₹50+</span>
             </div>
             <input type="range" class="form-range" min="0" max="50" step="5" id="priceRange">
             <div class="d-flex justify-content-between mt-2">
-              <small class="text-muted">$<span id="minPrice">10</span></small>
-              <small class="text-muted">$<span id="maxPrice">30</span></small>
+              <small class="text-muted">₹<span id="minPrice">10</span></small>
+              <small class="text-muted">₹<span id="maxPrice">30</span></small>
             </div>
           </div>
         </div>
@@ -445,7 +445,7 @@
                   </div>
                   <div class="d-flex justify-content-between align-items-end">
                     <div>
-                      <div class="parking-price">$12.50 <span>/hour</span></div>
+                      <div class="parking-price">₹12.50 <span>/hour</span></div>
                       <small class="text-success"><i class="fas fa-check-circle"></i> 45 spots available</small>
                     </div>
                     <button class="btn-book" onclick="bookStation('ST001')">Book Now</button>
@@ -479,7 +479,7 @@
                   </div>
                   <div class="d-flex justify-content-between align-items-end">
                     <div>
-                      <div class="parking-price">$10.00 <span>/hour</span></div>
+                      <div class="parking-price">₹10.00 <span>/hour</span></div>
                       <small class="text-success"><i class="fas fa-check-circle"></i> 32 spots available</small>
                     </div>
                     <button class="btn-book" onclick="bookStation('ST002')">Book Now</button>
@@ -512,7 +512,7 @@
                   </div>
                   <div class="d-flex justify-content-between align-items-end">
                     <div>
-                      <div class="parking-price">$8.50 <span>/hour</span></div>
+                      <div class="parking-price">₹8.50 <span>/hour</span></div>
                       <small class="text-success"><i class="fas fa-check-circle"></i> 18 spots available</small>
                     </div>
                     <button class="btn-book" onclick="bookStation('ST003')">Book Now</button>
@@ -692,7 +692,7 @@
                   </div>
                   <div class="d-flex justify-content-between align-items-end">
                     <div>
-                      <div class="parking-price">$${station.price} <span>/hour</span></div>
+                      <div class="parking-price">₹${station.price} <span>/hour</span></div>
                       <small class="text-success"><i class="fas fa-check-circle"></i> ${availableSlots} spots available</small>
                     </div>
                     <div class="d-flex gap-2">
@@ -788,10 +788,10 @@
               currentSort = 'distance';
               break;
             case 'Price (Low to High)':
-              currentSort = 'price-high';
+              currentSort = 'price-low';
               break;
             case 'Price (High to Low)':
-              currentSort = 'price-low';
+              currentSort = 'price-high';
               break;
             case 'Rating':
               currentSort = 'rating';

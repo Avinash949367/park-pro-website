@@ -101,6 +101,15 @@ router.post("/storeadmin/login", async (req, res, next) => {
     if (!isMatch) {
       return res.status(403).json({ message: "Access denied: Invalid credentials" });
     }
+
+    // Get the string stationId from the Station document
+    const Station = require('../models/Station');
+    let stationId = null;
+    const station = await Station.findById(credentials.stationId);
+    if (station) {
+      stationId = station.stationId; // string stationId
+    }
+
     const token = jwt.sign(
       { id: credentials._id, email: credentials.email, role: 'store admin' },
       process.env.JWT_SECRET || "default_jwt_secret_key",
@@ -108,7 +117,7 @@ router.post("/storeadmin/login", async (req, res, next) => {
     );
     res.json({
       token,
-      user: { email: credentials.email, role: 'store admin', stationId: credentials.stationId },
+      user: { email: credentials.email, role: 'store admin', stationId },
       redirectUrl: "station_admin_dashboard.html",
     });
   } catch (err) {

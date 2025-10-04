@@ -599,7 +599,7 @@
           console.log('Fetching dashboard stats from:', `/api/slots/dashboard-stats/${stationId}`);
 
           // Fetch dashboard stats
-          const statsResponse = await fetch(`/api/slots/dashboard-stats/${stationId}`, { headers });
+          const statsResponse = await fetch(`http://localhost:5000/api/slots/dashboard-stats/${stationId}`, { headers });
           console.log('Stats response status:', statsResponse.status);
 
           if (!statsResponse.ok) {
@@ -621,7 +621,7 @@
           console.log('Fetching recent bookings from:', `/api/slots/recent-bookings/${stationId}`);
 
           // Fetch recent bookings
-          const bookingsResponse = await fetch(`/api/slots/recent-bookings/${stationId}`, { headers });
+          const bookingsResponse = await fetch(`http://localhost:5000/api/slots/recent-bookings/${stationId}`, { headers });
           console.log('Bookings response status:', bookingsResponse.status);
 
           if (!bookingsResponse.ok) {
