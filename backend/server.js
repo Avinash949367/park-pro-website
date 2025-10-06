@@ -46,8 +46,8 @@ const createAdminUser = async () => {
 createAdminUser();
 
 const allowedOrigins = [
-  'http://127.0.0.1:5500', 
-  'http://127.0.0.1:5501', 
+  'http://127.0.0.1:5500',
+  'http://127.0.0.1:5501',
   'http://127.0.0.1:5502',
   'http://localhost:5500',
   'http://localhost:5501',
@@ -65,16 +65,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function(origin, callback){
-    // allow requests with no origin (like mobile apps or curl requests)
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      console.log('CORS blocked origin:', origin);
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
+  origin: true, // Allow all origins
   credentials: true,
 }));
 app.use(express.json());
@@ -93,11 +84,14 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/', authRoutes);
 app.use('/api/registrations', registerRoutes);
 app.use('/api', stationRoutes);
+
 const mediaRoutes = require('./routes/mediaRoutes');
 app.use('/api/media', mediaRoutes);
+
 const userProfileRoutes = require('./routes/userProfileRoutes');
 const userRoutes = require('./routes/userRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const fastagRoutes = require('./routes/fastagRoutes');
 
 // Import cleanup function
 const cleanupExpiredReservations = require('./scripts/cleanupExpiredReservations');
@@ -110,6 +104,7 @@ app.use('/api', userRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/slots', slotRoutes);
 app.use('/api/reviews', reviewRoutes);  // Added review routes
+app.use('/api/fastag', fastagRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

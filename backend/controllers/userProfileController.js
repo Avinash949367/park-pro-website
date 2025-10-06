@@ -897,6 +897,7 @@ const getUserBookings = async (req, res) => {
     })
       .populate('stationId', 'name location address')
       .populate('vehicleId', 'number type')
+      .populate('slotId', 'slotId type')
       .sort({ bookingStartTime: 1 }); // Sort by start time ascending
 
     const formattedBookings = bookings.map(booking => ({
@@ -904,6 +905,8 @@ const getUserBookings = async (req, res) => {
       stationName: booking.stationId?.name || 'Unknown Station',
       stationLocation: booking.stationId?.location || '',
       stationAddress: booking.stationId?.address || '',
+      slotId: booking.slotId?.slotId || 'Unknown Slot',
+      slotType: booking.slotId?.type || 'Unknown Type',
       vehicle: booking.vehicleId ? `${booking.vehicleId.number} (${booking.vehicleId.type})` : 'Unknown vehicle',
       startTime: booking.bookingStartTime,
       endTime: booking.bookingEndTime,

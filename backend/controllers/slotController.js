@@ -264,6 +264,7 @@ exports.createBooking = async (req, res) => {
 
         console.log('Booking created successfully:', newBooking._id);
 
+<<<<<<< HEAD
         // Send booking confirmation email with map link
         try {
             let destination = 's1'; // default
@@ -285,6 +286,33 @@ exports.createBooking = async (req, res) => {
             await sendBookingConfirmationEmail(user.email, user.name, bookingDetails, mapUrl);
         } catch (emailError) {
             console.error('Error sending booking confirmation email:', emailError);
+=======
+        // Populate booking details for email
+        const populatedBooking = await SlotBooking.findById(newBooking._id)
+            .populate('stationId', 'name address')
+            .populate('vehicleId', 'number')
+            .populate('slotId', 'slotId type')
+            .populate('userId', 'name email');
+
+        // Send booking confirmation email
+        try {
+            await sendBookingConfirmationEmail(
+                populatedBooking.userId.email,
+                populatedBooking.userId.name,
+                {
+                    stationName: populatedBooking.stationId.name,
+                    stationAddress: populatedBooking.stationId.address,
+                    vehicleNumber: populatedBooking.vehicleId.number,
+                    startTime: populatedBooking.bookingStartTime,
+                    endTime: populatedBooking.bookingEndTime,
+                    amountPaid: populatedBooking.amountPaid,
+                    paymentMethod: populatedBooking.paymentMethod
+                }
+            );
+            console.log('Booking confirmation email sent successfully');
+        } catch (emailError) {
+            console.error('Failed to send booking confirmation email:', emailError);
+>>>>>>> 5585064 (Changes in fasttag)
             // Don't fail the booking if email fails
         }
 
