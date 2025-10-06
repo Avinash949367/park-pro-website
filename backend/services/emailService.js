@@ -26,7 +26,7 @@ const sendApprovalEmail = async (toEmail, userName, registrationId, attachments 
                     <p>Next steps:</p>
                     <ol>
                         <li>Complete the document submission process</li>
-                        <li>Get Approved by parkpro+ and get login credentails 
+                        <li>Get Approved by parkpro+ and get login credentials</li>
                         <li>Login in to your station dashboard & Start listing your parking spots</li>
                     </ol>
                     <p>Thank you for choosing ParkPro!</p>
@@ -126,19 +126,12 @@ const sendRejectionEmail = async (toEmail, userName, reason) => {
     }
 };
 
-<<<<<<< HEAD
-// Send booking confirmation email with map link
-const sendBookingConfirmationEmail = async (toEmail, userName, bookingDetails, mapUrl) => {
-=======
 // Send payment success email notification
 const sendPaymentSuccessEmail = async (toEmail, userName, amount, transactionId) => {
->>>>>>> 5585064 (Changes in fasttag)
     try {
         const mailOptions = {
             from: process.env.EMAIL_USER || 'parkproplus@gmail.com',
             to: toEmail,
-<<<<<<< HEAD
-=======
             subject: 'Payment Successful - FASTag Recharge',
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -181,32 +174,11 @@ const sendBookingConfirmationEmail = async (toEmail, userName, bookingDetails) =
         const mailOptions = {
             from: process.env.EMAIL_USER || 'parkproplus@gmail.com',
             to: toEmail,
->>>>>>> 5585064 (Changes in fasttag)
             subject: 'Booking Confirmed - ParkPro',
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                     <h2 style="color: #46949d;">🎉 Booking Confirmed!</h2>
                     <p>Dear ${userName},</p>
-<<<<<<< HEAD
-                    <p>Your parking slot booking has been successfully confirmed.</p>
-                    
-                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                        <h3 style="color: #46949d; margin-top: 0;">Booking Details:</h3>
-                        <p><strong>Slot:</strong> ${bookingDetails.slotId}</p>
-                        <p><strong>Start Time:</strong> ${bookingDetails.startTime}</p>
-                        <p><strong>End Time:</strong> ${bookingDetails.endTime}</p>
-                        <p><strong>Amount Paid:</strong> ₹${bookingDetails.amountPaid}</p>
-                        <p><strong>Vehicle:</strong> ${bookingDetails.vehicleNumber}</p>
-                    </div>
-
-                    <div style="background-color: #e8f5e8; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #28a745;">
-                        <h3 style="color: #155724; margin-top: 0;">🗺️ Parking Map:</h3>
-                        <p>Click the link below to view your parking path from the entry to your slot:</p>
-                        <p><a href="${mapUrl}" style="color: #46949d; font-weight: bold;">View Parking Map</a></p>
-                    </div>
-
-                    <p>Thank you for choosing ParkPro!</p>
-=======
                     <p>Your parking slot has been successfully booked. Here are the details:</p>
 
                     <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -227,7 +199,6 @@ const sendBookingConfirmationEmail = async (toEmail, userName, bookingDetails) =
                     <p>If you have any questions, please contact our support team at parkproplus@gmail.com</p>
 
                     <p>Thank you for using ParkPro!</p>
->>>>>>> 5585064 (Changes in fasttag)
                     <p>Best regards,<br>The ParkPro Team</p>
                 </div>
             `
@@ -246,9 +217,6 @@ module.exports = {
     sendApprovalEmail,
     sendFinalApprovalEmail,
     sendRejectionEmail,
-<<<<<<< HEAD
-=======
     sendPaymentSuccessEmail,
->>>>>>> 5585064 (Changes in fasttag)
     sendBookingConfirmationEmail
 };
