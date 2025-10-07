@@ -587,10 +587,19 @@ exports.generateFastagId = async (req, res) => {
 
     console.log('User found:', { id: user._id, email: user.email, existingFastagId: user.fastagId });
 
-    // Check if user already has a FASTag
-    if (user.fastagId) {
-      console.log('User already has FASTag:', user.fastagId);
-      return res.status(400).json({ message: 'User already has a FASTag' });
+    // Check if user already has a FASTag (either in user.fastagId or in vehicles)
+    let existingFastagId = user.fastagId;
+    if (!existingFastagId) {
+      // Check if any vehicle has a fastTag
+      const vehicleWithFastTag = await Vehicle.findOne({ userId: userId, 'fastTag.tagId': { $exists: true, $ne: null } });
+      if (vehicleWithFastTag) {
+        existingFastagId = vehicleWithFastTag.fastTag.tagId;
+      }
+    }
+
+    if (existingFastagId) {
+      console.log('User already has FASTag:', existingFastagId);
+      return res.status(400).json({ message: 'You already have a FASTag', fastagId: existingFastagId });
     }
 
     console.log('Attempting to update counter for fastagId');
