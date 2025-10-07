@@ -3,6 +3,7 @@ const Vehicle = require('../models/Vehicle');
 const FastagTransaction = require('../models/FastagTransaction');
 const Counter = require('../models/Counter');
 const { v4: uuidv4 } = require('uuid');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { sendPaymentSuccessEmail } = require('../services/emailService');
 
 // Get FASTag balance for user
