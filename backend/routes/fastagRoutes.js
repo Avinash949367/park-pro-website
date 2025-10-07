@@ -64,7 +64,7 @@ router.post('/generate', generateFastagId);
 // Apply for new FASTAG
 router.post('/apply', applyForFastag);
 
-// Razorpay webhook (no auth required)
-router.post('/webhook', express.raw({ type: 'application/json' }), require('../controllers/fastagController').handleRazorpayWebhook);
+// Stripe webhook (no auth required)
+router.post('/webhook', express.raw({ type: 'application/json' }), require('../controllers/fastagController').handleStripeWebhook);
 
 module.exports = router;

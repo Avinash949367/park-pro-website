@@ -5,7 +5,7 @@ const User = require('../models/User');
 async function insertDemoUser() {
   try {
     // Connect to MongoDB
-    await mongoose.connect('mongodb://localhost:27017/parkpro', {
+    await mongoose.connect('mongodb://localhost:27017/park-pro', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
