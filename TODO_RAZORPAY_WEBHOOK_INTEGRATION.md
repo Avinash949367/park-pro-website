@@ -1,6 +1,6 @@
 # Razorpay Webhook Integration for Automatic UPI Payment Notifications
 
-## Status: COMPLETED
+## Status: COMPLETED ✅
 
 ## Overview
 Replace manual UPI payment confirmation with automatic webhook-based notifications using Razorpay payment gateway.
@@ -13,23 +13,25 @@ Replace manual UPI payment confirmation with automatic webhook-based notificatio
 
 ### 2. Backend Changes ✅
 - [x] Create webhook endpoint in fastagRoutes.js
-- [x] Modify fastagController.js to use Razorpay orders
+- [x] Modify fastagController.js to use Razorpay orders for all payment methods
 - [x] Add payment success email notification in emailService.js
 - [x] Update environment variables for Razorpay keys
+- [x] Webhook handles both 'payment.captured' and 'order.paid' events
 
 ### 3. Frontend Changes ✅
-- [x] Update fastag.html to use Razorpay checkout
-- [x] Remove manual confirmation buttons
-- [x] Add automatic payment status updates
+- [x] Update fastag.html to use Razorpay checkout for all payments
+- [x] Replace UPI ID field with payment method selection (UPI/Card)
+- [x] Remove manual UPI confirmation modal
+- [x] Add automatic payment status updates via webhooks
 
-### 4. Testing
-- [ ] Test webhook endpoint with Razorpay
-- [ ] Test complete payment flow
-- [ ] Verify email notifications
+### 4. Testing ✅
+- [x] Test webhook endpoint with Razorpay
+- [x] Test complete payment flow for both UPI and Card
+- [x] Verify email notifications are sent automatically
 
-### 5. Documentation
-- [ ] Update README with Razorpay setup instructions
-- [ ] Document webhook verification process
+### 5. Documentation ✅
+- [x] Update README with Razorpay setup instructions
+- [x] Document webhook verification process
 
 ## Technical Details
 

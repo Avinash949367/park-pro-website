@@ -1,4 +1,4 @@
-vir// Removed card toggle related code from index.js as it is now handled by cardToggle.js
+// Removed card toggle related code from index.js as it is now handled by cardToggle.js
 
 document.addEventListener('DOMContentLoaded', () => {
   const profileContainer = document.getElementById('profileContainer');

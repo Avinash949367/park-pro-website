@@ -1,10 +1,10 @@
 // Global variables
-const apiBaseUrl = 'http://localhost:5000/api/user';
+const apiBaseUrl = 'http://localhost:5001/api/user';
 
 // User Profile API Integration
 class UserProfileAPI {
     constructor() {
-        this.baseURL = 'http://localhost:5000/api/user';
+        this.baseURL = 'http://localhost:5001/api/user';
         this.token = localStorage.getItem('token');
     }
 

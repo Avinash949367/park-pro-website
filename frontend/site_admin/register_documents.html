@@ -526,7 +526,7 @@
     // Function to load station statistics
     async function loadStationStats() {
       try {
-        const response = await fetch('http://localhost:5000/api/registrations/stats');
+        const response = await fetch('http://localhost:5001/api/registrations/stats');
         if (!response.ok) {
           throw new Error('Failed to fetch registration statistics');
         }
@@ -572,7 +572,7 @@
     // Function to load doc-processing stations
     async function loadDocProcessingStations() {
       try {
-        const response = await fetch('http://localhost:5000/api/registrations/status/doc-processing');
+        const response = await fetch('http://localhost:5001/api/registrations/status/doc-processing');
         const registrations = await response.json();
 
         const tbody = document.getElementById('docProcessingStationsBody');
@@ -628,7 +628,7 @@
     // Function to view registration details
     window.viewDetails = async function(stationId) {
       try {
-        const response = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+        const response = await fetch(`http://localhost:5001/api/registrations/${stationId}/details`);
         if (!response.ok) {
           throw new Error('Failed to fetch registration details');
         }
@@ -817,7 +817,7 @@
     window.approveStation = async function(stationId) {
       try {
         // First, get the registration details to check current status
-        const detailsResponse = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+        const detailsResponse = await fetch(`http://localhost:5001/api/registrations/${stationId}/details`);
         if (!detailsResponse.ok) {
           throw new Error('Failed to fetch registration details');
         }
@@ -830,13 +830,13 @@
 
         // Determine which endpoint to call based on current status
         if (registration.status === 'pending') {
-          endpoint = `http://localhost:5000/api/registrations/approve/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/approve/${stationId}`;
           successMessage = 'Registration approved for documentation process!';
         } else if (registration.status === 'doc-processing') {
-          endpoint = `http://localhost:5000/api/registrations/final-approve/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/final-approve/${stationId}`;
           successMessage = 'Registration approved and station activated successfully!';
         } else if (registration.status === 'checking') {
-          endpoint = `http://localhost:5000/api/registrations/final-approve/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/final-approve/${stationId}`;
           successMessage = 'Registration approved and station activated successfully!';
         } else {
           throw new Error(`Cannot approve registration with status: ${registration.status}`);
@@ -877,7 +877,7 @@
     window.rejectStation = async function(stationId) {
       try {
         // First, get the registration details to check current status
-        const detailsResponse = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+        const detailsResponse = await fetch(`http://localhost:5001/api/registrations/${stationId}/details`);
         if (!detailsResponse.ok) {
           throw new Error('Failed to fetch registration details');
         }
@@ -890,13 +890,13 @@
 
         // Determine which endpoint to call based on current status
         if (registration.status === 'pending') {
-          endpoint = `http://localhost:5000/api/registrations/reject/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/reject/${stationId}`;
           successMessage = 'Registration rejected successfully!';
         } else if (registration.status === 'doc-processing') {
-          endpoint = `http://localhost:5000/api/registrations/final-reject/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/final-reject/${stationId}`;
           successMessage = 'Registration rejected successfully!';
         } else if (registration.status === 'checking') {
-          endpoint = `http://localhost:5000/api/registrations/final-reject/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/final-reject/${stationId}`;
           successMessage = 'Registration rejected successfully!';
         } else {
           throw new Error(`Cannot reject registration with status: ${registration.status}`);

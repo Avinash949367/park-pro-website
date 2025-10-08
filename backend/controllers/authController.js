@@ -79,18 +79,20 @@ exports.register = async (req, res) => {
     const otp = generateOTP();
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
 
+    console.log('Creating user with:', { name, email, role, password: hashedPassword, isConfirmed: false, confirmationToken: otp, otpExpiry: otpExpiry });
+
     const user = await User.create({
       name,
       email,
       role,
       password: hashedPassword,
-      isConfirmed: true, // Temporarily set to true for testing without OTP
-      confirmationToken: null,
-      otpExpiry: null,
+      isConfirmed: false,
+      confirmationToken: otp,
+      otpExpiry: otpExpiry,
     });
 
-    // OTP email sending commented out for testing
-    /*
+    console.log('User created:', user);
+
     // Send OTP email
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -106,7 +108,6 @@ exports.register = async (req, res) => {
         console.log("OTP email sent:", info.response);
       }
     });
-    */
 
     res.status(201).json({ message: "Registered successfully." });
   } catch (err) {
@@ -161,13 +162,10 @@ exports.login = async (req, res) => {
 
     console.log('User found:', user.email, 'Role:', user.role, 'Confirmed:', user.isConfirmed);
 
-    // Temporarily comment out confirmation check for testing
-    /*
     if (!user.isConfirmed && user.role !== 'admin') {
       console.log('Account not confirmed for user:', user.email);
       return res.status(400).json({ message: "Account not confirmed. Please verify your email." });
     }
-    */
 
     console.log('About to compare passwords...');
     let isMatch = await bcrypt.compare(password, user.password);

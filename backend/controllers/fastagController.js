@@ -4,7 +4,15 @@ const FastagTransaction = require('../models/FastagTransaction');
 const Counter = require('../models/Counter');
 const { v4: uuidv4 } = require('uuid');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
 const { sendPaymentSuccessEmail } = require('../services/emailService');
+
+// Initialize Razorpay
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_your_key_id',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_key_secret'
+});
 
 // Get FASTag balance for user
 exports.getBalance = async (req, res) => {
@@ -16,9 +24,38 @@ exports.getBalance = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Check if user has an active FASTag
+    const hasActiveFastag = !!(user.fastagId || user.vehicle);
+
+    // Get primary vehicle if exists
+    let primaryVehicle = null;
+    if (user.vehicle) {
+      const vehicle = await Vehicle.findOne({ userId, number: user.vehicle });
+      if (vehicle) {
+        primaryVehicle = {
+          number: vehicle.number,
+          type: vehicle.type
+        };
+      }
+    }
+
+    // Get recent transaction for last transaction info
+    const lastTransaction = await FastagTransaction.findOne({ userId })
+      .sort({ createdAt: -1 })
+      .select('amount location createdAt type');
+
     res.json({
+      success: true,
+      isActive: hasActiveFastag,
+      tagId: user.fastagId || null,
       balance: user.walletBalance || 0,
-      vehicle: user.vehicle || null
+      linkedVehicle: primaryVehicle,
+      lastTransaction: lastTransaction ? {
+        amount: lastTransaction.amount,
+        location: lastTransaction.location || 'Unknown',
+        date: lastTransaction.createdAt,
+        type: lastTransaction.type
+      } : null
     });
   } catch (error) {
     console.error('Error fetching balance:', error);
@@ -29,10 +66,10 @@ exports.getBalance = async (req, res) => {
 exports.recharge = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { amount, vehicleNumber, paymentMethod, cardNumber, cardExpiry, cardCVV, upiId } = req.body;
+    const { amount, upiId, vehicleNumber, paymentMethod } = req.body;
 
-    if (!amount || amount < 100) {
-      return res.status(400).json({ message: 'Minimum recharge amount is ₹100' });
+    if (!amount || amount < 1) {
+      return res.status(400).json({ message: 'Minimum recharge amount is ₹1' });
     }
 
     const user = await User.findById(userId);
@@ -40,230 +77,59 @@ exports.recharge = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check if vehicle number is being updated
-    let vehicleUpdated = false;
-    if (vehicleNumber && vehicleNumber !== user.vehicle) {
-      // Validate that the new vehicle number isn't already linked to another user
-      const existingUser = await User.findOne({
-        vehicle: vehicleNumber,
-        _id: { $ne: userId }
-      });
-
-      if (existingUser) {
-        return res.status(400).json({ message: 'Vehicle number is already linked to another account' });
-      }
-
-      // Update user's vehicle number
-      user.vehicle = vehicleNumber;
-      vehicleUpdated = true;
+    // Find the vehicle document
+    let vehicle = null;
+    if (vehicleNumber) {
+      vehicle = await Vehicle.findOne({ userId, number: vehicleNumber });
+    } else if (user.vehicle) {
+      vehicle = await Vehicle.findOne({ userId, number: user.vehicle });
     }
 
-    if (paymentMethod === 'upi') {
-      // Create Stripe PaymentIntent for UPI payment
-      try {
-        const paymentIntent = await stripe.paymentIntents.create({
-          amount: amount * 100, // Amount in paisa (smallest currency unit)
-          currency: 'inr',
-          payment_method_types: ['upi'],
-          metadata: {
-            userId: userId,
-            vehicleNumber: vehicleNumber || user.vehicle,
-            vehicleUpdated: vehicleUpdated.toString(),
-            upiId: upiId
-          },
-          description: `FASTag recharge via UPI${vehicleUpdated ? ' (vehicle updated)' : ''}`
-        });
-
-        // Find or create vehicle for vehicleId reference
-        let vehicle = await Vehicle.findOne({ userId, number: vehicleNumber || user.vehicle });
-        if (!vehicle) {
-          // Create vehicle if it doesn't exist
-          vehicle = new Vehicle({
-            userId,
-            number: vehicleNumber || user.vehicle,
-            type: 'car', // Default type
-            isPrimary: true,
-            fastTag: {
-              tagId: user.fastagId || 'TEMP',
-              balance: 0,
-              status: 'active'
-            }
-          });
-          await vehicle.save();
+    // If no vehicle document found, create one if user has vehicle info
+    if (!vehicle && user.vehicle) {
+      vehicle = new Vehicle({
+        userId: user._id,
+        number: user.vehicle,
+        type: user.vehicleType || 'car',
+        isPrimary: true,
+        fastTag: {
+          tagId: user.fastagId,
+          balance: user.walletBalance || 0,
+          status: 'active'
         }
-
-        // Create pending transaction record
-        const transaction = new FastagTransaction({
-          userId,
-          vehicleId: vehicle._id,
-          vehicleNumber: vehicleNumber || user.vehicle,
-          type: 'recharge',
-          amount,
-          method: 'upi',
-          status: 'pending',
-          txnId: paymentIntent.id,
-          description: `FASTag recharge via UPI${vehicleUpdated ? ' (vehicle updated)' : ''}`
-        });
-
-        await transaction.save();
-
-        // Update vehicle if changed
-        if (vehicleUpdated) {
-          await user.save();
-        }
-
-        res.json({
-          clientSecret: paymentIntent.client_secret,
-          paymentIntentId: paymentIntent.id,
-          amount: amount,
-          vehicleUpdated: vehicleUpdated,
-          paymentMethod: 'upi'
-        });
-      } catch (stripeError) {
-        console.error('Stripe PaymentIntent creation failed:', stripeError);
-        // Fallback to manual UPI flow since Stripe UPI is not available in test mode
-        console.log('Falling back to manual UPI flow');
-
-        // Find or create vehicle for vehicleId reference
-        let vehicle = await Vehicle.findOne({ userId, number: vehicleNumber || user.vehicle });
-        if (!vehicle) {
-          // Create vehicle if it doesn't exist
-          vehicle = new Vehicle({
-            userId,
-            number: vehicleNumber || user.vehicle,
-            type: 'car', // Default type
-            isPrimary: true,
-            fastTag: {
-              tagId: user.fastagId || 'TEMP',
-              balance: 0,
-              status: 'active'
-            }
-          });
-          await vehicle.save();
-        }
-
-        // Generate unique transaction ID
-        const transactionId = uuidv4();
-
-        // Create UPI deep link (for production)
-        const upiDeepLink = `upi://pay?pa=${upiId}&pn=ParkPro&am=${amount}&cu=INR&tn=FASTag%20Recharge&tr=${transactionId}`;
-
-        // Create QR code URL using Google Charts API
-        const qrCodeUrl = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encodeURIComponent(upiDeepLink)}&choe=UTF-8`;
-
-        // Create pending transaction record
-        const transaction = new FastagTransaction({
-          userId,
-          vehicleId: vehicle._id,
-          vehicleNumber: vehicleNumber || user.vehicle,
-          type: 'recharge',
-          amount,
-          method: 'upi',
-          status: 'pending',
-          txnId: transactionId,
-          description: `FASTag recharge via UPI${vehicleUpdated ? ' (vehicle updated)' : ''}`
-        });
-
-        await transaction.save();
-
-        // Update vehicle if changed
-        if (vehicleUpdated) {
-          await user.save();
-        }
-
-        res.json({
-          message: 'UPI payment initiated. Complete the payment using your UPI app.',
-          upiDeepLink: upiDeepLink,
-          qrCodeUrl: qrCodeUrl,
-          transactionId: transactionId,
-          amount: amount,
-          vehicleUpdated: vehicleUpdated,
-          paymentMethod: 'upi',
-          status: 'pending'
-        });
-      }
-    } else {
-      // For card and other payment methods, process immediately
-      // Validate card details if payment method is card
-      if (paymentMethod === 'card') {
-        if (!cardNumber || !cardExpiry || !cardCVV) {
-          return res.status(400).json({ message: 'Card number, expiry date, and CVV are required for card payment' });
-        }
-
-        // Basic validation for card number (13-19 digits)
-        const cardNumberPattern = /^[0-9\s]{13,19}$/;
-        if (!cardNumberPattern.test(cardNumber.replace(/\s/g, ''))) {
-          return res.status(400).json({ message: 'Invalid card number format' });
-        }
-
-        // Basic validation for expiry date (MM/YY format)
-        const expiryPattern = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
-        if (!expiryPattern.test(cardExpiry)) {
-          return res.status(400).json({ message: 'Invalid expiry date format. Use MM/YY' });
-        }
-
-        // Basic validation for CVV (3-4 digits)
-        const cvvPattern = /^[0-9]{3,4}$/;
-        if (!cvvPattern.test(cardCVV)) {
-          return res.status(400).json({ message: 'Invalid CVV format' });
-        }
-      }
-
-      // Update wallet balance
-      user.walletBalance = (user.walletBalance || 0) + amount;
-      await user.save();
-
-      // Find or create vehicle for vehicleId reference
-      let vehicle = await Vehicle.findOne({ userId, number: vehicleNumber || user.vehicle });
-      if (!vehicle) {
-        // Create vehicle if it doesn't exist
-        vehicle = new Vehicle({
-          userId,
-          number: vehicleNumber || user.vehicle,
-          type: 'car', // Default type
-          isPrimary: true,
-          fastTag: {
-            tagId: user.fastagId || 'TEMP',
-            balance: 0,
-            status: 'active'
-          }
-        });
-        await vehicle.save();
-      }
-
-      // Create transaction record
-      const transaction = new FastagTransaction({
-        userId,
-        vehicleId: vehicle._id,
-        vehicleNumber: vehicleNumber || user.vehicle,
-        type: 'recharge',
-        amount,
-        method: paymentMethod,
-        status: 'completed',
-        txnId: uuidv4(),
-        description: `FASTag recharge via ${paymentMethod || 'online payment'}${vehicleUpdated ? ' (vehicle updated)' : ''}`
       });
-
-      await transaction.save();
-
-      // Send payment success email notification
-      await sendPaymentSuccessEmail(user.email, user.name, amount, transaction.txnId);
-
-      // Fetch recent transactions
-      const recentTransactions = await FastagTransaction.find({ userId })
-        .sort({ createdAt: -1 })
-        .limit(5)
-        .select('type amount status createdAt description');
-
-      res.json({
-        message: vehicleUpdated ? 'Recharge successful and vehicle number updated' : 'Recharge successful',
-        newBalance: user.walletBalance,
-        transactionId: transaction.txnId,
-        vehicleUpdated: vehicleUpdated,
-        fastagId: user.fastagId,
-        recentTransactions: recentTransactions
-      });
+      await vehicle.save();
     }
+
+    if (!vehicle) {
+      return res.status(400).json({ message: 'No vehicle found for recharge. Please ensure you have a registered vehicle.' });
+    }
+
+    // Dummy implementation: Directly update balance without payment processing
+    user.walletBalance = (user.walletBalance || 0) + amount;
+    await user.save();
+
+    // Create transaction record as completed
+    const transaction = new FastagTransaction({
+      userId,
+      vehicleId: vehicle._id,
+      vehicleNumber: vehicle.number,
+      type: 'recharge',
+      amount,
+      method: paymentMethod || 'card',
+      status: 'completed',
+      txnId: `DUMMY_${Date.now()}`,
+      description: `FASTag wallet recharge via ${paymentMethod === 'upi' ? 'UPI' : 'Card'} (Dummy)`
+    });
+
+    await transaction.save();
+
+    res.json({
+      success: true,
+      message: 'Recharge successful (Dummy implementation)',
+      newBalance: user.walletBalance,
+      transactionId: transaction._id
+    });
   } catch (error) {
     console.error('Error processing recharge:', error);
     res.status(500).json({ message: 'Error processing recharge', error: error.message });
@@ -282,14 +148,15 @@ exports.confirmUpiPayment = async (req, res) => {
 
     // Find the pending transaction
     const transaction = await FastagTransaction.findOne({
-      txnId: transactionId,
+      _id: transactionId,
       userId,
       status: 'pending',
-      type: 'recharge'
+      type: 'recharge',
+      method: 'upi'
     });
 
     if (!transaction) {
-      return res.status(404).json({ message: 'Pending transaction not found' });
+      return res.status(404).json({ message: 'Pending UPI transaction not found' });
     }
 
     // Update transaction status to completed
@@ -469,15 +336,24 @@ exports.deactivateFastag = async (req, res) => {
 
     const remainingBalance = user.walletBalance || 0;
 
+    // Find the vehicle with FASTag
+    const vehicle = await Vehicle.findOne({ userId, 'fastTag.tagId': user.fastagId });
+    if (vehicle) {
+      vehicle.fastTag.status = 'disabled';
+      await vehicle.save();
+    }
+
     if (remainingBalance > 0) {
       // Create refund transaction
       const refundTransaction = new FastagTransaction({
         userId,
+        vehicleId: vehicle?._id,
         vehicleNumber: user.vehicle,
         type: 'refund',
         amount: remainingBalance,
+        method: 'refund',
         status: 'completed',
-        transactionId: uuidv4(),
+        txnId: uuidv4(),
         description: 'FASTag deactivation refund'
       });
 
@@ -486,25 +362,121 @@ exports.deactivateFastag = async (req, res) => {
       // Reset balance and vehicle
       user.walletBalance = 0;
       user.vehicle = null;
+      user.fastagId = null;
       await user.save();
 
       res.json({
+        success: true,
         message: 'FASTag deactivated successfully. Refund processed.',
         refundAmount: remainingBalance,
-        transactionId: refundTransaction.transactionId
+        transactionId: refundTransaction.txnId
       });
     } else {
       // No balance to refund, just deactivate
       user.vehicle = null;
+      user.fastagId = null;
       await user.save();
 
       res.json({
+        success: true,
         message: 'FASTag deactivated successfully.'
       });
     }
   } catch (error) {
     console.error('Error deactivating FASTag:', error);
     res.status(500).json({ message: 'Error deactivating FASTag', error: error.message });
+  }
+};
+
+// Handle Razorpay webhook
+exports.handleRazorpayWebhook = async (req, res) => {
+  try {
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET || 'your_webhook_secret';
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(JSON.stringify(req.body))
+      .digest('hex');
+
+    const receivedSignature = req.headers['x-razorpay-signature'];
+
+    if (expectedSignature !== receivedSignature) {
+      console.error('Razorpay webhook signature verification failed');
+      return res.status(400).json({ message: 'Invalid signature' });
+    }
+
+    const event = req.body.event;
+
+    console.log('Razorpay webhook received:', event);
+
+    if (event === 'payment.captured') {
+      const paymentEntity = req.body.payload.payment.entity;
+
+      // Find the pending transaction
+      const transaction = await FastagTransaction.findOne({
+        txnId: paymentEntity.order_id,
+        status: 'pending',
+        type: 'recharge'
+      });
+
+      if (!transaction) {
+        console.error('Transaction not found for order:', paymentEntity.order_id);
+        return res.status(200).json({ message: 'Transaction not found' });
+      }
+
+      // Update transaction status
+      transaction.status = 'completed';
+      transaction.paymentId = paymentEntity.id;
+      await transaction.save();
+
+      // Update user wallet balance
+      const user = await User.findById(transaction.userId);
+      if (user) {
+        user.walletBalance = (user.walletBalance || 0) + transaction.amount;
+        await user.save();
+
+        // Send payment success email
+        await sendPaymentSuccessEmail(user.email, user.name, transaction.amount, transaction.txnId);
+
+        console.log('Payment processed successfully for user:', user.email);
+      }
+    } else if (event === 'order.paid') {
+      // Handle order paid event for UPI payments
+      const orderEntity = req.body.payload.order.entity;
+
+      // Find the pending transaction
+      const transaction = await FastagTransaction.findOne({
+        txnId: orderEntity.id,
+        status: 'pending',
+        type: 'recharge',
+        method: 'upi'
+      });
+
+      if (!transaction) {
+        console.error('UPI Transaction not found for order:', orderEntity.id);
+        return res.status(200).json({ message: 'Transaction not found' });
+      }
+
+      // Update transaction status
+      transaction.status = 'completed';
+      await transaction.save();
+
+      // Update user wallet balance
+      const user = await User.findById(transaction.userId);
+      if (user) {
+        user.walletBalance = (user.walletBalance || 0) + transaction.amount;
+        await user.save();
+
+        // Send payment success email
+        await sendPaymentSuccessEmail(user.email, user.name, transaction.amount, transaction.txnId);
+
+        console.log('UPI Payment processed successfully for user:', user.email);
+      }
+    }
+
+    res.status(200).json({ received: true });
+  } catch (error) {
+    console.error('Razorpay webhook error:', error);
+    res.status(500).json({ message: 'Webhook processing failed' });
   }
 };
 
@@ -684,44 +656,80 @@ exports.generateFastagId = async (req, res) => {
 exports.applyForFastag = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {
-      fullName,
-      mobile,
-      email,
-      vehicleNumber,
-      vehicleType,
-      address
-    } = req.body;
+    const { vehicleNumber, vehicleType } = req.body;
+
+    if (!vehicleNumber || !vehicleType) {
+      return res.status(400).json({ message: 'Vehicle number and type are required' });
+    }
 
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update user information
-    user.name = fullName;
-    user.phone = mobile;
-    user.vehicle = vehicleNumber;
-    // Note: Email should match the logged-in user's email
+    // Check if user already has a FASTag
+    if (user.fastagId) {
+      return res.status(400).json({ message: 'You already have an active FASTag', fastagId: user.fastagId });
+    }
 
+    // Generate FASTag ID
+    const counter = await Counter.findOneAndUpdate(
+      { name: 'fastagId' },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    const fastagId = 'FT' + counter.seq.toString().padStart(6, '0');
+
+    // Update user with FASTag details
+    user.vehicle = vehicleNumber;
+    user.fastagId = fastagId;
     await user.save();
 
-    // Create initial transaction for FASTag purchase (₹100 fee)
-    const purchaseTransaction = new FastagTransaction({
+    // Create or update vehicle
+    let vehicle = await Vehicle.findOne({ userId, number: vehicleNumber });
+    if (!vehicle) {
+      vehicle = new Vehicle({
+        userId,
+        number: vehicleNumber,
+        type: vehicleType,
+        isPrimary: true,
+        fastTag: {
+          tagId: fastagId,
+          balance: 0,
+          status: 'active'
+        }
+      });
+    } else {
+      vehicle.fastTag = {
+        tagId: fastagId,
+        balance: vehicle.fastTag?.balance || 0,
+        status: 'active'
+      };
+    }
+    await vehicle.save();
+
+    // Create initial transaction for FASTag activation
+    const activationTransaction = new FastagTransaction({
       userId,
+      vehicleId: vehicle._id,
       vehicleNumber,
-      type: 'recharge', // Using recharge type for initial purchase
-      amount: 100,
+      type: 'recharge',
+      amount: 0, // No charge for activation in this simplified version
+      method: 'activation',
       status: 'completed',
-      transactionId: uuidv4(),
-      description: 'FASTag purchase and activation fee'
+      txnId: uuidv4(),
+      description: 'FASTag activation'
     });
 
-    await purchaseTransaction.save();
+    await activationTransaction.save();
 
     res.json({
-      message: 'FASTag application submitted successfully. Your FASTag will be activated within 24 hours.',
-      transactionId: purchaseTransaction.transactionId
+      success: true,
+      message: 'FASTag activated successfully!',
+      fastagId: fastagId,
+      vehicleNumber: vehicleNumber,
+      vehicleType: vehicleType
     });
   } catch (error) {
     console.error('Error processing FASTag application:', error);

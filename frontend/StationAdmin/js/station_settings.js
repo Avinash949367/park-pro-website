@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
     console.log('Token for loadSettings:', token);
     // Fetch current settings from backend
-    fetch('http://localhost:5000/api/stations/settings', {
+    fetch('http://localhost:5001/api/stations/settings', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
       endTime: isOpen24 ? null : endTime
     };
 
-    fetch('http://localhost:5000/api/stations/settings', {
+    fetch('http://localhost:5001/api/stations/settings', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

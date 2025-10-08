@@ -290,7 +290,7 @@
 
     async function loadStationInfo() {
       try {
-        const response = await fetch(`http://localhost:5000/api/stations/${currentStationId}`);
+        const response = await fetch(`http://localhost:5001/api/stations/${currentStationId}`);
         const data = await response.json();
 
     if (data && data.name) {
@@ -310,7 +310,7 @@
 
     async function loadReviews() {
       try {
-        const response = await fetch(`http://localhost:5000/api/reviews/station/${currentStationId}`);
+        const response = await fetch(`http://localhost:5001/api/reviews/station/${currentStationId}`);
         const data = await response.json();
 
         if (data.success && data.reviews) {
@@ -419,7 +419,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/reviews', {
+        const response = await fetch('http://localhost:5001/api/reviews', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

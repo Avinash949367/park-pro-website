@@ -8,7 +8,7 @@ async function checkFastagAccess() {
   }
 
   try {
-    const response = await fetch('http://localhost:5000/profile', {
+    const response = await fetch('http://localhost:5001/profile', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -50,7 +50,7 @@ async function checkFastagId() {
   }
 
   try {
-    const response = await fetch('http://localhost:5000/profile', {
+    const response = await fetch('http://localhost:5001/profile', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

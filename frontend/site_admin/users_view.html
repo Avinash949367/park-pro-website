@@ -213,7 +213,7 @@
           throw new Error('Invalid authentication token. Please log in again.');
         }
 
-        const response = await fetch('http://localhost:5000/api/users', {
+        const response = await fetch('http://localhost:5001/api/users', {
           headers: {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
@@ -306,7 +306,7 @@
     async function openUserDetails(userId) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+        const response = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
           headers: {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
@@ -439,10 +439,10 @@
         console.log('Token:', token ? 'Present' : 'Missing');
         let url, method;
         if (action === 'delete') {
-          url = `http://localhost:5000/api/admin/users/${userId}`;
+          url = `http://localhost:5001/api/admin/users/${userId}`;
           method = 'DELETE';
         } else {
-          url = `http://localhost:5000/api/admin/users/${userId}/${action}`;
+          url = `http://localhost:5001/api/admin/users/${userId}/${action}`;
           method = 'POST';
         }
         console.log('Request URL:', url);

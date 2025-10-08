@@ -628,7 +628,7 @@
     async function loadStationData() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/stations/me', {
+        const response = await fetch('http://localhost:5001/api/stations/me', {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -647,13 +647,13 @@
       try {
         const token = localStorage.getItem('token');
         const [slotsRes, bookingsRes, earningsRes] = await Promise.all([
-          fetch('http://localhost:5000/api/slots/station', {
+          fetch('http://localhost:5001/api/slots/station', {
             headers: { 'Authorization': 'Bearer ' + token }
           }),
-          fetch('http://localhost:5000/api/bookings/station/current', {
+          fetch('http://localhost:5001/api/bookings/station/current', {
             headers: { 'Authorization': 'Bearer ' + token }
           }),
-          fetch('http://localhost:5000/api/payments/station/today', {
+          fetch('http://localhost:5001/api/payments/station/today', {
             headers: { 'Authorization': 'Bearer ' + token }
           })
         ]);
@@ -687,7 +687,7 @@
     async function loadSlotsData() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/slots/station', {
+        const response = await fetch('http://localhost:5001/api/slots/station', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
 
@@ -703,7 +703,7 @@
     async function loadBookingsData() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/bookings/station/all', {
+        const response = await fetch('http://localhost:5001/api/bookings/station/all', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
 
@@ -720,13 +720,13 @@
       try {
         const token = localStorage.getItem('token');
         const [dailyRes, monthlyRes, breakdownRes] = await Promise.all([
-          fetch('http://localhost:5000/api/payments/station/daily', {
+          fetch('http://localhost:5001/api/payments/station/daily', {
             headers: { 'Authorization': 'Bearer ' + token }
           }),
-          fetch('http://localhost:5000/api/payments/station/monthly', {
+          fetch('http://localhost:5001/api/payments/station/monthly', {
             headers: { 'Authorization': 'Bearer ' + token }
           }),
-          fetch('http://localhost:5000/api/payments/station/breakdown', {
+          fetch('http://localhost:5001/api/payments/station/breakdown', {
             headers: { 'Authorization': 'Bearer ' + token }
           })
         ]);
@@ -768,7 +768,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/slots', {
+        const response = await fetch('http://localhost:5001/api/slots', {
           method: 'POST',
           headers: {
             'Authorization': 'Bearer ' + token,
@@ -799,7 +799,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/slots/${id}`, {
+        const response = await fetch(`http://localhost:5001/api/slots/${id}`, {
           method: 'PUT',
           headers: {
             'Authorization': 'Bearer ' + token,

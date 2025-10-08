@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const Stations = require('../models/Stations');
+const Stations = require('../models/Station');
 const StoreAdminCredentials = require('../models/StoreAdminCredentials');
 
 // Demo data

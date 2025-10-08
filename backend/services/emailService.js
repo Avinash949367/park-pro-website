@@ -213,10 +213,73 @@ const sendBookingConfirmationEmail = async (toEmail, userName, bookingDetails) =
     }
 };
 
+// Send payment receipt email
+const sendPaymentReceiptEmail = async (toEmail, userName, bookingDetails, paymentDetails) => {
+    try {
+        const { stationName, stationAddress, vehicleNumber, startTime, endTime, slotId, slotType } = bookingDetails;
+        const { amount, method, txnId, status, paymentDate } = paymentDetails;
+
+        const statusEmoji = status === 'success' ? '✅' : '❌';
+        const statusText = status === 'success' ? 'Payment Successful' : 'Payment Failed';
+        const bookingStatus = status === 'success' ? 'Confirmed' : 'Cancelled';
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER || 'parkproplus@gmail.com',
+            to: toEmail,
+            subject: `Payment Receipt - ${statusText} - ParkPro`,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #46949d;">${statusEmoji} Payment Receipt</h2>
+                    <p>Dear ${userName},</p>
+                    <p>Your payment has been processed. Here are the details:</p>
+
+                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="color: #46949d; margin-top: 0;">Payment Details:</h3>
+                        <p><strong>Amount:</strong> ₹${amount}</p>
+                        <p><strong>Payment Method:</strong> ${method.toUpperCase()}</p>
+                        <p><strong>Transaction ID:</strong> ${txnId}</p>
+                        <p><strong>Status:</strong> ${statusText}</p>
+                        <p><strong>Payment Date:</strong> ${new Date(paymentDate).toLocaleString()}</p>
+                    </div>
+
+                    <div style="background-color: #e8f5e8; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="color: #155724; margin-top: 0;">Booking Details:</h3>
+                        <p><strong>Station:</strong> ${stationName}</p>
+                        <p><strong>Address:</strong> ${stationAddress}</p>
+                        <p><strong>Slot:</strong> ${slotId} (${slotType})</p>
+                        <p><strong>Vehicle:</strong> ${vehicleNumber}</p>
+                        <p><strong>Start Time:</strong> ${new Date(startTime).toLocaleString()}</p>
+                        <p><strong>End Time:</strong> ${new Date(endTime).toLocaleString()}</p>
+                        <p><strong>Booking Status:</strong> ${bookingStatus}</p>
+                    </div>
+
+                    ${status === 'success'
+                        ? '<p style="color: #155724; font-weight: bold;">✅ Your booking has been confirmed. Please arrive at the station on time.</p>'
+                        : '<p style="color: #721c24; font-weight: bold;">❌ Your booking has been cancelled due to payment failure. You can try booking again.</p>'
+                    }
+
+                    <p>If you have any questions, please contact our support team at parkproplus@gmail.com</p>
+
+                    <p>Thank you for using ParkPro!</p>
+                    <p>Best regards,<br>The ParkPro Team</p>
+                </div>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log('Payment receipt email sent successfully to:', toEmail);
+        return true;
+    } catch (error) {
+        console.error('Error sending payment receipt email:', error);
+        return false;
+    }
+};
+
 module.exports = {
     sendApprovalEmail,
     sendFinalApprovalEmail,
     sendRejectionEmail,
     sendPaymentSuccessEmail,
-    sendBookingConfirmationEmail
+    sendBookingConfirmationEmail,
+    sendPaymentReceiptEmail
 };

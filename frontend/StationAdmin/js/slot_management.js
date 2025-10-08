@@ -1,6 +1,6 @@
 // Slot Management JavaScript
 
-const API_BASE = 'http://localhost:5000/api/slots';
+const API_BASE = 'http://localhost:5001/api/slots';
 
 const CLOUDINARY_CLOUD_NAME = 'dwgwtx0jz';
 const CLOUDINARY_API_KEY = '523154331876144';
@@ -504,7 +504,7 @@ async function loadUserData() {
 // Load all stations
 async function loadStations() {
     try {
-        const response = await fetch('http://localhost:5000/api/stations');
+        const response = await fetch('http://localhost:5001/api/stations');
         if (response.ok) {
             stations = await response.json();
             console.log('Stations loaded:', stations);

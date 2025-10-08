@@ -455,7 +455,7 @@
           throw new Error('No authentication token found. Please log in again.');
         }
 
-        const response = await fetch('http://localhost:5000/api/user/profile', {
+        const response = await fetch('http://localhost:5001/api/user/profile', {
           headers: {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
@@ -560,7 +560,7 @@
           throw new Error('Email is required');
         }
 
-        const response = await fetch('http://localhost:5000/api/user/profile', {
+        const response = await fetch('http://localhost:5001/api/user/profile', {
           method: 'PUT',
           headers: {
             'Authorization': 'Bearer ' + token,

@@ -91,7 +91,7 @@
           return;
         }
 
-        const response = await fetch('http://localhost:5000/api/fastag/generate', {
+        const response = await fetch('http://localhost:5001/api/fastag/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -105,12 +105,18 @@
         console.log('Response data:', data);
 
         if (response.ok) {
+          alert(`Your FASTag ID has been generated successfully!\n\nFASTag ID: ${data.fastagId}\n\nPlease save this ID for your records.`);
           resultMessage.textContent = `FASTag ID generated successfully: ${data.fastagId}`;
           resultMessage.style.color = 'green';
           e.target.reset();
+          // Redirect to user profile to show the Fastag ID
+          setTimeout(() => {
+            window.location.href = 'userprofile.html';
+          }, 2000); // Delay to let user see the message
         } else {
           if (data.message && data.message.toLowerCase().includes('already has')) {
-            if (confirm('You already have a FASTag. Would you like to recharge it now?')) {
+            const existingId = data.fastagId || 'N/A';
+            if (confirm(`You already have a FASTag (ID: ${existingId}). Would you like to recharge it now?`)) {
               // Redirect to recharge FASTag page with query params to prefill name and vehicle number
               const user = JSON.parse(localStorage.getItem('user'));
               if (user) {
@@ -122,7 +128,7 @@
               }
               return;
             } else {
-              resultMessage.textContent = 'You chose not to recharge your FASTag at this time.';
+              resultMessage.textContent = `You already have a FASTag (ID: ${existingId}). You chose not to recharge it at this time.`;
               resultMessage.style.color = 'orange';
               return;
             }

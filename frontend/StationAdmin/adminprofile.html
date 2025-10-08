@@ -189,7 +189,7 @@
 
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch('http://localhost:5000/api/stations/admin/change-password', {
+          const response = await fetch('http://localhost:5001/api/stations/admin/change-password', {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -221,7 +221,7 @@
     async function fetchProfileData() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/stations/admin/profile', {
+        const response = await fetch('http://localhost:5001/api/stations/admin/profile', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -262,7 +262,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/stations/admin/profile', {
+        const response = await fetch('http://localhost:5001/api/stations/admin/profile', {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -78,6 +78,7 @@ const getUserProfile = async (req, res) => {
       walletBalance: user.walletBalance || 0,
       savedVehicles: user.savedVehicles || [],
       preferredSpots: user.preferredSpots || [],
+      fastagId: user.fastagId || null,
       role: user.role,
       createdAt: user.createdAt
     };
@@ -96,6 +97,64 @@ const getUserProfile = async (req, res) => {
 
     // Add vehicles data
     profileData.vehicles = vehicles;
+
+    // Add payment information
+    try {
+      // Get recent payments (last 5)
+      const recentPayments = await SlotBooking.find({ userId })
+        .populate('stationId', 'name')
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .select('amountPaid paymentMethod paymentStatus createdAt stationId');
+
+      // Get payment statistics
+      const paymentStats = await SlotBooking.aggregate([
+        { $match: { userId: user._id } },
+        {
+          $group: {
+            _id: null,
+            totalPayments: { $sum: '$amountPaid' },
+            successfulPayments: {
+              $sum: { $cond: [{ $eq: ['$paymentStatus', 'completed'] }, 1, 0] }
+            },
+            pendingPayments: {
+              $sum: { $cond: [{ $eq: ['$paymentStatus', 'pending'] }, 1, 0] }
+            },
+            failedPayments: {
+              $sum: { $cond: [{ $eq: ['$paymentStatus', 'failed'] }, 1, 0] }
+            }
+          }
+        }
+      ]);
+
+      profileData.paymentInfo = {
+        recentPayments: recentPayments.map(payment => ({
+          id: payment._id,
+          amount: payment.amountPaid,
+          method: payment.paymentMethod,
+          status: payment.paymentStatus,
+          date: payment.createdAt,
+          station: payment.stationId?.name || 'Unknown Station'
+        })),
+        stats: paymentStats[0] || {
+          totalPayments: 0,
+          successfulPayments: 0,
+          pendingPayments: 0,
+          failedPayments: 0
+        }
+      };
+    } catch (error) {
+      console.log('getUserProfile: Error fetching payment info:', error.message);
+      profileData.paymentInfo = {
+        recentPayments: [],
+        stats: {
+          totalPayments: 0,
+          successfulPayments: 0,
+          pendingPayments: 0,
+          failedPayments: 0
+        }
+      };
+    }
 
     console.log('getUserProfile: Sending response with profile data');
     res.json({
@@ -535,7 +594,7 @@ const rechargeFastag = async (req, res) => {
     }
 
     // Update vehicle FastTag balance
-    vehicle.fastTag.balance += amount;
+    vehicle.fastTag.balance = (vehicle.fastTag.balance || 0) + amount;
     await vehicle.save();
 
     // Deduct from user wallet
@@ -544,11 +603,14 @@ const rechargeFastag = async (req, res) => {
 
     // Create transaction record
     const transaction = new FastagTransaction({
+      userId,
       vehicleId,
-      txnId: `FT${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+      vehicleNumber: vehicle.number,
       type: 'recharge',
       amount,
-      method: 'wallet'
+      method: 'wallet',
+      txnId: `FT${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+      description: 'FASTag wallet recharge'
     });
     await transaction.save();
 
@@ -749,7 +811,7 @@ const rechargeUserFastTag = async (req, res) => {
     }
 
     // Update vehicle FastTag balance
-    vehicle.fastTag.balance += amount;
+    vehicle.fastTag.balance = (vehicle.fastTag.balance || 0) + amount;
     await vehicle.save();
 
     // Deduct from user wallet
@@ -758,11 +820,14 @@ const rechargeUserFastTag = async (req, res) => {
 
     // Create transaction record
     const transaction = new FastagTransaction({
+      userId,
       vehicleId: vehicle._id,
-      txnId: `FT${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+      vehicleNumber: vehicle.number,
       type: 'recharge',
       amount,
-      method: 'wallet'
+      method: 'wallet',
+      txnId: `FT${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+      description: 'FASTag wallet recharge'
     });
     await transaction.save();
 

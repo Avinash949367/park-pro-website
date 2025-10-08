@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch and display stations with status 'admin confirm'
   async function fetchStations() {
     try {
-      const backendBaseUrl = 'http://localhost:5000'; // Adjust if your backend runs on a different URL or port
+      const backendBaseUrl = 'http://localhost:5001'; // Adjust if your backend runs on a different URL or port
       const statusParam = encodeURIComponent('admin confirm');
       const response = await fetch(`${backendBaseUrl}/api/stations/status/${statusParam}`);
       if (!response.ok) throw new Error('Failed to fetch stations');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Final confirm station - update status to 'active' and send credentials
   async function finalConfirmStation(stationId) {
     try {
-      const backendBaseUrl = 'http://localhost:5000';
+      const backendBaseUrl = 'http://localhost:5001';
       // First update station status
       const statusResponse = await fetch(`${backendBaseUrl}/api/stations/${stationId}/status`, {
         method: 'PATCH',

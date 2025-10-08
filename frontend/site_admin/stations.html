@@ -237,7 +237,7 @@
         // Function to load list of registers for message icon click
         document.getElementById('messageIcon').addEventListener('click', async () => {
           try {
-            const response = await fetch('http://localhost:5000/api/registrations/status/pending');
+            const response = await fetch('http://localhost:5001/api/registrations/status/pending');
             if (!response.ok) {
               throw new Error('Failed to fetch pending registrations');
             }
@@ -303,7 +303,7 @@
         // Function to update message badge and show popup animation
         async function updateMessageBadge() {
           try {
-            const response = await fetch('http://localhost:5000/api/registrations/status/pending');
+            const response = await fetch('http://localhost:5001/api/registrations/status/pending');
             if (!response.ok) {
               throw new Error('Failed to fetch pending registrations');
             }
@@ -418,7 +418,7 @@
         // Function to approve registration
         async function approveRegistration(registrationId) {
           try {
-            const response = await fetch(`http://localhost:5000/api/registrations/approve/${registrationId}`, {
+            const response = await fetch(`http://localhost:5001/api/registrations/approve/${registrationId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -455,7 +455,7 @@
               return;
             }
 
-            const response = await fetch(`http://localhost:5000/api/registrations/reject/${registrationId}`, {
+            const response = await fetch(`http://localhost:5001/api/registrations/reject/${registrationId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -958,7 +958,7 @@
     // Function to load station statistics
     async function loadStationStats() {
       try {
-        const response = await fetch('http://localhost:5000/api/stations/stats');
+        const response = await fetch('http://localhost:5001/api/stations/stats');
         if (!response.ok) {
           throw new Error('Failed to fetch station statistics');
         }
@@ -995,7 +995,7 @@
     // Function to load stations with doc-processing status (global scope)
     async function loadDocProcessingStations() {
       try {
-        const response = await fetch('http://localhost:5000/api/registrations/status/doc-processing');
+        const response = await fetch('http://localhost:5001/api/registrations/status/doc-processing');
         const registrations = await response.json();
         
         // Filter for doc-processing status
@@ -1060,7 +1060,7 @@
         if (noStationsElem) noStationsElem.classList.add('hidden');
 
         // Fetch active stations from API
-        const response = await fetch('http://localhost:5000/api/stations/status/active');
+        const response = await fetch('http://localhost:5001/api/stations/status/active');
         if (!response.ok) {
           throw new Error('Failed to fetch active stations');
         }
@@ -1399,7 +1399,7 @@
       // View registration details functionality
       window.viewDetails = async function(stationId) {
         try {
-          const response = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+          const response = await fetch(`http://localhost:5001/api/registrations/${stationId}/details`);
           if (!response.ok) {
             throw new Error('Failed to fetch registration details');
           }
@@ -1593,7 +1593,7 @@
     window.approveStation = async function(stationId) {
       try {
         // First, get the registration details to check current status
-        const detailsResponse = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+        const detailsResponse = await fetch(`http://localhost:5001/api/registrations/${stationId}/details`);
         if (!detailsResponse.ok) {
           throw new Error('Failed to fetch registration details');
         }
@@ -1606,10 +1606,10 @@
         
         // Determine which endpoint to call based on current status
         if (registration.status === 'pending') {
-          endpoint = `http://localhost:5000/api/registrations/approve/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/approve/${stationId}`;
           successMessage = 'Registration approved for documentation process!';
         } else if (registration.status === 'doc-processing') {
-          endpoint = `http://localhost:5000/api/registrations/final-approve/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/final-approve/${stationId}`;
           successMessage = 'Registration approved and station activated successfully!';
         } else {
           throw new Error(`Cannot approve registration with status: ${registration.status}`);
@@ -1652,7 +1652,7 @@
     window.rejectStation = async function(stationId) {
       try {
         // First, get the registration details to check current status
-        const detailsResponse = await fetch(`http://localhost:5000/api/registrations/${stationId}/details`);
+        const detailsResponse = await fetch(`http://localhost:5001/api/registrations/${stationId}/details`);
         if (!detailsResponse.ok) {
           throw new Error('Failed to fetch registration details');
         }
@@ -1665,10 +1665,10 @@
         
         // Determine which endpoint to call based on current status
         if (registration.status === 'pending') {
-          endpoint = `http://localhost:5000/api/registrations/reject/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/reject/${stationId}`;
           successMessage = 'Registration rejected successfully!';
         } else if (registration.status === 'doc-processing') {
-          endpoint = `http://localhost:5000/api/registrations/final-reject/${stationId}`;
+          endpoint = `http://localhost:5001/api/registrations/final-reject/${stationId}`;
           successMessage = 'Registration rejected successfully!';
         } else {
           throw new Error(`Cannot reject registration with status: ${registration.status}`);

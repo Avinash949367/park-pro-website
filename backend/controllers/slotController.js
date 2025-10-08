@@ -255,8 +255,8 @@ exports.createBooking = async (req, res) => {
             bookingEndTime: endTime,
             amountPaid,
             paymentMethod,
-            paymentStatus: paymentMethod === 'coupon' ? 'success' : 'paid',
-            status: 'active',
+            paymentStatus: paymentMethod === 'coupon' ? 'success' : 'pending',
+            status: paymentMethod === 'coupon' ? 'confirmed' : 'reserved',
             cancelReason: null
         });
 
@@ -557,11 +557,17 @@ exports.verifyPayment = async (req, res) => {
 
         const SlotBooking = require('../models/SlotBooking');
         const Payment = require('../models/Payment');
+        const { sendPaymentReceiptEmail } = require('../services/emailService');
 
         // Find booking by reservation_id (assuming reservation_id is stored or can be derived)
         // For simplicity, assume reservation_id is the booking _id or we can search by some field
         // Since we don't have a reservation_id field, we'll assume it's the booking id
-        const booking = await SlotBooking.findById(reservation_id);
+        const booking = await SlotBooking.findById(reservation_id)
+            .populate('stationId', 'name address')
+            .populate('vehicleId', 'number')
+            .populate('slotId', 'slotId type')
+            .populate('userId', 'name email');
+
         if (!booking) {
             return res.status(404).json({ message: 'Booking not found' });
         }
@@ -593,7 +599,39 @@ exports.verifyPayment = async (req, res) => {
 
         await booking.save();
 
-        res.status(200).json({ message: 'Payment verified and booking updated' });
+        // Send payment receipt email
+        try {
+            await sendPaymentReceiptEmail(
+                booking.userId.email,
+                booking.userId.name,
+                {
+                    stationName: booking.stationId.name,
+                    stationAddress: booking.stationId.address,
+                    vehicleNumber: booking.vehicleId.number,
+                    startTime: booking.bookingStartTime,
+                    endTime: booking.bookingEndTime,
+                    slotId: booking.slotId.slotId,
+                    slotType: booking.slotId.type
+                },
+                {
+                    amount: booking.amountPaid,
+                    method: 'UPI',
+                    txnId: txn_id,
+                    status: status,
+                    paymentDate: new Date()
+                }
+            );
+            console.log('Payment receipt email sent successfully');
+        } catch (emailError) {
+            console.error('Failed to send payment receipt email:', emailError);
+            // Don't fail the payment verification if email fails
+        }
+
+        res.status(200).json({
+            message: 'Payment verified and booking updated',
+            bookingStatus: booking.status,
+            paymentStatus: booking.paymentStatus
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -742,6 +780,171 @@ exports.getRecentBookings = async (req, res) => {
         res.status(200).json(formattedBookings);
     } catch (error) {
         console.error('Error in getRecentBookings:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Check payment status for a booking
+exports.checkPaymentStatus = async (req, res) => {
+    try {
+        const { bookingId } = req.params;
+
+        if (!bookingId) {
+            return res.status(400).json({ message: 'Booking ID is required' });
+        }
+
+        const SlotBooking = require('../models/SlotBooking');
+        const Payment = require('../models/Payment');
+
+        // Find booking
+        const booking = await SlotBooking.findById(bookingId)
+            .populate('stationId', 'name address')
+            .populate('vehicleId', 'number')
+            .populate('slotId', 'slotId type')
+            .populate('userId', 'name email');
+
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        // Check if user owns this booking
+        if (!req.user || booking.userId._id.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        // Find payment record
+        const payment = await Payment.findOne({ bookingId: booking._id });
+
+        res.status(200).json({
+            booking: {
+                id: booking._id,
+                status: booking.status,
+                paymentStatus: booking.paymentStatus,
+                amountPaid: booking.amountPaid,
+                paymentMethod: booking.paymentMethod,
+                bookingStartTime: booking.bookingStartTime,
+                bookingEndTime: booking.bookingEndTime,
+                stationName: booking.stationId.name,
+                vehicleNumber: booking.vehicleId.number,
+                slotId: booking.slotId.slotId
+            },
+            payment: payment ? {
+                id: payment.id,
+                txnId: payment.txnId,
+                status: payment.status,
+                timestamp: payment.timestamp
+            } : null
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Simulate payment status update (for testing)
+exports.simulatePayment = async (req, res) => {
+    try {
+        const { bookingId } = req.params;
+        const { status, txn_id } = req.body;
+
+        if (!bookingId || !status) {
+            return res.status(400).json({ message: 'Booking ID and status are required' });
+        }
+
+        if (!['success', 'failed'].includes(status)) {
+            return res.status(400).json({ message: 'Status must be either success or failed' });
+        }
+
+        const SlotBooking = require('../models/SlotBooking');
+        const Payment = require('../models/Payment');
+        const { sendPaymentReceiptEmail } = require('../services/emailService');
+
+        // Find booking
+        const booking = await SlotBooking.findById(bookingId)
+            .populate('stationId', 'name address')
+            .populate('vehicleId', 'number')
+            .populate('slotId', 'slotId type')
+            .populate('userId', 'name email');
+
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        // Check if user owns this booking
+        if (!req.user || booking.userId._id.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        if (booking.status !== 'reserved' && booking.paymentStatus !== 'pending') {
+            return res.status(400).json({ message: 'Booking is not in a payable state' });
+        }
+
+        // Create or update payment record
+        let payment = await Payment.findOne({ bookingId: booking._id });
+        if (!payment) {
+            payment = new Payment({
+                id: 'P' + Date.now(),
+                bookingId: booking._id,
+                amount: booking.amountPaid,
+                method: booking.paymentMethod,
+                txnId: txn_id || `TXN${Date.now()}`,
+                status: status
+            });
+        } else {
+            payment.status = status;
+            payment.txnId = txn_id || payment.txnId;
+        }
+
+        await payment.save();
+
+        // Update booking status
+        if (status === 'success') {
+            booking.status = 'confirmed';
+            booking.paymentStatus = 'success';
+        } else {
+            booking.status = 'cancelled';
+            booking.paymentStatus = 'failed';
+        }
+
+        await booking.save();
+
+        // Send payment receipt email
+        try {
+            await sendPaymentReceiptEmail(
+                booking.userId.email,
+                booking.userId.name,
+                {
+                    stationName: booking.stationId.name,
+                    stationAddress: booking.stationId.address,
+                    vehicleNumber: booking.vehicleId.number,
+                    startTime: booking.bookingStartTime,
+                    endTime: booking.bookingEndTime,
+                    slotId: booking.slotId.slotId,
+                    slotType: booking.slotId.type
+                },
+                {
+                    amount: booking.amountPaid,
+                    method: booking.paymentMethod,
+                    txnId: payment.txnId,
+                    status: status,
+                    paymentDate: new Date()
+                }
+            );
+            console.log('Payment receipt email sent successfully');
+        } catch (emailError) {
+            console.error('Failed to send payment receipt email:', emailError);
+        }
+
+        res.status(200).json({
+            message: 'Payment simulated successfully',
+            bookingStatus: booking.status,
+            paymentStatus: booking.paymentStatus,
+            payment: {
+                id: payment.id,
+                txnId: payment.txnId,
+                status: payment.status
+            }
+        });
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };

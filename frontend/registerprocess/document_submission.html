@@ -526,7 +526,7 @@
           }
         });
 
-        const response = await fetch("http://localhost:5000/api/media/upload-media", {
+        const response = await fetch("http://localhost:5001/api/media/upload-media", {
           method: "POST",
           body: formData,
         });
@@ -620,7 +620,7 @@
 
         console.log('Sending data:', data);
 
-        const response = await fetch("http://localhost:5000/api/registrations/update-address", {
+        const response = await fetch("http://localhost:5001/api/registrations/update-address", {
           method: "POST",
           headers: {
             'Content-Type': 'application/json',

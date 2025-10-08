@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const closePopupBtn = document.getElementById('closePopup');
   const receivedStationsList = document.getElementById('receivedStationsList');
 
-  const backendBaseUrl = 'http://localhost:5000'; // Adjust if your backend runs on a different URL or port
+  const backendBaseUrl = 'http://localhost:5001'; // Adjust if your backend runs on a different URL or port
 
   // Fetch count of pending registrations and update badge
   async function updatePendingCount() {

@@ -45,4 +45,10 @@ router.get('/dashboard-stats/:stationId', slotController.getDashboardStats);
 // Get recent bookings for station admin
 router.get('/recent-bookings/:stationId', slotController.getRecentBookings);
 
+// Check payment status for a booking
+router.get('/payments/:bookingId/status', passport.authenticate('jwt', { session: false }), slotController.checkPaymentStatus);
+
+// Simulate payment for testing
+router.post('/payments/:bookingId/simulate', passport.authenticate('jwt', { session: false }), slotController.simulatePayment);
+
 module.exports = router;

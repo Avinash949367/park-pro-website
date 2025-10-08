@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Submitting login for:', email);
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
+      const response = await fetch('http://localhost:5001/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/signup', {
+      const response = await fetch('http://localhost:5001/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     otpErrorElem.textContent = '';
 
     try {
-      const response = await fetch('http://localhost:5000/verify-otp', {
+      const response = await fetch('http://localhost:5001/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }),
@@ -210,6 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Handle Google login button click
   googleLoginBtn.addEventListener('click', () => {
-    window.location.href = 'http://localhost:5000/auth/google';
+    window.location.href = 'http://localhost:5001/auth/google';
   });
 });

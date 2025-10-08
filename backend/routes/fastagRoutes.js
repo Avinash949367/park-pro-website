@@ -9,7 +9,9 @@ const {
   linkVehicle,
   deactivateFastag,
   generateFastagId,
-  applyForFastag
+  applyForFastag,
+  handleRazorpayWebhook,
+  handleStripeWebhook
 } = require('../controllers/fastagController');
 
 const router = express.Router();
@@ -63,6 +65,9 @@ router.post('/generate', generateFastagId);
 
 // Apply for new FASTAG
 router.post('/apply', applyForFastag);
+
+// Razorpay webhook (no auth required)
+router.post('/razorpay-webhook', express.raw({ type: 'application/json' }), handleRazorpayWebhook);
 
 // Stripe webhook (no auth required)
 router.post('/webhook', express.raw({ type: 'application/json' }), require('../controllers/fastagController').handleStripeWebhook);
