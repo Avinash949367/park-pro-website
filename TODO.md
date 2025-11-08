@@ -1,19 +1,9 @@
-# Payment Integration Completion
+# TODO: Add "Pay with Razorpay" Button to FASTag Recharge Form
 
 ## Tasks
-- [x] Razorpay webhook integration for automatic UPI payment notifications
-- [x] UPI payment integration for FASTAG recharge and application
-- [x] Toll payment functionality for deducting toll amounts from user wallet
-- [x] Parking slot booking payments (UPI and coupon)
-- [x] TypeScript conversion of backend with proper types
-- [x] Install @types/express, @types/node, typescript, ts-node
-- [x] Create tsconfig.json with appropriate settings
-- [x] Convert userController.js and userRoutes.js to TypeScript
-- [x] Update package.json with build and dev scripts
-- [x] Test TypeScript compilation and server startup
+- [x] Modify `frontend/fastag.html` to add a "Pay with Razorpay" button below the payment method selection
+- [x] Update `frontend/js/razorpayFastag.js` to add event listener for the new button that validates form and initiates Razorpay payment
 
-## Completed
-- All payment methods integrated: UPI, Card, Net Banking, Toll payments, Parking bookings
-- Backend converted to TypeScript with proper type checking
-- Payment flows tested and working
-- Server starts successfully with TypeScript
+## Followup Steps
+- [ ] Test the new button functionality to ensure it initiates Razorpay payment correctly
+- [ ] Verify that both the radio button selection and the new button work independently

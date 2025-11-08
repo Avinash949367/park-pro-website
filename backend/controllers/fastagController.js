@@ -105,31 +105,90 @@ exports.recharge = async (req, res) => {
       return res.status(400).json({ message: 'No vehicle found for recharge. Please ensure you have a registered vehicle.' });
     }
 
-    // Dummy implementation: Directly update balance without payment processing
-    user.walletBalance = (user.walletBalance || 0) + amount;
-    await user.save();
+    // Handle different payment methods
+    if (paymentMethod === 'razorpay') {
+      // Create Razorpay order
+      const options = {
+        amount: amount * 100, // Razorpay expects amount in paisa
+        currency: 'INR',
+        receipt: `rcpt_${Date.now()}`,
+        payment_capture: 1
+      };
 
-    // Create transaction record as completed
-    const transaction = new FastagTransaction({
-      userId,
-      vehicleId: vehicle._id,
-      vehicleNumber: vehicle.number,
-      type: 'recharge',
-      amount,
-      method: paymentMethod || 'card',
-      status: 'completed',
-      txnId: `DUMMY_${Date.now()}`,
-      description: `FASTag wallet recharge via ${paymentMethod === 'upi' ? 'UPI' : 'Card'} (Dummy)`
-    });
+      const order = await razorpay.orders.create(options);
 
-    await transaction.save();
+      // Create pending transaction record
+      const transaction = new FastagTransaction({
+        userId,
+        vehicleId: vehicle._id,
+        vehicleNumber: vehicle.number,
+        type: 'recharge',
+        amount,
+        method: 'razorpay',
+        status: 'pending',
+        txnId: order.id,
+        description: 'FASTag wallet recharge via Razorpay'
+      });
 
-    res.json({
-      success: true,
-      message: 'Recharge successful (Dummy implementation)',
-      newBalance: user.walletBalance,
-      transactionId: transaction._id
-    });
+      await transaction.save();
+
+      res.json({
+        success: true,
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        key: process.env.RAZORPAY_KEY_ID || 'rzp_test_your_key_id',
+        transactionId: transaction._id
+      });
+    } else if (paymentMethod === 'upi') {
+      // For UPI, create a pending transaction and return transaction details
+      const transaction = new FastagTransaction({
+        userId,
+        vehicleId: vehicle._id,
+        vehicleNumber: vehicle.number,
+        type: 'recharge',
+        amount,
+        method: 'upi',
+        status: 'pending',
+        txnId: `UPI_${Date.now()}`,
+        description: 'FASTag wallet recharge via UPI'
+      });
+
+      await transaction.save();
+
+      res.json({
+        success: true,
+        transactionId: transaction._id,
+        amount,
+        method: 'upi',
+        message: 'UPI payment initiated. Please confirm payment.'
+      });
+    } else {
+      // Fallback to dummy implementation for other methods
+      user.walletBalance = (user.walletBalance || 0) + amount;
+      await user.save();
+
+      const transaction = new FastagTransaction({
+        userId,
+        vehicleId: vehicle._id,
+        vehicleNumber: vehicle.number,
+        type: 'recharge',
+        amount,
+        method: paymentMethod || 'card',
+        status: 'completed',
+        txnId: `DUMMY_${Date.now()}`,
+        description: `FASTag wallet recharge via ${paymentMethod || 'Card'} (Dummy)`
+      });
+
+      await transaction.save();
+
+      res.json({
+        success: true,
+        message: 'Recharge successful (Dummy implementation)',
+        newBalance: user.walletBalance,
+        transactionId: transaction._id
+      });
+    }
   } catch (error) {
     console.error('Error processing recharge:', error);
     res.status(500).json({ message: 'Error processing recharge', error: error.message });

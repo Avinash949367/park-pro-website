@@ -28,7 +28,7 @@ const fastagTransactionSchema = new mongoose.Schema({
   },
   method: {
     type: String,
-    enum: ['upi', 'card', 'wallet', 'auto-deduction'],
+    enum: ['upi', 'card', 'wallet', 'auto-deduction', 'razorpay'],
     required: true
   },
   location: {

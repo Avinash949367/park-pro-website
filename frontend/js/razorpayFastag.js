@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('rechargeForm');
   const rechargeBtn = document.getElementById('rechargeBtn');
   const loadingSpinner = document.getElementById('loadingSpinner');
+  const razorpayBtn = document.getElementById('razorpayBtn');
+  const razorpayLoadingSpinner = document.getElementById('razorpayLoadingSpinner');
   const selectedAmountInput = document.getElementById('selectedAmount');
   const vehicleNumberInput = document.getElementById('vehicleNumber');
   const fastagIdInput = document.getElementById('fastagId');
@@ -71,8 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // For dummy implementation, directly show success
-      showSuccessModal();
+      // Check payment method and handle accordingly
+      if (paymentMethod === 'razorpay') {
+        // Initiate Razorpay payment
+        initiateRazorpayPayment(data);
+      } else {
+        // For UPI, show UPI modal
+        showUpiModal(data);
+      }
+
       rechargeBtn.disabled = false;
       loadingSpinner.classList.add('hidden');
     } catch (err) {
@@ -107,6 +116,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
   customAmountInput.addEventListener('input', () => {
     selectedAmountInput.value = customAmountInput.value;
+  });
+
+  // Handle Pay with Razorpay button click
+  razorpayBtn.addEventListener('click', async () => {
+    const vehicleNumber = vehicleNumberInput.value.trim();
+    const fastagId = fastagIdInput.value.trim();
+    const amount = selectedAmountInput.value;
+
+    if (!vehicleNumber) {
+      alert('Please enter your vehicle number.');
+      return;
+    }
+    if (!fastagId) {
+      alert('Please enter your FASTag ID.');
+      return;
+    }
+    if (!amount || isNaN(amount) || Number(amount) < 100) {
+      alert('Please select or enter a valid recharge amount (minimum ₹100).');
+      return;
+    }
+
+    // Get authentication token
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in to recharge your FASTag.');
+      return;
+    }
+
+    razorpayBtn.disabled = true;
+    razorpayLoadingSpinner.classList.remove('hidden');
+
+    try {
+      // Create payment on backend with Razorpay method
+      const response = await fetch('http://localhost:5001/api/fastag/recharge', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          amount: Number(amount),
+          vehicleNumber: vehicleNumber,
+          paymentMethod: 'razorpay'
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || 'Failed to initiate payment.');
+        razorpayBtn.disabled = false;
+        razorpayLoadingSpinner.classList.add('hidden');
+        return;
+      }
+
+      // Initiate Razorpay payment
+      initiateRazorpayPayment(data);
+
+      razorpayBtn.disabled = false;
+      razorpayLoadingSpinner.classList.add('hidden');
+    } catch (err) {
+      console.error('Error during Razorpay payment:', err);
+      alert('An error occurred during payment. Please try again.');
+      razorpayBtn.disabled = false;
+      razorpayLoadingSpinner.classList.add('hidden');
+    }
   });
 
   // Function to initiate Razorpay payment
