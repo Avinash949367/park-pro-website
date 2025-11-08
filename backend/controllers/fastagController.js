@@ -618,6 +618,12 @@ exports.generateFastagId = async (req, res) => {
 
     console.log('User found:', { id: user._id, email: user.email, existingFastagId: user.fastagId });
 
+    // Check if vehicle number is already registered to another user
+    const existingVehicle = await Vehicle.findOne({ number: vehicleNumber });
+    if (existingVehicle && existingVehicle.userId.toString() !== userId) {
+      return res.status(400).json({ message: 'Vehicle number is already registered to another account' });
+    }
+
     // Check if user already has a FASTag (either in user.fastagId or in vehicles)
     let existingFastagId = user.fastagId;
     if (!existingFastagId) {

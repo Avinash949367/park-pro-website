@@ -1627,9 +1627,9 @@
   // Function to update FastTag UI based on status
   function updateFastTagUI(fastTagData) {
     const fastTagContainer = document.getElementById('fastTagContainer');
-    
-    if (!fastTagData || !fastTagData.isActive) {
-      // No active FastTag - show get FastTag UI
+
+    if (!fastTagData || !fastTagData.fastagId) {
+      // No FastTag - show get FastTag UI
       fastTagContainer.innerHTML = `
         <div class="text-center py-4">
           <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -1642,15 +1642,11 @@
           </button>
         </div>
       `;
-      
+
       // Add event listener to the Get FastTag button
       document.getElementById('getFastTagButton').addEventListener('click', applyForFastTag);
     } else {
-      // Active FastTag - show FastTag details
-      const vehicleInfo = fastTagData.linkedVehicle ? 
-        `${fastTagData.linkedVehicle.number} (${fastTagData.linkedVehicle.type})` : 
-        'Not linked to vehicle';
-        
+      // Has FastTag - show FastTag details
       fastTagContainer.innerHTML = `
         <div class="space-y-6">
           <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border border-yellow-200">
@@ -1658,9 +1654,9 @@
               <span class="material-icons-outlined mr-3 text-yellow-600">check_circle</span>
               <span class="text-gray-700">Status: <span class="font-medium text-green-600">Active</span></span>
             </div>
-            <span class="text-sm text-gray-500">ID: ${fastTagData.tagId || 'N/A'}</span>
+            <span class="text-sm text-gray-500">ID: ${fastTagData.fastagId}</span>
           </div>
-          
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 bg-gray-50 rounded-xl">
               <div class="flex items-center mb-2">
@@ -1669,28 +1665,16 @@
               </div>
               <div class="text-2xl font-bold text-gray-900">₹${fastTagData.balance || 0}</div>
             </div>
-            
+
             <div class="p-4 bg-gray-50 rounded-xl">
               <div class="flex items-center mb-2">
                 <span class="material-icons-outlined mr-2 text-gray-500 text-sm">directions_car</span>
                 <span class="text-sm text-gray-600">Linked Vehicle</span>
               </div>
-              <div class="text-lg font-medium text-gray-900">${vehicleInfo}</div>
+              <div class="text-lg font-medium text-gray-900">Not linked</div>
             </div>
           </div>
-          
-          <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
-            <div class="flex items-center mb-2">
-              <span class="material-icons-outlined mr-2 text-blue-600 text-sm">info</span>
-              <span class="text-sm font-medium text-blue-800">Last Transaction</span>
-            </div>
-            <div class="text-gray-700">
-              ${fastTagData.lastTransaction ? 
-                `${fastTagData.lastTransaction.amount} at ${fastTagData.lastTransaction.location} on ${new Date(fastTagData.lastTransaction.date).toLocaleDateString()}` : 
-                'No recent transactions'}
-            </div>
-          </div>
-          
+
           <div class="flex flex-col sm:flex-row gap-3 pt-4">
             <button id="rechargeFastTagButton" class="flex-1 px-4 py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 font-medium flex items-center justify-center">
               <span class="material-icons-outlined mr-2 text-sm">account_balance_wallet</span>
@@ -1703,7 +1687,7 @@
           </div>
         </div>
       `;
-      
+
       // Add event listeners
       document.getElementById('rechargeFastTagButton').addEventListener('click', rechargeFastTag);
       document.getElementById('deactivateFastTagButton').addEventListener('click', deactivateFastTag);
@@ -1745,40 +1729,40 @@
     try {
       // Show loading
       document.getElementById('loadingOverlay').classList.remove('hidden');
-      
+
       const token = getAuthToken();
       if (!token) {
         showErrorNotification('Not authenticated. Please login again.');
         window.location.href = 'userlogin.html';
         return;
       }
-      
+
       // Get user vehicles to select one for FastTag linking
       const userResponse = await fetch(`${apiBaseUrl}/profile`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       if (!userResponse.ok) {
         throw new Error('Failed to fetch user data');
       }
-      
+
       const userData = await userResponse.json();
       const vehicles = userData.user.vehicles || [];
-      
+
       if (vehicles.length === 0) {
         showErrorNotification('You need to add a vehicle first before applying for FastTag');
         document.getElementById('addVehicleButton').click(); // Open add vehicle modal
         return;
       }
-      
+
       // For simplicity, we'll use the first vehicle
       // In a real implementation, you might want to let the user choose
       const selectedVehicle = vehicles[0];
-      
+
       // Use correct API endpoint for fastag operations
-      const response = await fetch('http://localhost:5001/api/fasttag/apply', {
+      const response = await fetch('http://localhost:5001/api/fastag/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1789,20 +1773,19 @@
           vehicleType: selectedVehicle.type
         })
       });
-      
+
       const data = await response.json();
-      
-      if (response.ok && data.success) {
-        showSuccessNotification('FastTag application submitted successfully!');
-        // Refresh FastTag data
-        const fastTagData = await fetchFastTagData();
-        updateFastTagUI(fastTagData);
+
+      if (response.ok && data.fastagId) {
+        showSuccessNotification(`FastTag generated successfully! ID: ${data.fastagId}`);
+        // Refresh profile data
+        fetchUserProfile();
       } else {
-        showErrorNotification(data.message || 'Failed to apply for FastTag');
+        showErrorNotification(data.message || 'Failed to generate FastTag');
       }
     } catch (error) {
-      console.error('Error applying for FastTag:', error);
-      showErrorNotification('Error applying for FastTag. Please try again.');
+      console.error('Error generating FastTag:', error);
+      showErrorNotification('Error generating FastTag. Please try again.');
     } finally {
       document.getElementById('loadingOverlay').classList.add('hidden');
     }
@@ -1899,14 +1882,30 @@
     }
   }
 
-  // Update the fetchUserProfile function to also fetch FastTag data
+  // Update the fetchUserProfile function to also update FastTag UI
   const originalFetchUserProfile = fetchUserProfile;
   fetchUserProfile = async function() {
     await originalFetchUserProfile();
 
-    // Fetch and display FastTag data
-    const fastTagData = await fetchFastTagData();
-    updateFastTagUI(fastTagData);
+    // Get user data from the last fetch
+    const token = getAuthToken();
+    if (token) {
+      try {
+        const response = await fetch(`${apiBaseUrl}/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            updateFastTagUI(data.user);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data for FastTag:', error);
+      }
+    }
   };
 
   // Function to fetch user bookings
