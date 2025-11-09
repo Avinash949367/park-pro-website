@@ -385,6 +385,24 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="js/razorpayFastag.js"></script>
 
+  <script>
+    // Function to scroll to the recharge section
+    function scrollToRecharge() {
+      const rechargeSection = document.getElementById('recharge');
+      if (rechargeSection) {
+        rechargeSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Add event listener to the "Yes, I have a FASTag ID" button
+    document.addEventListener('DOMContentLoaded', function() {
+      const hasFastagBtn = document.getElementById('hasFastagBtn');
+      if (hasFastagBtn) {
+        hasFastagBtn.addEventListener('click', scrollToRecharge);
+      }
+    });
+  </script>
+
     <!-- FASTag ID Check Section -->
     <section class="py-8 bg-blue-50">
         <div class="container mx-auto px-4 text-center">
